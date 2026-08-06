@@ -78,16 +78,8 @@ const nextConfig: NextConfig = {
         destination: '/portals/jobs/job-seekers',
       },
       {
-        source: '/about',
-        destination: '/portals/jobs/about',
-      },
-      {
         source: '/contact',
         destination: '/portals/jobs/contact',
-      },
-      {
-        source: '/podcast',
-        destination: '/portals/jobs/podcast',
       },
       {
         source: '/security',

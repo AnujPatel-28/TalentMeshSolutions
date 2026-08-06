@@ -85,11 +85,11 @@ const Navbar = () => {
                             Company <span className={styles.chevron}>▼</span>
                         </div>
                         <div className={styles.dropdown}>
-                            <Link href="/portals/jobs/about" className={`${styles.dropdownLink} ${pathname === '/about' || pathname === '/portals/jobs/about' ? styles.dropdownLinkActive : ''}`}>About</Link>
+                            {/* <Link href="/portals/jobs/about" className={`${styles.dropdownLink} ${pathname === '/about' || pathname === '/portals/jobs/about' ? styles.dropdownLinkActive : ''}`}>About</Link> */}
                             <Link href="/portals/jobs/contact" className={`${styles.dropdownLink} ${pathname === '/portals/jobs/contact' ? styles.dropdownLinkActive : ''}`}>Contact</Link>
                             {/* <Link href="/portals/jobs/careers" className={`${styles.dropdownLink} ${pathname === '/careers' ? styles.dropdownLinkActive : ''}`}>Careers</Link> */}
                             <Link href="/blog" className={`${styles.dropdownLink} ${pathname === '/blog' ? styles.dropdownLinkActive : ''}`}>Blog</Link>
-                            <Link href="/portals/jobs/podcast" className={`${styles.dropdownLink} ${pathname === '/podcast' ? styles.dropdownLinkActive : ''}`}>Podcast</Link>
+                            {/* <Link href="/portals/jobs/podcast" className={`${styles.dropdownLink} ${pathname === '/podcast' ? styles.dropdownLinkActive : ''}`}>Podcast</Link> */}
                         </div>
                     </div>
 
@@ -162,11 +162,11 @@ const Navbar = () => {
 
                 <div className={styles.mobileNavItem}>
                     <span className={styles.mobileNavLabel}>Company</span>
-                    <Link href="/portals/jobs/about" className={styles.mobileNavLink}>About</Link>
+                    {/* <Link href="/portals/jobs/about" className={styles.mobileNavLink}>About</Link> */}
                     <Link href="/portals/jobs/contact" className={styles.mobileNavLink}>Contact</Link>
                     {/* <Link href="/portals/jobs/careers" className={styles.mobileNavLink}>Careers</Link> */}
                     <Link href="/blog" className={styles.mobileNavLink}>Blog</Link>
-                    <Link href="/portals/jobs/podcast" className={styles.mobileNavLink}>Podcast</Link>
+                    {/* <Link href="/portals/jobs/podcast" className={styles.mobileNavLink}>Podcast</Link> */}
                 </div>
 
                 <div className={styles.mobileAuth}>

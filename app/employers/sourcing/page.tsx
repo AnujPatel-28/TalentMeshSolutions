@@ -610,15 +610,15 @@ export default function TalentSourcingPage() {
                                 <div className={styles.formContact}>
                                     <div className={styles.formContactItem}>
                                         <Phone size={18} />
-                                        <span>+91 98765 43210</span>
+                                        <span>+91 98981 61106</span>
                                     </div>
                                     <div className={styles.formContactItem}>
                                         <Mail size={18} />
-                                        <span>sourcing@talentmesh.io</span>
+                                        <span>info@talentmeshsolutions.com</span>
                                     </div>
                                     <div className={styles.formContactItem}>
                                         <MapPin size={18} />
-                                        <span>Bangalore, India</span>
+                                        <span>Ahmedabad, India</span>
                                     </div>
                                 </div>
                                 <div className={styles.formTrust}>
@@ -658,7 +658,7 @@ export default function TalentSourcingPage() {
                                             </div>
                                             <div className={styles.field}>
                                                 <label className={styles.lbl}>Phone Number</label>
-                                                <input type="tel" className={styles.input} placeholder="+91 98765 43210" value={form.phone} onChange={e => set('phone', e.target.value)} />
+                                                <input type="tel" className={styles.input} placeholder="+91 98981 61106" value={form.phone} onChange={e => set('phone', e.target.value)} />
                                             </div>
                                         </div>
                                         <div className={styles.fieldRow}>

@@ -8,9 +8,10 @@ const REMOVED_PORTAL_PREFIXES = [
   '/admin', '/dashboard', '/recruiter', '/candidate', '/onboarding', '/company',
   '/auth', '/newsletter', '/unauthorized', '/debug-ai', '/signup', '/verify-recruiter',
   '/pending-approval', '/forgot-password', '/reset-password', '/jobs',
-  // Not deleted — just disabled (app/_browse-jobs). Stray links elsewhere on the
-  // site still point here; redirect home instead of 404ing until it's live again.
-  '/browse-jobs',
+  // Not deleted — just disabled (app/_browse-jobs, app/portals/jobs/_about,
+  // app/portals/jobs/_podcast) while being reworked locally. Stray links elsewhere on
+  // the site still point here; redirect home instead of 404ing until they're live again.
+  '/browse-jobs', '/about', '/portals/jobs/about', '/podcast', '/portals/jobs/podcast',
 ];
 
 export function proxy(request: NextRequest) {

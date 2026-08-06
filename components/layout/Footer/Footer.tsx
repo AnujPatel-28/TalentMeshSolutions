@@ -101,10 +101,10 @@ const Footer = () => {
 
                     <div className={styles.column}>
                         <h4>Company</h4>
-                        <Link href="/about">About Us</Link>
+                        {/* <Link href="/about">About Us</Link> */}
                         {/* <Link href="/careers">Careers</Link> */}
                         <Link href="/blog">Blog</Link>
-                        <Link href="/podcast">Podcast</Link>
+                        {/* <Link href="/podcast">Podcast</Link> */}
                         <Link href="/contact">Contact</Link>
                     </div>
 
@@ -117,7 +117,7 @@ const Footer = () => {
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>&copy; 2026 TalentMesh. All rights reserved.</p>
+                    <p>&copy; 2026 TalentMesh Solutions. All rights reserved.</p>
                     <div className={styles.socials}>
                         <a href="https://x.com/TalentmeshS" className={`${styles.socialIcon} ${styles.twitter}`} aria-label="X (Twitter)">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

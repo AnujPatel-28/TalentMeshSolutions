@@ -9,9 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = [
     '',
     '/job-seekers',
-    '/about',
     '/contact',
-    '/podcast',
     '/security',
     '/portals/jobs/career-advice',
     '/portals/jobs/careers',

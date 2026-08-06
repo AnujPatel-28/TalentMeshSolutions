@@ -50,29 +50,36 @@ const playfair = Playfair_Display({
   weight: ["400", "700", "900"],
 });
 
+const SITE_URL = "https://talentmeshsolutions.com";
+
 export const metadata: Metadata = {
   title: {
-    default: "TalentMesh | Next-Gen AI Recruitment & Smart Matching",
-    template: "%s | TalentMesh Solutions | AI Recruiting Platform"
+    default: "TalentMesh Solutions | Next-Gen Recruitment Platform",
+    template: "%s | TalentMesh Solutions",
   },
-  description: "Experience the future of hiring with TalentMesh. Our AI-powered platform connects top tech talent with world-class companies using advanced skill-matching algorithms. Hire faster, smarter, and more efficiently.",
-  keywords: ["AI Recruitment Platform", "AI Job Matching", "Tech Recruitment", "Smart Hiring", "Talent Acquisition Software", "Recruitment Automation"],
-  authors: [{ name: "TalentMesh Team" }],
+  description: "TalentMesh Solutions is a next-generation recruitment platform connecting employers and job seekers across India. Post jobs, source talent, and get expert recruitment assistance in one place.",
+  keywords: ["TalentMesh Solutions", "Recruitment Platform India", "Job Board", "Talent Sourcing", "Post a Job", "Recruitment Agency India", "Hiring Platform"],
+  authors: [{ name: "TalentMesh Solutions" }],
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "TalentMesh | Revolutionary AI-Powered Recruitment",
-    description: "Connect with the best opportunities using our advanced AI matching technology.",
-    url: "https://talentmesh solutions.com",
-    siteName: "TalentMesh",
+    title: "TalentMesh Solutions | Next-Gen Recruitment Platform",
+    description: "Connecting employers and job seekers with a next-generation, streamlined hiring platform.",
+    url: SITE_URL,
+    siteName: "TalentMesh Solutions",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TalentMesh Solutions | AI Recruitment Platform",
-    description: "Hire top talent with the power of AI.",
+    title: "TalentMesh Solutions | Next-Gen Recruitment Platform",
+    description: "Post jobs, source talent, and hire faster with TalentMesh Solutions.",
   },
-  verification: {
-    google: "https://talentmeshsolutions.com",
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
     icon: [
@@ -86,10 +93,37 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   appleWebApp: {
-    title: 'Talentmesh',
+    title: 'TalentMesh Solutions',
     statusBarStyle: 'default',
     capable: true,
   },
+};
+
+// Structured data (schema.org Organization) — helps both traditional search
+// engines and AI answer engines (Perplexity, ChatGPT search, Google AI
+// Overviews) identify and cite TalentMesh Solutions accurately.
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "TalentMesh Solutions",
+  url: SITE_URL,
+  logo: `${SITE_URL}/TalentMesh_page-0002-removebg-preview.png`,
+  description: "TalentMesh Solutions is a next-generation recruitment platform connecting employers and job seekers across India.",
+  email: "info@talentmeshsolutions.com",
+  telephone: "+91-98981-61106",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "3rd Floor, Chinubhai House, 7-B Amrutbaug Colony, Navjivan",
+    addressLocality: "Ahmedabad",
+    addressRegion: "Gujarat",
+    postalCode: "380014",
+    addressCountry: "IN",
+  },
+  sameAs: [
+    "https://x.com/TalentmeshS",
+    "https://www.linkedin.com/company/talentmesh-solutions/",
+    "https://www.instagram.com/talentmesh_",
+  ],
 };
 
 import { headers } from "next/headers";
@@ -114,6 +148,10 @@ export default async function RootLayout({
         className={`${inter.variable} ${jakarta.variable} ${geist.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <ScrollToTop />
         {!skipHeaderFooter ? (
           <div className={layoutStyles.rootFlexContainer}>
