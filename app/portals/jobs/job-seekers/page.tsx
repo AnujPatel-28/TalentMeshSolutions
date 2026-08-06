@@ -303,10 +303,10 @@ export default function JobSeekersPage() {
                             Create your professional portfolio once and connect with actively hiring companies instantly. Your dream job is waiting.
                         </p>
                         <div className={styles.heroButtons}>
-                            <Link href="/signup" className={styles.primaryCta}>
+                            <Link href="/login" className={styles.primaryCta}>
                                 Create Free Profile <IconArrowRight />
                             </Link>
-                            <Link href="/browse-jobs" className={styles.secondaryCta}>
+                            <Link href="/login" className={styles.secondaryCta}>
                                 Browse Jobs
                             </Link>
                         </div>
@@ -339,7 +339,7 @@ export default function JobSeekersPage() {
                                     <p className={styles.chooseDesc}>
                                         Discover opportunities that align with your skills, experience, and career goals.
                                     </p>
-                                    <Link href="/browse-jobs" className={styles.btnGreen}>
+                                    <Link href="/login" className={styles.btnGreen}>
                                         Explore Jobs <ArrowRight size={14} style={{ marginLeft: '4px' }} />
                                     </Link>
                                 </div>
@@ -399,7 +399,7 @@ export default function JobSeekersPage() {
                                     <p className={styles.chooseDesc}>
                                         Monitor your application status and stay updated throughout the hiring process.
                                     </p>
-                                    <Link href="/dashboard" className={styles.btnBlueLink}>
+                                    <Link href="/login" className={styles.btnBlueLink}>
                                         View My Applications <ArrowRight size={14} style={{ marginLeft: '4px' }} />
                                     </Link>
                                 </div>
@@ -458,7 +458,7 @@ export default function JobSeekersPage() {
                                     <p className={styles.chooseDesc}>
                                         Access personalized career advice, skill resources, and expert guidance to help you grow and achieve your goals.
                                     </p>
-                                    <Link href="/dashboard" className={styles.btnPurple}>
+                                    <Link href="/login" className={styles.btnPurple}>
                                         Explore Growth Paths <ArrowRight size={14} style={{ marginLeft: '4px' }} />
                                     </Link>
                                 </div>
@@ -474,7 +474,7 @@ export default function JobSeekersPage() {
                                     <p className={styles.chooseDesc}>
                                         Get tips to improve your resume and profile visibility to stand out to recruiters.
                                     </p>
-                                    <Link href="/dashboard" className={styles.btnOrange}>
+                                    <Link href="/login" className={styles.btnOrange}>
                                         Optimize Now <ArrowRight size={14} style={{ marginLeft: '4px' }} />
                                     </Link>
                                 </div>
@@ -685,10 +685,10 @@ export default function JobSeekersPage() {
                             Create your free TalentMesh profile, connect with verified employers, and take the next step in your career.
                         </p>
                         <div className={styles.ctaButtons}>
-                            <Link href="/signup" className={styles.ctaPrimary}>
+                            <Link href="/login" className={styles.ctaPrimary}>
                                 Create Free Profile
                             </Link>
-                            <Link href="/browse-jobs" className={styles.ctaSecondary}>
+                            <Link href="/login" className={styles.ctaSecondary}>
                                 Browse Jobs
                             </Link>
                         </div>

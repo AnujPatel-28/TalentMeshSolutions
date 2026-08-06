@@ -19,23 +19,27 @@ const Footer = () => {
         setErrorMsg('');
 
         try {
-            const response = await fetch('/api/newsletter/subscribe', {
+            const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({
+                    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '',
+                    email,
+                    subject: `New Newsletter Subscription: ${email}`,
+                    from_name: 'TalentMesh Newsletter',
+                }),
             });
-
-            const data = await response.json();
 
             if (response.ok) {
                 setStatus('success');
-                setMessage(data.message);
+                setMessage("You're subscribed!");
                 setEmail('');
             } else {
                 setStatus('error');
-                setErrorMsg(data.error || 'Something went wrong. Please try again.');
+                setErrorMsg('Something went wrong. Please try again.');
             }
         } catch (error) {
             console.error('Subscription error:', error);
@@ -92,9 +96,7 @@ const Footer = () => {
                     <div className={styles.column}>
                         <h4>Platform</h4>
                         <Link href="/employers">For Employers</Link>
-                        <Link href="/job-seekers">For Candidates</Link>
-                        <Link href="/pricing">Pricing</Link>
-                        <Link href="/features">AI Features</Link>
+                        <Link href="/job-seekers">Candidate Benefits</Link>
                     </div>
 
                     <div className={styles.column}>
@@ -103,7 +105,6 @@ const Footer = () => {
                         {/* <Link href="/careers">Careers</Link> */}
                         <Link href="/blog">Blog</Link>
                         <Link href="/podcast">Podcast</Link>
-                        <Link href="/case-studies">Success Stories</Link>
                         <Link href="/contact">Contact</Link>
                     </div>
 

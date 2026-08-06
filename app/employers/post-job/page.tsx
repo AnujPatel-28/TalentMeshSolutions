@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from './post-job.module.css';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import HeroBg from '@/components/ui/HeroBg/HeroBg';
@@ -64,6 +65,7 @@ export default function PostJobPage() {
     const [aiLoading, setAiLoading] = useState(false);
     const [aiGenerated, setAiGenerated] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [posting, setPosting] = useState(false);
     const [form, setForm] = useState({
         title: '', company: '', industry: '', location: '', salary: '', exp: '', description: '', deadline: ''
     });
@@ -85,6 +87,37 @@ export default function PostJobPage() {
             }));
             setAiLoading(false); setAiGenerated(true);
         }, 1800);
+    };
+
+    // Job posting isn't live yet — this is a preview of the flow. We still capture the
+    // draft as a lead via Web3Forms (same pattern as the rest of the site) so real interest
+    // isn't lost, then point the employer to early access instead of pretending it posted.
+    const handlePostJob = async () => {
+        setPosting(true);
+        try {
+            await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '',
+                    job_title: form.title,
+                    company: form.company,
+                    industry: form.industry,
+                    location: preview.location,
+                    salary: form.salary,
+                    experience_level: form.exp,
+                    skills: skills.join(', '),
+                    description: form.description,
+                    subject: `New Job Post Draft — ${form.title || 'Untitled role'} @ ${form.company || 'Unknown company'}`,
+                    from_name: 'TalentMesh Post-a-Job Preview',
+                }),
+            });
+        } catch (err) {
+            console.error('Job draft capture failed:', err);
+        } finally {
+            setPosting(false);
+            setSubmitted(true);
+        }
     };
 
     const preview = {
@@ -137,9 +170,10 @@ export default function PostJobPage() {
                         {submitted ? (
                             <div className={styles.success}>
                                 <div className={styles.successIco}><CheckIco /></div>
-                                <h2 className={styles.successTitle}>Job Posted Successfully!</h2>
-                                <p className={styles.successDesc}>Your listing is now live. Our AI is already matching candidates to your role.</p>
-                                <button className={styles.successBtn} onClick={() => { setSubmitted(false); setStep(0); }}>Post Another Job</button>
+                                <h2 className={styles.successTitle}>You&apos;re ready to go live</h2>
+                                <p className={styles.successDesc}>Job posting isn&apos;t open yet, but we&apos;ve saved your draft. Join early access and we&apos;ll notify you the moment you can publish it.</p>
+                                <Link href="/login" className={styles.successBtn}>Join Early Access</Link>
+                                <button className={styles.backBtn} style={{ marginTop: '0.75rem' }} onClick={() => { setSubmitted(false); setStep(0); }}>Start Another Draft</button>
                             </div>
                         ) : (
                             <>
@@ -261,7 +295,9 @@ export default function PostJobPage() {
                                         </div>
                                         <div className={styles.stepBtns}>
                                             <button className={styles.backBtn} onClick={() => setStep(1)}>← Edit</button>
-                                            <button className={styles.postBtn} onClick={() => setSubmitted(true)}><SendIco /> Post This Job</button>
+                                            <button className={styles.postBtn} onClick={handlePostJob} disabled={posting}>
+                                                <SendIco /> {posting ? 'Submitting...' : 'Post This Job'}
+                                            </button>
                                         </div>
                                     </div>
                                 )}

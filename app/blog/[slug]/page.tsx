@@ -1,14 +1,12 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { PortableText, type PortableTextComponents } from 'next-sanity';
 import styles from '../blog.module.css';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import { SafeBlogContent } from '@/components/blog/SafeBlogContent';
-import { publicInsforge } from '@/lib/insforge';
-import HeroBg from '@/components/ui/HeroBg/HeroBg';
-import { LoadingScreen } from '@/components/ui';
+import { sanityClient } from '@/lib/sanity/client';
+import { urlForImage } from '@/lib/sanity/image';
+import { POST_BY_SLUG_QUERY, RELATED_POSTS_QUERY } from '@/lib/sanity/queries';
 
 const IconArrowLeft = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -22,64 +20,47 @@ const IconArrowRight = () => (
     </svg>
 );
 
-export default function BlogDetailPage() {
-    const { slug } = useParams();
-    const router = useRouter();
-    const [post, setPost] = useState<any>(null);
-    const [related, setRelated] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+const ptComponents: PortableTextComponents = {
+    block: {
+        h2: ({ children }) => <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '2.5rem 0 1rem' }}>{children}</h2>,
+        h3: ({ children }) => <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '2rem 0 1rem' }}>{children}</h3>,
+        normal: ({ children }) => <p style={{ margin: '0 0 1.2rem', lineHeight: 1.9 }}>{children}</p>,
+    },
+    list: {
+        bullet: ({ children }) => <ul style={{ listStyleType: 'disc', listStylePosition: 'outside', margin: '0 0 1.5rem 1.4rem', padding: 0, color: '#334155', lineHeight: 1.8 }}>{children}</ul>,
+        number: ({ children }) => <ol style={{ listStyleType: 'decimal', listStylePosition: 'outside', margin: '0 0 1.5rem 1.4rem', padding: 0, color: '#334155', lineHeight: 1.8 }}>{children}</ol>,
+    },
+    listItem: {
+        bullet: ({ children }) => <li style={{ marginBottom: '0.65rem' }}>{children}</li>,
+        number: ({ children }) => <li style={{ marginBottom: '0.65rem' }}>{children}</li>,
+    },
+    types: {
+        image: ({ value }) => {
+            const url = urlForImage(value)?.width(900).url();
+            if (!url) return null;
+            return <img src={url} alt="" style={{ width: '100%', borderRadius: 12, margin: '1.5rem 0' }} />;
+        },
+    },
+};
 
-    useEffect(() => {
-        async function fetchPost() {
-            try {
-                const slugStr = Array.isArray(slug) ? slug[0] : slug;
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
 
-                // Fetch article by slug
-                const { data: postData, error: postError } = await publicInsforge.database
-                    .from('blog')
-                    .select('id, title, slug, excerpt, content, category, cover_image, status, created_at, author_id, author:profiles(name)')
-                    .eq('slug', slugStr)
-                    .eq('status', 'published')
-                    .single();
+    if (!post) notFound();
 
-                if (postError || !postData) {
-                    throw new Error('Not found');
-                }
+    const related = post.category
+        ? await sanityClient.fetch(RELATED_POSTS_QUERY, { category: post.category, id: post.id })
+        : [];
 
-                setPost(postData);
-
-                // Fetch related posts in same category, excluding current article
-                const { data: relatedData } = await publicInsforge.database
-                    .from('blog')
-                    .select('id, title, slug, category, cover_image, created_at')
-                    .eq('status', 'published')
-                    .eq('category', postData.category)
-                    .neq('id', postData.id)
-                    .order('created_at', { ascending: false })
-                    .limit(3);
-
-                setRelated(relatedData || []);
-            } catch (err) {
-                console.error(err);
-                router.push('/blog');
-            } finally {
-                setLoading(false);
-            }
-        }
-        if (slug) fetchPost();
-    }, [slug, router]);
-
-    if (loading) return <LoadingScreen />;
-
-    if (!post) return null;
+    const coverImageUrl = post.coverImage ? urlForImage(post.coverImage)?.width(1400).url() : undefined;
 
     return (
         <main className={styles.blogWrapper}>
-            <HeroBg src="/bg2.png" fixed />
-            <div className="premium-container" style={{ paddingTop: '2rem', position: 'relative', zIndex: 1 }}>
-                <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#64748b', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+            <div className="premium-container" style={{ paddingTop: '7rem', position: 'relative', zIndex: 1 }}>
+                <Link href="/blog" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none' }}>
                     <IconArrowLeft /> Back to Blog
-                </button>
+                </Link>
             </div>
 
             <article>
@@ -93,11 +74,11 @@ export default function BlogDetailPage() {
                         </h1>
                         <div className={styles.detailAuthorWrapper}>
                             <div className={styles.detailAuthorAvatar}>
-                                {post.author?.name?.charAt(0) || 'A'}
+                                {(post.authorName || 'A').charAt(0)}
                             </div>
                             <div className={styles.detailAuthorInfo}>
-                                <div className={styles.detailAuthorName}>{post.author?.name || 'TalentMesh Editorial'}</div>
-                                <div suppressHydrationWarning>{new Date(post.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })} · {post.read_minutes || 5} min read</div>
+                                <div className={styles.detailAuthorName}>{post.authorName || 'TalentMesh Editorial'}</div>
+                                <div suppressHydrationWarning>{new Date(post.publishedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })} · {post.readTimeMinutes} min read</div>
                             </div>
                         </div>
                     </AnimateOnScroll>
@@ -107,7 +88,7 @@ export default function BlogDetailPage() {
                     <div className={`premium-container ${styles.detailImageWrapper}`}>
                         <div className={styles.detailImageContainer}>
                             <Image
-                                src={post.cover_image || "/images/tech-office.jpg"}
+                                src={coverImageUrl || "/images/tech-office.jpg"}
                                 alt={post.title}
                                 fill
                                 style={{ objectFit: 'cover' }}
@@ -120,7 +101,7 @@ export default function BlogDetailPage() {
                 <div className={styles.detailContentWrapper}>
                     <AnimateOnScroll animation="fadeUp" delay={200}>
                         <div className={styles.detailContent}>
-                            <SafeBlogContent content={post.content || ''} />
+                            {Array.isArray(post.body) && <PortableText value={post.body} components={ptComponents} />}
                         </div>
                     </AnimateOnScroll>
                 </div>
@@ -134,22 +115,25 @@ export default function BlogDetailPage() {
                             <Link href="/blog" style={{ color: 'var(--primary-blue)', fontWeight: 700, textDecoration: 'none' }}>View All</Link>
                         </div>
                         <div className="premium-grid-3">
-                            {related.map(rel => (
-                                <Link href={`/blog/${rel.slug}`} key={rel.id} style={{ textDecoration: 'none' }}>
-                                    <div className={`${styles.relatedCard} glass-card`}>
-                                        <div className={styles.relatedImageWrapper}>
-                                            <Image src={rel.cover_image || "/images/tech-office.jpg"} alt={rel.title} fill style={{ objectFit: 'cover' }} />
-                                        </div>
-                                        <div className={styles.relatedContent}>
-                                            <span className={styles.relatedCategory}>{rel.category}</span>
-                                            <h3 className={styles.relatedCardTitle}>{rel.title}</h3>
-                                            <div className={styles.relatedReadMore}>
-                                                Read More <IconArrowRight />
+                            {related.map((rel: any) => {
+                                const relImageUrl = rel.coverImage ? urlForImage(rel.coverImage)?.width(600).url() : undefined;
+                                return (
+                                    <Link href={`/blog/${rel.slug}`} key={rel.id} style={{ textDecoration: 'none' }}>
+                                        <div className={`${styles.relatedCard} glass-card`}>
+                                            <div className={styles.relatedImageWrapper}>
+                                                <Image src={relImageUrl || "/images/tech-office.jpg"} alt={rel.title} fill style={{ objectFit: 'cover' }} />
+                                            </div>
+                                            <div className={styles.relatedContent}>
+                                                <span className={styles.relatedCategory}>{rel.category}</span>
+                                                <h3 className={styles.relatedCardTitle}>{rel.title}</h3>
+                                                <div className={styles.relatedReadMore}>
+                                                    Read More <IconArrowRight />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
@@ -158,11 +142,10 @@ export default function BlogDetailPage() {
             <div className={`premium-container ${styles.detailCtaWrapper}`}>
                 <div className={styles.detailCtaBox}>
                     <h2 className={styles.detailCtaTitle}>Enjoyed this article?</h2>
-                    <p className={styles.detailCtaDesc}>Subscribe to our newsletter and never miss an update on AI recruitment.</p>
-                    <div className={styles.detailCtaForm}>
-                        <input type="email" placeholder="your@email.com" className={styles.detailCtaInput} />
-                        <button className={styles.detailCtaBtn}>Subscribe Now</button>
-                    </div>
+                    <p className={styles.detailCtaDesc}>Explore more insights on hiring, careers, and recruitment.</p>
+                    <Link href="/blog" className={styles.detailCtaBtn}>
+                        Read More Articles
+                    </Link>
                 </div>
             </div>
         </main>

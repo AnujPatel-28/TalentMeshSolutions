@@ -388,6 +388,33 @@
   margin-top: 0.4rem;
 }
 
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.emptyBlogState {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 6rem 16px 4rem;
+  text-align: center;
+}
+
+.emptyBlogState h1 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--deep-navy, #000000);
+  margin: 0 0 0.75rem;
+}
+
+.emptyBlogState p {
+  color: var(--neutral-text-muted, #6B7280);
+  font-size: 1rem;
+}
+
 .viewAllLink {
   display: inline-flex;
   align-items: center;
@@ -1364,6 +1391,7 @@
 }
 
 .detailCtaBtn {
+  display: inline-block;
   background: var(--primary-blue, #007BFF);
   color: #fff;
   border: none;
@@ -1372,6 +1400,7 @@
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.2s;
   white-space: nowrap;
 }

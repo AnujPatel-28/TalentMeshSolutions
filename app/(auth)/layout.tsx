@@ -13,8 +13,8 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-    title: "TalentMesh — Sign In / Sign Up",
-    description: "Access your TalentMesh account — AI-powered recruiting platform.",
+    title: "TalentMesh — Early Access",
+    description: "Get early access to TalentMesh — AI-powered recruiting platform.",
 };
 
 export default function AuthLayout({

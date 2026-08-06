@@ -1,21 +1,15 @@
 import type { NextConfig } from "next";
 
-const insforgeUrl = process.env.NEXT_PUBLIC_INSFORGE_URL;
-
-if (!insforgeUrl) {
-  console.warn('⚠️ WARNING: Missing NEXT_PUBLIC_INSFORGE_URL environment variable. API connections and images may fail.');
-}
-
-// Comprehensive Content Security Policy granting Next.js development access 
-// while explicitly clamping frame-ancestors and restricting API connections to self / InsForge.
+// Content Security Policy for the marketing site: no backend, so connect-src only needs
+// Web3Forms (lead-capture forms) and Sanity (blog content + images).
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cal.com https://*.cal.com https://app.cal.com;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://cal.com https://*.cal.com https://app.cal.com https://*.insforge.app https://cdn.insforge.dev https://insforge-storage.s3.us-east-2.amazonaws.com https://*.s3.us-east-2.amazonaws.com https://avatars.githubusercontent.com https://lh3.googleusercontent.com https://images.unsplash.com;
+    img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://api.web3forms.com https://cal.com https://*.cal.com https://app.cal.com https://*.insforge.app ${insforgeUrl} https://insforge-storage.s3.us-east-2.amazonaws.com https://*.s3.us-east-2.amazonaws.com https://api.anthropic.com wss:;
-    frame-src 'self' blob: https://cal.com https://*.cal.com https://app.cal.com;
+    connect-src 'self' https://api.web3forms.com https://*.api.sanity.io https://*.apicdn.sanity.io;
+    frame-src 'self' blob:;
     frame-ancestors 'none';
 `;
 
@@ -36,23 +30,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.insforge.app",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.insforge.dev",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
-      {
-        protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
       },
     ],
   },
@@ -104,12 +86,12 @@ const nextConfig: NextConfig = {
         destination: '/portals/jobs/contact',
       },
       {
-        source: '/candidates',
-        destination: '/dashboard/admin/candidates',
+        source: '/podcast',
+        destination: '/portals/jobs/podcast',
       },
       {
-        source: '/recruiters',
-        destination: '/dashboard/admin/recruiters',
+        source: '/security',
+        destination: '/portals/jobs/security',
       },
     ];
 

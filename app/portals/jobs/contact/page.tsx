@@ -6,9 +6,7 @@ import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { PageHeader } from '@/components/ui';
-import { CTA } from '@/components/sections';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import HeroBg from '@/components/ui/HeroBg/HeroBg';
 import styles from './contact.module.css';
 
 import { SectionHeader, CustomSelect, MotionAccordion } from '@/components/ui';
@@ -79,7 +77,6 @@ export default function ContactPage() {
 
     return (
         <main className={styles.page}>
-            <HeroBg src="/bg4.png" fixed />
             <SectionHeader
                 centered
                 tag="Get in Touch"
@@ -253,15 +250,6 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </section>
-            </AnimateOnScroll>
-            <AnimateOnScroll animation="scaleUp">
-                <CTA 
-                    glass
-                    title={<>Have Custom Integration <span className="text-gradient">Needs?</span></>}
-                    description="Our solutions architects are ready to design a custom hiring environment for you."
-                    buttonText="Schedule a Consultation"
-                    buttonLink="#contact-form"
-                />
             </AnimateOnScroll>
         </main>
     );

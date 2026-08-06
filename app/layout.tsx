@@ -92,8 +92,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { AuthProvider } from "@/lib/auth/AuthContext";
-import QueryProvider from "@/components/providers/QueryProvider";
 import { headers } from "next/headers";
 import { cn } from "@/lib/utils";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -107,14 +105,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const headersList = await headers();
-  const host = headersList.get("host") || "";
   const pathname = headersList.get("x-pathname") || "";
-  const isPortal = host.startsWith("jobs.") || host.startsWith("app.") || host.startsWith("admin.");
-  const isAuthRoute = pathname.startsWith("/login") || 
-                      pathname.startsWith("/signup") || 
-                      pathname.startsWith("/auth") || 
-                      pathname.startsWith("/onboarding");
-  const skipHeaderFooter = isPortal || isAuthRoute;
+  const skipHeaderFooter = pathname.startsWith("/login");
 
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
@@ -122,26 +114,22 @@ export default async function RootLayout({
         className={`${inter.variable} ${jakarta.variable} ${geist.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
       >
-        <QueryProvider>
-          <AuthProvider>
-            <ScrollToTop />
-            {!skipHeaderFooter ? (
-              <div className={layoutStyles.rootFlexContainer}>
-                <NavbarWrapper>
-                  <Navbar />
-                </NavbarWrapper>
-                <div className={layoutStyles.mainContentGrow}>
-                  {children}
-                </div>
-                <NavbarWrapper showFooter>
-                  <Footer />
-                </NavbarWrapper>
-              </div>
-            ) : (
-              children
-            )}
-          </AuthProvider>
-        </QueryProvider>
+        <ScrollToTop />
+        {!skipHeaderFooter ? (
+          <div className={layoutStyles.rootFlexContainer}>
+            <NavbarWrapper>
+              <Navbar />
+            </NavbarWrapper>
+            <div className={layoutStyles.mainContentGrow}>
+              {children}
+            </div>
+            <NavbarWrapper showFooter>
+              <Footer />
+            </NavbarWrapper>
+          </div>
+        ) : (
+          children
+        )}
       </body>
     </html>
   );

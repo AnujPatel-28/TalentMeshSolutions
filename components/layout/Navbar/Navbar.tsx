@@ -61,7 +61,7 @@ const Navbar = () => {
                             Find Work <span className={styles.chevron}>▼</span>
                         </div>
                         <div className={styles.dropdown}>
-                            <Link href="/browse-jobs" className={`${styles.dropdownLink} ${pathname === '/browse-jobs' ? styles.dropdownLinkActive : ''}`}>Browse Jobs</Link>
+                            {/* <Link href="/browse-jobs" className={`${styles.dropdownLink} ${pathname === '/browse-jobs' ? styles.dropdownLinkActive : ''}`}>Browse Jobs</Link> */}
                             <Link href="/job-seekers" className={`${styles.dropdownLink} ${pathname === '/job-seekers' ? styles.dropdownLinkActive : ''}`}>Candidate Benefits</Link>
                             <Link href="/portals/jobs/career-advice" className={`${styles.dropdownLink} ${pathname === '/career-advice' ? styles.dropdownLinkActive : ''}`}>Career Advice</Link>
                         </div>
@@ -69,14 +69,13 @@ const Navbar = () => {
 
                     {/* For Employers */}
                     <div className={styles.navItem}>
-                        <div className={`${styles.link} ${isActive('/employers') || isActive('/portals/jobs/case-studies') ? styles.linkActive : ''}`}>
+                        <div className={`${styles.link} ${isActive('/employers') ? styles.linkActive : ''}`}>
                             For Employers <span className={styles.chevron}>▼</span>
                         </div>
                         <div className={styles.dropdown}>
                             <Link href="/employers/post-job" className={`${styles.dropdownLink} ${pathname === '/employers/post-job' ? styles.dropdownLinkActive : ''}`}>Post a Job</Link>
                             <Link href="/employers/sourcing" className={`${styles.dropdownLink} ${pathname === '/employers/sourcing' ? styles.dropdownLinkActive : ''}`}>Talent Sourcing</Link>
                             {/* <Link href="/employers/products" className={`${styles.dropdownLink} ${pathname === '/employers/products' ? styles.dropdownLinkActive : ''}`}>Products & Pricing</Link> */}
-                            {/* <Link href="/portals/jobs/case-studies" className={`${styles.dropdownLink} ${pathname === '/case-studies' ? styles.dropdownLinkActive : ''}`}>Success Stories</Link> */}
                         </div>
                     </div>
 
@@ -124,10 +123,10 @@ const Navbar = () => {
                         </Link>
                         <div className={styles.dropdown}>
                             <Link href="/login" className={styles.dropdownLink}>Candidate Login</Link>
-                            <Link href="/recruiter/dashboard" className={styles.dropdownLink}>Recruiter Login</Link>
+                            <Link href="/login" className={styles.dropdownLink}>Recruiter Login</Link>
                         </div>
                     </div>
-                    <Link href="/signup" className={styles.signupBtn}>Get Started</Link>
+                    <Link href="/login" className={styles.signupBtn}>Get Started</Link>
                 </div>
 
                 {/* ── Mobile Hamburger ── */}
@@ -148,7 +147,7 @@ const Navbar = () => {
 
                 <div className={styles.mobileNavItem}>
                     <span className={styles.mobileNavLabel}>Find Work</span>
-                    <Link href="/browse-jobs" className={styles.mobileNavLink}>Browse Jobs</Link>
+                    {/* <Link href="/browse-jobs" className={styles.mobileNavLink}>Browse Jobs</Link> */}
                     <Link href="/job-seekers" className={styles.mobileNavLink}>Candidate Benefits</Link>
                     <Link href="/portals/jobs/career-advice" className={styles.mobileNavLink}>Career Advice</Link>
                 </div>
@@ -171,13 +170,13 @@ const Navbar = () => {
                 </div>
 
                 <div className={styles.mobileAuth}>
-                    <Link href="/signup" className={styles.signupBtn} style={{ textAlign: 'center', justifyContent: 'center' }}>
+                    <Link href="/login" className={styles.signupBtn} style={{ textAlign: 'center', justifyContent: 'center' }}>
                         Get Started
                     </Link>
                     <Link href="/login" className={styles.mobileLogin}>
                         Candidate Log In
                     </Link>
-                    <Link href="/recruiter/dashboard" className={styles.mobileLogin}>
+                    <Link href="/login" className={styles.mobileLogin}>
                         Recruiter Log In
                     </Link>
                 </div>
