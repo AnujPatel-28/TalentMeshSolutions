@@ -1,0 +1,150 @@
+.container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid #eef0f2;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 16px;
+}
+
+.stepper {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 3rem;
+}
+
+.stepBar {
+  flex: 1;
+  height: 6px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  transition: background 0.3s;
+}
+
+.stepBarActive {
+  background: #1e88e5;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.input, .select, .textarea {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s;
+  background: #f8fafc;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  border-color: #1e88e5;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.1);
+}
+
+.textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.backBtn {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.nextBtn {
+  background: #1e88e5;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nextBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(30, 136, 229, 0.2);
+}
+
+.previewCard {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.previewItem {
+  margin-bottom: 16px;
+}
+
+.previewLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.previewValue {
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 500;
+}

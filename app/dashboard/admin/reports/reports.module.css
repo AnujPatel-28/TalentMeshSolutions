@@ -1,0 +1,383 @@
+/* ==========================================================================
+   ADMIN REPORTS & ANALYTICS STYLES - GOLDEN RATIO (φ ≈ 1.618) DESIGN SYSTEM
+   ========================================================================== */
+
+.page {
+  padding: 1.618rem;
+  max-width: 1618px;
+  margin: 0 auto;
+  font-family: inherit;
+  color: #0f172a;
+  box-sizing: border-box;
+}
+
+.hero {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.618rem;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  font-size: 0.825rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #2563eb;
+  font-weight: 800;
+  margin-bottom: 0.382rem;
+}
+
+.title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.618rem;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 1rem;
+  max-width: 618px;
+  line-height: 1.5;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.618rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+/* Golden Ratio Metrics Grid (4 cards aligned to golden scale) */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.618rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: #ffffff;
+  padding: 1.618rem;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 8px 30px -4px rgba(59, 130, 246, 0.12);
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.382rem;
+  display: block;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* Golden Ratio Charts Layout (61.8% / 38.2% & Golden Aspect Ratio cards) */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.618rem;
+  box-sizing: border-box;
+}
+
+.chartCard {
+  background: #ffffff;
+  padding: 1.618rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 340px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chartCard:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.07);
+}
+
+.chartTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  color: #0f172a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Golden Ratio Container for SVG Graphs (1.618 : 1 aspect ratio fit) */
+.chartContainer {
+  aspect-ratio: 1.618 / 1;
+  width: 100%;
+  max-height: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Funnel Styles - Perfectly contained inside Golden Ratio Card */
+.funnelWrapper {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 0.618rem;
+  padding: 0.5rem 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.funnelStep {
+  height: 42px;
+  background: #3b82f6;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.funnelStep:hover {
+  transform: translateX(6px);
+  filter: brightness(1.05);
+}
+
+.funnelLabel {
+  opacity: 0.95;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Skill distribution Heatmap Bars */
+.skillBar {
+  display: flex;
+  align-items: center;
+  gap: 1.618rem;
+  margin-bottom: 0.85rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.skillName {
+  width: 110px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barTrack {
+  flex: 1;
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 100px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.barFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.skillCount {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #64748b;
+  width: 36px;
+  text-align: right;
+}
+
+/* Tabs & Audit Report Styles */
+.tabsContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.618rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.tabButton {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.618rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.tabButton:hover {
+  color: #2563eb;
+  background: #f8fafc;
+}
+
+.tabButtonActive {
+  color: #2563eb;
+  background: #eff6ff;
+  border-bottom: 2px solid #2563eb;
+}
+
+.operationsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.618rem;
+  box-sizing: border-box;
+}
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.table th {
+  background: #f8fafc;
+  padding: 0.85rem 1.25rem;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table td {
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.statusSuccess {
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.statusWarning {
+  color: #d97706;
+  background: #fef3c7;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.statusError {
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.jsonBlock {
+  background: #0f172a;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 1rem;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 220px;
+  margin-top: 0.5rem;
+}
+
+.emptyState {
+  padding: 3rem;
+  text-align: center;
+  color: #64748b;
+  font-weight: 600;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,298 @@
+.timelineContainer {
+  padding: 8px 0;
+  width: 100%;
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 0 44px 0; /* Extra bottom spacing for absolute labels */
+  position: relative;
+}
+
+.stageNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.nodeCircle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.nodeCircle.completed {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.nodeCircle.current {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  animation: pulse 2.5s infinite;
+}
+
+.nodeCircle.pending {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
+.connectorLine {
+  flex: 1;
+  height: 3px;
+  background: #f1f5f9;
+  z-index: 1;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+  margin: 0 -4px; /* seamless connection overlap */
+}
+
+.connectorCompleted {
+  background: #3b82f6;
+}
+
+.stageInfo {
+  position: absolute;
+  top: 46px; /* positioned directly below nodes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 90px;
+}
+
+.stageLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.stageDate {
+  font-size: 0.68rem;
+  color: #64748b;
+  margin-top: 1px;
+  font-weight: 600;
+}
+
+/* Vertical Timeline (Ashby/Lever Style) */
+.verticalTimelineContainer {
+  padding: 8px 0;
+  width: 100%;
+}
+
+.verticalTimeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 28px;
+  padding-left: 8px;
+}
+
+.verticalNode {
+  display: flex;
+  gap: 18px;
+  position: relative;
+  align-items: flex-start;
+}
+
+.verticalLine {
+  position: absolute;
+  left: 6px;
+  top: 22px;
+  bottom: -34px;
+  width: 2px;
+  background: #e2e8f0;
+  z-index: 0;
+  transition: background 0.3s;
+}
+
+.verticalDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  background: #fff;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.vCompleted .verticalDot {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+.vCompleted .verticalLine {
+  background: #3b82f6;
+}
+
+.vCurrent .verticalDot {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.vPending .verticalDot {
+  border-color: #e2e8f0;
+  background: #fff;
+}
+
+.vPending .verticalLine {
+  background: #f1f5f9;
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
+  animation: verticalPulse 2s infinite;
+}
+
+@keyframes verticalPulse {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.verticalContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.verticalHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.verticalTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verticalIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.vCompleted .verticalIconWrapper {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #3b82f6;
+}
+
+.vCurrent .verticalIconWrapper {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.vPending .verticalIconWrapper {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+}
+
+.vTerminalIcon {
+  background: #fee2e2 !important;
+  border-color: #fca5a5 !important;
+  color: #ef4444 !important;
+  font-weight: 800;
+  font-size: 0.7rem;
+}
+
+.verticalStageTitle {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.vPending .verticalStageTitle {
+  color: #94a3b8;
+}
+
+.verticalDate {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.verticalDesc {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.45;
+  padding-left: 34px; /* Align with stage title text */
+}
+
+.vPending .verticalDesc {
+  color: #cbd5e1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline {
+    overflow-x: auto;
+    padding-bottom: 44px; /* spacer for horizontal scroll scrollbars */
+  }
+  .stageNode {
+    min-width: 80px;
+  }
+}

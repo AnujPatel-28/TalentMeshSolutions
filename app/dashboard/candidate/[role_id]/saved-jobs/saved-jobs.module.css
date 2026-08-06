@@ -1,0 +1,325 @@
+.container {
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.badge {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.search {
+    flex: 1;
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.search input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.sort {
+    width: 180px;
+}
+
+.sort select {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    text-align: center;
+    background: white;
+    border-radius: 16px;
+    border: 2px dashed #e2e8f0;
+}
+
+.emptyIcon {
+    background: #f8fafc;
+    color: #94a3b8;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.emptyTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.emptyText {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    max-width: 320px;
+}
+
+.cta {
+    background: #2563eb;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.cta:hover {
+    background: #1d4ed8;
+}
+
+/* Saved Job Card */
+.jobCard {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s, transform 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.jobCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -8px rgba(0,0,0,0.08);
+}
+
+.cardTop {
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.info {
+    flex: 1;
+}
+
+.jobTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.25rem;
+}
+
+.companyRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.dot {
+    width: 3px;
+    height: 3px;
+    background: #cbd5e1;
+    border-radius: 50%;
+}
+
+.metaRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.typeBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+
+.fulltime { background: #f0f9ff; color: #0369a1; }
+.contract { background: #fef2f2; color: #b91c1c; }
+.remote { background: #f0fdf4; color: #15803d; }
+.other { background: #f8fafc; color: #475569; }
+
+.salary {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: #f1f5f9;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+
+.cardFoot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.savedDate {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.applyBtn {
+    background: #2563eb;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.applyBtn:hover {
+    background: #1d4ed8;
+}
+
+.removeBtn {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.removeBtn:hover {
+    background: #fef2f2;
+    color: #ef4444;
+    border-color: #fee2e2;
+}
+
+.expired {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #fff1f2;
+    color: #e11d48;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.removing {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .controls {
+        flex-direction: column;
+    }
+    .sort {
+        width: 100%;
+    }
+}

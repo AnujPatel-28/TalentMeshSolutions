@@ -1,0 +1,359 @@
+.container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    background: #f0f9ff;
+    color: #0284c7;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.badge:hover {
+    background: #e0f2fe;
+}
+
+/* Grid of Cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.popularRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section {
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sectionTitle {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.priceWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.currency {
+    position: absolute;
+    left: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.priceInput {
+    padding-left: 1.75rem !important;
+}
+
+.savings {
+    font-size: 0.75rem;
+    color: #10b981;
+    font-weight: 700;
+}
+
+/* Features List */
+.featuresList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.featureRow {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.featureInput {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.removeBtn {
+    color: #ef4444;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.addBtn {
+    background: white;
+    border: 1px dashed #cbd5e1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #64748b;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.addBtn:hover {
+    background: #f1f5f9;
+}
+
+/* Footer Action */
+.saveBtn {
+    width: 100%;
+    padding: 0.875rem;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveBtn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px);
+}
+
+.saveBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Preview Section */
+.previewSection {
+    margin-top: 4rem;
+    padding-top: 4rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.previewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.previewGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    background: #f8fafc;
+    padding: 4rem 2rem;
+    border-radius: 32px;
+}
+
+/* Danger Zone */
+.dangerZone {
+    margin-top: 4rem;
+    padding: 2rem;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-radius: 24px;
+}
+
+.dangerZone h2 {
+    color: #991b1b;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.dangerActions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.dangerBtn {
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 1px solid #fca5a5;
+    color: #dc2626;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dangerBtn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.dangerBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Toggles */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+}
+
+.toggle input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider { background-color: #6366f1; }
+input:checked + .slider:before { transform: translateX(16px); }
+
+/* Pricing Preview Components */
+.previewPlan {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.previewPlanPopular {
+    border-color: #6366f1;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+}
+
+.popularBadge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #6366f1;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.previewName {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.previewPrice {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.previewPrice span {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.previewFeature {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #475569;
+    align-items: center;
+}
+
+.check {
+    color: #10b981;
+}
+
+.previewCTA {
+    margin-top: auto;
+    padding: 0.875rem;
+    background: #0f172a;
+    color: white;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+}

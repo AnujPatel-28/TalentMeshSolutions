@@ -1,0 +1,28 @@
+-- Migration 045: Document false-positive RLS index warnings (no-op)
+-- Advisor warnings: performance/missing-rls-index (11 issues)
+--
+-- IMPORTANT: This migration creates NO indexes and makes NO database changes.
+--
+-- The InsForge Advisor's static parser incorrectly attributes columns from
+-- joined tables inside RLS policy subqueries to the parent table.
+-- All 11 flagged columns do NOT exist on the tables the Advisor claims.
+-- The actual columns being filtered (on the joined tables) are already indexed.
+--
+-- Verified against live database on 2026-07-11.
+--
+-- False positives documented:
+-- 1.  application_status_history.candidate_id  → actual: applications.candidate_id (idx_applications_candidate_id ✓)
+-- 2.  application_status_history.recruiter_id   → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+-- 3.  applications.recruiter_id (apps_recruiter_update) → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+-- 4.  applications.recruiter_id (apps_recruiter_view)   → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+-- 5.  candidate_profiles.recruiter_id           → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+-- 6.  candidate_resumes.recruiter_id            → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+-- 7.  export_candidates.user_id                 → actual: export_jobs.user_id (idx_export_jobs_user_id ✓)
+-- 8.  notification_events.user_id               → actual: notification_jobs.user_id (idx_notification_jobs_user_id ✓)
+-- 9.  notification_preferences.id               → actual: profiles.id (profiles_pkey ✓)
+-- 10. notification_templates.user_id            → actual: admin_users.user_id (admin_users_pkey ✓)
+-- 11. profiles.recruiter_id                     → actual: jobs.recruiter_id (idx_jobs_recruiter_id ✓)
+
+-- No SQL statements — this file exists solely as audit documentation.
+-- The Advisor will continue to flag these warnings because it cannot parse
+-- subquery JOIN semantics. They are safe to ignore.

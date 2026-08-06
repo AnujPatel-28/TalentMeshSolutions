@@ -1,0 +1,866 @@
+/* =====================================================
+   ABOUT PAGE — Modern Glassmorphism & High-Impact Styling
+   ===================================================== */
+
+.page {
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 100px;
+    background: #090d16;
+    color: #f8fafc;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ── Badges & Typography ── */
+.sectionBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    font-size: 0.825rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.heroTitle {
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.highlight {
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heroSub {
+    font-size: 1.15rem;
+    line-height: 1.65;
+    color: #94a3b8;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ── 1. HERO SECTION ── */
+.hero {
+    padding: 40px 0 80px;
+    text-align: center;
+}
+
+.heroInner {
+    max-width: 820px;
+    margin: 0 auto 56px;
+}
+
+.heroImageGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    height: 480px;
+}
+
+.imgLeft {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.imgRightCol {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 24px;
+}
+
+.imgRightTop,
+.imgRightBottom {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gridImg {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.imgLeft:hover .gridImg,
+.imgRightTop:hover .gridImg,
+.imgRightBottom:hover .gridImg {
+    transform: scale(1.04);
+}
+
+/* Trusted Logos */
+.trustedCompanies {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-top: 20px;
+}
+
+.trustedLabel {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.logoRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
+}
+
+.companyLogo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #94a3b8;
+    opacity: 0.75;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    letter-spacing: 0.02em;
+}
+
+.companyLogo:hover {
+    opacity: 1;
+    color: #ffffff;
+}
+
+/* ── 2. FOUNDER QUOTE ── */
+.quoteSection {
+    padding: 80px 0;
+}
+
+.quoteContent {
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    text-align: center;
+}
+
+.quoteMark {
+    position: absolute;
+    top: -20px;
+    left: 40px;
+    font-size: 6rem;
+    line-height: 1;
+    color: rgba(52, 211, 153, 0.2);
+    font-family: Georgia, serif;
+    pointer-events: none;
+}
+
+.mainQuote {
+    font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+    font-weight: 500;
+    line-height: 1.55;
+    color: #f1f5f9;
+    font-style: italic;
+    margin: 0 0 32px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.quoteAuthor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.authorAvatar {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #34d399;
+}
+
+.avatarImg {
+    object-fit: cover;
+}
+
+.authorMeta {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.authorName {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-style: normal;
+}
+
+.authorRole {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* ── 3. TEAM SECTION ── */
+.teamSection {
+    padding: 80px 0;
+}
+
+.teamHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 48px;
+}
+
+.teamHeaderLeft {
+    max-width: 480px;
+}
+
+.teamHeaderRight {
+    max-width: 520px;
+}
+
+.teamDescription {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #94a3b8;
+}
+
+.teamRowGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.teamCard {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.teamCard:hover {
+    transform: translateY(-6px);
+    border-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+.teamImgWrapper {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.teamCardImg {
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.teamCard:hover .teamCardImg {
+    transform: scale(1.05);
+}
+
+.teamCardInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.teamCardName {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.teamCardRole {
+    font-size: 0.875rem;
+    color: #34d399;
+    font-weight: 500;
+}
+
+/* ── 4. JOURNEY / MILESTONES ── */
+.journeySection {
+    padding: 80px 0;
+}
+
+.journeyHeader {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 48px;
+}
+
+.milestonesTable {
+    max-width: 960px;
+    margin: 0 auto;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.tableHeaderRow {
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+    gap: 24px;
+    padding: 20px 32px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.colHeader {
+    font-size: 0.825rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+}
+
+.colHeaderRight {
+    composes: colHeader;
+    text-align: right;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+    gap: 24px;
+    align-items: center;
+    padding: 22px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background-color 0.2s ease;
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+.tableRow:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.milestoneTitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.milestoneDesc {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #94a3b8;
+}
+
+.milestoneYear {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #34d399;
+    text-align: right;
+}
+
+/* ── 5. STATS & TESTIMONIALS ── */
+.statsSection {
+    padding: 80px 0;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.testimonialStatCard {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.testimonialStatCard:hover {
+    transform: translateY(-4px);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.cardStatHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 20px;
+}
+
+.statMetric {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #34d399;
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.cardQuoteMark {
+    font-size: 2.5rem;
+    line-height: 1;
+    color: rgba(52, 211, 153, 0.25);
+    margin-bottom: -10px;
+}
+
+.cardTestimonialText {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin-bottom: 24px;
+    flex: 1;
+}
+
+.cardAuthorRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cardAvatar {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.cardAuthorMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardAuthorName {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-style: normal;
+}
+
+.cardAuthorRole {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* ── 6. WHY WORK WITH US ── */
+.whyUsSection {
+    padding: 80px 0;
+}
+
+.whyUsHeader {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 48px;
+}
+
+.whyUsSub {
+    font-size: 1.05rem;
+    color: #94a3b8;
+}
+
+.comparisonGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.comparisonCard {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 36px;
+}
+
+.compCardActive {
+    background: rgba(6, 78, 59, 0.2);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    box-shadow: 0 20px 40px rgba(52, 211, 153, 0.05);
+}
+
+.compCardTitle {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.compList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.compItemMinus,
+.compItemPlus {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+}
+
+.compItemMinus {
+    color: #94a3b8;
+}
+
+.compItemPlus {
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+.compIconMinus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.compIconPlus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(52, 211, 153, 0.2);
+    color: #34d399;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── 7. OUR VISION ── */
+.visionSection {
+    padding: 80px 0;
+}
+
+.visionContent {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    padding: 64px 32px;
+    border-radius: 32px;
+    border: 1px solid rgba(52, 211, 153, 0.15);
+}
+
+.visionText {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    margin-bottom: 28px;
+}
+
+.visionQuoteText {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #34d399;
+    font-style: italic;
+}
+
+/* ── 8. OFFICES & WORLD MAP ── */
+.officeSection {
+    padding: 80px 0;
+}
+
+.officeHeader {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 48px;
+}
+
+.worldMap {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    height: 440px;
+    margin: 0 auto 48px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.worldMapImg {
+    object-fit: contain;
+    opacity: 0.45;
+
+}
+
+.worldMapOverlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(9, 13, 22, 0.8) 100%);
+    pointer-events: none;
+}
+
+.mapPin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 5;
+}
+
+.mapPinDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 12px #34d399;
+}
+
+.mapPinRipple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+    margin-left: -14px;
+    border-radius: 50%;
+    border: 2px solid #34d399;
+    animation: ripple 2s infinite ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0.4);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+.mapPinLabel {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+}
+
+.mapPinLabel strong {
+    font-size: 0.85rem;
+    color: #ffffff;
+}
+
+.mapPinLabel span {
+    font-size: 0.725rem;
+    color: #34d399;
+}
+
+.mapPin:hover .mapPinLabel {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.officeCards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.officeCard {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.officeCard:hover {
+    transform: translateY(-4px);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.officeTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.officeCity {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.officeCountry {
+    font-size: 0.825rem;
+    color: #94a3b8;
+}
+
+.officeRole {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    text-transform: uppercase;
+}
+
+.officeAddr {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.mapLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #34d399;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.mapLink:hover {
+    color: #6ee7b7;
+    text-decoration: underline;
+}
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+@media (max-width: 1024px) {
+    .teamRowGrid,
+    .officeCards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .teamHeaderRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .tableHeaderRow,
+    .tableRow {
+        grid-template-columns: 140px 1fr 80px;
+        padding: 16px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroImageGrid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .imgLeft {
+        height: 280px;
+    }
+
+    .imgRightCol {
+        height: 360px;
+    }
+
+    .comparisonGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tableHeaderRow,
+    .tableRow {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .colHeaderRight,
+    .milestoneYear {
+        text-align: left;
+    }
+
+    .teamRowGrid,
+    .officeCards {
+        grid-template-columns: 1fr;
+    }
+
+    .worldMap {
+        height: 280px;
+    }
+}

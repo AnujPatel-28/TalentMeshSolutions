@@ -1,0 +1,252 @@
+.header {
+    background: linear-gradient(135deg, #0a0f1e 0%, #0d1b3e 40%, #0f2044 70%, #081428 100%);
+    padding: 11rem 2rem 7rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Animated grid-line overlay */
+.header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 1;
+}
+
+/* Gradient glow overlay */
+.header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 50% 80% at 20% 100%, rgba(0, 123, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 60% at 80% 0%, rgba(96, 165, 250, 0.12) 0%, transparent 50%);
+    z-index: 2;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #60a5fa;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.03em;
+}
+
+.highlight {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6, #818cf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.description {
+    font-size: clamp(1.125rem, 2vw, 1.35rem);
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.65;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Floating orb 1 */
+.decor1 {
+    position: absolute;
+    top: -15%;
+    right: -8%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 123, 255, 0.18) 0%, rgba(0, 123, 255, 0.05) 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: 3;
+    animation: floatOrb1 8s ease-in-out infinite;
+    filter: blur(20px);
+}
+
+/* Floating orb 2 */
+.decor2 {
+    position: absolute;
+    bottom: -20%;
+    left: -8%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.15) 0%, rgba(129, 140, 248, 0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: 3;
+    animation: floatOrb2 10s ease-in-out infinite;
+    filter: blur(20px);
+}
+
+@keyframes floatOrb1 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(-30px, 20px) scale(1.05);
+    }
+}
+
+@keyframes floatOrb2 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(20px, -30px) scale(1.08);
+    }
+}
+
+/* --- Light Theme Variant --- */
+.header.light {
+    background: linear-gradient(180deg, #eef5ff 0%, #fafcff 100%);
+}
+.header.light::before {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+.header.light::after {
+    display: none;
+}
+.header.light .title {
+    color: #0f172a;
+}
+.header.light .description {
+    color: #475569;
+}
+.header.light .breadcrumb {
+    background: #ffffff;
+    color: #1e40af;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.header.light .highlight {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.header.light .decor1, .header.light .decor2 {
+    opacity: 0.3;
+}
+
+/* ── withBg Variant (light-wave images) ── */
+.header.withBg {
+    /* Image replaces the dark gradient — use transparent so image shows */
+    background: transparent;
+}
+.header.withBg::before,
+.header.withBg::after {
+    display: none;
+}
+.header.withBg .title {
+    color: #0f172a;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+}
+.header.withBg .description {
+    color: #1e3a5f;
+}
+.header.withBg .breadcrumb {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #1e40af;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.header.withBg .highlight {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.header.withBg .decor1,
+.header.withBg .decor2 {
+    opacity: 0.12;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .header {
+        padding: 9rem 2rem 6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 8rem 1.25rem 5rem;
+    }
+
+    .title {
+        font-size: clamp(2rem, 7vw, 3rem);
+        letter-spacing: -0.02em;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .breadcrumb {
+        font-size: 0.75rem;
+        padding: 0.4rem 1rem;
+    }
+
+    .decor1,
+    .decor2 {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 7rem 1rem 4rem;
+    }
+
+    .title {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+
+    .decor1 {
+        width: 180px;
+        height: 180px;
+    }
+
+    .decor2 {
+        width: 140px;
+        height: 140px;
+    }
+}

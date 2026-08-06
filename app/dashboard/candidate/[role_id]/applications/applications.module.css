@@ -1,0 +1,818 @@
+.pageContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #334155;
+  background: #fafbfd;
+  min-height: 100vh;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  align-self: flex-start;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.backButton:hover {
+  color: #3b82f6;
+  background: #f1f5f9;
+  transform: translateX(-3px);
+}
+
+/* Header Section */
+.headerCard {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01), 0 1px 2px rgba(0, 0, 0, 0.02);
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .headerCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+.logoWrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.defaultLogo {
+  font-size: 2.25rem;
+  user-select: none;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.jobTitle {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.companyName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  transition: all 0.2s;
+}
+
+.badge:hover {
+  background: #eff6ff;
+  border-color: #cbd5e1;
+  color: #2563eb;
+}
+
+/* Status Banner */
+.statusBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.statusTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 250px;
+}
+
+.statusHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.updatedText {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.statusTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.statusDescription {
+  font-size: 0.85rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.withdrawBtn {
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  white-space: nowrap;
+}
+
+.withdrawBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.05);
+}
+
+/* Status Colors configs */
+.statusApplied {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.statusApplied .statusBadge {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+
+.statusReviewing {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.statusReviewing .statusBadge {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.statusShortlisted, .statusInterviewing {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.statusShortlisted .statusBadge, .statusInterviewing .statusBadge {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+.statusOffered, .statusHired {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+.statusOffered .statusBadge, .statusHired .statusBadge {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+.statusRejected, .statusWithdrawn {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+.statusRejected .statusBadge, .statusWithdrawn .statusBadge {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+/* Layout Columns Grid */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leftColumn, .rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card layout styles */
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01), 0 1px 2px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Overview layout */
+.overviewGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.overviewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.825rem;
+  padding-bottom: 0.25rem;
+}
+
+.overviewRow:not(:last-child) {
+  border-bottom: 1px dashed #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.overviewLabel {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.overviewValue {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* Next Steps Widget */
+.nextStepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nextStepRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+}
+
+.nextStepActive {
+  opacity: 1;
+  font-weight: 700;
+}
+
+.nextStepDone {
+  opacity: 0.85;
+}
+
+.nextStepDot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.nextStepDone .nextStepDot {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.nextStepActive .nextStepDot {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.nextStepLabel {
+  font-size: 0.825rem;
+  color: #334155;
+}
+
+.nextStepDone .nextStepLabel {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* Resume details card */
+.resumeCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resumeInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.resumeTextDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.resumeFileName {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resumeFileSize {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.resumeActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.resumeViewBtn, .resumeDownloadBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border-radius: 8px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.resumeViewBtn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.resumeViewBtn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.resumeDownloadBtn {
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+}
+
+.resumeDownloadBtn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Recruiter Logs widget */
+.recruiterLogs {
+  display: flex;
+  flex-direction: column;
+}
+
+.logsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.logRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.logBullet {
+  color: #3b82f6;
+  font-weight: 900;
+  font-size: 1.1rem;
+  line-height: 0.8;
+  margin-top: 2px;
+}
+
+.logInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.logActionText {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.logTime {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.emptyLogsText {
+  font-size: 0.775rem;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Support widget */
+.helpPromptText {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.helpActionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.helpActionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.helpActionButton:hover {
+  background: #eff6ff;
+  border-color: #cbd5e1;
+  color: #2563eb;
+}
+
+/* AI Insights details */
+.insightsWidget {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 640px) {
+  .insightsWidget {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.insightsDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.insightsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #334155;
+}
+
+.matchLevelBadge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  user-select: none;
+}
+
+.matchHigh {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.matchMedium {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.insightsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.insightItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.insightItem svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Cover letter text block */
+.coverLetterBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #475569;
+  white-space: pre-wrap;
+}
+
+/* Modals & Dialogs overlays */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalContent {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  max-width: 440px;
+  width: 100%;
+  padding: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modalTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.modalBody {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.modalCancelBtn {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modalCancelBtn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.modalConfirmBtn {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modalConfirmBtn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.modalConfirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Spinners and Loader elements */
+.loadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f1f5f9;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorState {
+  text-align: center;
+  padding: 80px 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.errorState h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.errorState p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.25rem;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.primaryBtn:hover {
+  background: #2563eb;
+}

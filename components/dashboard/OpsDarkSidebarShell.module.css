@@ -1,0 +1,893 @@
+.shell {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--tm-surface-muted);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+    width: 230px;
+    background-color: #12151A;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: width 0.2s ease-in-out;
+    position: relative;
+    z-index: 1000;
+}
+
+.sidebarCollapsed {
+    width: 64px;
+}
+
+/* Brand Row (Top Header) */
+.brandRow {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    color: var(--white);
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.sidebarCollapsed .brandRow {
+    justify-content: center;
+    padding: 0;
+}
+
+.collapseBtnTop {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #9CA3AF;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease;
+}
+
+.collapseBtnTop:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Create New Wrapper & Button */
+.createWrapper {
+    padding: 0 12px;
+    margin-bottom: 12px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.createBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: var(--white);
+    color: #12151A;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.createBtn:hover {
+    background-color: #f8fafc;
+    transform: translateY(-1px);
+}
+
+.createBtnCollapsed {
+    padding: 10px;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.createDropdown {
+    position: absolute;
+    top: 100%;
+    background-color: #1E2229;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px;
+    width: 180px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.createDropdownItem {
+    padding: 8px 12px;
+    color: #9CA3AF;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.createDropdownItem:hover {
+    background-color: #2A2F38;
+    color: var(--white);
+}
+
+/* Navigation Menu */
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 8px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.navRow {
+    position: relative;
+    width: 100%;
+}
+
+.navLink {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 8px;
+    color: #9CA3AF;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 12px;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.navLink:hover {
+    color: var(--white);
+    background-color: rgba(255,255,255,0.03);
+}
+
+.navLinkActive {
+    background-color: #1E2229 !important;
+    color: var(--white) !important;
+}
+
+.navLinkCollapsed {
+    padding: 0;
+    justify-content: center;
+    width: 44px;
+    height: 42px;
+    margin: 0 auto;
+}
+
+.navIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.navLabel {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevronRight {
+    margin-left: auto;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+}
+
+/* Button reset for nav items with accordion */
+.navLinkButton {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* Inline Accordion Sub-items List */
+.subList {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-left: 28px;
+    padding-right: 8px;
+    margin-top: 3px;
+    margin-bottom: 6px;
+}
+
+.subLink {
+    display: flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: #9CA3AF;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    gap: 8px;
+}
+
+.subLink:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.subLinkActive {
+    color: #60A5FA !important;
+    background: rgba(59, 130, 246, 0.12) !important;
+    font-weight: 600;
+}
+
+.subDot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #6B7280;
+    flex-shrink: 0;
+}
+
+.subLinkActive .subDot {
+    background-color: #60A5FA;
+    box-shadow: 0 0 6px rgba(96, 165, 250, 0.8);
+}
+
+/* Absolute Floating Submenu Flyout */
+.flyout {
+    position: absolute;
+    left: 100%;
+    background-color: #1E2229;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    width: 220px;
+    padding: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: 8px;
+}
+
+.flyoutHeader {
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.flyoutList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.flyoutItem {
+    padding: 10px 12px;
+    color: #9CA3AF;
+    font-size: 13px;
+    font-weight: 550;
+    text-decoration: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.flyoutItem:hover {
+    color: var(--white);
+    background-color: rgba(255,255,255,0.05);
+}
+
+.flyoutItemFeatured {
+    background-color: #2A2F38;
+    color: var(--white);
+}
+
+.flyoutItemActive {
+    background-color: var(--tm-accent) !important;
+    color: var(--white) !important;
+}
+
+/* ─── Main Area ─── */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+}
+
+/* Top Bar */
+.topbar {
+    height: 56px;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--tm-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    flex-shrink: 0;
+}
+
+.logoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--tm-text-primary);
+}
+
+/* Top bar right navigation links */
+.topbarRight {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.topLink {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--tm-text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px;
+    transition: color 0.15s;
+    outline: none;
+}
+
+.topLink:hover {
+    color: var(--tm-text-primary);
+}
+
+.notifBadge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
+    background-color: var(--tm-status-error-text);
+    border-radius: 50%;
+}
+
+/* Account Dropdown */
+.accountMenu {
+    position: relative;
+}
+
+.accountBtn {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--tm-text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+}
+
+.accountBtn:hover {
+    color: var(--tm-text-primary);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--tm-surface-muted);
+    border: 1px solid var(--tm-border);
+    color: var(--tm-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.emailText {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.accountDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--white);
+    border: 1px solid var(--tm-border);
+    border-radius: 8px;
+    padding: 6px;
+    width: 220px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.accountDropdownHeader {
+    padding: 8px 12px 12px;
+    border-bottom: 1px solid var(--tm-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+    color: var(--tm-text-primary);
+}
+
+.accountDropdownHeader span {
+    font-size: 11px;
+    color: var(--tm-text-secondary);
+}
+
+.dropdownItem {
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tm-text-primary);
+    text-decoration: none;
+    border-radius: 6px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    outline: none;
+}
+
+.dropdownItem:hover {
+    background-color: var(--tm-surface-muted);
+}
+
+.signOutBtn {
+    color: var(--tm-status-error-text);
+    border-top: 1px solid var(--tm-border);
+    margin-top: 4px;
+    padding-top: 12px;
+    border-radius: 0;
+}
+
+.signOutBtn:hover {
+    background-color: var(--tm-status-error-bg);
+    color: var(--tm-status-error-text);
+}
+
+/* Content Pane */
+.contentPane {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+/* Backdrop for Mobile */
+.backdrop {
+    display: none;
+}
+
+/* ─── Mobile Responsiveness (< 768px) ─── */
+@media (max-width: 767px) {
+    .sidebar {
+        position: fixed;
+        left: -230px;
+        top: 0;
+        bottom: 0;
+        transition: left 0.25s ease-in-out;
+    }
+
+    .sidebarMobileOpen {
+        left: 0;
+    }
+
+    .sidebarCollapsed {
+        left: -230px;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .topbarRight .topLink span {
+        display: none;
+    }
+
+    .emailText {
+        display: none;
+    }
+
+    .backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0,0,0,0.4);
+        z-index: 990;
+    }
+}
+
+/* Recruiter workspace refinement */
+.recruiterShell {
+    --recruiter-sidebar: #11161d;
+    --recruiter-sidebar-raised: #1b222c;
+    --recruiter-sidebar-muted: #9aa6b5;
+    --recruiter-sidebar-border: rgba(255, 255, 255, 0.09);
+    --recruiter-accent: #60a5fa;
+    --recruiter-accent-soft: rgba(96, 165, 250, 0.14);
+    background: #f5f7fa;
+}
+
+.recruiterShell .sidebar {
+    width: 240px;
+    background: var(--recruiter-sidebar);
+    border-right: 1px solid var(--recruiter-sidebar-border);
+    box-shadow: none;
+}
+
+.recruiterShell .sidebarCollapsed {
+    width: 72px;
+}
+
+.recruiterShell .sidebarCollapsed .brandRow {
+    justify-content: center;
+    padding: 0;
+}
+
+.recruiterShell .sidebarCollapsed .workspaceHome {
+    display: none;
+}
+
+.recruiterShell .brandRow {
+    height: 64px;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--recruiter-sidebar-border);
+}
+
+.workspaceHome {
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #f8fafc;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.workspaceMark {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border: 1px solid rgba(96, 165, 250, 0.42);
+    border-radius: 10px;
+    color: #dbeafe;
+    background: rgba(96, 165, 250, 0.16);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.workspaceHome:hover .workspaceMark {
+    background: rgba(96, 165, 250, 0.24);
+}
+
+.workspaceLabel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recruiterShell .collapseBtnTop {
+    width: 32px;
+    height: 32px;
+    border-color: var(--recruiter-sidebar-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--recruiter-sidebar-muted);
+}
+
+.recruiterShell .collapseBtnTop:hover {
+    background: var(--recruiter-sidebar-raised);
+    color: #f8fafc;
+}
+
+.recruiterShell .nav {
+    gap: 6px;
+    padding: 16px 10px;
+}
+
+.recruiterShell .navLink {
+    min-height: 44px;
+    color: var(--recruiter-sidebar-muted);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.recruiterShell .navLink:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.recruiterShell .navLinkActive {
+    background: var(--recruiter-accent-soft) !important;
+    color: #f8fafc !important;
+    box-shadow: inset 3px 0 0 var(--recruiter-accent);
+}
+
+.recruiterShell .navLinkActive .navIcon,
+.recruiterShell .subLinkActive .subDot {
+    color: var(--recruiter-accent);
+    filter: none;
+}
+
+.recruiterShell .subList {
+    gap: 4px;
+    padding-left: 32px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.recruiterShell .subLink {
+    min-height: 36px;
+    color: #8793a3;
+    border-radius: 8px;
+}
+
+.recruiterShell .subLink:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.recruiterShell .subLinkActive {
+    color: #bfdbfe !important;
+    background: var(--recruiter-accent-soft) !important;
+    font-weight: 600;
+}
+
+.recruiterShell .createWrapper {
+    padding: 0 12px;
+    margin: 12px 0 8px;
+}
+
+.recruiterShell .createBtn {
+    min-height: 44px;
+    background: #f8fafc;
+    color: #16202b;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.recruiterShell .createBtn:hover {
+    background: #ffffff;
+    transform: none;
+}
+
+.recruiterShell .createDropdown,
+.recruiterShell .flyout {
+    background: #1b222c;
+    border: 1px solid var(--recruiter-sidebar-border);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+}
+
+.recruiterShell .topbar {
+    height: 64px;
+    padding: 0 32px;
+    background: #ffffff;
+    border-bottom-color: #e5e9ef;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
+}
+
+.recruiterShell .contentPane {
+    padding: 32px;
+    background: #f5f7fa;
+}
+
+.recruiterShell .topLink,
+.recruiterShell .accountBtn {
+    min-height: 40px;
+}
+
+.recruiterShell .mobileNav,
+.skipLink {
+    display: none;
+}
+
+.skipLink:focus-visible {
+    display: block;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 2000;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.recruiterShell :is(a, button):focus-visible {
+    outline: 2px solid var(--recruiter-accent);
+    outline-offset: 2px;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .recruiterShell .sidebar {
+        width: 72px;
+    }
+
+    .recruiterShell .brandRow {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .recruiterShell .workspaceLabel,
+    .recruiterShell .createBtn > span,
+    .recruiterShell .createBtn > svg:last-child {
+        display: none;
+    }
+
+    .recruiterShell .workspaceHome {
+        gap: 0;
+    }
+
+    .recruiterShell .collapseBtnTop {
+        display: none;
+    }
+
+    .recruiterShell .navLabel,
+    .recruiterShell .chevronRight {
+        display: none;
+    }
+
+    .recruiterShell .navLink {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .recruiterShell .navLinkButton {
+        display: flex;
+    }
+
+    .recruiterShell .createWrapper {
+        padding: 0 16px;
+    }
+
+    .recruiterShell .createBtn {
+        width: 40px;
+        padding: 10px;
+        margin: 0 auto;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .recruiterShell .contentPane {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .recruiterShell .contentPane {
+        padding: 20px 16px 92px;
+    }
+
+    .recruiterShell .topbar {
+        height: 60px;
+        padding: 0 16px;
+    }
+
+    .recruiterShell .mobileNav {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 980;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.96);
+        border-top: 1px solid #e5e9ef;
+        box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(12px);
+    }
+
+    .recruiterShell .mobileNav a,
+    .recruiterShell .mobileNav button {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 3px;
+        padding: 4px 2px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #64748b;
+        font: inherit;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .recruiterShell .mobileNav a:hover,
+    .recruiterShell .mobileNav button:hover,
+    .recruiterShell .mobileNavActive {
+        color: #1d4ed8 !important;
+        background: #eff6ff !important;
+    }
+
+    .mobileNavIcon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .recruiterShell .topbarRight .topLink span {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .recruiterShell *,
+    .recruiterShell *::before,
+    .recruiterShell *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

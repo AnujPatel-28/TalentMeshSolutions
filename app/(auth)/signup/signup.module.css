@@ -1,0 +1,1325 @@
+/* ============================
+   SIGNUP PAGE — Centered Card
+   Full-screen, no scroll, form in center
+   ============================ */
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: row;
+    background-image: url('/mountain login1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: var(--font-inter), -apple-system, sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+.pageOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            rgba(15, 23, 42, 0.8) 0%,
+            rgba(30, 20, 10, 0.45) 55%,
+            rgba(15, 23, 42, 0.7) 100%);
+    z-index: 2;
+}
+
+.leftPanel {
+    flex: 0 0 45%;
+    width: 45vw;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.leftPanelContent {
+    position: relative;
+    z-index: 10;
+    padding: 3rem;
+    max-width: 480px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.rightPanel {
+    flex: 0 0 55%;
+    width: 55vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: transparent;
+    z-index: 10;
+}
+
+.heroBranding {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.heroBrandingTitle {
+    font-family: var(--font-jakarta), sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+}
+
+.heroBrandingText {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.heroBrandingHighlight {
+    background: linear-gradient(135deg, #fbcfe8 0%, #fbbf24 40%, #f59e0b 70%, #d97706 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heroBrandingSub {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+    font-weight: 500;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 1024px) {
+    .leftPanel {
+        display: none;
+    }
+
+    .rightPanel {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+}
+
+/* Drifting Mesh Gradient Blobs */
+.blobContainer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glowBlob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.6;
+}
+
+.blob1 {
+    top: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(244, 63, 94, 0.18) 0%, transparent 70%);
+}
+
+.blob2 {
+    bottom: -15%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.statCard {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 0.85rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.statCard:hover {
+    background: rgba(15, 23, 42, 0.6);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.statValue {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: var(--font-jakarta), sans-serif;
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.cardWrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    max-height: 96vh;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 1.25rem 1.6rem;
+    box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.12),
+        0 1px 3px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: cardEnter 0.5s ease-out;
+
+    /* Hide scrollbars but allow scrolling if absolutely needed */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.card::-webkit-scrollbar {
+    display: none;
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Logo */
+.logoWrap {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.logoImg {
+    filter: none;
+    opacity: 1;
+}
+
+/* Progress stepper */
+
+.progressSteps {
+    display: flex;
+    align-items: center;
+}
+
+.progressStep {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.3s ease;
+}
+
+.progressStep:not(.progressActive) {
+    opacity: 0.3;
+}
+
+.progressDot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: 2px solid #e2e8f0;
+    color: #94a3b8;
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.progressStep.progressActive .progressDot {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+.progressLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.progressStep.progressActive .progressLabel {
+    color: #374151;
+}
+
+.progressLine {
+    flex: 1;
+    height: 2px;
+    background: #e5e7eb;
+    margin: 0 0.6rem;
+    transition: background 0.3s ease;
+    border-radius: 1px;
+}
+
+.progressLine.progressLineActive {
+    background: var(--primary-blue);
+}
+
+/* Header */
+.header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.switchLink {
+    color: var(--primary-blue);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.switchLink:hover {
+    color: #0056d6;
+}
+
+/* Step content */
+.stepContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stepLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Role cards */
+.roleCards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.roleCard {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+}
+
+.roleCard:hover {
+    border-color: #66b3ff;
+    background: #f8fafc;
+}
+
+.roleCard.roleCardActive {
+    border-color: var(--primary-blue);
+    background: #e6f2ff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.08);
+}
+
+.roleIconWrap {
+    width: 40px;
+    height: 40px;
+    background: #f1f5f9;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.roleCard.roleCardActive .roleIconWrap {
+    background: #cce4ff;
+    color: var(--primary-blue);
+}
+
+.roleContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.roleTitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.roleDesc {
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+.roleCheck {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s ease;
+}
+
+.roleCard.roleCardActive .roleCheck {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dividerLine {
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.dividerText {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-weight: 600;
+    white-space: nowrap;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 0.2rem 0.65rem;
+    letter-spacing: 0.01em;
+}
+
+/* Custom Scrollbar for inner containers */
+.card::-webkit-scrollbar,
+.innerScroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.card::-webkit-scrollbar-track,
+.innerScroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.card::-webkit-scrollbar-thumb,
+.innerScroll::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-thumb:hover,
+.innerScroll::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+/* Ensure RoleSelection fits on screen */
+@media (min-height: 800px) {
+    .page {
+        justify-content: center;
+    }
+}
+
+@media (max-height: 800px) {
+    .page {
+        padding: 1rem 0;
+    }
+}
+
+/* Social */
+.socialAuth,
+.socialRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    width: 100%;
+}
+
+.socialBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.75rem;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 9px;
+    color: #374151;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.socialBtn:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.socialBtn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+/* Floating Password Popover */
+.passwordPopover {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: #0f172a;
+    color: #f8fafc;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    pointer-events: none;
+}
+
+.popoverArrow {
+    position: absolute;
+    bottom: -4px;
+    left: 1.5rem;
+    width: 8px;
+    height: 8px;
+    background: #0f172a;
+    transform: rotate(45deg);
+}
+
+/* Next button */
+.nextBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.7rem 1.5rem;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.nextBtn:hover:not(:disabled) {
+    background: #0056d6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.4);
+}
+
+.nextBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Form (step 2) */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.nameRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.label {
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.inputWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 0.75rem;
+    color: #c0c7d0;
+    pointer-events: none;
+    z-index: 1;
+    transition: color 0.2s ease;
+}
+
+.inputWrap:focus-within .inputIcon {
+    color: var(--primary-blue);
+}
+
+.input {
+    width: 100%;
+    padding: 0.48rem 0.75rem;
+    background: #f9fafb;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    color: #0f172a;
+    font-size: 0.82rem;
+    font-family: inherit;
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputWithIcon {
+    padding-left: 2.4rem;
+}
+
+.input::placeholder {
+    color: #b0b8c4;
+}
+
+.input:focus {
+    background: #ffffff;
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.14), inset 0 1px 2px rgba(0, 0, 0, 0.01);
+}
+
+.input:hover:not(:focus) {
+    border-color: #d1d5db;
+}
+
+.eyeBtn {
+    position: absolute;
+    right: 0.7rem;
+    background: none;
+    border: none;
+    color: #b0b8c4;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.eyeBtn:hover {
+    color: #64748b;
+}
+
+/* Strength bar */
+.strengthBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+.strengthTrack {
+    height: 4px;
+    flex: 1;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.strengthFill {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.strengthLabel {
+    font-size: 0.68rem;
+    font-weight: 700;
+    min-width: 32px;
+    text-align: right;
+}
+
+/* Grouped Consent Container */
+.consentBox {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    max-height: 85px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.consentBox::-webkit-scrollbar {
+    width: 4px;
+}
+
+.consentBox::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* Custom Animated Checkbox */
+.hiddenCheckbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkboxCustom {
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 4px;
+    background: #ffffff;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 1px;
+}
+
+.checkboxChecked {
+    background: var(--primary-blue, #007BFF);
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.25);
+}
+
+.checkboxText {
+    font-size: 0.71rem;
+    color: #64748b;
+    line-height: 1.3;
+}
+
+.inlineLink {
+    color: var(--primary-blue, #007BFF);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.inlineLink:hover {
+    text-decoration: underline;
+}
+
+/* Actions */
+.formActions {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.6rem 0.85rem;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 9px;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.backBtn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+.input:focus-visible,
+.submitBtn:focus-visible,
+.socialBtn:focus-visible,
+.backBtn:focus-visible,
+.eyeBtn:focus-visible {
+    outline: 2px solid var(--primary-blue, #007BFF);
+    outline-offset: 2px;
+}
+
+.socialBtn:active,
+.submitBtn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.checkboxRow {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.45rem;
+    cursor: pointer;
+}
+
+.submitBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    flex: 1;
+    padding: 0.65rem 1.2rem;
+    background: linear-gradient(135deg, #007BFF 0%, #0056d6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+}
+
+.btnContent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.spinnerWrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.submitBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.35);
+}
+
+.submitBtn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.spinnerWrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Terms */
+.terms {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    white-space: nowrap;
+    z-index: 10;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.termsLink {
+    color: #60a5fa;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+.termsLink:hover {
+    color: #93c5fd;
+}
+
+/* Both candidate and recruiter use the same brand blue theme */
+
+/* ==========================================================================
+   MOBILE & RESPONSIVE OPTIMIZATIONS (UI SKILL - APPLE HIG & MATERIAL 3)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .leftPanel {
+        display: none;
+    }
+
+    .rightPanel {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .page {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow-y: auto;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .rightPanel {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        justify-content: flex-start;
+        padding: 0.5rem 0;
+    }
+
+    .cardWrapper {
+        padding: 0.25rem;
+        max-width: 100%;
+    }
+
+    .card {
+        max-width: 100%;
+        padding: 1rem 0.85rem;
+        border-radius: 18px;
+        max-height: none;
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: 0.78rem;
+    }
+
+    .nameRow {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .socialAuth {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .socialBtn {
+        padding: 0.55rem 0.5rem;
+        font-size: 0.8rem;
+        min-height: 42px;
+    }
+
+    .input {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.84rem;
+        min-height: 40px;
+    }
+
+    .checkboxLabel {
+        padding: 0.15rem 0;
+        min-height: 34px;
+    }
+
+    .consentBox {
+        max-height: 80px;
+        padding: 0.4rem 0.55rem;
+    }
+
+    .submitBtn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.88rem;
+        min-height: 44px;
+    }
+
+    .passwordPopover {
+        bottom: calc(100% + 6px);
+        font-size: 0.65rem;
+        padding: 0.4rem 0.55rem;
+        z-index: 30;
+    }
+}
+
+@media (max-width: 380px) {
+    .card {
+        padding: 0.85rem 0.75rem;
+        border-radius: 16px;
+    }
+
+    .title {
+        font-size: 1.15rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+    }
+
+    .socialBtn {
+        font-size: 0.76rem;
+        padding: 0.5rem 0.35rem;
+    }
+}
+
+@media (max-height: 700px) {
+    .card {
+        gap: 0.35rem;
+        padding: 0.75rem 0.85rem;
+    }
+
+    .form {
+        gap: 0.3rem;
+    }
+
+    .header {
+        gap: 0.1rem;
+    }
+
+    .input {
+        padding: 0.45rem 0.65rem;
+        min-height: 38px;
+    }
+
+    .socialBtn {
+        padding: 0.48rem 0.4rem;
+        min-height: 38px;
+    }
+
+    .submitBtn {
+        padding: 0.6rem 1rem;
+        min-height: 40px;
+    }
+
+    .consentBox {
+        max-height: 70px;
+        padding: 0.35rem 0.5rem;
+    }
+}
+
+/* ==========================================================================
+   VERIFICATION PAGE STYLES (UI/UX - APPLE HIG & MATERIAL 3 ACCESSIBILITY)
+   ========================================================================== */
+
+.verifyHeaderIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(37, 99, 235, 0.06) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem auto;
+    color: #2563eb;
+    box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.15);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.verifyHeaderIcon:hover {
+    transform: scale(1.05);
+}
+
+.emailHighlight {
+    color: #0f172a;
+    font-weight: 700;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.otpContainer {
+    position: relative;
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.otpInputHidden {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 16px; /* Prevents mobile Safari page zoom */
+}
+
+.otpSlots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    pointer-events: none;
+}
+
+.otpSlot {
+    flex: 1;
+    max-width: 52px;
+    height: 56px;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    font-family: var(--font-jakarta), sans-serif;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.otpSlotFilled {
+    background: #ffffff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+}
+
+.otpSlotActive {
+    background: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.01);
+    transform: translateY(-1px);
+}
+
+.timerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.timerText {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.timerValue {
+    font-weight: 700;
+    color: #2563eb;
+    font-variant-numeric: tabular-nums;
+}
+
+.timerExpired {
+    font-size: 0.85rem;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.resendBtn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.resendBtn:hover:not(:disabled) {
+    color: #1d4ed8;
+    background: rgba(37, 99, 235, 0.06);
+}
+
+.resendBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.resendSuccessBadge {
+    padding: 0.5rem 0.85rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    color: #166534;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.footerNav {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.backToLogin {
+    font-size: 0.82rem;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s ease;
+    min-height: 44px;
+    padding: 0.3rem 0.6rem;
+}
+
+.backToLogin:hover {
+    color: #2563eb;
+}
+
+@media (max-width: 480px) {
+    .otpSlots {
+        gap: 0.35rem;
+    }
+
+    .otpSlot {
+        height: 48px;
+        font-size: 1.15rem;
+        border-radius: 10px;
+    }
+
+    .verifyHeaderIcon {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        margin-bottom: 0.5rem;
+    }
+}

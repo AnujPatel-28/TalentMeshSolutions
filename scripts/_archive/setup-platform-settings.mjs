@@ -1,0 +1,54 @@
+import { createClient } from '@insforge/sdk';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+import * as dotenv from 'dotenv';
+
+// Load local environment variables
+dotenv.config({ path: '.env.local' });
+
+const supabaseUrl = process.env.NEXT_PUBLIC_INSFORGE_URL;
+const serviceKey = process.env.INSFORGE_SERVICE_KEY;
+
+if (!supabaseUrl || !serviceKey) {
+  console.error('Error: NEXT_PUBLIC_INSFORGE_URL or INSFORGE_SERVICE_KEY is missing from environment.');
+  process.exit(1);
+}
+
+const insforge = createClient({
+  baseUrl: supabaseUrl,
+  anonKey: serviceKey,
+  isServerMode: true
+});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function main() {
+  console.log('--- Applying Platform Settings Migration ---');
+  
+  const sqlPath = path.resolve(__dirname, '../insforge/migrations/006_platform_settings.sql');
+  if (!fs.existsSync(sqlPath)) {
+    console.error(`Error: SQL script not found at ${sqlPath}`);
+    process.exit(1);
+  }
+
+  const sqlContent = fs.readFileSync(sqlPath, 'utf8');
+  console.log(`Successfully read SQL script. Length: ${sqlContent.length} chars.`);
+
+  console.log('Executing SQL query via exec_sql RPC...');
+  try {
+    const { data, error } = await insforge.database.rpc('exec_sql', { query: sqlContent });
+    if (error) {
+      console.error('Execution failed:', error.message);
+      process.exit(1);
+    }
+    
+    console.log('✅ Success: platform_settings table created and seeded successfully.');
+  } catch (err) {
+    console.error('Unexpected error during RPC execution:', err.message || err);
+    process.exit(1);
+  }
+}
+
+main();

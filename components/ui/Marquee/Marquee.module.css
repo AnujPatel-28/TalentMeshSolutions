@@ -1,0 +1,39 @@
+.wrapper {
+    overflow: hidden;
+    padding: 3rem 0;
+    background: #ffffff;
+    user-select: none;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.scroll {
+    display: flex;
+    white-space: nowrap;
+    width: fit-content;
+    animation: scroll 30s linear infinite;
+}
+
+.logoItem {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e2e8f0;
+    margin: 0 4rem;
+    letter-spacing: -0.05em;
+    transition: color 0.3s ease;
+    cursor: default;
+}
+
+.logoItem:hover {
+    color: var(--primary-blue);
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}

@@ -1,0 +1,1239 @@
+/* ─── Page Container & Background ───────────────────────────────────────────── */
+.page {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 80px;
+    padding-bottom: 5rem;
+    overflow-x: clip;
+    color: var(--neutral-text, #12263A);
+}
+
+.bgWrapper {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+}
+
+.bgImage {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background-image: url('/bgbg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: floatBg 35s ease-in-out infinite alternate;
+}
+
+.bgOverlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+@keyframes floatBg {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(-2%, -1%) scale(1.04) rotate(0.2deg);
+    }
+
+    100% {
+        transform: translate(1%, 1%) scale(1.02) rotate(-0.2deg);
+    }
+}
+
+/* ─── 1. Hero Section (Above the fold) ──────────────────────────────────────── */
+.heroSection {
+    padding: clamp(56px, 9vh, 96px) 16px 20px;
+    background: transparent;
+    text-align: center;
+}
+
+.heroInner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.heroTitle {
+    font-size: clamp(2.2rem, 3.8vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--deep-navy, #000000);
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.highlightText {
+    background: linear-gradient(120deg,
+            var(--deep-navy, #000000) 0%,
+            var(--primary-blue, #007BFF) 35%,
+            #ffffff 50%,
+            var(--primary-blue, #007BFF) 65%,
+            var(--deep-navy, #000000) 100%);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 800;
+    animation: textShine 32.5s linear infinite;
+    display: inline-block;
+}
+
+@keyframes textShine {
+    0% {
+        background-position: 100% center;
+    }
+
+    8% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
+}
+
+
+.heroSubtitle {
+    font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+    color: var(--medium-grey, #475569);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 780px;
+}
+
+.trustIndicators {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 12px;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trustIcon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.trustText {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--medium-grey, #475569);
+}
+
+/* ─── 2. Form & Sidebar Consultation Layout ─────────────────────────────────── */
+.consultationSection {
+    padding: 3rem 16px;
+    position: relative;
+}
+
+.formLayout {
+    display: grid;
+    grid-template-columns: 1.85fr 1fr;
+    gap: 32px;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Glassmorphic Card base */
+.glassCard {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1.5px solid rgba(0, 123, 255, 0.18);
+    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.glassCard:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.55);
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 25px 50px -12px rgba(0, 123, 255, 0.15);
+}
+
+.formCard {
+    padding: clamp(24px, 4vw, 48px);
+}
+
+.formTitle {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+}
+
+.formNote {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0 0 24px 0;
+}
+
+.formTrustNote {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 123, 255, 0.04);
+    border-left: 4px solid var(--primary-blue, #007BFF);
+    color: #334155;
+    font-size: 0.875rem;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
+    border-top: 1px solid rgba(0, 123, 255, 0.1);
+    border-right: 1px solid rgba(0, 123, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+}
+
+.formSectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.formSectionNumber {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--primary-blue, #007BFF);
+    background: rgba(0, 123, 255, 0.1);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formSectionTitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.formSectionDivider {
+    height: 1px;
+    background: rgba(0, 123, 255, 0.12);
+    margin: 10px 0 20px 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fieldRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--neutral-text-secondary, #334155);
+}
+
+.input,
+.select,
+.textarea {
+    border: 1.5px solid rgba(0, 123, 255, 0.18);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.55);
+    color: #0f172a;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: #94a3b8;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    background: #ffffff;
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.08);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Chips selection group */
+.chipGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.helpChip {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(0, 123, 255, 0.18);
+    background: rgba(255, 255, 255, 0.45);
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.helpChip:hover {
+    background: #ffffff;
+    border-color: var(--primary-blue, #007BFF);
+    color: var(--primary-blue, #007BFF);
+}
+
+.helpChipActive {
+    background: var(--primary-blue, #007BFF) !important;
+    color: #ffffff !important;
+    border-color: var(--primary-blue, #007BFF) !important;
+}
+
+/* Radio buttons Group */
+.radioGroup {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #475569;
+    cursor: pointer;
+    user-select: none;
+}
+
+.radioInput {
+    display: none;
+}
+
+.radioCustom {
+    height: 18px;
+    width: 18px;
+    border: 1.5px solid rgba(0, 123, 255, 0.18);
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.radioLabel:hover .radioCustom {
+    border-color: var(--primary-blue, #007BFF);
+}
+
+.radioInput:checked~.radioCustom {
+    border-color: var(--primary-blue, #007BFF);
+}
+
+.radioCustom::after {
+    content: '';
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary-blue, #007BFF);
+}
+
+.radioInput:checked~.radioCustom::after {
+    display: block;
+}
+
+/* Form submission button */
+.submitBtn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-blue, #007BFF);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.submitBtn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
+}
+
+/* Form Success State */
+.successState {
+    text-align: center;
+    padding: 56px 32px;
+}
+
+.successIco {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.successTitle {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    margin: 0 0 12px 0;
+}
+
+.successDesc {
+    font-size: 1rem;
+    color: var(--medium-grey, #475569);
+    margin: 0 0 22px 0;
+    line-height: 1.65;
+}
+
+.successBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.5);
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+}
+
+/* ─── Sidebar info and stats ────────────────────────────────────────────────── */
+.minimalAside {
+    position: sticky;
+    top: 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.asideInfoCard {
+    padding: 28px 24px;
+}
+
+.asideStatsCard {
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+}
+
+.asideTitle {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    margin: 0 0 16px 0;
+}
+
+.asideItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.875rem;
+    color: #334155;
+    margin-bottom: 12px;
+    line-height: 1.45;
+}
+
+.asideItem:last-child {
+    margin-bottom: 0;
+}
+
+.asideCheck {
+    color: var(--primary-blue, #007BFF);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.asideStatItem {
+    text-align: center;
+}
+
+.asideStatVal {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    line-height: 1.1;
+}
+
+.asideStatLabel {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+}
+
+/* ─── Generic Section Headers ───────────────────────────────────────────────── */
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.sectionTag {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--primary-blue, #007BFF);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(0, 123, 255, 0.08);
+    padding: 4px 12px;
+    border-radius: 30px;
+}
+
+.sectionTitle {
+    font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+/* ─── 3. How It Works Section ───────────────────────────────────────────────── */
+.howSection {
+    padding: clamp(56px, 9vh, 88px) 16px;
+    position: relative;
+}
+
+.stepsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .stepsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Connecting line for desktop */
+.stepsGrid::before {
+    content: '';
+    position: absolute;
+    top: 4.5rem;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-blue, #007BFF), transparent);
+    z-index: 0;
+    display: none;
+    opacity: 0.3;
+}
+
+@media (min-width: 1024px) {
+    .stepsGrid::before {
+        display: block;
+    }
+}
+
+.stepCard {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    background: #ffffff;
+    padding: 2.5rem 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.stepCard:hover {
+    background: #ffffff;
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 25px 50px -12px rgba(0, 123, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+.stepNumber {
+    width: 4rem;
+    height: 4rem;
+    background: #ffffff;
+    color: var(--primary-blue, #007BFF);
+    border: 2px solid var(--primary-blue, #007BFF);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 0 0 8px var(--light-ice-blue, #F0F7FF);
+    transition: all 0.3s ease;
+}
+
+.stepCard:hover .stepNumber {
+    background: var(--primary-blue, #007BFF);
+    color: #ffffff;
+    box-shadow: 0 0 0 12px rgba(0, 123, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.stepTitle {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--deep-navy, #000000);
+    margin: 0 0 10px 0;
+}
+
+.stepDesc {
+    font-size: 0.9rem;
+    color: var(--medium-grey, #475569);
+    line-height: 1.55;
+    margin: 0;
+}
+
+
+/* ─── 4. Why Professionals Choose TalentMesh ───────────────────────── */
+.whySection {
+    position: relative;
+    /* Height is computed dynamically in page.tsx */
+}
+
+/* Section title sits above the sticky frame, scrolls away normally */
+.whySectionIntro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: clamp(56px, 9vh, 88px) 16px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.valueLayout {
+    position: sticky;
+    top: 80px; /* Pin below header */
+    height: calc(100vh - 80px - 40px); /* Leave some bottom spacing */
+    max-height: 580px; /* Cap layout height to ensure it fits beautifully on smaller screens */
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Unified Showcase Card ── */
+.showcaseCard {
+    background: #ffffff;
+    border: 1px solid rgba(0, 123, 255, 0.12);
+    border-radius: 32px;
+    box-shadow: 0 30px 70px rgba(0, 123, 255, 0.05),
+                0 10px 30px rgba(0, 0, 0, 0.02);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.cardImageContainer {
+    position: relative;
+    background: #f8fafc; /* Subtle light background for illustrations */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    overflow: hidden;
+    border-right: 1px solid rgba(0, 123, 255, 0.06);
+}
+
+.cardImage {
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.cardImageActive {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+.cardImageInactive {
+    opacity: 0;
+    transform: scale(0.95);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── Content side (Right column) ── */
+.cardContent {
+    padding: clamp(32px, 5%, 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background: #ffffff;
+}
+
+.cardContentTop {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cardHeaderRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.cardStepNumber {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary-blue, #007BFF);
+    font-family: var(--font-jakarta, sans-serif);
+    letter-spacing: -0.02em;
+}
+
+.cardIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(0, 123, 255, 0.07);
+    color: var(--primary-blue, #007BFF);
+}
+
+.stepIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.cardTextContent {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardTitle {
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    font-weight: 800;
+    color: var(--deep-navy, #0f172a);
+    margin: 0;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+}
+
+.cardDesc {
+    font-size: 0.95rem;
+    color: var(--medium-grey, #64748b);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Checklist Features ── */
+.featuresList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92rem;
+    color: var(--deep-navy, #0f172a);
+    font-weight: 600;
+}
+
+.checkIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-blue, #007BFF);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+/* ── Horizontal Progress Timeline ── */
+.progressBarWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 24px;
+    padding: 0 4px;
+}
+
+.timelineNode {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.timelineNum {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    transition: color 0.3s ease;
+}
+
+.timelineNumActive {
+    color: var(--primary-blue, #007BFF);
+}
+
+.progressDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    background: #ffffff;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.dotActive {
+    background: var(--primary-blue, #007BFF);
+    border-color: var(--primary-blue, #007BFF);
+    transform: scale(1.1);
+}
+
+.dotPassed {
+    background: var(--primary-blue, #007BFF);
+    border-color: var(--primary-blue, #007BFF);
+}
+
+.progressLineSegment {
+    flex: 1;
+    height: 2px;
+    background: #cbd5e1;
+    transition: background-color 0.4s ease;
+    margin: 0 8px;
+}
+
+.linePassed {
+    background: var(--primary-blue, #007BFF);
+}
+
+/* ── Section Title subtitle addition ── */
+.sectionSubtitle {
+    font-size: 1.1rem;
+    color: var(--medium-grey, #64748b);
+    margin: 8px 0 0 0;
+    font-weight: 500;
+}
+
+/* ── Mobile/Dot Indicators and Carousel ── */
+.desktopValueRight {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.mobileValueRight {
+    display: none;
+}
+
+.valueScrollMask {
+    height: clamp(420px, 55vh, 560px);
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.valueScrollTrack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+}
+
+/* ── Mobile Cards ── */
+.mobileCard {
+    background: #ffffff;
+    border: 1px solid rgba(0, 123, 255, 0.12);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.03);
+    padding: 24px;
+    min-width: 290px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.cardIconWrapperMobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(0, 123, 255, 0.07);
+    color: var(--primary-blue, #007BFF);
+}
+
+.mobileCardDots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.mobileCardDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.3s ease;
+}
+
+.mobileCardDotActive {
+    background: var(--primary-blue, #007BFF);
+    transform: scale(1.2);
+}
+
+.valueTitle {
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    font-weight: 800;
+    color: var(--deep-navy, #0f172a);
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.valueDesc {
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    color: var(--medium-grey, #64748b);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ── Mobile/Dot Indicators ── */
+.mobileDots {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.valueDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 123, 255, 0.3);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.35s ease;
+    flex-shrink: 0;
+}
+
+.valueDot:hover {
+    border-color: rgba(0, 123, 255, 0.6);
+}
+
+.valueDotActive {
+    background: var(--primary-blue, #007BFF);
+    border-color: var(--primary-blue, #007BFF);
+    transform: scale(1.45);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .valueImage,
+    .valueScrollTrack,
+    .valueCard {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* ─── 5. FAQ Section ────────────────────────────────────────────────────────── */
+.faqSection {
+    padding: clamp(56px, 9vh, 88px) 16px;
+    position: relative;
+}
+
+.faqLayout {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faqItem {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1.5px solid rgba(0, 123, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faqItem:hover {
+    border-color: rgba(0, 123, 255, 0.3);
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.faqQuestionBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--deep-navy, #000000);
+    text-align: left;
+    transition: color 0.2s;
+    outline: none;
+}
+
+.faqQuestionBtn:hover {
+    color: var(--primary-blue, #007BFF);
+}
+
+.faqChevron {
+    color: var(--primary-blue, #007BFF);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.faqAnswerContainer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faqAnswerOpen {
+    max-height: 1000px;
+    /* high value for content extension */
+}
+
+.faqAnswer {
+    padding: 0 24px 20px 24px;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--medium-grey, #475569);
+    line-height: 1.6;
+}
+
+.faqItemOpen {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: var(--primary-blue, #007BFF);
+    box-shadow: 0 4px 18px rgba(0, 123, 255, 0.05);
+}
+
+.faqItemOpen .faqChevron {
+    transform: rotate(180deg);
+}
+
+/* ─── Responsive Layouts ─────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .formLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .minimalAside {
+        position: static;
+        flex-direction: row;
+        gap: 24px;
+    }
+
+    .asideInfoCard,
+    .asideStatsCard {
+        flex: 1;
+    }
+
+    .whySection {
+        height: auto !important;
+    }
+
+    .valueLayout {
+        position: static !important;
+        height: auto !important;
+        display: block !important;
+        padding: 0 16px;
+    }
+
+    .showcaseCard {
+        display: none !important;
+    }
+
+    .valueStickyLeft {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* ── Mobile: horizontal snap-scroll carousel ── */
+    .desktopValueRight {
+        display: none !important;
+    }
+
+    .mobileValueRight {
+        display: flex !important;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .valueScrollMask {
+        height: auto !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 8px 4px 16px;
+        width: 100%;
+        scrollbar-width: none;
+    }
+
+    .valueScrollMask::-webkit-scrollbar {
+        display: none;
+    }
+
+    .valueScrollTrack {
+        flex-direction: row !important;
+        gap: 20px;
+        transform: none !important;
+        width: max-content;
+    }
+
+    .valueCard {
+        min-width: 80vw;
+        max-width: 340px;
+        scroll-snap-align: center;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        pointer-events: auto !important;
+        flex-shrink: 0;
+    }
+
+    .valueCardActive {
+        border-color: rgba(0, 123, 255, 0.4);
+        box-shadow: 0 16px 48px rgba(0, 123, 255, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .stepsRow {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .stepConnector {
+        transform: rotate(90deg);
+        max-width: 24px;
+        margin: 0 auto;
+    }
+
+    .minimalAside {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 640px) {
+    .formCard {
+        padding: 24px 16px;
+    }
+
+    .fieldRow {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .heroSection {
+        padding: clamp(32px, 6vh, 48px) 16px 20px;
+    }
+}

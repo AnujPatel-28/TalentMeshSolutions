@@ -1,0 +1,389 @@
+/* ─── Navbar Shell ─────────────────────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.618rem; /* Golden Ratio */
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navbar.scrolled .container {
+  height: 64px; /* Dynamic Shrink */
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem;
+    height: 72px;
+  }
+}
+
+/* ─── Logo ─────────────────────────────────────────────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1010;
+}
+
+.logoImg {
+  width: auto;
+  height: 54px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .logoImg {
+    height: 46px;
+  }
+}
+
+/* ─── Desktop Nav Links ─────────────────────────────────────────────────────── */
+.links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 1rem;
+  height: 100%;
+  color: var(--deep-navy);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  white-space: nowrap;
+  position: relative;
+}
+
+.navItem:hover .link {
+  color: var(--primary-blue);
+}
+
+/* Active state – when any child route is current */
+.linkActive {
+  color: var(--primary-blue) !important;
+}
+
+.chevron {
+  font-size: 9px;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.navItem:hover .chevron {
+  transform: rotate(180deg);
+}
+/* ─── Dropdown Panel ────────────────────────────────────────────────────────── */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px) scale(0.96);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  min-width: 240px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+  padding: 0.618rem; /* Golden Ratio */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
+  z-index: 1100;
+}
+
+.navItem:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+}
+
+.dropdownLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text-body, #374151);
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdownLink:hover {
+  background: var(--alice-blue, #f0f7ff);
+  color: var(--primary-blue);
+}
+
+/* Highlighted active dropdown link */
+.dropdownLinkActive {
+  background: var(--alice-blue, #f0f7ff) !important;
+  color: var(--primary-blue) !important;
+  font-weight: 600;
+}
+
+/* ── Dashboard dropdown special styles ── */
+.dropdownSectionLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--medium-grey, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.5rem 0.85rem 0.2rem;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
+  margin: 4px 6px;
+}
+
+.ddIcon {
+  font-size: 0.9rem;
+}
+
+/* ─── Auth Buttons ─────────────────────────────────────────────────────────── */
+.auth {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.loginBtn {
+  text-decoration: none;
+  color: var(--deep-navy);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.loginBtn:hover {
+  color: var(--primary-blue);
+}
+
+.signupBtn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(90deg, #00C6FF 0%, #007BFF 60%, #0056b3 100%);
+  color: white;
+  padding: 0.618rem 1.618rem; /* Golden Ratio */
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.signupBtn:hover {
+  background: linear-gradient(90deg, #00d2ff 0%, #0062cc 60%, #004494 100%);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+/* ─── Mobile Hamburger ──────────────────────────────────────────────────────── */
+.mobileToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1010;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.bar {
+  width: 100%;
+  height: 2px;
+  background: var(--ink-black, #111827);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+/* X animation */
+.mobileToggle.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(2px, 9px);
+}
+
+.mobileToggle.open .bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.mobileToggle.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(2px, -9px);
+}
+
+/* ─── Mobile Drawer ─────────────────────────────────────────────────────────── */
+.mobileNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background: var(--background);
+  z-index: 1005; /* Above everything */
+  padding: calc(90px + env(safe-area-inset-top, 0px)) 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobileNav.open {
+  transform: translateX(0);
+}
+
+.mobileNavItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 1rem 0;
+}
+
+.mobileNavLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--medium-grey, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.mobileNavLink {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--deep-navy, #0d2137);
+  text-decoration: none;
+  padding: 0.6rem 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileNavLink:hover {
+  color: var(--primary-blue);
+}
+
+/* Dashboard links in mobile nav get a subtle pill badge on hover */
+.mobileNavLinkDash:hover {
+  color: var(--primary-blue);
+}
+
+.mobileAuth {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+}
+
+.mobileLogin {
+  text-align: center;
+  padding: 0.85rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--deep-navy);
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.mobileLogin:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+/* ─── Responsive Breakpoints ────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .links {
+    gap: 0;
+  }
+
+  .link {
+    padding: 0 0.75rem;
+    font-size: 0.89rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    background: var(--background);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .links {
+    display: none;
+  }
+
+  .auth {
+    display: none;
+  }
+
+  .mobileToggle {
+    display: flex;
+  }
+}

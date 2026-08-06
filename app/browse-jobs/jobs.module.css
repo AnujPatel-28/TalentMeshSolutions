@@ -1,0 +1,1630 @@
+/* ─── Global Page Canvas ────────────────────────────────────────────────────────── */
+.page {
+    padding-top: 72px;
+    min-height: 100vh;
+    background-color: #FAF9F6;
+    color: #0F172A;
+    font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+}
+
+/* ─── Loading State ──────────────────────────────────────────────────────────── */
+.loadingState {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #475569;
+}
+
+.loadingSpinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid #E2E8F0;
+    border-top-color: #4F46E5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Hero Banner Section ────────────────────────────────────────────────────── */
+.heroSection {
+    padding: 48px 0 32px;
+    background: transparent;
+}
+
+.heroHeader {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 36px;
+}
+
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #EFF6FF;
+    color: #1D4ED8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    margin-bottom: 16px;
+}
+
+.heroTitle {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: #0F172A;
+    margin: 0 0 16px;
+}
+
+.gradientText {
+    background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.heroSubtitle {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ─── Integrated Quick Search Bar ────────────────────────────────────────────── */
+.searchBarCard {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 9999px;
+    padding: 8px 8px 8px 24px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    max-width: 1000px;
+    margin: 0 auto 24px;
+    position: relative;
+}
+
+.searchBarCard:hover {
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08), 0 3px 8px rgba(15, 23, 42, 0.03);
+    transform: translateY(-1px);
+}
+
+.searchBarCard:focus-within {
+    border-color: #2563EB;
+    box-shadow: 0 14px 36px rgba(37, 99, 235, 0.12), 0 0 0 3px rgba(37, 99, 235, 0.15);
+    transform: translateY(-1px);
+}
+
+.searchInputGroup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    color: #64748B;
+    position: relative;
+    padding: 4px 8px;
+    border-radius: 9999px;
+    transition: background 0.15s ease;
+}
+
+.searchInputGroup:focus-within {
+    background: #F8FAFC;
+}
+
+.inputIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563EB;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.searchInputGroup:focus-within .inputIconWrapper {
+    transform: scale(1.1);
+}
+
+.fieldWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.inputLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #64748B;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 2px;
+    user-select: none;
+}
+
+.searchInput {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+    color: #0F172A;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0;
+}
+
+.searchInput::placeholder {
+    color: #94A3B8;
+    font-weight: 400;
+}
+
+.clearBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F1F5F9;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    color: #64748B;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    padding: 0;
+    animation: popIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.clearBtn:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.locateBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EFF6FF;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    color: #2563EB;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.locateBtnSpin {
+    animation: locateSpin 1s linear infinite;
+}
+
+@keyframes locateSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.locateBtn:hover:not(:disabled) {
+    background: #2563EB;
+    color: #FFFFFF;
+}
+
+.searchDivider {
+    width: 1px;
+    height: 32px;
+    background: #E2E8F0;
+    margin: 0 8px;
+    flex-shrink: 0;
+}
+
+.searchSelect {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 0.875rem !important;
+    color: #0F172A !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+}
+
+.searchSubmitBtn {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 28px;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    margin-left: 8px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+}
+
+.searchSubmitBtn:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38);
+}
+
+@media (max-width: 868px) {
+    .searchBarCard {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 20px;
+        padding: 16px;
+        gap: 14px;
+    }
+    .searchDivider {
+        display: none;
+    }
+    .searchSubmitBtn {
+        border-radius: 12px;
+        width: 100%;
+        margin-left: 0;
+        text-align: center;
+        margin-top: 4px;
+    }
+}
+
+/* Popular Tags Row */
+.popularTagsRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.popularLabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748B;
+    margin-right: 4px;
+}
+
+.popularTagPill {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.popularTagPill:hover {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+/* ─── Metrics Bar ────────────────────────────────────────────────────────────── */
+.metricsBar {
+    background: #FFFFFF;
+    border-y: 1px solid #E2E8F0;
+    padding: 20px 0;
+    margin-bottom: 32px;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .metricsGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+.metricItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.metricNumber {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-blue, #007BFF);
+    letter-spacing: -0.02em;
+}
+
+.metricMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.metricMeta strong {
+    font-size: 0.95rem;
+    color: #0F172A;
+    font-weight: 700;
+}
+
+.metricMeta span {
+    font-size: 0.82rem;
+    color: #64748B;
+}
+
+/* ─── Sticky Category Chips Bar (Option 1: Segmented Glass Pill Container) ───── */
+.stickyCategoryBar {
+    position: sticky;
+    top: 72px;
+    z-index: 20;
+    padding: 14px 0;
+    margin-bottom: 28px;
+}
+
+.categorySegmentedContainer {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid #E2E8F0;
+    border-radius: 9999px;
+    padding: 5px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.categorySegmentedContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.categoryChipsList {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.categoryChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: #475569;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.categoryChip:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+}
+
+.categoryChipActive {
+    background: linear-gradient(135deg, var(--primary-blue, #007BFF) 0%, #0056b3 100%) !important;
+    color: #FFFFFF !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px rgba(0, 123, 255, 0.25) !important;
+}
+
+.categoryChipActive:hover {
+    background: linear-gradient(135deg, #0069D9 0%, #004494 100%) !important;
+}
+
+.categoryChipMuted {
+    opacity: 0.5;
+}
+
+.categoryChipMuted:hover {
+    opacity: 0.9;
+}
+
+.chipIcon {
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.chipCountBadge {
+    background: #E2E8F0;
+    color: #334155;
+    font-size: 0.74rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.categoryChipActive .chipCountBadge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
+}
+
+/* ─── Main Discovery Layout Grid ────────────────────────────────────────────── */
+.mainLayout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 60px;
+}
+
+@media (max-width: 992px) {
+    .mainLayout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── Filters Sidebar ──────────────────────────────────────────────────────── */
+.filterSidebar {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 20px;
+    position: sticky;
+    top: 140px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+@media (max-width: 992px) {
+    .filterSidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 320px;
+        z-index: 100;
+        border-radius: 0;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow-y: auto;
+    }
+    .filterSidebarOpen {
+        transform: translateX(0);
+    }
+}
+
+.filterOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+}
+
+.sidebarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #F1F5F9;
+    margin-bottom: 16px;
+    gap: 8px;
+}
+
+.sidebarTitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0F172A;
+    white-space: nowrap;
+}
+
+.filterIconBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: #EFF6FF;
+    color: var(--primary-blue, #007BFF);
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+.totalActiveBadge {
+    background: var(--primary-blue, #007BFF);
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+}
+
+.clearFiltersBtn {
+    background: #EFF6FF;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #1D4ED8;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+
+.clearFiltersBtn:hover {
+    background: #DBEAFE;
+    color: #1E40AF;
+}
+
+.closeSidebarBtn {
+    display: none;
+    background: none;
+    border: none;
+    color: #64748B;
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .closeSidebarBtn {
+        display: block;
+    }
+}
+
+.filterSectionGroup {
+    margin-bottom: 14px;
+    border-bottom: 1px dashed #F1F5F9;
+    padding-bottom: 10px;
+}
+
+.filterSectionGroup:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.filterGroupHeadingBtn {
+    width: calc(100% + 12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0F172A;
+    padding: 6px 8px;
+    margin: 0 -6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.filterGroupHeadingBtn:hover {
+    background: #F8FAFC;
+}
+
+.filterLabelWithBadge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activeFilterCountDot {
+    background: var(--primary-blue, #007BFF);
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filterGroupArrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #F1F5F9;
+    border-radius: 50%;
+    color: #64748B;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
+}
+
+.filterGroupHeadingBtn:hover .filterGroupArrow {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.filterGroupArrowOpen {
+    transform: rotate(180deg);
+}
+
+.filterGroupOptionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+}
+
+.filterCheckboxRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 8px;
+    margin: 0 -8px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    color: #334155;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+
+.filterCheckboxRow:hover {
+    background: #F8FAFC;
+}
+
+.filterCheckboxRow input[type="checkbox"] {
+    accent-color: var(--primary-blue, #007BFF);
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.checkboxLabelText {
+    flex: 1;
+    font-weight: 500;
+}
+
+.filterBadgeCount {
+    font-size: 0.74rem;
+    color: #94A3B8;
+    background: #F8FAFC;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* ─── Results & Split Master-Detail Container ──────────────────────────────── */
+.resultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.resultsToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 12px 18px;
+}
+
+.mobileFilterTrigger {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .mobileFilterTrigger {
+        display: flex;
+    }
+}
+
+.filterBadgeActiveCount {
+    background: #4F46E5;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.resultsMetaText {
+    font-size: 0.92rem;
+    color: #475569;
+}
+
+.resultsMetaText strong {
+    color: #0F172A;
+    font-size: 1.05rem;
+}
+
+.sortDropdownGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sortLabel {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.sortSelect {
+    min-width: 170px;
+}
+
+/* Split Pane Layout */
+.splitMasterDetail {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .splitMasterDetail {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Master Job Cards Column */
+.jobCardsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.jobMasterCard {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+    position: relative;
+}
+
+.jobMasterCard:hover {
+    border-color: #93C5FD;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.jobMasterCardActive {
+    border-color: #2563EB !important;
+    background: #F8FAFC !important;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12) !important;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.companyLogoBadge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.companyLogoBadge img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.companyTitleGroup {
+    flex: 1;
+    min-width: 0;
+}
+
+.companyNameRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.companyNameText {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.jobLocationText {
+    font-size: 0.82rem;
+    color: #64748B;
+    display: block;
+    margin-top: 2px;
+}
+
+.bookmarkCardBtn {
+    background: none;
+    border: none;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.bookmarkCardBtn:hover {
+    color: #EF4444;
+    background: #FEF2F2;
+}
+
+.bookmarkCardBtnSaved {
+    color: #EF4444 !important;
+}
+
+.cardBody {
+    margin-bottom: 16px;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.jobTitleHeading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.newBadgePill {
+    background: #ECFDF5;
+    color: #059669;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.salaryRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.salaryText {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #10B981;
+}
+
+.matchScorePill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #EFF6FF;
+    color: #2563EB;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 12px;
+}
+
+.skillTagsRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.typeTagPill {
+    background: #F1F5F9;
+    color: #334155;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 6px;
+}
+
+.skillTagPill {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 6px;
+}
+
+.cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #F1F5F9;
+    font-size: 0.82rem;
+}
+
+.postedDaysText {
+    color: #94A3B8;
+}
+
+.inspectBtnText {
+    color: #2563EB;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Sticky Detail Inspector Pane */
+.detailInspectorPane {
+    position: sticky;
+    top: 140px;
+}
+
+@media (max-width: 1100px) {
+    .detailInspectorPane {
+        position: static;
+    }
+}
+
+.inspectorCard {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.inspectorHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.inspectorLogoGroup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.inspectorLogo {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 1.2rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.inspectorLogo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inspectorJobTitle {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 4px;
+}
+
+.inspectorCompanySub {
+    font-size: 0.9rem;
+    color: #475569;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dotSeparator {
+    color: #CBD5E1;
+}
+
+.inspectorActionButtons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inspectorIconBtn {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.inspectorIconBtn:hover {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.inspectorIconBtnActive {
+    color: #EF4444 !important;
+    background: #FEF2F2 !important;
+    border-color: #FCA5A5 !important;
+}
+
+.inspectorBadgesRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.inspectorBadge {
+    background: #F1F5F9;
+    color: #334155;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 8px;
+}
+
+.inspectorBadgeHighlight {
+    background: #ECFDF5;
+    color: #059669;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.inspectorBadgeMatch {
+    background: #EFF6FF;
+    color: #2563EB;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inspectorCtaBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.primaryApplyBtn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary-blue, #007BFF) 0%, #0056b3 100%);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+.primaryApplyBtn:hover {
+    background: linear-gradient(135deg, #0069D9 0%, #004494 100%);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.secondaryCopyBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.secondaryCopyBtn:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+    color: #0F172A;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.recruiterBadgeNotice {
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 10px;
+}
+
+/* Inspector Tabs */
+.inspectorTabsHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #E2E8F0;
+    margin-bottom: 20px;
+}
+
+.tabHeaderBtn {
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748B;
+    padding: 10px 14px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tabHeaderBtn:hover {
+    color: #0F172A;
+}
+
+.tabHeaderBtnActive {
+    color: #2563EB !important;
+    border-bottom-color: #2563EB !important;
+}
+
+.tabContentBody {
+    min-height: 200px;
+}
+
+.tabSectionHeading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 10px;
+}
+
+.tabDescriptionText {
+    font-size: 0.92rem;
+    color: #334155;
+    line-height: 1.6;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.tabBulletList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tabBulletList li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.skillsChipGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.techSkillChip {
+    background: #EFF6FF;
+    color: #1D4ED8;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.aiInsightCard {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.aiInsightHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2563EB;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.aiInsightCard p {
+    font-size: 0.85rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.companyMetaList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.metaRowItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #475569;
+}
+
+.emptyInspectorState {
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    color: #64748B;
+}
+
+.emptyStateContainer {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.emptyStateContainer h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 8px;
+}
+
+.emptyStateContainer p {
+    font-size: 0.92rem;
+    color: #64748B;
+    margin: 0 0 20px;
+}
+
+.resetSearchBtn {
+    background: linear-gradient(135deg, var(--primary-blue, #007BFF) 0%, #0056b3 100%);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 123, 255, 0.15);
+}
+
+.resetSearchBtn:hover {
+    background: linear-gradient(135deg, #258aff 0%, #0062cc 100%);
+}
+
+/* ─── Pagination Row ────────────────────────────────────────────────────────── */
+.paginationRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 14px 20px;
+    margin-top: 24px;
+}
+
+.pageNavBtn {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.pageNavBtn:hover:not(:disabled) {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+    color: #0F172A;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+.pageNavBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pageNumbersGroup {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pageNumberBtn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pageNumberBtn:hover:not(.pageNumberBtnActive) {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #1D4ED8;
+    transform: translateY(-1px);
+}
+
+.pageNumberBtnActive {
+    background: var(--primary-blue, #007BFF);
+    color: #FFFFFF;
+}
+
+.pageSizeSelectBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #64748B;
+}
+
+.pageSizeSelect {
+    min-width: 70px;
+}
+
+/* ─── Testimonials Section ─────────────────────────────────────────────────── */
+.testimonialsSection {
+    background: #FFFFFF;
+    border-t: 1px solid #E2E8F0;
+    padding: 60px 0;
+}
+
+.sectionTitleBlock {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.sectionBadgeText {
+    background: #F1F5F9;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sectionHeadingText {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 10px 0 0;
+}
+
+.testimonialsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 868px) {
+    .testimonialsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.testimonialCard {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.starRating {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.quoteText {
+    font-size: 0.93rem;
+    color: #334155;
+    line-height: 1.6;
+    margin: 0 0 20px;
+}
+
+.authorGroup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.authorAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4F46E5;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.authorName {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+}
+
+.authorRole {
+    font-size: 0.78rem;
+    color: #64748B;
+    margin: 0;
+}
+
+/* ─── FAQ Section ──────────────────────────────────────────────────────────── */
+.faqSection {
+    padding: 60px 0 80px;
+    background: #FAF9F6;
+}
+
+.faqListContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faqCardItem {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.faqQuestionHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    border: none;
+    padding: 18px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0F172A;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqIconToggle {
+    font-size: 1.3rem;
+    color: #4F46E5;
+    font-weight: 400;
+}
+
+.faqAnswerBody {
+    padding: 0 20px 18px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.faqAnswerBody p {
+    font-size: 0.92rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 12px 0 0;
+}

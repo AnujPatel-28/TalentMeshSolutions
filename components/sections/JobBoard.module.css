@@ -1,0 +1,360 @@
+.section {
+    padding: 6rem 2rem;
+    background: #f8fafc;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Search Bar */
+.searchWrapper {
+    margin-bottom: 4rem;
+}
+
+.searchBox {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+    .searchBox {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .searchIcon {
+        display: none;
+    }
+
+    .searchInput {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .searchBtn {
+        width: 100%;
+        border-radius: 12px;
+    }
+}
+
+.searchIcon {
+    color: var(--medium-grey);
+    margin-right: 1rem;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.125rem;
+    color: var(--deep-navy);
+}
+
+.searchBtn {
+    background: var(--primary-blue);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.searchBtn:hover {
+    background: var(--deep-navy);
+    transform: scale(1.02);
+}
+
+/* Sectors Grid */
+.sectorsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.sectorCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    text-align: left;
+    outline: none;
+}
+
+.sectorIcon {
+    width: 48px;
+    height: 48px;
+    background: #f1f5f9;
+    color: var(--medium-grey);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.sectorLabel {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--deep-navy);
+    margin: 0;
+}
+
+.sectorCount {
+    font-size: 0.85rem;
+    color: var(--medium-grey);
+}
+
+.sectorCard:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.sectorCard:hover .sectorIcon {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.sectorActive {
+    border-color: var(--accent);
+    background: #ffffff;
+    box-shadow: var(--shadow-md);
+}
+
+.sectorActive .sectorIcon {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+/* Filter Row */
+.filterRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.resultCount {
+    font-size: 1.125rem;
+    color: var(--medium-grey);
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+}
+
+.filterBtn,
+.sortSelect {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    font-weight: 600;
+    color: var(--deep-navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    outline: none;
+}
+
+/* Jobs Grid */
+.jobsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.jobCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition-smooth);
+}
+
+.jobCard:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-blue);
+}
+
+.jobHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.companyLogo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+.jobTime {
+    font-size: 0.85rem;
+    color: var(--medium-grey);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.jobBody {
+    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.jobTitle {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--deep-navy);
+    margin-bottom: 0.5rem;
+}
+
+.companyName {
+    font-size: 1rem;
+    color: var(--medium-grey);
+    margin-bottom: 1rem;
+}
+
+.specialityBadge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: var(--light-ice-blue);
+    color: var(--primary-blue);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.jobMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--medium-grey);
+}
+
+.jobFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.jobType {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--deep-navy);
+}
+
+.applyBtn {
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.applyBtn:hover {
+    color: var(--deep-navy);
+    text-decoration: underline;
+}
+
+.emptyState {
+    grid-column: span 3;
+    text-align: center;
+    padding: 4rem;
+    color: var(--medium-grey);
+}
+
+@media (max-width: 1024px) {
+    .jobsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sectorsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .section {
+        padding: 3rem 1.25rem;
+    }
+
+    .jobsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sectorsGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .sectorCard {
+        padding: 1.25rem;
+    }
+
+    .filterRow {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.25rem;
+    }
+
+    .filters {
+        width: 100%;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .filterBtn,
+    .sortSelect {
+        width: 100%;
+        justify-content: center;
+    }
+}

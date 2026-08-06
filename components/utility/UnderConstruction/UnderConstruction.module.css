@@ -1,0 +1,303 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+    color: var(--deep-navy);
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f8fafc 100%);
+}
+
+.background::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.6;
+    z-index: 1;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    animation: float 20s infinite ease-in-out alternate;
+    z-index: 2;
+}
+
+.blob1 {
+    top: -10%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: var(--light-ice-blue);
+    animation-delay: 0s;
+}
+
+.blob2 {
+    bottom: -10%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: var(--alice-blue);
+    animation-delay: -5s;
+}
+
+.blob3 {
+    top: 40%;
+    left: 40%;
+    width: 40vw;
+    height: 40vw;
+    background: var(--icy-blue);
+    animation-delay: -10s;
+    opacity: 0.4;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(30px, 20px) scale(1.05);
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    max-width: 700px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 4rem 3rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 20px 60px -15px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.iconWrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border-radius: 50%;
+    box-shadow:
+        0 10px 30px -10px rgba(37, 99, 235, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.iconWrapper::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cool-sky-2), transparent);
+    opacity: 0.3;
+    z-index: -1;
+    animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon {
+    font-size: 3rem;
+    animation: bounce 3s infinite ease-in-out;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.textGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.title {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--deep-navy) 0%, #334155 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.02em;
+}
+
+.message {
+    font-family: var(--font-sans, sans-serif);
+    font-size: 1.25rem;
+    color: var(--medium-grey);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.homeBtn {
+    background: var(--primary-blue);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.homeBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 35px -10px rgba(37, 99, 235, 0.5);
+    background: var(--cobalt-blue, #1d4ed8);
+}
+
+.notifyForm {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 460px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.3s ease;
+}
+
+.notifyForm:focus-within {
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.1);
+    border-color: var(--cool-sky);
+}
+
+.input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    color: var(--deep-navy);
+    outline: none;
+}
+
+.input::placeholder {
+    color: #94a3b8;
+}
+
+.submitBtn {
+    background: var(--deep-navy);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.submitBtn:hover {
+    transform: scale(1.02);
+    background: black;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 3rem 1.5rem;
+        border-radius: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .title {
+        font-size: 2.25rem;
+    }
+
+    .message {
+        font-size: 1.1rem;
+    }
+
+    .notifyForm {
+        flex-direction: column;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        gap: 1rem;
+        border-radius: 0;
+    }
+
+    .input {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .submitBtn {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+}

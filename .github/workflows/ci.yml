@@ -1,0 +1,174 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality:
+    name: Quality (Lint & Type Check)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+  test:
+    name: Unit Tests (Vitest)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests with Coverage
+        run: npm run test:coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  build:
+    name: Production Build
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      NEXT_PUBLIC_INSFORGE_URL: ${{ secrets.NEXT_PUBLIC_INSFORGE_URL || 'https://placeholder.insforge.app' }}
+      NEXT_PUBLIC_INSFORGE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_INSFORGE_ANON_KEY || 'ik_placeholder' }}
+      INSFORGE_SERVICE_KEY: ${{ secrets.INSFORGE_SERVICE_KEY || 'ik_placeholder' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Cache Next.js Build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Build
+        run: npm run build
+
+  e2e:
+    name: End-to-End Tests (Playwright)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      NEXT_PUBLIC_INSFORGE_URL: ${{ secrets.NEXT_PUBLIC_INSFORGE_URL || 'https://placeholder.insforge.app' }}
+      NEXT_PUBLIC_INSFORGE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_INSFORGE_ANON_KEY || 'ik_placeholder' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E Tests
+        run: npm run e2e
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  security-mock-auth-off:
+    name: Security Regression (ALLOW_MOCK_AUTH off)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Runs the C-2-flagoff spec against a server started WITHOUT ALLOW_MOCK_AUTH: a
+    # mock-admin-token cookie must NOT mint a session (→ 401). This is the one security spec
+    # that cannot run in the shared webServer (which sets ALLOW_MOCK_AUTH=true).
+    env:
+      NEXT_PUBLIC_INSFORGE_URL: ${{ secrets.NEXT_PUBLIC_INSFORGE_URL || 'https://placeholder.insforge.app' }}
+      NEXT_PUBLIC_INSFORGE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_INSFORGE_ANON_KEY || 'ik_placeholder' }}
+      INSFORGE_SERVICE_KEY: ${{ secrets.INSFORGE_SERVICE_KEY || 'ik_placeholder' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - name: Start no-flag server and run C-2-flagoff spec
+        # One step: the background server must stay alive for the test — a process backgrounded
+        # in a separate step is killed when that step ends.
+        run: |
+          ALLOW_MOCK_AUTH='' PORT=3001 npm run start &
+          SERVER_PID=$!
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:3001/ >/dev/null 2>&1 && break
+            sleep 1
+          done
+          curl -sf http://localhost:3001/ >/dev/null 2>&1 || { echo "server failed to start"; exit 1; }
+          npx playwright test e2e/security-regressions.spec.ts --grep "C-2-flagoff"
+          STATUS=$?
+          kill $SERVER_PID 2>/dev/null || true
+          exit $STATUS
+        env:
+          ALLOW_MOCK_AUTH: ''
+          E2E_MOCK_AUTH_OFF: '1'
+          PLAYWRIGHT_BASE_URL: http://localhost:3001

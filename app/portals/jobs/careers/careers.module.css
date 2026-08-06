@@ -1,0 +1,661 @@
+/* =====================================================
+   CAREERS PAGE — TalentMesh Redesign
+   Aesthetic · Minimalist · Transparent & Glassmorphic
+   Palette: theme blues and slate grays
+   ===================================================== */
+
+.page {
+    padding-top: 80px;
+    background: transparent;
+    color: var(--deep-navy, #0d2137);
+    overflow-x: hidden;
+}
+
+/* ── Typography & Accents ── */
+.highlight {
+    background: linear-gradient(135deg, var(--sky-blue, #90CAF9), var(--primary-blue, #007BFF));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.sectionBadge {
+    display: inline-block;
+    background: rgba(0, 123, 255, 0.08);
+    border: 1px solid rgba(0, 123, 255, 0.15);
+    color: var(--primary-blue, #007BFF);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+}
+
+.sectionHeader {
+    text-align: left;
+    margin-bottom: 48px;
+    max-width: 680px;
+}
+
+.sectionHeaderCentered {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 56px;
+}
+
+.sectionTitle {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--deep-navy, #0d2137);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 0 16px;
+}
+
+.sectionTitleCentered {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--deep-navy, #0d2137);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 auto 16px;
+    text-align: center;
+}
+
+.sectionSubtitle {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--medium-grey, #475569);
+    margin: 0;
+}
+
+.sectionSubtitleCentered {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--medium-grey, #475569);
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* ── HERO SECTION ── */
+.hero {
+    padding: 80px 0 64px;
+    background: transparent;
+}
+
+.heroInner {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heroTitle {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--deep-navy, #0d2137);
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+}
+
+.heroButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.seeRolesBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-blue, #007BFF);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
+}
+
+.seeRolesBtn:hover {
+    background: #0069d9;
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+.emailLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--medium-grey, #475569);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.emailLink:hover {
+    color: var(--primary-blue, #007BFF);
+}
+
+.emailDot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary-blue, #007BFF);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Grayscale Wide Team Photo */
+.heroImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 12/5;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.teamImg {
+    object-fit: cover;
+    object-position: center 30%;
+    filter: grayscale(100%);
+    transition: filter 0.8s ease, transform 0.8s ease;
+}
+
+.heroImageWrapper:hover .teamImg {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+}
+
+/* ── TEAM SECTION (The Team Behind Hexora) ── */
+.teamSection {
+    padding: 80px 0;
+    background: transparent;
+}
+
+.leadersGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+}
+
+.leaderCard {
+    padding: 20px 24px !important;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(0, 123, 255, 0.06) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    border-radius: 20px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.leaderCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-blue, #007BFF) !important;
+    box-shadow: 0 16px 36px rgba(0, 123, 255, 0.08) !important;
+}
+
+.leaderAvatar {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e2e8f0;
+    flex-shrink: 0;
+}
+
+.avatarImg {
+    object-fit: cover;
+}
+
+.leaderMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderName {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--deep-navy, #0d2137);
+    margin: 0 0 2px;
+}
+
+.leaderRole {
+    font-size: 0.78rem;
+    color: var(--medium-grey, #475569);
+}
+
+/* 4-column team list at bottom */
+.teamTextGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 48px;
+}
+
+.teamTextItem {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8px;
+}
+
+.textMemberName {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--deep-navy, #0d2137);
+    margin: 0 0 2px;
+}
+
+.textMemberRole {
+    font-size: 0.78rem;
+    color: var(--medium-grey, #475569);
+}
+
+/* ── BENEFITS SECTION (Why You'll Love style) ── */
+.benefitsSection {
+    padding: 80px 0;
+    background: transparent;
+}
+
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.benefitCard {
+    padding: 36px 32px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: rgba(0, 123, 255, 0.06) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    border-radius: 24px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.benefitCard:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary-blue, #007BFF) !important;
+    box-shadow: 0 16px 40px rgba(0, 123, 255, 0.08) !important;
+}
+
+.benefitIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: rgba(0, 123, 255, 0.1);
+    color: var(--primary-blue, #007BFF);
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.benefitTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--deep-navy, #0d2137);
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+}
+
+.benefitDesc {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--medium-grey, #475569);
+    margin: 0;
+}
+
+/* ── OPEN ROLES SECTION ── */
+.rolesSection {
+    padding: 80px 0;
+    background: transparent;
+}
+
+.tabsRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.tabBtn {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--medium-grey, #475569);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--deep-navy, #0d2137);
+}
+
+.tabBtnActive {
+    background: var(--primary-blue, #007BFF) !important;
+    color: white !important;
+    border-color: var(--primary-blue, #007BFF) !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.rolesList {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.roleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px !important;
+    background: rgba(0, 123, 255, 0.06) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    border-radius: 16px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.roleRow:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-blue, #007BFF) !important;
+    box-shadow: 0 12px 32px rgba(0, 123, 255, 0.08) !important;
+}
+
+.roleLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.roleJobTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--deep-navy, #0d2137);
+    margin: 0;
+}
+
+.roleMeta {
+    font-size: 0.84rem;
+    color: var(--medium-grey, #475569);
+}
+
+.roleApplyBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 123, 255, 0.1);
+    color: var(--primary-blue, #007BFF);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 123, 255, 0.15);
+}
+
+.roleRow:hover .roleApplyBtn {
+    background: var(--primary-blue, #007BFF);
+    color: white;
+    border-color: var(--primary-blue, #007BFF);
+}
+
+.noRoles {
+    text-align: center;
+    padding: 40px;
+    background: rgba(0, 123, 255, 0.04);
+    border: 1px dashed rgba(0, 123, 255, 0.15);
+    border-radius: 16px;
+    font-size: 0.95rem;
+    color: var(--medium-grey, #475569);
+}
+
+/* ── FAQ SECTION ── */
+.faqSection {
+    padding: 80px 0;
+    background: transparent;
+}
+
+.faqAccordion {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faqItem {
+    border-radius: 16px;
+    background: rgba(0, 123, 255, 0.06) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.faqHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+.faqQuestion {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--deep-navy, #0d2137);
+}
+
+.faqToggle {
+    color: var(--primary-blue, #007BFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.faqBody {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.3s;
+    padding: 0 28px;
+}
+
+.faqBodyExpanded {
+    max-height: 1000px; /* high value for content expansion */
+    transition: max-height 0.5s cubic-bezier(0.85, 0, 0.15, 1), padding 0.3s;
+    padding: 0 28px 24px;
+}
+
+.faqAnswer {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--medium-grey, #475569);
+    margin: 0;
+    border-top: 1px solid rgba(0, 123, 255, 0.1);
+    padding-top: 16px;
+}
+
+/* ── CTA SECTION ── */
+.ctaSection {
+    background: transparent;
+    padding: 64px 0 80px;
+}
+
+.ctaCard {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 64px 48px;
+    text-align: center;
+    background: rgba(0, 123, 255, 0.06) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ctaCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-blue, #007BFF) !important;
+    box-shadow: 0 20px 40px rgba(0, 123, 255, 0.08) !important;
+}
+
+.ctaContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ctaTitle {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--deep-navy, #0d2137);
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.ctaDesc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--medium-grey, #475569);
+    max-width: 580px;
+    margin: 0 auto 32px;
+}
+
+.ctaBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-blue, #007BFF);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
+}
+
+.ctaBtn:hover {
+    background: #0069d9;
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+@media (max-width: 1024px) {
+    .leadersGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .teamTextGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .benefitsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 56px 0;
+    }
+
+    .heroInner {
+        margin-bottom: 40px;
+    }
+
+    .heroButtons {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .teamHeaderRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .leadersGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .teamTextGrid {
+        grid-template-columns: repeat(2, 1fr);
+        padding-top: 36px;
+    }
+
+    .benefitsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .roleRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 24px !important;
+    }
+
+    .roleApplyBtn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ctaCard {
+        padding: 40px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .teamTextGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
