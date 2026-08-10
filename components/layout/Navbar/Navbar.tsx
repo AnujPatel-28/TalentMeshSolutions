@@ -69,12 +69,13 @@ const Navbar = () => {
 
                     {/* For Employers */}
                     <div className={styles.navItem}>
-                        <div className={`${styles.link} ${isActive('/employers') ? styles.linkActive : ''}`}>
+                        <div className={`${styles.link} ${isActive('/employers') || isActive('/talentmesh-portal') ? styles.linkActive : ''}`}>
                             For Employers <span className={styles.chevron}>▼</span>
                         </div>
                         <div className={styles.dropdown}>
                             <Link href="/employers/post-job" className={`${styles.dropdownLink} ${pathname === '/employers/post-job' ? styles.dropdownLinkActive : ''}`}>Post a Job</Link>
                             <Link href="/employers/sourcing" className={`${styles.dropdownLink} ${pathname === '/employers/sourcing' ? styles.dropdownLinkActive : ''}`}>Talent Sourcing</Link>
+                            <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>TalentMesh Portal</Link>
                             {/* <Link href="/employers/products" className={`${styles.dropdownLink} ${pathname === '/employers/products' ? styles.dropdownLinkActive : ''}`}>Products & Pricing</Link> */}
                         </div>
                     </div>
@@ -156,6 +157,7 @@ const Navbar = () => {
                     <span className={styles.mobileNavLabel}>For Employers</span>
                     <Link href="/employers/post-job" className={styles.mobileNavLink}>Post a Job</Link>
                     <Link href="/employers/sourcing" className={styles.mobileNavLink}>Talent Sourcing</Link>
+                    <Link href="/talentmesh-portal" className={styles.mobileNavLink}>TalentMesh Portal</Link>
                     {/* <Link href="/employers/products" className={styles.mobileNavLink}>Products & Pricing</Link> */}
                     {/* <Link href="/portals/jobs/case-studies" className={styles.mobileNavLink}>Success Stories</Link> */}
                 </div>

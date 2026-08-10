@@ -109,9 +109,9 @@ export default function ContactPage() {
                             <span className={styles.infoLabel}>Headquarters</span>
                             <span className={styles.infoValue}>Ahmedabad, India</span>
                             <span className={styles.infoSub}>
-                                3rd Floor, Chinubhai House,<br />
-                                7-B Amrutbaug Colony, Navjivan,<br />
-                                Ahmedabad, Gujarat 380014
+                                7-B, Amrut Bag Colony, Opp. Stadium,<br />
+                                Nr. Hindu Colony, Navrangpura,<br />
+                                Ahmedabad, Gujarat 380009
                             </span>
                         </div>
 

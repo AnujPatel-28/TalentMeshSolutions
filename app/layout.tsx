@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Geist, Overlock, Manrope, Outfit, Space_Grotesk, Sora, Playfair_Display } from "next/font/google";
 import { Navbar, Footer, NavbarWrapper } from "@/components/layout";
+import { SERVICES } from "@/content/home";
 import "./globals.css";
 import layoutStyles from "./layout.module.css";
 
@@ -104,20 +105,35 @@ export const metadata: Metadata = {
 // Overviews) identify and cite TalentMesh Solutions accurately.
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "EmploymentAgency"],
+  "@id": `${SITE_URL}/#org`,
   name: "TalentMesh Solutions",
+  legalName: "Talentmesh Solution Pvt. Ltd.",
   url: SITE_URL,
   logo: `${SITE_URL}/TalentMesh_page-0002-removebg-preview.png`,
-  description: "TalentMesh Solutions is a next-generation recruitment platform connecting employers and job seekers across India.",
+  description: "TalentMesh Solutions is a professional, result-driven recruitment and staffing firm delivering end-to-end manpower services across India.",
   email: "info@talentmeshsolutions.com",
   telephone: "+91-98981-61106",
+  areaServed: { "@type": "Country", name: "India" },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "3rd Floor, Chinubhai House, 7-B Amrutbaug Colony, Navjivan",
+    streetAddress: "7-B, Amrut Bag Colony, Opp. Stadium, Nr. Hindu Colony, Navrangpura",
     addressLocality: "Ahmedabad",
     addressRegion: "Gujarat",
-    postalCode: "380014",
+    postalCode: "380009",
     addressCountry: "IN",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Recruitment & Staffing Services",
+    itemListElement: SERVICES.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+      },
+    })),
   },
   sameAs: [
     "https://x.com/TalentmeshS",

@@ -1,6 +1,12 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
+  // The site is light-only (see the token set in app/globals.css). Tailwind v3
+  // defaults to `media`, which would fire MotionAccordion's `dark:` variants
+  // from the visitor's OS setting and render a dark accordion inside an
+  // otherwise white page. Nothing in the app ever sets a `.dark` class, so
+  // `class` makes those variants inert.
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
