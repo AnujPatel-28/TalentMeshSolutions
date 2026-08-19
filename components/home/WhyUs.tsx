@@ -1,29 +1,110 @@
-import { PILLARS } from '@/content/home';
+'use client';
+
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Target, Layers, LifeBuoy, Briefcase } from 'lucide-react';
+import { WHY_TALENTMESH } from '@/content/home';
 import styles from './home.module.css';
 
+const POINT_ICONS = {
+    target: Target,
+    layers: Layers,
+    lifeBuoy: LifeBuoy,
+    briefcase: Briefcase,
+};
+
+const headVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    },
+};
+
+const imageVariants = {
+    hidden: { opacity: 0, x: 30, scale: 0.95 },
+    visible: {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+};
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+};
+
+const pillarVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    },
+};
+
 export default function WhyUs() {
+    const reduceMotion = useReducedMotion();
+
     return (
-        <section className={styles.section} id="why-talentmesh">
+        <section className={`${styles.section} ${styles.sectionTint}`} id="why-talentmesh">
             <div className={styles.inner}>
-                <div className={styles.head}>
-                    <p className={styles.eyebrow}>Why TalentMesh</p>
-                    <h2 className={styles.h2}>
-                        A hiring partner, <span className={styles.accent}>not a résumé vendor</span>
-                    </h2>
-                    <p className={styles.lede}>
-                        We aim to be the partner you call first — providing skilled talent, seamless
-                        coordination and value-added support that helps you build a high-performing team.
-                    </p>
+                <div className={styles.whyTopRow}>
+                    <motion.div
+                        className={`${styles.head} ${styles.headLeft} ${styles.whyHeadFull}`}
+                        variants={reduceMotion ? undefined : headVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.5 }}
+                    >
+                        <p className={styles.eyebrow}>What Sets Us Apart</p>
+                        <h2 className={styles.h2}>
+                            More Than Recruitment.
+                            <br />
+                            A Hiring Partner.
+                        </h2>
+                        <p className={styles.lede}>
+                            We build strategic talent relationships to support your long-term organizational growth.
+                        </p>
+                    </motion.div>
                 </div>
 
-                <div className={styles.pillarGrid}>
-                    {PILLARS.map((pillar) => (
-                        <article key={pillar.title} className={styles.pillar}>
-                            <h3 className={styles.pillarTitle}>{pillar.title}</h3>
-                            <p className={styles.pillarDesc}>{pillar.description}</p>
-                        </article>
-                    ))}
-                </div>
+                <motion.div
+                    className={styles.pillarRow}
+                    variants={reduceMotion ? undefined : containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                >
+                    {WHY_TALENTMESH.points.map((pt) => {
+                        const Icon = POINT_ICONS[pt.icon as keyof typeof POINT_ICONS] || Target;
+                        return (
+                            <motion.article
+                                key={pt.title}
+                                className={styles.pillar}
+                                variants={reduceMotion ? undefined : pillarVariants}
+                                whileHover={reduceMotion ? undefined : { y: -2, transition: { duration: 0.2 } }}
+                                whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                            >
+                                <span className={styles.pillarIcon}>
+                                    <Icon strokeWidth={2} aria-hidden="true" />
+                                </span>
+                                <div className={styles.pillarContent}>
+                                    <h3 className={styles.pillarTitle}>{pt.title}</h3>
+                                    <p className={styles.pillarDesc}>{pt.description}</p>
+                                </div>
+                            </motion.article>
+                        );
+                    })}
+                </motion.div>
             </div>
         </section>
     );

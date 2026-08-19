@@ -23,6 +23,18 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Prevent body scroll when mobile menu is open
+    React.useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isMenuOpen]);
+
     // ── Hide the Navbar entirely inside the dashboard (it has its own layout) ──
     if (pathname.startsWith('/dashboard')) return null;
 
@@ -36,8 +48,12 @@ const Navbar = () => {
     // Helper – returns true when the pathname starts with the given base
     const isActive = (base: string) => pathname.startsWith(base);
 
+    const isHome = pathname === '/';
+    const isTransparentNav = isHome && !isScrolled && !isMenuOpen;
+
     return (
-        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''}`}>
+        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
+
             <div className={styles.container}>
                 {/* ── Logo ── */}
                 <Link href="/" className={styles.logo} onClick={scrollToTop}>

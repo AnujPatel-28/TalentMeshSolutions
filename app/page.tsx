@@ -83,17 +83,20 @@ export default function Home() {
       />
 
       <HomeHero />
-      <TrustStrip />
 
       <AnimateOnScroll animation="fadeUp" once>
         <Services />
       </AnimateOnScroll>
 
+      <TrustStrip />
+
+      {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
+      <WhyUs />
+
       <IndustriesGrid />
-      <Process />
 
       <AnimateOnScroll animation="fadeUp" once>
-        <WhyUs />
+        <Process />
       </AnimateOnScroll>
 
       <AnimateOnScroll animation="fadeUp" once>
@@ -103,6 +106,7 @@ export default function Home() {
       <AnimateOnScroll animation="fadeUp" once>
         <ContactCTA />
       </AnimateOnScroll>
+
     </>
   );
 }

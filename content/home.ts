@@ -22,239 +22,259 @@ export const CONTACT = {
   locality: 'Ahmedabad',
   region: 'Gujarat',
   postalCode: '380009',
-  phoneDisplay: '+91 98981 61106',
-  phoneHref: 'tel:+919898161106',
-  email: 'info@talentmeshsolutions.com',
+  phoneDisplay: '9898161106',
+  phoneHref: 'tel:9898161106',
+  email: 'talentmeshsolutions@gmail.com',
 } as const;
 
 export const HERO = {
-  eyebrow: 'Recruitment & Staffing · Ahmedabad, India',
+  eyebrow: 'Recruitment & Staffing Solutions',
   /** Word-by-word reveal; words flagged `accent` render in brand blue. */
   headline: [
-    { text: 'Your' },
-    { text: 'trusted' },
-    { text: 'hiring' },
-    { text: 'partner' },
-    { text: 'for' },
-    { text: 'a' },
-    { text: 'high-performing', accent: true },
-    { text: 'workforce.', accent: true },
+    { text: 'Connecting' },
+    { text: 'Businesses' },
+    { text: 'With' },
+    { text: 'the' },
+    { text: 'Right', accent: true },
+    { text: 'Talent', accent: true },
   ] as { text: string; accent?: boolean }[],
   /** Same string, unsplit — used for the `og:title` and screen-reader label. */
-  headlinePlain: 'Your trusted hiring partner for a high-performing workforce.',
+  headlinePlain: 'Connecting Businesses With the Right Talent',
   description:
-    'TalentMesh Solutions is a professional, result-driven recruitment and staffing firm. With deep domain knowledge and a focus on quality, we deliver end-to-end manpower services tailored to the way your organisation actually hires.',
-  primaryCta: { label: 'Hire Talent', href: '/portals/jobs/contact' },
-  secondaryCta: { label: 'Post a Job', href: '/employers/post-job' },
+    'End-to-end recruitment and staffing solutions designed to help businesses hire skilled professionals, scale teams, and build high-performing workforces.',
+  primaryCta: { label: 'Get Hiring Support', href: '/portals/jobs/contact' },
+  secondaryCta: { label: 'Talk to Our Team', href: '/portals/jobs/contact' },
 } as const;
 
-/** The only numeric claims permitted on this page. Source: LinkedIn overview. */
-export const TRUST_CLAIMS = [
-  { value: '48–72 hrs', label: 'Shortlists delivered' },
-  { value: '93%+', label: 'Retention & offer-to-joining ratio' },
-  { value: 'Dedicated', label: 'Talent pools built per client' },
-] as const;
+export const POSITIONING = {
+  heading: 'Your Hiring Needs. Our Recruitment Expertise.',
+  intro:
+    'Talentmesh Solution helps organizations manage their hiring requirements with flexible recruitment and staffing solutions tailored to their business needs.',
+  columns: [
+    {
+      title: 'Find the Right Talent',
+      description: 'Skilled candidates matched to your requirements.',
+      icon: 'users',
+    },
+    {
+      title: 'Scale With Flexibility',
+      description: 'Permanent, contractual, temporary, bulk and remote hiring.',
+      icon: 'trendingUp',
+    },
+    {
+      title: 'Simplify Recruitment',
+      description: 'From sourcing and screening to onboarding assistance.',
+      icon: 'checkCircle',
+    },
+  ],
+} as const;
 
-export type ServiceIcon =
-  | 'briefcase'
-  | 'crown'
-  | 'timer'
-  | 'workflow'
-  | 'graduation'
-  | 'globe'
-  | 'users'
-  | 'shield'
-  | 'fileCheck'
-  | 'compass';
-
-export interface Service {
+export interface ServiceCategory {
   title: string;
-  description: string;
-  icon: ServiceIcon;
-  /** Renders as a double-width tile in the bento grid. */
-  featured?: boolean;
+  icon: string;
+  items: string[];
 }
 
-export const SERVICES: Service[] = [
+export const SERVICE_CATEGORIES: ServiceCategory[] = [
   {
-    title: 'Permanent & Contractual Staffing',
-    description:
-      'Full-time hires and fixed-term contract roles sourced, screened and closed against your role specification — from individual replacements to entire teams.',
-    icon: 'briefcase',
-    featured: true,
+    title: 'Talent Acquisition',
+    icon: 'userCheck',
+    items: [
+      'Permanent & Contractual Staffing',
+      'Executive & Leadership Hiring',
+      'Bulk & Volume Hiring',
+      'Campus Hiring & Internship Drives',
+    ],
   },
   {
-    title: 'Executive & Leadership Hiring',
-    description:
-      'Confidential search for senior and leadership mandates, with mapped shortlists, structured evaluation and discreet candidate engagement throughout.',
-    icon: 'crown',
-    featured: true,
+    title: 'Flexible Workforce',
+    icon: 'sliders',
+    items: [
+      'Temporary & Flexi Staffing',
+      'Remote Hiring Solutions',
+      'Recruitment Process Outsourcing',
+    ],
   },
   {
-    title: 'Temporary & Flexi Staffing',
-    description:
-      'Short-term and seasonal manpower for peak load, project cycles and cover, without adding to permanent headcount.',
-    icon: 'timer',
-  },
-  {
-    title: 'Recruitment Process Outsourcing',
-    description:
-      'We run your hiring function end to end — sourcing, screening, coordination and reporting — as an extension of your internal team.',
-    icon: 'workflow',
-  },
-  {
-    title: 'Campus Hiring & Internship Drives',
-    description:
-      'Campus engagement, assessment days and internship pipelines that build an entry-level bench before you need it.',
-    icon: 'graduation',
-  },
-  {
-    title: 'Remote Hiring Solutions',
-    description:
-      'Distributed and work-from-home roles sourced beyond your immediate city, with remote-readiness factored into screening.',
-    icon: 'globe',
-  },
-  {
-    title: 'Bulk & Volume Hiring',
-    description:
-      'High-volume mandates run to a schedule — coordinated sourcing, batch assessment and joining tracking against agreed timelines.',
-    icon: 'users',
-  },
-  {
-    title: 'Background Verification & Reference Checks',
-    description:
-      'Employment, education and reference verification completed before joining, so surprises surface early rather than after onboarding.',
-    icon: 'shield',
-  },
-  {
-    title: 'Onboarding Assistance & Documentation Support',
-    description:
-      'Offer-to-joining follow-through: documentation, joining formalities and candidate engagement across the notice period.',
-    icon: 'fileCheck',
-  },
-  {
-    title: 'HR Consulting & Workforce Planning',
-    description:
-      'Role design, compensation benchmarking and headcount planning to align hiring with where the business is heading.',
-    icon: 'compass',
+    title: 'Workforce Support',
+    icon: 'shieldCheck',
+    items: [
+      'Background Verification',
+      'Reference Checks',
+      'Onboarding Assistance',
+      'Documentation Support',
+      'HR Consulting & Workforce Planning',
+    ],
   },
 ];
 
-export interface Industry {
+export const SERVICES = SERVICE_CATEGORIES.flatMap((cat) =>
+  cat.items.map((item) => ({
+    title: item,
+    description: `${item} solutions provided by TalentMesh Solutions.`,
+  }))
+);
+
+export interface CollaberaServiceCard {
+  title: string;
+  description: string;
+  image: string;
+  actionPills: { label: string; href: string }[];
+}
+
+export const COLLABERA_SERVICES: CollaberaServiceCard[] = [
+  {
+    title: 'Flexible Workforce Solutions',
+    description: 'Access pre-vetted skilled professionals on demand, and scale your team up or down as project requirements shift.',
+    image: '/images/services/flexible_workforce_solutions.png',
+    actionPills: [
+      { label: 'Contingent Staffing', href: '/employers/sourcing' },
+      { label: 'Contract-to-Hire', href: '/employers/sourcing' },
+    ],
+  },
+  {
+    title: 'Scaled Hiring & RPO',
+    description: 'Bring structure, speed, and consistency to high-volume recruitment programs and enterprise expansion initiatives.',
+    image: '/images/services/scaled_hiring_rpo.png',
+    actionPills: [
+      { label: 'Recruitment Process Outsourcing', href: '/employers/rpo' },
+      { label: 'Managed Talent Solutions', href: '/talentmesh-portal' },
+    ],
+  },
+  {
+    title: 'Technology & Platform',
+    description: 'Hire smarter across borders with connected AI platforms, remote sourcing tools, and dedicated offshore tech teams.',
+    image: '/images/services/technology_platform.png',
+    actionPills: [
+      { label: 'Global Remote Talent Platform', href: '/talentmesh-portal' },
+      { label: 'Tech Stack Sourcing', href: '/employers/sourcing' },
+    ],
+  },
+  {
+    title: 'Global Capability Centers (GCC)',
+    description: 'End-to-end support to set up, build infrastructure, and scale Global Capability Centers aligned to business goals.',
+    image: '/images/services/global_capability_centers.png',
+    actionPills: [
+      { label: 'GCC Setup & Build', href: '/employers/sourcing' },
+      { label: 'Offshore Staffing', href: '/employers/sourcing' },
+    ],
+  },
+  {
+    title: 'Leadership & Strategic Hiring',
+    description: 'Identify and place senior leaders and specialist directors who shape long-term business outcomes and market growth.',
+    image: '/images/services/leadership_strategic_hiring.png',
+    actionPills: [
+      { label: 'Executive Search', href: '/employers/post-job' },
+      { label: 'Direct Hire Recruitment', href: '/employers/post-job' },
+    ],
+  },
+  {
+    title: 'Workforce Creation & Enablement',
+    description: 'Build job-ready talent pipelines through structured skill training, designed for long-term impact and sustained delivery.',
+    image: '/images/services/workforce_creation_enablement.png',
+    actionPills: [
+      { label: 'Hire, Train & Deploy', href: '/talentmesh-portal' },
+      { label: 'Skill Upskilling', href: '/portals/jobs/career-advice' },
+    ],
+  },
+];
+
+
+
+export const WHY_TALENTMESH = {
+  heading: 'More Than Recruitment. A Hiring Partner.',
+  points: [
+    {
+      title: 'Quality-Focused Hiring',
+      description: "Focus on finding candidates aligned with the organization's requirements.",
+      icon: 'target',
+    },
+    {
+      title: 'Flexible Staffing Models',
+      description: 'Permanent, contractual, temporary, remote and volume hiring options.',
+      icon: 'layers',
+    },
+    {
+      title: 'End-to-End Support',
+      description: 'Support across recruitment coordination, verification and onboarding.',
+      icon: 'lifeBuoy',
+    },
+    {
+      title: 'Industry-Aware Recruitment',
+      description: 'Recruitment support across technology, healthcare, manufacturing, BFSI and other sectors.',
+      icon: 'briefcase',
+    },
+  ],
+} as const;
+
+export interface IndustryTag {
   name: string;
-  /** Local file under `public/`. Omit for an icon-only tile. */
-  image?: string;
-  imageAlt?: string;
+  /** Key into ICONS in components/home/IndustriesGrid.tsx. */
+  icon: string;
+  /** Accent for the icon and the label's hover glow. */
+  color: string;
+  /** Shown in the cursor-following card on hover. */
+  image: string;
 }
 
-export const INDUSTRIES: Industry[] = [
-  {
-    name: 'Information Technology',
-    image: '/images/tech-office.jpg',
-    imageAlt: 'Technology team working in a modern office',
-  },
-  {
-    name: 'Pharmaceuticals & Healthcare',
-    image: '/healthcare_photo.png',
-    imageAlt: 'Healthcare professionals at work',
-  },
-  {
-    name: 'Engineering & Manufacturing',
-    image: '/manufacturing_photo.png',
-    imageAlt: 'Engineers on a manufacturing floor',
-  },
-  {
-    name: 'Sales, Marketing & Retail',
-    image: '/retail_photo.png',
-    imageAlt: 'Retail team serving customers in store',
-  },
-  {
-    name: 'Logistics & Supply Chain',
-    image: '/logistics_photo.jpg',
-    imageAlt: 'Logistics warehouse and distribution operations',
-  },
-  { name: 'Banking, Financial Services & Insurance' },
-  {
-    name: 'BPO, KPO & Call Centers',
-    image: '/images/customer-support.jpg',
-    imageAlt: 'Customer support agents at a contact centre',
-  },
-  {
-    name: 'EdTech & Training Institutes',
-    image: '/education_photo.jpg',
-    imageAlt: 'Classroom training session in progress',
-  },
-  { name: 'Hospitality & Tourism' },
-  { name: 'E-commerce & Startups' },
+/**
+ * Grouped into display rows (4 / 3 / 3) so the centered block reads as a
+ * pyramid, matching the same section on /employers/sourcing.
+ */
+export const INDUSTRY_ROWS: IndustryTag[][] = [
+  [
+    { name: 'IT & Software', icon: 'monitor', color: '#3b82f6', image: '/images/tech-office.jpg' },
+    { name: 'Healthcare', icon: 'heart', color: '#ef4444', image: '/healthcare_photo.png' },
+    { name: 'Finance', icon: 'landmark', color: '#10b981', image: '/Finance management.png' },
+    { name: 'Manufacturing', icon: 'factory', color: '#f59e0b', image: '/manufacturing_photo.png' },
+  ],
+  [
+    { name: 'Retail', icon: 'shoppingBag', color: '#8b5cf6', image: '/retail_photo.png' },
+    { name: 'Logistics', icon: 'truck', color: '#06b6d4', image: '/logistics_photo.jpg' },
+    { name: 'Education', icon: 'graduationCap', color: '#ec4899', image: '/education_photo.jpg' },
+  ],
+  [
+    { name: 'Marketing', icon: 'megaphone', color: '#f97316', image: '/Marketing and finance.png' },
+    { name: 'Human Resources', icon: 'users', color: '#6366f1', image: '/Human research.png' },
+    { name: 'Customer Support', icon: 'headphones', color: '#14b8a6', image: '/Customer services.png' },
+  ],
 ];
 
-export interface ProcessStep {
+export interface RedesignStep {
+  step: string;
   title: string;
   description: string;
 }
 
-export const PROCESS_STEPS: ProcessStep[] = [
+export const PROCESS_REDESIGN_STEPS: RedesignStep[] = [
   {
-    title: 'Requirement Intake',
-    description:
-      'We map the role with your hiring manager — skills, band, reporting line, must-haves versus nice-to-haves — before a single profile is sourced.',
+    step: '01',
+    title: 'Understand',
+    description: 'We understand your hiring requirements, roles and workforce needs.',
   },
   {
-    title: 'Sourcing & Talent Mapping',
-    description:
-      'We work our dedicated talent pools and open market together, mapping the relevant candidate universe for the role rather than posting and waiting.',
+    step: '02',
+    title: 'Source',
+    description: 'We identify and source relevant candidates.',
   },
   {
-    title: 'Screening & Assessment',
-    description:
-      'Every profile is spoken to before it reaches you: role fit, compensation expectation, notice period and genuine intent to move.',
+    step: '03',
+    title: 'Screen',
+    description: 'Candidates are evaluated against the requirements.',
   },
   {
-    title: 'Shortlist & Interview Coordination',
-    description:
-      'You receive a shortlist, not a résumé dump. We schedule interviews, manage reschedules and keep candidates warm between rounds.',
+    step: '04',
+    title: 'Coordinate',
+    description: 'We support the recruitment process and coordination.',
   },
   {
-    title: 'Offer, Verification & Onboarding',
-    description:
-      'Offer negotiation, background and reference checks, documentation support, and follow-through until the candidate actually joins.',
-  },
-];
-
-export interface Pillar {
-  title: string;
-  description: string;
-}
-
-export const PILLARS: Pillar[] = [
-  {
-    title: 'Deep Domain Knowledge',
-    description:
-      'Consultants who understand the roles they hire for, so screening is a real technical conversation rather than keyword matching against a job description.',
-  },
-  {
-    title: 'Quality Over Volume',
-    description:
-      'A short, defensible shortlist where every profile has been spoken to and qualified — we would rather send you four right ones than forty maybes.',
-  },
-  {
-    title: 'Seamless Coordination',
-    description:
-      'One point of contact who owns scheduling, feedback loops and candidate communication, so your team spends its time interviewing rather than chasing.',
-  },
-  {
-    title: 'End-to-End Ownership',
-    description:
-      'We stay accountable from requirement intake through verification and onboarding — the mandate is closed when the candidate joins, not when the offer goes out.',
+    step: '05',
+    title: 'Onboard',
+    description: 'We assist with documentation and onboarding requirements.',
   },
 ];
 
-export interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-export const FAQS: FaqItem[] = [
+export const FAQS = [
   {
     question: 'How quickly can you share a shortlist?',
     answer:
@@ -282,9 +302,14 @@ export const FAQS: FaqItem[] = [
   },
 ];
 
-export const CONTACT_BAND = {
-  heading: 'Let’s build your team.',
-  description:
-    'Tell us the role, the band and the timeline. We will come back with a realistic plan for filling it — and a shortlist, not a résumé dump.',
-  cta: { label: 'Talk to our team', href: '/portals/jobs/contact' },
+export const STRONG_CTA = {
+  heading: 'Looking for the Right People to Grow Your Business?',
+  subtext: 'Tell us what you\'re hiring for. Our team can help you find the right recruitment and staffing solution.',
+  buttonLabel: 'Start a Conversation →',
+  buttonHref: '/portals/jobs/contact',
+  phoneDisplay: '9898161106',
+  phoneHref: 'tel:9898161106',
+  email: 'talentmeshsolutions@gmail.com',
+  emailHref: 'mailto:talentmeshsolutions@gmail.com',
 } as const;
+

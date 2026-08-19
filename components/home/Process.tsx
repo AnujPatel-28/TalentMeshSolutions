@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { PROCESS_STEPS } from '@/content/home';
+import { PROCESS_REDESIGN_STEPS } from '@/content/home';
 import styles from './home.module.css';
 
 export default function Process() {
@@ -19,13 +19,12 @@ export default function Process() {
         <section className={styles.section} id="process">
             <div className={styles.inner}>
                 <div className={styles.head}>
-                    <p className={styles.eyebrow}>How we work</p>
+                    <p className={styles.eyebrow}>How It Works</p>
                     <h2 className={styles.h2}>
-                        A process built to <span className={styles.accent}>close the role</span>
+                        A Simple Approach to <span className={styles.accent}>Better Hiring</span>
                     </h2>
                     <p className={styles.lede}>
-                        Five stages, one point of contact, and accountability that runs past the offer
-                        letter — the mandate is closed when the candidate joins.
+                        A transparent, step-by-step process designed to simplify candidate discovery and hiring coordination.
                     </p>
                 </div>
 
@@ -37,16 +36,18 @@ export default function Process() {
                         />
                     </div>
 
-                    {PROCESS_STEPS.map((step, i) => (
+                    {PROCESS_REDESIGN_STEPS.map((step, i) => (
                         <motion.div
                             key={step.title}
                             className={styles.processStep}
                             initial={reduceMotion ? false : { opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.5 }}
+                            whileHover={reduceMotion ? undefined : { y: -2, transition: { duration: 0.2 } }}
+                            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
                             transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                         >
-                            <span className={styles.processNum}>{String(i + 1).padStart(2, '0')}</span>
+                            <span className={styles.processNum}>{step.step}</span>
                             <div>
                                 <h3 className={styles.processTitle}>{step.title}</h3>
                                 <p className={styles.processDesc}>{step.description}</p>
@@ -58,3 +59,4 @@ export default function Process() {
         </section>
     );
 }
+

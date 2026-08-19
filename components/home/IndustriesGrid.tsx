@@ -1,94 +1,165 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
-import { INDUSTRIES } from '@/content/home';
+import React, { useState, useEffect } from 'react';
+import {
+    motion,
+    AnimatePresence,
+    useMotionValue,
+    useSpring,
+    useTransform,
+    useVelocity,
+    useReducedMotion,
+} from 'framer-motion';
+import {
+    Monitor,
+    Heart,
+    Landmark,
+    Factory,
+    ShoppingBag,
+    Truck,
+    GraduationCap,
+    Megaphone,
+    Users,
+    Headphones,
+} from 'lucide-react';
+import { INDUSTRY_ROWS } from '@/content/home';
 import styles from './home.module.css';
 
-/**
- * Pills for all ten sectors. On pointer devices, hovering a pill that has a
- * photo floats a preview card that follows the cursor — same spring idiom as
- * components/sections/Industries.tsx. Touch devices get the plain pill grid.
- */
+const ICONS = {
+    monitor: Monitor,
+    heart: Heart,
+    landmark: Landmark,
+    factory: Factory,
+    shoppingBag: ShoppingBag,
+    truck: Truck,
+    graduationCap: GraduationCap,
+    megaphone: Megaphone,
+    users: Users,
+    headphones: Headphones,
+};
+
+const FLAT_INDUSTRIES = INDUSTRY_ROWS.flat();
+
 export default function IndustriesGrid() {
-    const [active, setActive] = useState<number | null>(null);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [supportsHover, setSupportsHover] = useState(false);
+    const reduceMotion = useReducedMotion();
 
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-    const x = useSpring(mouseX, { stiffness: 260, damping: 26, mass: 0.6 });
-    const y = useSpring(mouseY, { stiffness: 260, damping: 26, mass: 0.6 });
-
-    // Resolved after mount so the server and first client render agree.
-    const [canHover, setCanHover] = useState(false);
+    // The follower card is pointer-only; touch devices never get a hover state.
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover)');
-        setCanHover(mq.matches);
-        const onChange = (e: MediaQueryListEvent) => setCanHover(e.matches);
-        mq.addEventListener('change', onChange);
-        return () => mq.removeEventListener('change', onChange);
+        setSupportsHover(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setSupportsHover(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
     }, []);
 
-    const handleMove = (event: React.MouseEvent) => {
-        mouseX.set(event.clientX + 24);
-        mouseY.set(event.clientY - 95);
+    // Coordinates for the follower card, softened by a spring for lag/inertia.
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springConfig = { damping: 25, stiffness: 220, mass: 0.6 };
+    const x = useSpring(mouseX, springConfig);
+    const y = useSpring(mouseY, springConfig);
+
+    // Tilt the card in the direction the cursor is travelling.
+    const xVelocity = useVelocity(mouseX);
+    const rotateRaw = useTransform(xVelocity, [-2000, 2000], [-10, 10]);
+    const rotate = useSpring(rotateRaw, { damping: 20, stiffness: 200 });
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        mouseX.set(e.clientX - 160);
+        mouseY.set(e.clientY - 210);
     };
 
-    const preview = active !== null ? INDUSTRIES[active] : null;
+    const showFollower = supportsHover && !reduceMotion;
 
     return (
-        <section className={`${styles.section} ${styles.sectionDark}`} id="industries">
+        <section className={styles.section} id="industries" onMouseMove={handleMouseMove}>
             <div className={styles.inner}>
-                <div className={styles.head}>
-                    <p className={styles.eyebrow}>Industries we serve</p>
-                    <h2 className={styles.h2}>
-                        Hiring expertise across <span className={styles.accent}>ten sectors</span>
-                    </h2>
+                <div className={`${styles.head} ${styles.industriesHead}`}>
+                    <p className={styles.eyebrow}>Industries</p>
+                    <h2 className={styles.h2}>Recruitment Solutions Across Multiple Industries</h2>
                     <p className={styles.lede}>
-                        Consultants who know the roles they recruit for — so screening is a real
-                        conversation about the work, not keyword matching against a job description.
+                        We recruit skilled professionals across a wide range of industries.
                     </p>
                 </div>
 
-                <div className={styles.industryWrap} onMouseMove={canHover ? handleMove : undefined}>
-                    <ul className={styles.industryList}>
-                        {INDUSTRIES.map((industry, i) => (
-                            <li
-                                key={industry.name}
-                                className={styles.industryPill}
-                                onMouseEnter={() => industry.image && canHover && setActive(i)}
-                                onMouseLeave={() => setActive(null)}
-                            >
-                                <span className={styles.industryDot} aria-hidden="true" />
-                                {industry.name}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <AnimatePresence>
-                        {preview?.image && (
-                            <motion.div
-                                key={preview.name}
-                                className={styles.industryPreview}
-                                style={{ x, y }}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.18, ease: 'easeOut' }}
-                                aria-hidden="true"
-                            >
-                                <Image
-                                    src={preview.image}
-                                    alt=""
-                                    width={300}
-                                    height={190}
-                                    sizes="300px"
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                <div className={styles.industriesContainer}>
+                    {INDUSTRY_ROWS.map((row, rowIndex) => (
+                        <div key={rowIndex} className={styles.industryRow}>
+                            {row.map((ind) => {
+                                const Icon = ICONS[ind.icon as keyof typeof ICONS] || Monitor;
+                                const flatIndex = FLAT_INDUSTRIES.indexOf(ind);
+                                return (
+                                    <div
+                                        key={ind.name}
+                                        className={styles.industryTag}
+                                        style={{ '--hover-color': ind.color } as React.CSSProperties}
+                                        onMouseEnter={() => setHoveredIndex(flatIndex)}
+                                        onMouseLeave={() => setHoveredIndex(null)}
+                                    >
+                                        <span className={styles.tagIcon}>
+                                            <Icon size={22} />
+                                        </span>
+                                        <span className={styles.tagName}>{ind.name}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
             </div>
+
+            {/* Warm the browser cache so the follower card paints without a gap. */}
+            {showFollower && (
+                <div style={{ display: 'none' }} aria-hidden="true">
+                    {FLAT_INDUSTRIES.map((ind) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={ind.name} src={ind.image} alt="" />
+                    ))}
+                </div>
+            )}
+
+            {/* Cursor-following preview card */}
+            <AnimatePresence>
+                {showFollower && hoveredIndex !== null && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+                        style={{
+                            position: 'fixed',
+                            left: 0,
+                            top: 0,
+                            x,
+                            y,
+                            rotate,
+                            width: 320,
+                            height: 200,
+                            pointerEvents: 'none',
+                            zIndex: 9999,
+                            overflow: 'hidden',
+                            borderRadius: '16px',
+                            boxShadow:
+                                '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.15)',
+                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(8px)',
+                        }}
+                    >
+                        <motion.img
+                            src={FLAT_INDUSTRIES[hoveredIndex].image}
+                            alt={FLAT_INDUSTRIES[hoveredIndex].name}
+                            initial={{ scale: 1.15 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 1.15 }}
+                            transition={{ duration: 0.35, ease: 'easeOut' }}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

@@ -13,53 +13,65 @@
 }
 
 :root {
-  --background: #F2F3F4;
-  --foreground: #000000;
+  /* Design System Color Palette */
+  --midnight-navy: #071A2B;
+  --talent-blue: #0878B5;
+  --sky-blue: #78B9D9;
+  --mist-blue: #DCECF5;
+  --cloud: #F4F8FA;
+  --white: #FFFFFF;
 
-  /* Brand Palette */
+  /* Brand Gradients */
+  --blue-gradient: linear-gradient(135deg, #0878B5 0%, #78B9D9 100%);
+  --soft-blue-gradient: linear-gradient(180deg, #DCECF5 0%, #FFFFFF 100%);
+  --deep-blue-gradient: linear-gradient(135deg, #071A2B 0%, #0878B5 100%);
+
+  /* Global Compatibility Variables */
+  --background: #F4F8FA;
+  --foreground: #071A2B;
+  /* Reverted to the pre-redesign values so the /talentmesh-portal hero shine
+     reads as it does in production. Design-system equivalents, if reverting:
+     --primary-blue: #0878B5 (--talent-blue), --deep-navy: #071A2B (--midnight-navy). */
   --primary-blue: #007BFF;
   --deep-navy: #000000;
-  /* Updated to Pure Black per user request */
   --medium-grey: #475569;
-  --light-ice-blue: #F0F7FF;
+  --light-ice-blue: #F4F8FA;
 
-  --alice-blue: #e3f2fdff;
-  --icy-blue: #bbdefbff;
-  --sky-blue: #90caf9ff;
-  --cool-sky: #64b5f6ff;
-  --cool-sky-2: #42a5f5ff;
-  --dodger-blue: #2196f3ff;
-  --brilliant-azure: #1e88e5ff;
-  --twitter-blue: #1976d2ff;
-  --ocean-deep: #1565c0ff;
-  --cobalt-blue: #0d47a1ff;
+  --alice-blue: #DCECF5;
+  --icy-blue: #DCECF5;
+  --sky-blue-compat: #78B9D9;
+  --cool-sky: #78B9D9;
+  --cool-sky-2: #0878B5;
+  --dodger-blue: #0878B5;
+  --brilliant-azure: #0878B5;
+  --twitter-blue: #0878B5;
+  --ocean-deep: #071A2B;
+  --cobalt-blue: #071A2B;
 
-  /* Mapped Variables for Compatibility */
-  --white: #ffffff;
-  --ink-black: #000000;
-  /* Pure Black */
-  --text-body: var(--medium-grey);
+  --ink-black: #071A2B;
+  --text-body: #475569;
 
-  --deep-space-blue: var(--ocean-deep);
-  --cerulean: var(--cool-sky-2);
-  --fresh-sky: var(--light-ice-blue);
+  --deep-space-blue: #071A2B;
+  --cerulean: #0878B5;
+  --fresh-sky: #DCECF5;
 
-  /* Lighting & Glows for Premium Feel */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-glow-blue: 0 0 20px rgba(0, 123, 255, 0.3);
-  --shadow-glow-hover: 0 0 30px rgba(0, 123, 255, 0.5);
+  /* Lighting & Glows */
+  --shadow-sm: 0 2px 4px rgba(7, 26, 43, 0.05);
+  --shadow-md: 0 4px 12px rgba(7, 26, 43, 0.08);
+  --shadow-lg: 0 10px 25px rgba(7, 26, 43, 0.1);
+  --shadow-xl: 0 20px 35px rgba(7, 26, 43, 0.12);
+  --shadow-glow-blue: 0 4px 20px rgba(8, 120, 181, 0.25);
+  --shadow-glow-hover: 0 8px 30px rgba(8, 120, 181, 0.4);
 
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.5);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: 1px solid rgba(8, 120, 181, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(7, 26, 43, 0.06);
 
-  --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--dodger-blue));
-  --gradient-dark: linear-gradient(135deg, var(--deep-navy), #1e293b);
-  --gradient-premium: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  --gradient-primary: linear-gradient(135deg, #0878B5 0%, #78B9D9 100%);
+  --gradient-premium: linear-gradient(135deg, #071A2B 0%, #0878B5 100%);
+  --gradient-dark: linear-gradient(135deg, #071A2B 0%, #0878B5 100%);
   --gradient-glass: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+
 
   --radius-sm: 8px;
   --radius-md: 12px;

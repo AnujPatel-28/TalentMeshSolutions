@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Geist, Overlock, Manrope, Outfit, Space_Grotesk, Sora, Playfair_Display } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Geist, Overlock, Manrope, Outfit, Space_Grotesk, Sora, Playfair_Display, Instrument_Serif } from "next/font/google";
 import { Navbar, Footer, NavbarWrapper } from "@/components/layout";
 import { SERVICES } from "@/content/home";
 import "./globals.css";
@@ -8,6 +8,12 @@ import layoutStyles from "./layout.module.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const jakarta = Plus_Jakarta_Sans({
@@ -50,6 +56,7 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "700", "900"],
 });
+
 
 const SITE_URL = "https://talentmeshsolutions.com";
 
@@ -161,9 +168,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
-        className={`${inter.variable} ${jakarta.variable} ${geist.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
+        className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
       >
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
