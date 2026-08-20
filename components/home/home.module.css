@@ -507,7 +507,7 @@
     padding: 0.85rem 1.4rem;
     border-radius: 9999px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: none;
     color: rgba(255, 255, 255, 0.88);
     font-size: 1rem;
     font-weight: 500;
@@ -677,52 +677,66 @@
 
 .contactCard {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 3rem;
+    aspect-ratio: 1773 / 887;
+    box-sizing: border-box;
+    min-height: 0;
+    font-family: var(--font-inter), Inter, sans-serif;
     align-items: center;
-    padding: 3.5rem;
-    background: var(--gradient-premium);
+    padding: clamp(2.75rem, 5.5vw, 4.25rem);
+    background-color: #03204e;
+    background-image: linear-gradient(90deg, rgba(3, 24, 60, 0.92) 0%, rgba(3, 24, 60, 0.72) 42%, rgba(3, 24, 60, 0.25) 75%, rgba(3, 24, 60, 0.05) 100%), url('/leaf-bg.webp');
+    background-size: 100% 100%;
+    background-position: center right;
+    background-repeat: no-repeat;
     border-radius: var(--radius-xl);
     color: #fff;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 16px 35px -14px rgba(2, 36, 85, 0.28);
+    border: none;
 }
 
 .contactCard::after {
-    content: '';
-    position: absolute;
-    top: -140px;
-    right: -140px;
-    width: 420px;
-    height: 420px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 123, 255, 0.35), transparent 68%);
-    pointer-events: none;
+    display: none;
 }
 
 .contactHeading {
     margin: 0;
+    font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
     font-size: clamp(1.9rem, 3.6vw, 2.75rem);
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #fff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .contactDesc {
     margin: 1.1rem 0 2rem;
+    font-family: var(--font-inter), Inter, sans-serif;
     font-size: 1.03rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 480px;
 }
 
 .contactDetails {
     position: relative;
+    font-family: var(--font-inter), Inter, sans-serif;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
+    gap: 1.25rem;
     font-style: normal;
+    background: rgba(3, 24, 60, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .contactRow {
@@ -731,24 +745,41 @@
     gap: 0.85rem;
     font-size: 0.97rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .contactRow svg {
     flex-shrink: 0;
     margin-top: 2px;
-    color: var(--cool-sky);
+    color: #38bdf8;
 }
 
 .contactRow a {
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.95);
     text-decoration: none;
     transition: var(--transition-fast);
 }
 
 .contactRow a:hover {
-    color: var(--sky-blue);
+    color: #38bdf8;
     text-decoration: underline;
+}
+
+.contactMetaLabel {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7dd3fc;
+    margin-bottom: 0.2rem;
+}
+
+.contactLink {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    word-break: break-all;
 }
 
 /* ---------------------------------------------------------- breakpoints -- */
@@ -857,8 +888,28 @@
 
     .contactCard {
         grid-template-columns: 1fr;
-        gap: 2.25rem;
-        padding: 2.5rem 2rem;
+        gap: 2rem;
+        aspect-ratio: auto;
+        padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 4.5vw, 2.25rem);
+        border-radius: 28px;
+        background-color: #031c44;
+        background-image: linear-gradient(155deg, rgba(3, 24, 60, 0.97) 0%, rgba(3, 24, 60, 0.90) 50%, rgba(3, 24, 60, 0.65) 80%, rgba(3, 24, 60, 0.35) 100%), url('/leaf-bg.webp');
+        background-size: cover;
+        background-position: right bottom;
+        background-repeat: no-repeat;
+    }
+
+    .contactHeading {
+        font-size: clamp(1.75rem, 5.5vw, 2.25rem);
+        line-height: 1.2;
+    }
+
+    .contactDesc {
+        font-size: 0.98rem;
+        line-height: 1.65;
+        margin: 1rem 0 1.85rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 100%;
     }
 
     /* Horizontal Feature Card Stack on tablet & mobile */
@@ -907,8 +958,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 2px;
-        margin-bottom: 0;
         flex-shrink: 0;
     }
 
@@ -1283,25 +1332,85 @@
 
 .positioningCard {
     flex: 1;
-    display: grid;
-    grid-template-columns: 56px minmax(0, 1fr);
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 2rem;
     background: var(--trust-card-bg);
     border: none;
     border-bottom: 1px solid var(--trust-card-border);
     border-radius: 0px;
-    padding: 3.5rem 4rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
-    text-align: left;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    padding: 3.5rem 4rem 3.5rem 2rem;
+    text-align: right;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease,
+                opacity 0.35s ease;
+    user-select: none;
+    outline: none;
+}
+
+.positioningCard:focus-visible {
+    outline: 2px solid #0072FF;
+    outline-offset: -2px;
+}
+
+.positioningCardActive {
+    background: linear-gradient(90deg, #f8faff 0%, #f0f7ff 100%);
+}
+
+.positioningCardInactive {
+    opacity: 0.65;
+}
+
+.positioningCardInactive:hover {
+    opacity: 0.92;
+    background: #fafcff;
 }
 
 .positioningCard:last-child {
     border-bottom: none;
 }
 
-.positioningCard:hover {
-    background: var(--trust-card-hover);
+.positioningCardInner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.positioningBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin-bottom: 0.4rem;
+    transition: color 0.3s ease;
+}
+
+.positioningBadgeActive {
+    color: #0284c7;
+}
+
+.positioningBadgeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.3s ease;
+}
+
+.positioningBadgeDotActive {
+    background: #0072FF;
+    box-shadow: 0 0 8px rgba(0, 114, 255, 0.65);
+    animation: pulseDot 2s infinite ease-in-out;
 }
 
 .positioningIconBox {
@@ -1324,6 +1433,7 @@
 .positioningContent {
     display: flex;
     flex-direction: column;
+    text-align: right;
 }
 
 .positioningTitle {
@@ -1332,6 +1442,11 @@
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--midnight-navy);
+    transition: color 0.3s ease;
+}
+
+.positioningTitleActive {
+    color: #0056B3;
 }
 
 .positioningDesc {
@@ -1340,6 +1455,54 @@
     font-size: 1.05rem;
     line-height: 1.65;
     color: var(--medium-grey);
+    transition: color 0.3s ease;
+    min-height: 3.3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.positioningDescActive {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.cardProgressBar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #00C6FF 0%, #0072FF 100%);
+    border-radius: 4px 0 0 4px;
+    box-shadow: 0 0 12px rgba(0, 114, 255, 0.45);
+    z-index: 5;
+    transform-origin: top;
+}
+
+.typewriterWrapper {
+    display: inline;
+}
+
+.typewriterCursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background-color: #0072FF;
+    margin-left: 2px;
+    vertical-align: -1px;
+    border-radius: 1px;
+    animation: blinkCursor 0.75s infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
 }
 
 /* Categorized Services */
@@ -1734,32 +1897,27 @@
 
     .positioningCard {
         padding: 1.25rem 1.25rem;
-        grid-template-columns: 48px minmax(0, 1fr);
-        gap: 1.15rem;
+        display: block;
         align-items: flex-start;
         background: #ffffff;
         border: 1px solid rgba(8, 120, 181, 0.12);
         border-radius: 16px;
         box-shadow: 0 4px 16px rgba(7, 26, 43, 0.04);
-        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        text-align: left;
+    }
+
+    .positioningCardInner {
+        display: block;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .positioningContent {
+        text-align: left;
     }
 
     .positioningCard:last-child {
         border-bottom: 1px solid rgba(8, 120, 181, 0.12);
-    }
-
-    .positioningIconBox {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-        color: #0284c7;
-        margin-top: 2px;
-    }
-
-    .positioningIconBox svg {
-        width: 24px;
-        height: 24px;
     }
 
     .positioningTitle {
@@ -1774,6 +1932,29 @@
         font-size: 0.92rem;
         line-height: 1.55;
         color: var(--medium-grey, #64748b);
+        min-height: 2.8em;
+    }
+
+    .positioningCardActive {
+        background: #f0f7ff;
+        border-color: #93c5fd;
+        box-shadow: 0 6px 20px rgba(0, 114, 255, 0.08);
+    }
+
+    .positioningBadge {
+        margin-bottom: 0.25rem;
+    }
+
+    .positioningCard .cardProgressBar {
+        right: 0;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 3px;
+        border-radius: 0 0 16px 16px;
+        background: linear-gradient(90deg, #00C6FF 0%, #0072FF 100%);
+        transform-origin: left;
     }
 
     .trustTextCol {
@@ -2038,3 +2219,66 @@
     }
 }
 
+
+/* ------------------------------------------------------------------ FAQ Section -- */
+.faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: #ffffff; }
+.faqLayout { display: grid; grid-template-columns: 1fr 1.35fr; gap: clamp(2.5rem, 5vw, 4.5rem); align-items: flex-start; }
+.faqLeftCol { position: static; }
+.faqHeading { font-family: var(--font-manrope), 'Manrope', sans-serif; font-size: clamp(2.35rem, 3.8vw, 3.4rem); line-height: 1.15; font-weight: 800; letter-spacing: -0.035em; color: #0b0f19; margin: 0; }
+.faqSubtext { margin: 1.35rem 0 0; font-size: 1.05rem; line-height: 1.7; color: #64748b; max-width: 390px; }
+.faqRightCol { min-width: 0; }
+.faqBr { display: block; }
+
+@media (max-width: 900px) {
+    .faqSection {
+        padding: clamp(3.5rem, 7vw, 5rem) 1.25rem;
+    }
+
+    .faqLayout {
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+        align-items: center;
+    }
+
+    .faqLeftCol {
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .faqHeading {
+        text-align: center;
+        font-size: clamp(2rem, 6vw, 2.5rem);
+    }
+
+    .faqBr {
+        display: none;
+    }
+
+    .faqSubtext {
+        text-align: center;
+        margin: 0.85rem auto 0;
+        max-width: 540px;
+        font-size: 1rem;
+    }
+
+    .faqRightCol {
+        width: 100%;
+        max-width: 768px;
+        margin: 0 auto;
+    }
+
+    /* Style the accordion items on mobile to match the /job-seekers card aesthetic */
+    .faqRightCol > div > div > div {
+        background: #f4f4f5 !important;
+        border: 1px solid rgba(228, 228, 231, 0.8) !important;
+        border-radius: 20px !important;
+        overflow: hidden;
+        margin-bottom: 6px;
+    }
+
+    .faqRightCol button {
+        padding: 18px 20px !important;
+    }
+}

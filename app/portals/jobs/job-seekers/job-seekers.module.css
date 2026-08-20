@@ -1694,6 +1694,48 @@
 
     .gridChoose {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .cardSmartMatch {
+        grid-column: span 2;
+        background: url('/1.1_illu.png') no-repeat right -100px center / auto 115%,
+            linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(255, 255, 255, 0.7) 100%) !important;
+    }
+
+    .cardSmartMatch .cardInfoCol {
+        max-width: 60%;
+    }
+
+    .cardOneProfile {
+        grid-column: span 1;
+    }
+
+    .cardVerified {
+        grid-column: span 1;
+        min-height: auto;
+    }
+
+    .cardJobAlerts {
+        grid-column: span 1;
+        min-height: auto;
+    }
+
+    .cardTrackApp {
+        grid-column: span 2;
+    }
+
+    .cardCareerGrowth {
+        grid-column: span 2;
+    }
+
+    .cardCareerGrowth .cardInfoCol {
+        max-width: 55%;
+    }
+
+    .cardResumeOpt {
+        grid-column: span 2;
+        min-height: auto;
     }
 
     .gridJourneys {
@@ -1732,16 +1774,142 @@
     }
 }
 
+@media (max-width: 768px) {
+    .section {
+        padding: 64px 16px;
+    }
+
+    .sectionHeader {
+        margin-bottom: 36px;
+    }
+
+    .sectionTitle {
+        font-size: clamp(1.8rem, 6vw, 2.2rem);
+    }
+
+    .sectionDesc {
+        font-size: 1rem;
+    }
+
+    .gridChoose {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .chooseCard {
+        grid-column: 1 / -1 !important;
+        padding: 24px 20px !important;
+        border-radius: 18px;
+    }
+
+    .cardSmartMatch {
+        grid-column: 1 / -1 !important;
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: auto !important;
+        background: radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.12) 0%, rgba(52, 211, 153, 0.04) 45%, transparent 70%), #ffffff !important;
+    }
+
+    .cardSmartMatch .cardInfoCol {
+        max-width: 100% !important;
+        width: 100%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cardOneProfile {
+        grid-column: 1 / -1 !important;
+        padding: 24px 20px !important;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .cardOneProfile .chooseTitle,
+    .cardOneProfile .chooseDesc {
+        text-align: left !important;
+    }
+
+    .cardVerified {
+        grid-column: 1 / -1 !important;
+        min-height: auto !important;
+        padding: 24px 20px !important;
+    }
+
+    .cardVerified .cardBgDecoration {
+        bottom: -20px;
+        right: -20px;
+    }
+
+    .cardVerified .cardBgDecoration svg {
+        width: 120px;
+        height: 120px;
+    }
+
+    .cardJobAlerts {
+        grid-column: 1 / -1 !important;
+        min-height: auto !important;
+        padding: 24px 20px !important;
+    }
+
+    .cardJobAlerts .cardBgDecoration {
+        bottom: -20px;
+        right: -20px;
+    }
+
+    .cardJobAlerts .cardBgDecoration svg {
+        width: 120px;
+        height: 120px;
+    }
+
+    .cardTrackApp {
+        grid-column: 1 / -1 !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 24px 20px !important;
+        min-height: auto !important;
+    }
+
+    .cardTrackApp .cardInfoCol {
+        max-width: 100% !important;
+        width: 100%;
+    }
+
+    .cardTrackApp .cardIllustrationCol {
+        display: none !important;
+    }
+
+    .cardCareerGrowth {
+        grid-column: 1 / -1 !important;
+        flex-direction: column !important;
+        padding: 24px 20px !important;
+        min-height: auto !important;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(245, 243, 255, 0.75) 100%),
+            url('/bentomountain.png') no-repeat right bottom / cover !important;
+    }
+
+    .cardCareerGrowth .cardInfoCol {
+        max-width: 100% !important;
+        width: 100%;
+    }
+
+    .cardResumeOpt {
+        grid-column: 1 / -1 !important;
+        min-height: auto !important;
+        padding: 24px 20px !important;
+    }
+
+    .cardResumeOpt .cardInfoCol {
+        max-width: 100% !important;
+        width: 100%;
+    }
+}
+
 @media (max-width: 640px) {
     .hero {
         padding-top: 40px;
     }
 
     .heroChecklist {
-        grid-template-columns: 1fr;
-    }
-
-    .gridChoose {
         grid-template-columns: 1fr;
     }
 
@@ -1778,6 +1946,26 @@
     .graphicCenter {
         max-width: 270px;
         max-height: 270px;
+    }
+}
+
+@media (max-width: 380px) {
+    .simpleIconCircle {
+        width: 38px;
+        height: 38px;
+    }
+
+    .simpleStepLabel {
+        font-size: 0.72rem;
+    }
+
+    .simpleDot {
+        width: 16px;
+        height: 16px;
+    }
+
+    .stepperDotsList {
+        padding: 0 10px;
     }
 }
 

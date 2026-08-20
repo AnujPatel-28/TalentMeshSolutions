@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Phone, Mail } from 'lucide-react';
 import { STRONG_CTA } from '@/content/home';
+import SplitText from '@/components/reactbits/SplitText';
 import styles from './home.module.css';
 
 export default function ContactCTA() {
@@ -9,35 +9,12 @@ export default function ContactCTA() {
             <div className={styles.inner}>
                 <div className={styles.contactCard}>
                     <div>
-                        <h2 className={styles.contactHeading}>{STRONG_CTA.heading}</h2>
+                        <SplitText tag="h2" text={STRONG_CTA.heading} className={styles.contactHeading} delay={28} duration={0.7} ease="power3.out" splitType="chars" from={{ opacity: 0, y: 24 }} to={{ opacity: 1, y: 0 }} threshold={0.1} rootMargin="-80px" textAlign="left" />
                         <p className={styles.contactDesc}>{STRONG_CTA.subtext}</p>
                         <Link href={STRONG_CTA.buttonHref} className={styles.btnPrimary}>
                             {STRONG_CTA.buttonLabel}
                         </Link>
                     </div>
-
-
-                    <address className={styles.contactDetails}>
-                        <div className={styles.contactRow}>
-                            <Phone size={20} strokeWidth={2} aria-hidden="true" />
-                            <div>
-                                <span className={styles.contactMetaLabel}>Mobile:</span>
-                                <a href={STRONG_CTA.phoneHref} className={styles.contactLink}>
-                                    {STRONG_CTA.phoneDisplay}
-                                </a>
-                            </div>
-                        </div>
-
-                        <div className={styles.contactRow}>
-                            <Mail size={20} strokeWidth={2} aria-hidden="true" />
-                            <div>
-                                <span className={styles.contactMetaLabel}>Email:</span>
-                                <a href={STRONG_CTA.emailHref} className={styles.contactLink}>
-                                    {STRONG_CTA.email}
-                                </a>
-                            </div>
-                        </div>
-                    </address>
                 </div>
             </div>
         </section>

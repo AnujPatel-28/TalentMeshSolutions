@@ -303,7 +303,7 @@ export const FAQS = [
 ];
 
 export const STRONG_CTA = {
-  heading: 'Looking for the Right People to Grow Your Business?',
+  heading: 'Looking for the Right Team to Grow Your Business?',
   subtext: 'Tell us what you\'re hiring for. Our team can help you find the right recruitment and staffing solution.',
   buttonLabel: 'Start a Conversation →',
   buttonHref: '/portals/jobs/contact',
