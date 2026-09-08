@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Geist, Overlock, Manrope, Outfit, Space_Grotesk, Sora, Playfair_Display, Instrument_Serif } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Geist, Manrope, Space_Grotesk, Playfair_Display, Instrument_Serif } from "next/font/google";
 import { SiteChrome } from "@/components/layout";
 import { SERVICES } from "@/content/home";
 import "./globals.css";
@@ -13,6 +13,7 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument",
   subsets: ["latin"],
   weight: ["400"],
+  preload: false,
 });
 
 const jakarta = Plus_Jakarta_Sans({
@@ -20,20 +21,8 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
-const overlock = Overlock({
-  variable: "--font-overlock",
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-});
-
 const manrope = Manrope({
   variable: "--font-manrope",
-  subsets: ["latin"],
-  weight: ["400", "700", "800"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["400", "700", "800"],
 });
@@ -44,16 +33,11 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "700"],
 });
 
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["400", "700", "800"],
-});
-
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "700", "900"],
+  preload: false,
 });
 
 
@@ -180,7 +164,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body
-        className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
+        className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${manrope.variable} ${spaceGrotesk.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
       >
 

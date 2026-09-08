@@ -11,9 +11,9 @@ export default function HomeHero() {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     // `preload="none"` alone stops the browser autoplaying at all, so playback
-    // is kicked off by hand once the rest of the page has loaded. That is the
-    // point: the source is large, and it used to compete with the hero for
-    // bandwidth. Reduced-motion visitors never start it.
+    // is kicked off by hand once the rest of the page has loaded, keeping the
+    // loop off the critical path. Reduced-motion visitors never start it and
+    // keep the poster frame.
     useEffect(() => {
         if (reduceMotion) return;
         const video = videoRef.current;
@@ -22,7 +22,7 @@ export default function HomeHero() {
         const start = () => {
             video.load();
             // Rejects when the tab is backgrounded or autoplay is blocked;
-            // the static .hero background stands in either way.
+            // the poster stands in either way.
             video.play().catch(() => {});
         };
 
@@ -36,26 +36,22 @@ export default function HomeHero() {
 
     return (
         <section className={styles.hero}>
-            {/* `preload="none"` keeps the 26MB source off the critical path — it
-                used to download ahead of hydration and starve the hero — and
-                reduced-motion visitors get the static navy ground (.hero's
-                background) instead of playback.
-
-                TODO(assets): drop in `/images/hero-loop.webm` (VP9, <=1280px,
-                8-10s loop, <=2MB) plus `/images/hero-poster.webp` (frame 0,
-                <=80KB), then add `poster="/images/hero-poster.webp"` here and a
-                `<source src="/images/hero-loop.webm" type="video/webm" />`
-                above the mp4. Deliberately not referenced yet: both would 404. */}
+            {/* 1280x720, 10s, audio stripped: 661KB webm / 733KB mp4, re-encoded
+                from a 26MB 1080p master (still in git history). `preload="none"`
+                keeps even that off the critical path, and reduced-motion visitors
+                get the poster frame instead of playback. */}
             <video
                 ref={videoRef}
                 className={styles.heroVideoBg}
                 preload="none"
+                poster="/images/hero-poster.webp"
                 loop
                 muted
                 playsInline
                 aria-hidden="true"
             >
-                <source src="/images/Video%20Project%205.mp4" type="video/mp4" />
+                <source src="/images/hero-loop.webm" type="video/webm" />
+                <source src="/images/hero-loop.mp4" type="video/mp4" />
             </video>
 
             <div className={styles.heroInner}>
