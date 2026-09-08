@@ -24,7 +24,7 @@ export const CONTACT = {
   postalCode: '380009',
   phoneDisplay: '9898161106',
   phoneHref: 'tel:9898161106',
-  email: 'talentmeshsolutions@gmail.com',
+  email: 'info@talentmeshsolutions.com',
 } as const;
 
 export const HERO = {
@@ -42,31 +42,42 @@ export const HERO = {
   headlinePlain: 'Connecting Businesses With the Right Talent',
   description:
     'End-to-end recruitment and staffing solutions designed to help businesses hire skilled professionals, scale teams, and build high-performing workforces.',
-  primaryCta: { label: 'Get Hiring Support', href: '/portals/jobs/contact' },
-  secondaryCta: { label: 'Talk to Our Team', href: '/portals/jobs/contact' },
+  primaryCta: { label: 'Get Hiring Support', href: '/contact' },
+  secondaryCta: { label: 'Talk to Our Team', href: '/contact' },
 } as const;
 
 export const POSITIONING = {
-  heading: 'Your Hiring Needs. Our Recruitment Expertise.',
-  intro:
-    'Talentmesh Solution helps organizations manage their hiring requirements with flexible recruitment and staffing solutions tailored to their business needs.',
+  sectionTitle: 'Why TalentMesh',
+  badge: 'POSITIONING',
   columns: [
     {
       title: 'Find the Right Talent',
       description: 'Skilled candidates matched to your requirements.',
-      icon: 'users',
+      icon: 'zap',
+      rightHeading: 'Uncover Top Talent, Instantly.',
+      rightIntro: 'Our recruiters screen every profile against your brief — skills, experience and cultural fit — so the shortlist you see is already worth interviewing.',
+      rightImage: '/cop2.png',
+      rightBackground: '/building bg.png'
     },
     {
       title: 'Scale With Flexibility',
       description: 'Permanent, contractual, temporary, bulk and remote hiring.',
       icon: 'trendingUp',
+      rightHeading: 'Elastic Teams for Dynamic Growth.',
+      rightIntro: 'Whether you need a single remote developer or a full bulk hiring drive, we provide permanent, temporary, and contractual staffing to match your exact momentum.',
+      rightImage: '/personWithLaptop3.png',
+      rightBackground: '/building bg.png'
     },
     {
       title: 'Simplify Recruitment',
-      description: 'From sourcing and screening to onboarding assistance.',
-      icon: 'checkCircle',
-    },
-  ],
+      description: 'End-to-end RPO and seamless compliance.',
+      icon: 'shieldCheck',
+      rightHeading: 'Recruitment on Autopilot.',
+      rightIntro: 'From sourcing and screening to onboarding and compliance, our RPO solutions handle the heavy lifting so you can focus on building your business.',
+      rightImage: '/withClient.png',
+      rightBackground: '/building bg.png'
+    }
+  ]
 } as const;
 
 export interface ServiceCategory {
@@ -115,66 +126,66 @@ export const SERVICES = SERVICE_CATEGORIES.flatMap((cat) =>
   }))
 );
 
-export interface CollaberaServiceCard {
+export interface TalentMeshServiceCard {
   title: string;
   description: string;
   image: string;
   actionPills: { label: string; href: string }[];
 }
 
-export const COLLABERA_SERVICES: CollaberaServiceCard[] = [
+export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Flexible Workforce Solutions',
     description: 'Access pre-vetted skilled professionals on demand, and scale your team up or down as project requirements shift.',
-    image: '/images/services/flexible_workforce_solutions.png',
+    image: '/images/services/flexible_workforce_solutions1.png',
     actionPills: [
-      { label: 'Contingent Staffing', href: '/employers/sourcing' },
-      { label: 'Contract-to-Hire', href: '/employers/sourcing' },
+      { label: 'Contingent Staffing', href: '/contingent-staffing' },
+      { label: 'Contract-to-Hire', href: '/contract-to-hire' },
     ],
   },
   {
-    title: 'Scaled Hiring & RPO',
+    title: 'Scaled Hiring',
     description: 'Bring structure, speed, and consistency to high-volume recruitment programs and enterprise expansion initiatives.',
-    image: '/images/services/scaled_hiring_rpo.png',
+    image: '/images/services/scaled_hiring_rpo1.png',
     actionPills: [
-      { label: 'Recruitment Process Outsourcing', href: '/employers/rpo' },
-      { label: 'Managed Talent Solutions', href: '/talentmesh-portal' },
+      { label: 'Recruitment Process Outsourcing', href: '/recruitment-process-outsourcing' },
+      { label: 'Managed Talent Solutions', href: '/managed-talent-solutions' },
     ],
   },
   {
     title: 'Technology & Platform',
-    description: 'Hire smarter across borders with connected AI platforms, remote sourcing tools, and dedicated offshore tech teams.',
-    image: '/images/services/technology_platform.png',
+    description: 'Hire smarter across borders with connected sourcing tools and dedicated offshore tech teams.',
+    image: '/images/services/technology_platform1.png',
     actionPills: [
-      { label: 'Global Remote Talent Platform', href: '/talentmesh-portal' },
-      { label: 'Tech Stack Sourcing', href: '/employers/sourcing' },
+      { label: 'Remote Hiring Solutions', href: '/remote-hiring-solutions' },
+      { label: 'Technology Talent Sourcing', href: '/technology-talent-sourcing' },
     ],
   },
   {
     title: 'Global Capability Centers (GCC)',
     description: 'End-to-end support to set up, build infrastructure, and scale Global Capability Centers aligned to business goals.',
-    image: '/images/services/global_capability_centers.png',
+    image: '/images/services/global_capability_centers1.png',
     actionPills: [
-      { label: 'GCC Setup & Build', href: '/employers/sourcing' },
-      { label: 'Offshore Staffing', href: '/employers/sourcing' },
+      { label: 'GCC Setup & Build', href: '/gcc-setup-and-build' },
+      { label: 'Offshore Staffing', href: '/offshore-staffing' },
     ],
   },
   {
     title: 'Leadership & Strategic Hiring',
     description: 'Identify and place senior leaders and specialist directors who shape long-term business outcomes and market growth.',
-    image: '/images/services/leadership_strategic_hiring.png',
+    image: '/images/services/leadership_strategic_hiring1.png',
     actionPills: [
-      { label: 'Executive Search', href: '/employers/post-job' },
-      { label: 'Direct Hire Recruitment', href: '/employers/post-job' },
+      { label: 'Executive Search', href: '/executive-search' },
+      { label: 'Direct Hire Recruitment', href: '/direct-hire-recruitment' },
     ],
   },
   {
     title: 'Workforce Creation & Enablement',
     description: 'Build job-ready talent pipelines through structured skill training, designed for long-term impact and sustained delivery.',
-    image: '/images/services/workforce_creation_enablement.png',
+    image: '/images/services/workforce_creation_enablement1.png',
     actionPills: [
-      { label: 'Hire, Train & Deploy', href: '/talentmesh-portal' },
-      { label: 'Skill Upskilling', href: '/portals/jobs/career-advice' },
+      { label: 'Hire, Train & Deploy', href: '/hire-train-deploy' },
+      { label: 'Skill Upskilling', href: '/skill-upskilling' },
     ],
   },
 ];
@@ -306,10 +317,12 @@ export const STRONG_CTA = {
   heading: 'Looking for the Right Team to Grow Your Business?',
   subtext: 'Tell us what you\'re hiring for. Our team can help you find the right recruitment and staffing solution.',
   buttonLabel: 'Start a Conversation →',
-  buttonHref: '/portals/jobs/contact',
-  phoneDisplay: '9898161106',
-  phoneHref: 'tel:9898161106',
-  email: 'talentmeshsolutions@gmail.com',
-  emailHref: 'mailto:talentmeshsolutions@gmail.com',
+  buttonHref: '/contact',
+  // E.164 so the link dials correctly from outside India, and so this matches
+  // the Organization schema in app/layout.tsx.
+  phoneDisplay: '+91 98981 61106',
+  phoneHref: 'tel:+919898161106',
+  email: 'info@talentmeshsolutions.com',
+  emailHref: 'mailto:info@talentmeshsolutions.com',
 } as const;
 

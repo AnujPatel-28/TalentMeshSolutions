@@ -16,12 +16,19 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#007BFF',
+        // --talent-blue in app/globals.css. Utilities previously reached for
+        // Tailwind's default `blue-500`, which is #3B82F6 — a different blue
+        // from the brand's, on the most-repeated mark on the home page.
+        brand: '#0878B5',
         'deep-navy': '#000000',
         'light-ice': '#F0F7FF',
       },
       fontFamily: {
         inter: ['var(--font-inter)', 'sans-serif'],
         jakarta: ['var(--font-jakarta)', 'sans-serif'],
+        // The `font-manrope` class was already in use in TrustStrip but was
+        // never generated, so that heading silently fell back to the body face.
+        manrope: ['var(--font-manrope)', 'Manrope', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

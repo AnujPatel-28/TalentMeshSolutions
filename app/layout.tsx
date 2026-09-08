@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Geist, Overlock, Manrope, Outfit, Space_Grotesk, Sora, Playfair_Display, Instrument_Serif } from "next/font/google";
-import { Navbar, Footer, NavbarWrapper } from "@/components/layout";
+import { SiteChrome } from "@/components/layout";
 import { SERVICES } from "@/content/home";
 import "./globals.css";
-import layoutStyles from "./layout.module.css";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -149,24 +148,37 @@ const organizationJsonLd = {
   ],
 };
 
-import { headers } from "next/headers";
 import { cn } from "@/lib/utils";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const pathname = headersList.get("x-pathname") || "";
-  const skipHeaderFooter = pathname.startsWith("/login");
-
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    // suppressHydrationWarning: the inline script in <head> adds `js-ready` to
+    // this element before React hydrates, which is a deliberate mismatch.
+    <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+      <head>
+        {/* Runs before first paint so scroll-reveal wrappers can hide themselves
+            in CSS. Without scripting the class never lands and content stays
+            visible — see the `.aos` rules in globals.css. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add('js-ready')`,
+          }}
+        />
+        {/* Belt for the sections still entering via framer-motion variants
+            (TrustStrip, WhyUs), whose `initial` props serialise to inline
+            opacity:0 in the server HTML. */}
+        <noscript>
+          <style>{`[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+        </noscript>
+      </head>
       <body
         className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${overlock.variable} ${manrope.variable} ${outfit.variable} ${spaceGrotesk.variable} ${sora.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
@@ -177,21 +189,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <ScrollToTop />
-        {!skipHeaderFooter ? (
-          <div className={layoutStyles.rootFlexContainer}>
-            <NavbarWrapper>
-              <Navbar />
-            </NavbarWrapper>
-            <div className={layoutStyles.mainContentGrow}>
-              {children}
-            </div>
-            <NavbarWrapper showFooter>
-              <Footer />
-            </NavbarWrapper>
-          </div>
-        ) : (
-          children
-        )}
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

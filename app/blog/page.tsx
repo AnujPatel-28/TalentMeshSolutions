@@ -32,9 +32,6 @@ export default function BlogPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      document.title = "TalentMesh Blog | Insights, Hiring Advice & Career Growth";
-    }
     async function fetchPosts() {
       try {
         const data = await sanityClient.fetch(POSTS_LIST_QUERY);

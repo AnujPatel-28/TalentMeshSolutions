@@ -67,7 +67,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding-inline: clamp(1rem, 3vw, 2rem);
-  height: 90px;
+  height: 68px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -76,13 +76,13 @@
 }
 
 .navbar.scrolled .container {
-  height: 64px; /* Dynamic Shrink */
+  height: 60px; /* Dynamic Shrink */
 }
 
 @media (max-width: 768px) {
   .container {
     padding: 0 1.25rem;
-    height: 72px;
+    height: 62px;
   }
 }
 
@@ -93,19 +93,18 @@
   text-decoration: none;
   flex-shrink: 0;
   position: relative;
-  z-index: 1010;
 }
 
 .logoImg {
   width: auto;
-  height: 54px;
+  height: 40px;
   object-fit: contain;
   display: block;
 }
 
 @media (max-width: 480px) {
   .logoImg {
-    height: 46px;
+    height: 34px;
   }
 }
 
@@ -130,6 +129,9 @@
   gap: 5px;
   padding: 0 1rem;
   height: 100%;
+  background: transparent;
+  border: none;
+  font-family: inherit;
   color: var(--deep-navy);
   font-weight: 500;
   font-size: 0.95rem;
@@ -141,7 +143,8 @@
   position: relative;
 }
 
-.navItem:hover .link {
+.navItem:hover .link,
+.navItem:focus-within .link {
   color: var(--primary-blue);
 }
 
@@ -156,7 +159,8 @@
   transition: transform 0.2s ease;
 }
 
-.navItem:hover .chevron {
+.navItem:hover .chevron,
+.navItem:focus-within .chevron {
   transform: rotate(180deg);
 }
 /* ─── Dropdown Panel ────────────────────────────────────────────────────────── */
@@ -179,7 +183,8 @@
   z-index: 1100;
 }
 
-.navItem:hover .dropdown {
+.navItem:hover .dropdown,
+.navItem:focus-within .dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0) scale(1);
@@ -209,6 +214,236 @@
   background: var(--alice-blue, #f0f7ff) !important;
   color: var(--primary-blue) !important;
   font-weight: 600;
+}
+
+/* ─── Talent Solutions Mega-Menu ────────────────────────────────────────────── */
+/* .navItem is position:relative, so a position:absolute panel here would be
+   anchored to the narrow trigger box and clip off-screen at 1024–1280px.
+   position:fixed skips that ancestor and centers on the viewport instead. */
+.megaPanel {
+  position: fixed;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px) scale(0.98);
+  width: min(1240px, calc(100vw - 3rem));
+  padding-top: 24px; /* invisible hover-bridge down to the visible card */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
+  z-index: 1100;
+}
+
+.navItem:hover .megaPanel,
+.navItem:focus-within .megaPanel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+}
+
+.navbar.scrolled .megaPanel {
+  top: 40px;
+  padding-top: 20px;
+}
+
+.megaPanelInner {
+  display: grid;
+  /* Middle track is widest: it carries the actual navigation decision, and it
+     needs ~500px so the longest pill pair sits on one line. */
+  grid-template-columns: minmax(230px, 260px) minmax(460px, 1fr) minmax(280px, 320px);
+  gap: 2.5rem;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 2.25rem 2.5rem;
+}
+
+/* Left column — intro + CTAs. Centred against the tall category list so the
+   short paragraph doesn't leave a void at one end of the column. */
+.megaIntro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.megaIntroTitle {
+  font-family: var(--font-jakarta);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--deep-navy);
+  margin: 0;
+}
+
+.megaIntroText {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--medium-grey, #6b7280);
+  margin: 0;
+}
+
+.megaIntroActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.megaCtaPrimary,
+.megaCtaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.megaCtaPrimary {
+  background: linear-gradient(90deg, #00C6FF 0%, #007BFF 60%, #0056b3 100%);
+  color: #ffffff;
+}
+
+.megaCtaPrimary:hover {
+  transform: translateY(-1px);
+}
+
+.megaCtaSecondary {
+  background: transparent;
+  border: 1.5px solid var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.megaCtaSecondary:hover {
+  background: var(--alice-blue, #f0f7ff);
+}
+
+/* Middle column — tabular category rows.
+   The 1rem padding + matching negative margin pulls the column rules into the
+   existing 2rem grid gutter, so no column loses any content width. */
+.megaCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  border-inline: 1px solid rgba(7, 26, 43, 0.1);
+}
+
+/* Separator lives on the row, not the trigger, so the hairline spans the full
+   column width including the pill area — that's what reads as a table. */
+.megaCategoryRow {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(7, 26, 43, 0.1);
+}
+
+.megaCategoryRow:last-child {
+  border-bottom: none;
+}
+
+.megaCategoryTrigger {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 1.05rem 0.25rem;
+  border-radius: 0;
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--deep-navy);
+  transition: color 0.15s ease;
+}
+
+/* The revealed pills are the state cue — no row tint, no accent rule. #0056b3
+   rather than #007BFF so the label clears AA at this size. */
+.megaCategoryTriggerActive {
+  background: transparent;
+  color: #0056b3;
+}
+
+.megaCategoryTrigger:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.megaPillGroup {
+  display: none;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0 0.25rem 1.1rem;
+}
+
+.megaPillGroupOpen {
+  display: flex;
+}
+
+.megaPillLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  /* #0069d9, not --primary-blue: white on #007BFF measures 3.98:1 at this size,
+     under AA. Corrected by lightness so the brand hue is unchanged (5.2:1). */
+  background: #0069d9;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.megaPillLink:hover,
+.megaPillLink:focus-visible {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+.megaPillLink:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+/* Right column — active category media, centred for the same reason. */
+.megaMedia {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.95rem;
+}
+
+.megaMediaImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--alice-blue, #f0f7ff);
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  outline-offset: -1px;
+}
+
+.megaMediaImage {
+  object-fit: cover;
+}
+
+.megaMediaText {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--medium-grey, #6b7280);
+  margin: 0;
 }
 
 /* ── Dashboard dropdown special styles ── */
@@ -320,7 +555,9 @@
   left: 0;
   width: 100%;
   height: 100dvh;
-  background: var(--background, #ffffff);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 1005; /* Above everything */
   padding: calc(76px + env(safe-area-inset-top, 0px)) 1.5rem 2rem;
   display: flex;
@@ -343,13 +580,45 @@
   padding: 1rem 0;
 }
 
-.mobileNavLabel {
+/* Top-level drawer section toggle — collapsed by default, full-bleed highlight
+   when expanded (mirrors .dropdownLink's alice-blue fill on desktop) */
+.mobileNavSectionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  margin: 0 -1.5rem 0.4rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--medium-grey, #6b7280);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 0.4rem;
+  transition: background 0.15s ease;
+}
+
+.mobileNavSectionHeader[aria-expanded="true"] {
+  background: var(--alice-blue, #f0f7ff);
+}
+
+.mobileNavSectionHeader[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.mobileNavSectionBody {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+}
+
+.mobileNavSectionBodyOpen {
+  max-height: 2000px;
+  transition: max-height 0.5s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 .mobileNavLink {
@@ -365,6 +634,42 @@
 }
 
 .mobileNavLink:hover {
+  color: var(--primary-blue);
+}
+
+/* Highlighted active mobile link — mirrors .dropdownLinkActive on desktop */
+.mobileNavLinkActive {
+  color: var(--primary-blue) !important;
+}
+
+/* Category label nested under "Talent Solutions" — one step below
+   .mobileNavSectionHeader so it reads as a sub-group, not a new top-level section */
+.mobileCategoryLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--medium-grey, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  /* Rule sits above the label so it separates group from group, matching the
+     desktop panel's row rhythm. */
+  margin-block-start: 0.75rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid rgba(7, 26, 43, 0.1);
+}
+
+.mobileNavSubLink {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--deep-navy, #0d2137);
+  text-decoration: none;
+  padding: 0.45rem 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileNavSubLink:hover {
   color: var(--primary-blue);
 }
 
@@ -427,5 +732,21 @@
   .container { gap: 0.75rem; }
   .link { padding-inline: 0.5rem; font-size: 0.84rem; }
   .auth { gap: 0.6rem; }
+
+  .megaPanel { width: min(760px, calc(100vw - 2rem)); }
+  .megaPanelInner {
+    grid-template-columns: 220px 1fr;
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+  .megaMedia { display: none; }
+
+  /* Gutter is 1.25rem here, and there is no third column to separate from —
+     keep the left rule centred, drop the orphaned right one. */
+  .megaCategories {
+    padding-inline: 0.625rem 0;
+    margin-inline: -0.625rem 0;
+    border-inline-end: none;
+  }
 }
 

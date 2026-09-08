@@ -53,12 +53,6 @@ const PREVIEW_DEFAULTS = {
 
 export default function PostJobPage() {
     const [step, setStep] = useState(0);
-
-    React.useEffect(() => {
-        if (typeof window !== 'undefined') {
-            document.title = "Post a New Job | TalentMesh for Employers";
-        }
-    }, []);
     const [remote, setRemote] = useState(true);
     const [skills, setSkills] = useState<string[]>([]);
     const [skillInput, setSkillInput] = useState('');

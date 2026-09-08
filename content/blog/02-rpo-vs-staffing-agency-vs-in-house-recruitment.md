@@ -30,7 +30,7 @@ Avoid literal signpost metaphors. 1400px wide minimum, 16:9.
 Alt text: "A hiring team comparing recruitment models during a planning session."
 
 Internal links used in the body (all verified to exist in app/):
-  /employers/rpo, /employers/sourcing, /portals/jobs/contact
+  /recruitment-process-outsourcing, /technology-talent-sourcing, /portals/jobs/contact
   /blog/bulk-hiring-in-india-a-step-by-step-playbook (post 03 — publish both, or drop
   this link until 03 is live)
 -->
@@ -136,6 +136,6 @@ The important thing is that the choice is deliberate. Most companies drift into 
 
 ## Where TalentMesh Solutions fits
 
-We work across all three arrangements — permanent and contractual placement, executive and leadership hiring, campus and bulk drives, flexi staffing, and [recruitment process outsourcing](/employers/rpo) where we run your hiring function as an extension of your team. We will recommend the model that fits the mandate rather than defaulting to one, and we will say so if your volume does not justify the heavier option.
+We work across all three arrangements — permanent and contractual placement, executive and leadership hiring, campus and bulk drives, flexi staffing, and [recruitment process outsourcing](/recruitment-process-outsourcing) where we run your hiring function as an extension of your team. We will recommend the model that fits the mandate rather than defaulting to one, and we will say so if your volume does not justify the heavier option.
 
-If you are unsure which fits, [talk to our team](/portals/jobs/contact) about what you are hiring for over the next year, or read more about how we approach [sourcing and screening](/employers/sourcing).
+If you are unsure which fits, [talk to our team](/portals/jobs/contact) about what you are hiring for over the next year, or read more about how we approach [sourcing and screening](/technology-talent-sourcing).

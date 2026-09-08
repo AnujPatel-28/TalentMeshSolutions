@@ -23,6 +23,7 @@ import {
     Headphones,
 } from 'lucide-react';
 import { INDUSTRY_ROWS } from '@/content/home';
+import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 const ICONS = {
@@ -74,39 +75,42 @@ export default function IndustriesGrid() {
     const showFollower = supportsHover && !reduceMotion;
 
     return (
-        <section className={styles.section} id="industries" onMouseMove={handleMouseMove}>
-            <div className={styles.inner}>
-                <div className={`${styles.head} ${styles.industriesHead}`}>
-                    <p className={styles.eyebrow}>Industries</p>
-                    <h2 className={styles.h2}>Recruitment Solutions Across Multiple Industries</h2>
-                    <p className={styles.lede}>
-                        We recruit skilled professionals across a wide range of industries.
-                    </p>
-                </div>
+        <section className="relative" id="industries" onMouseMove={handleMouseMove}>
+            <SectionMarker label="Industries" index={4} />
 
-                <div className={styles.industriesContainer}>
-                    {INDUSTRY_ROWS.map((row, rowIndex) => (
-                        <div key={rowIndex} className={styles.industryRow}>
-                            {row.map((ind) => {
-                                const Icon = ICONS[ind.icon as keyof typeof ICONS] || Monitor;
-                                const flatIndex = FLAT_INDUSTRIES.indexOf(ind);
-                                return (
-                                    <div
-                                        key={ind.name}
-                                        className={styles.industryTag}
-                                        style={{ '--hover-color': ind.color } as React.CSSProperties}
-                                        onMouseEnter={() => setHoveredIndex(flatIndex)}
-                                        onMouseLeave={() => setHoveredIndex(null)}
-                                    >
-                                        <span className={styles.tagIcon}>
-                                            <Icon size={22} />
-                                        </span>
-                                        <span className={styles.tagName}>{ind.name}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ))}
+            <div className={styles.section}>
+                <div className={styles.inner}>
+                    <div className={`${styles.head} ${styles.industriesHead}`}>
+                        <h2 className={styles.h2}>Recruitment Solutions Across Multiple Industries</h2>
+                        <p className={styles.lede}>
+                            We recruit skilled professionals across a wide range of industries.
+                        </p>
+                    </div>
+
+                    <div className={styles.industriesContainer}>
+                        {INDUSTRY_ROWS.map((row, rowIndex) => (
+                            <div key={rowIndex} className={styles.industryRow}>
+                                {row.map((ind) => {
+                                    const Icon = ICONS[ind.icon as keyof typeof ICONS] || Monitor;
+                                    const flatIndex = FLAT_INDUSTRIES.indexOf(ind);
+                                    return (
+                                        <div
+                                            key={ind.name}
+                                            className={styles.industryTag}
+                                            style={{ '--hover-color': ind.color } as React.CSSProperties}
+                                            onMouseEnter={() => setHoveredIndex(flatIndex)}
+                                            onMouseLeave={() => setHoveredIndex(null)}
+                                        >
+                                            <span className={styles.tagIcon}>
+                                                <Icon size={22} />
+                                            </span>
+                                            <span className={styles.tagName}>{ind.name}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 

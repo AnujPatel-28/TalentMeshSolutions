@@ -26,7 +26,6 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -80,10 +79,6 @@ const nextConfig: NextConfig = {
       {
         source: '/contact',
         destination: '/portals/jobs/contact',
-      },
-      {
-        source: '/security',
-        destination: '/portals/jobs/security',
       },
     ];
 

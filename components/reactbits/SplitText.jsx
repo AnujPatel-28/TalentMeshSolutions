@@ -15,6 +15,12 @@ export default function SplitText({ text, className = '', delay = 35, duration =
   useEffect(() => { if (document.fonts.status === 'loaded') setFontsLoaded(true); else document.fonts.ready.then(() => setFontsLoaded(true)); }, []);
   useGSAP(() => {
     if (!ref.current || !text || !fontsLoaded || completed.current) return;
+    // Every other animation on the site honours this; the per-character split
+    // did not, and it runs on the final CTA heading. Read synchronously rather
+    // than via state — holding it in state and listing it as a useGSAP
+    // dependency makes the hook revert its context and strands the characters
+    // at opacity 0. Bailing here leaves `text` as ordinary children, static.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const element = ref.current;
     const startPct = (1 - threshold) * 100;
     const margin = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin);

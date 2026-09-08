@@ -5,12 +5,12 @@ import {
   TrustStrip,
   Services,
   IndustriesGrid,
-  Process,
   WhyUs,
   HomeFAQ,
   ContactCTA,
 } from '@/components/home';
 import { FAQS } from '@/content/home';
+import GridWrapper from '@/components/ui/GridWrapper';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
 
@@ -81,32 +81,34 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-
+      
       <HomeHero />
 
-      <AnimateOnScroll animation="fadeUp" once>
-        <Services />
-      </AnimateOnScroll>
+      <GridWrapper>
+        <AnimateOnScroll animation="fadeUp" once>
+          <Services />
+        </AnimateOnScroll>
 
-      <TrustStrip />
+        <TrustStrip />
 
-      {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
-      <WhyUs />
+        {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
+        <WhyUs />
 
-      <IndustriesGrid />
+        <IndustriesGrid />
 
-      <AnimateOnScroll animation="fadeUp" once>
-        <Process />
-      </AnimateOnScroll>
+        {/* Parked, not deleted. To bring it back: uncomment, restore the import
+            above, and shift HomeFAQ to index={6} and ContactCTA to index={7} —
+            Process owns [05] and pushes the rest of the sequence down. */}
+        {/* <Process /> */}
 
-      <AnimateOnScroll animation="fadeUp" once>
-        <HomeFAQ />
-      </AnimateOnScroll>
+        <AnimateOnScroll animation="fadeUp" once>
+          <HomeFAQ />
+        </AnimateOnScroll>
 
-      <AnimateOnScroll animation="fadeUp" once>
-        <ContactCTA />
-      </AnimateOnScroll>
-
+        <AnimateOnScroll animation="fadeUp" once>
+          <ContactCTA />
+        </AnimateOnScroll>
+      </GridWrapper>
     </>
   );
 }

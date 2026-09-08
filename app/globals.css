@@ -12,6 +12,31 @@
   }
 }
 
+/* Scroll-reveal wrappers (components/AnimateOnScroll.tsx).
+   Content is visible by default and only hidden once the `js-ready` marker
+   confirms scripting is live, so a blocked or failed bundle costs the reveal
+   rather than the content. The marker is set by a blocking script in
+   app/layout.tsx, before first paint, so there is no flash of visible content
+   on a normal load. */
+.aos {
+  opacity: 1;
+  transform: none;
+}
+
+html.js-ready .aos[data-aos-visible='false'] {
+  opacity: 0;
+  transform: var(--aos-from, translateY(15px));
+  filter: var(--aos-blur, none);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-ready .aos[data-aos-visible='false'] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
 :root {
   /* Design System Color Palette */
   --midnight-navy: #071A2B;
@@ -748,3 +773,36 @@ select:not([multiple]):disabled {
   cursor: not-allowed !important;
   opacity: 0.6 !important;
 }
+/* PARKED — gutter dither, disabled at the user's request pending a decision.
+   To re-enable: uncomment this block. The `dither-gutter` class and the
+   z-index/bg-white layering it needs are still in components/ui/GridWrapper.tsx,
+   so nothing else has to change.
+
+(* Dithered brand texture for the page gutters (components/ui/GridWrapper).
+   Three radial-dot grids at different pitches, offset from each other, so the
+   interference between them reads as a dither rather than a regular dot grid.
+   Deliberately quiet: it occupies only the margins either side of the content
+   column, never sits under text, and fades out down the page. *)
+.dither-gutter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle, rgba(8, 120, 181, 0.30) 0.9px, transparent 1px),
+    radial-gradient(circle, rgba(8, 120, 181, 0.22) 0.9px, transparent 1px),
+    radial-gradient(circle, rgba(8, 120, 181, 0.14) 0.9px, transparent 1px);
+  background-size: 5px 5px, 9px 9px, 15px 15px;
+  background-position: 0 0, 2px 3px, 4px 1px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 45%, transparent 85%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 45%, transparent 85%);
+}
+
+(* Below 80rem there are no gutters, so the texture would sit behind content. *)
+@media (max-width: 80rem) {
+  .dither-gutter::before {
+    display: none;
+  }
+}
+*/

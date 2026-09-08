@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import { cache } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -7,6 +9,12 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { sanityClient } from '@/lib/sanity/client';
 import { urlForImage } from '@/lib/sanity/image';
 import { POST_BY_SLUG_QUERY, RELATED_POSTS_QUERY } from '@/lib/sanity/queries';
+
+const SITE_URL = 'https://talentmeshsolutions.com';
+
+// Shared between generateMetadata and the page body so the same request only
+// hits Sanity once per render (React dedupes calls with identical arguments).
+const getPost = cache(async (slug: string) => sanityClient.fetch(POST_BY_SLUG_QUERY, { slug }));
 
 const IconArrowLeft = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -43,9 +51,40 @@ const ptComponents: PortableTextComponents = {
     },
 };
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await getPost(slug);
+
+    if (!post) return {};
+
+    const coverImageUrl = post.coverImage ? urlForImage(post.coverImage)?.width(1200).height(630).url() : undefined;
+
+    return {
+        // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+        title: post.title,
+        description: post.excerpt,
+        alternates: { canonical: `/blog/${slug}` },
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            url: `${SITE_URL}/blog/${slug}`,
+            siteName: 'TalentMesh Solutions',
+            type: 'article',
+            publishedTime: post.publishedAt,
+            authors: post.authorName ? [post.authorName] : undefined,
+            images: coverImageUrl ? [{ url: coverImageUrl }] : undefined,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+        },
+    };
+}
+
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
+    const post = await getPost(slug);
 
     if (!post) notFound();
 

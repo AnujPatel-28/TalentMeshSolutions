@@ -57,14 +57,10 @@ const Footer = () => {
                             <Image src="/TalentMesh_page-0002-removebg-preview.png" alt="TalentMesh" width={150} height={34} />
                         </Link>
                         <p className={styles.description}>
-                            Revolutionizing recruitment with advanced AI matching technology.
-                            Connecting top talent with world-class companies.
+                            Trusted Recruitment & Staffing Partner Across India
                         </p>
                         <div className={styles.newsletter}>
                             <h4 className={styles.newsletterTitle}>Get TalentMesh Insights</h4>
-                            <p className={styles.newsletterDescription}>
-                                Stay ahead with monthly recruitment trends, hiring best practices, AI insights, product updates, and career advice—delivered straight to your inbox.
-                            </p>
                             {status === 'success' ? (
                                 <p className={styles.newsletterSuccess}>{message}</p>
                             ) : (
@@ -94,25 +90,34 @@ const Footer = () => {
                     </div>
 
                     <div className={styles.column}>
-                        <h4>Platform</h4>
-                        <Link href="/employers">For Employers</Link>
+                        <h4>Talent Solutions</h4>
+                        <Link href="/contingent-staffing">Contingent Staffing</Link>
+                        <Link href="/contract-to-hire">Contract-to-Hire</Link>
+                        <Link href="/recruitment-process-outsourcing">Recruitment Process Outsourcing</Link>
+                        <Link href="/managed-talent-solutions">Managed Talent Solutions</Link>
+                        <Link href="/remote-hiring-solutions">Remote Hiring Solutions</Link>
+                        <Link href="/technology-talent-sourcing">Technology Talent Sourcing</Link>
+                        <Link href="/gcc-setup-and-build">GCC Setup & Build</Link>
+                        <Link href="/offshore-staffing">Offshore Staffing</Link>
+                        <Link href="/executive-search">Executive Search</Link>
+                        <Link href="/direct-hire-recruitment">Direct Hire Recruitment</Link>
+                        <Link href="/hire-train-deploy">Hire, Train & Deploy</Link>
+                        <Link href="/skill-upskilling">Skill Upskilling</Link>
+                    </div>
+
+                    <div className={styles.column}>
+                        <h4>Talent Portal</h4>
+                        <Link href="/talentmesh-portal">TalentMesh Portal</Link>
                         <Link href="/job-seekers">Candidate Benefits</Link>
+                        <Link href="/employers/post-job">Post a Job</Link>
                     </div>
 
                     <div className={styles.column}>
                         <h4>Company</h4>
-                        {/* <Link href="/about">About Us</Link> */}
-                        {/* <Link href="/careers">Careers</Link> */}
-                        <Link href="/blog">Blog</Link>
-                        {/* <Link href="/podcast">Podcast</Link> */}
+                        <Link href="/about">About Us</Link>
                         <Link href="/contact">Contact</Link>
-                    </div>
-
-                    <div className={styles.column}>
-                        <h4>Legal</h4>
-                        <Link href="/privacy">Privacy Policy</Link>
-                        <Link href="/terms">Terms of Service</Link>
-                        <Link href="/security">Security</Link>
+                        <Link href="/blog">Blog</Link>
+                        <Link href="/career-advice">Career Advice</Link>
                     </div>
                 </div>
 
@@ -120,8 +125,8 @@ const Footer = () => {
                     <p>&copy; 2026 TalentMesh Solutions. All rights reserved.</p>
                     <div className={styles.socials}>
                         <a href="https://x.com/TalentmeshS" className={`${styles.socialIcon} ${styles.twitter}`} aria-label="X (Twitter)">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.95H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                             </svg>
                         </a>
                         <a href="https://www.linkedin.com/company/talentmesh-solutions/" className={`${styles.socialIcon} ${styles.linkedin}`} aria-label="LinkedIn">

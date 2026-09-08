@@ -253,11 +253,6 @@ export default function LoginPage() {
                             </>
                         )}
 
-                        <motion.div variants={itemVariants} className={styles.terms}>
-                            By signing up, you agree to our{' '}
-                            <Link href="/terms" className={styles.termsLink}>Terms of Service</Link> and{' '}
-                            <Link href="/privacy" className={styles.termsLink}>Privacy Policy</Link>.
-                        </motion.div>
                     </motion.div>
                 </div>
             </div>

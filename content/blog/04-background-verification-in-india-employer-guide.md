@@ -36,7 +36,7 @@ framing of the DPDP Act paragraph matches the compliance position you want to st
 publicly. The post carries a "confirm with your own advisor" line for this reason.
 
 Internal links used in the body (all verified to exist in app/):
-  /portals/jobs/contact, /employers/sourcing
+  /portals/jobs/contact, /technology-talent-sourcing
   /blog/contract-and-flexi-staffing-in-india (post 05 — publish both, or drop the link
   until 05 is live)
 -->
@@ -150,4 +150,4 @@ The one category that generally justifies a firm line, regardless of role, is de
 
 The reason we treat verification as a hiring stage rather than an administrative one is the timing problem described above: checks started after joining are checks you cannot act on cleanly. At TalentMesh Solutions, background verification and reference checks — employment history, education and professional references — run alongside onboarding assistance and documentation support, so the offer-to-joining window is used rather than lost.
 
-If your current process starts verification after day one, that is the single change worth making first. [Talk to our team](/portals/jobs/contact) if you want a second view on how to sequence it, or see how [sourcing and screening](/employers/sourcing) sets up what verification later confirms.
+If your current process starts verification after day one, that is the single change worth making first. [Talk to our team](/portals/jobs/contact) if you want a second view on how to sequence it, or see how [sourcing and screening](/technology-talent-sourcing) sets up what verification later confirms.

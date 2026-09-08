@@ -127,7 +127,7 @@ Anything outside that set falls back to default rendering or is dropped. So when
 - **Bold and italic** work as standard marks.
 
 All internal links used in the bodies were checked against `app/` and exist:
-`/portals/jobs/contact`, `/employers/post-job`, `/employers/sourcing`, `/employers/rpo`.
+`/portals/jobs/contact`, `/employers/post-job`, `/technology-talent-sourcing`, `/recruitment-process-outsourcing`.
 
 ### Publish all five, or fix the cross-links
 

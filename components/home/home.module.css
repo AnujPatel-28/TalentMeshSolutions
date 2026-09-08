@@ -28,7 +28,11 @@
 /* Soft blue tint: a light bluish field with blue headings and grey body copy.
    The eyebrow pill flips to white so it still separates from the tinted field. */
 .sectionTint {
-    background: #F0F7FF;
+    background-color: #F0F7FF;
+    background-image: url('/graintest.png');
+    background-size: min(580px, 45vw) auto;
+    background-position: top right;
+    background-repeat: no-repeat;
 }
 
 .sectionTint .eyebrow {
@@ -43,6 +47,38 @@
 
 .sectionTint .lede {
     color: #64748B;
+}
+
+/* WhyUs-only mirrored grain: keeps the existing top-right
+   `background-image` untouched and adds a 180°-rotated copy at the
+   bottom-left via a pseudo-element (backgrounds can't be rotated
+   individually). Scoped to .whyTint so Process.tsx, which reuses
+   .sectionTint, is unaffected. Same file = no extra image request. */
+.whyTint::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(580px, 45vw);
+    aspect-ratio: 810 / 700;
+    background-image: url('/graintest.png');
+    background-size: contain;
+    background-position: bottom left;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.whyTint .inner {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 1024px) {
+    .whyTint::after {
+        width: min(420px, 70vw);
+    }
 }
 
 /* Narrower than .head's 760px so the lede lands inside the 60-75 character
@@ -196,16 +232,20 @@
     white-space: nowrap;
 }
 
+/* Every stop clears 4.5:1 against the white label. The old cyan start
+   (#00C6FF) measured 2.0:1, so the leading ~60% of the button failed AA —
+   the same trap the section-gradient comment at the top of this file warns
+   about. Keep any future stop at or below #0090CC. */
 .btnPrimary {
-    background: linear-gradient(90deg, #00C6FF 0%, #007BFF 60%, #0056b3 100%);
+    background: linear-gradient(90deg, #0090CC 0%, #007BFF 45%, #0056b3 100%);
     color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 198, 255, 0.35);
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.35);
 }
 
 .btnPrimary:hover {
-    background: linear-gradient(90deg, #00d2ff 0%, #0062cc 60%, #004494 100%);
+    background: linear-gradient(90deg, #0084bd 0%, #0062cc 45%, #004494 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 198, 255, 0.5);
+    box-shadow: 0 6px 24px rgba(0, 123, 255, 0.5);
 }
 
 
@@ -326,25 +366,13 @@
     font-family: "Space Grotesk", var(--font-space-grotesk), sans-serif;
     font-style: normal;
     font-weight: 700;
-    color: #ffffff;
+    /* Solid accent rather than clipped-gradient text: the emphasis now comes
+       from colour against the white words beside it. Dropping the text-shadow
+       override lets .heroTitle's dark legibility shadow inherit through, which
+       matters over the video. */
+    color: var(--sky-blue);
     letter-spacing: -0.03em;
-    text-shadow: 0 0 24px rgba(255, 255, 255, 0.4);
-    background: linear-gradient(90deg, #ffffff 0%, #b8e6fe 50%, #ffffff 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: textShimmer 6s ease-in-out infinite;
 }
-
-@keyframes textShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-
 
 
 .heroDesc {
@@ -355,6 +383,7 @@
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
 }
 
 .heroActions {
@@ -363,6 +392,39 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 2.25rem;
+    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
+}
+
+/* Hero entrance. This lives in CSS rather than framer-motion on purpose: the
+   hero is the LCP element, and motion `initial` props serialise to inline
+   `opacity:0` in the server HTML, which left the headline, lede and both CTAs
+   invisible until React hydrated. As keyframes the markup ships opaque and the
+   animation starts on first paint, so a slow or failed bundle costs the
+   entrance, not the content. Delays mirror the previous stagger.
+   Disabled wholesale in the reduced-motion block further down. */
+@keyframes heroEyebrowIn {
+    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes heroWordIn {
+    from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes heroRiseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+}
+
+.hero .eyebrow {
+    animation: heroEyebrowIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
+.heroWord {
+    animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 65ms);
 }
 
 .heroActions .btnSecondary {
@@ -414,10 +476,9 @@
     font-size: clamp(1.6rem, 3vw, 2.25rem);
     font-weight: 800;
     letter-spacing: -0.02em;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    /* Solid brand blue instead of clipped-gradient text — the weight and size
+       already carry the emphasis here. */
+    color: var(--talent-blue);
 }
 
 .trustLabel {
@@ -550,18 +611,25 @@
 
 /* --------------------------------------------------------------- process -- */
 
+/* The five steps used to be outlined circles on a hairline, centred — the most
+   category-interchangeable timeline on the internet, and it needed enormous
+   vertical space to justify itself. Rebuilt to speak the page's own language:
+   mono numerals and hairline rules, the same vocabulary as the section markers,
+   so the process reads as part of the system rather than a fifth pattern.
+   The spine is now the columns' shared top rule, and it fills on scroll. */
 .processWrap {
     position: relative;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1.5rem;
+    gap: 0;
+    margin-top: 3.25rem;
 }
 
 .processTrack {
     position: absolute;
-    top: 26px;
-    left: 8%;
-    right: 8%;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 2px;
     background: var(--neutral-border);
     overflow: hidden;
@@ -569,35 +637,49 @@
 
 .processFill {
     height: 100%;
-    background: var(--gradient-primary);
+    background: var(--talent-blue);
     transform-origin: left center;
 }
 
 .processStep {
     position: relative;
     z-index: 1;
-    text-align: center;
+    text-align: left;
+    padding: 1.6rem 1.5rem 0 0;
+}
+
+/* Tick marking where each step meets the spine. */
+.processStep::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 12px;
+    background: var(--neutral-border);
+}
+
+.processStep:first-child::before {
+    display: none;
 }
 
 .processNum {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 54px;
-    height: 54px;
-    margin-bottom: 1.25rem;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid var(--sky-blue);
-    color: var(--twitter-blue);
-    font-size: 1.05rem;
-    font-weight: 800;
+    display: block;
+    margin-bottom: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+    color: var(--talent-blue);
+    font-variant-numeric: tabular-nums;
 }
 
 .processTitle {
-    margin: 0 0 0.5rem;
-    font-size: 1.02rem;
+    margin: 0 0 0.45rem;
+    font-family: var(--font-manrope), Manrope, sans-serif;
+    font-size: 1.15rem;
     font-weight: 700;
+    letter-spacing: -0.015em;
     color: var(--ink-black);
 }
 
@@ -606,6 +688,7 @@
     font-size: 0.9rem;
     line-height: 1.6;
     color: var(--medium-grey);
+    max-width: 22ch;
 }
 
 /* --------------------------------------------------------------- why us -- */
@@ -613,13 +696,67 @@
 /* Four differentiators across one dark band. No card surfaces — the only
    borders here are hairline dividers, which carry structure rather than
    faking elevation. Nothing in the row is interactive, so there is no hover. */
+/* Cursor-reactive lift.
+   A soft light follows the pointer across the row and the column under it
+   raises slightly. Nothing is ever hidden — the four differentiators are the
+   section's argument, so the interaction adds attention rather than gating
+   content. Coordinates arrive as CSS custom properties set straight on the
+   node (see WhyUs.tsx), so pointer movement never triggers a React render. */
 .pillarRow {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    position: relative;
+}
+
+.pillarRow::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -1.5rem;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.35) 38%,
+        transparent 68%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.pillarRow:hover::before {
+    opacity: 1;
 }
 
 .pillar {
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Pointer devices only — there is no hover on touch, and a lift that never
+   resolves reads as a stuck state. */
+@media (hover: hover) {
+    .pillar:hover .pillarIcon {
+        color: var(--talent-blue);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pillarRow::before {
+        display: none;
+    }
+
+    .pillar {
+        transition: none;
+    }
+}
+
+@media (hover: none) {
+    .pillarRow::before {
+        display: none;
+    }
 }
 
 .pillar:not(:first-child) {
@@ -678,18 +815,24 @@
 .contactCard {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
-    gap: 3rem;
-    aspect-ratio: 1773 / 887;
+    gap: 2.5rem;
     box-sizing: border-box;
     min-height: 0;
     font-family: var(--font-inter), Inter, sans-serif;
     align-items: center;
-    padding: clamp(2.75rem, 5.5vw, 4.25rem);
-    background-color: #03204e;
-    background-image: linear-gradient(90deg, rgba(3, 24, 60, 0.92) 0%, rgba(3, 24, 60, 0.72) 42%, rgba(3, 24, 60, 0.25) 75%, rgba(3, 24, 60, 0.05) 100%), url('/leaf-bg.webp');
-    background-size: 100% 100%;
-    background-position: center right;
-    background-repeat: no-repeat;
+    padding: clamp(2rem, 4vw, 3rem);
+    /* Same ASCII-dot texture treatment as the about CTA card: navy scrim
+       holds white-text contrast over the image's bright top-center, deep
+       navy fallback while the image loads. Height is content-defined (no
+       aspect-ratio lock) so the panoramic image crops less. */
+    background-color: #041B3D;
+    background-image:
+        linear-gradient(135deg, rgba(7, 26, 43, 0.55) 0%, rgba(7, 26, 43, 0.15) 100%),
+        url('/images/about/ascii-magic-2.png'),
+        linear-gradient(135deg, #041B3D 0%, #062C5E 55%, #03204E 100%);
+    background-size: cover, cover, cover;
+    background-position: center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
     border-radius: var(--radius-xl);
     color: #fff;
     overflow: hidden;
@@ -782,6 +925,23 @@
     word-break: break-all;
 }
 
+.contactAddressLine {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.contactResponse {
+    margin: 0;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #7dd3fc;
+}
+
 /* ---------------------------------------------------------- breakpoints -- */
 
 @media (max-width: 1024px) {
@@ -853,6 +1013,16 @@
         transition: transform 0.2s ease;
     }
 
+    /* The desktop spine tick and measure belong to the horizontal rail only —
+       this breakpoint runs the vertical stepper instead. */
+    .processStep::before {
+        display: none;
+    }
+
+    .processDesc {
+        max-width: none;
+    }
+
     .processNum {
         display: inline-flex;
         align-items: center;
@@ -892,11 +1062,14 @@
         aspect-ratio: auto;
         padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 4.5vw, 2.25rem);
         border-radius: 28px;
-        background-color: #031c44;
-        background-image: linear-gradient(155deg, rgba(3, 24, 60, 0.97) 0%, rgba(3, 24, 60, 0.90) 50%, rgba(3, 24, 60, 0.65) 80%, rgba(3, 24, 60, 0.35) 100%), url('/leaf-bg.webp');
-        background-size: cover;
-        background-position: right bottom;
-        background-repeat: no-repeat;
+        background-color: #041B3D;
+        background-image:
+            linear-gradient(135deg, rgba(7, 26, 43, 0.55) 0%, rgba(7, 26, 43, 0.15) 100%),
+            url('/images/about/ascii-magic-2.png'),
+            linear-gradient(160deg, #041B3D 0%, #062C5E 60%, #03204E 100%);
+        background-size: cover, cover, cover;
+        background-position: center, center, center;
+        background-repeat: no-repeat, no-repeat, no-repeat;
     }
 
     .contactHeading {
@@ -1193,7 +1366,9 @@
     position: relative;
     padding: 0;
     width: 100%;
-    overflow: visible;
+    /* clip, not hidden — this section contains its own sticky marker, and
+       `hidden` would make it a scroll container and disable the stick. */
+    overflow-x: clip;
     background: #ffffff;
     /* Configurable color variables */
     --trust-cards-bg: #ffffff;        /* Left side (Cards) background */
@@ -1215,33 +1390,38 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 100%;
+    min-height: 750px;
     border-radius: 0px;
-    overflow: visible;
+    overflow: hidden;
     border: none;
     box-shadow: none;
     position: relative;
 }
 
-/* Left Side: Cards (Fills 100% of left column) */
+/* Left Side: Cards */
 .trustCardsCol {
     background: var(--trust-cards-bg);
-    padding: 0;
+    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
     display: flex;
     flex-direction: column;
+    /* `space-between` against .trustLayout's 750px min-height was flinging the
+       heading, the rail and the metric row to the extremes and opening ~120px
+       of dead air under the heading. Centre the group instead and let the gaps
+       be deliberate. */
+    justify-content: center;
+    gap: 2rem;
     height: 100%;
     width: 100%;
+    border-right: 1px solid var(--trust-card-border);
 }
 
 .trustCardsCol .positioningStack {
     width: 100%;
     max-width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 1rem;
     border: none;
-    border-right: 1px solid var(--trust-card-border);
-    border-radius: 0px;
     box-shadow: none;
 }
 
@@ -1253,12 +1433,23 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    position: relative;
+}
+
+.trustHeadWrap {
+    position: relative;
+    min-height: 190px;
+    width: 100%;
 }
 
 .trustHead {
     width: 100%;
     max-width: 620px;
     text-align: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 .trustEyebrow {
@@ -1306,12 +1497,15 @@
     width: 100%;
     max-width: 1720px;
     margin-top: 2rem;
-    margin-bottom: -30.5rem;
+    flex: 1;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
-    position: relative;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     z-index: 20;
+    pointer-events: none;
     transform: translateX(-105px);
 }
 
@@ -1330,52 +1524,112 @@
     overflow: hidden;
 }
 
+/* Capability rail — deliberately not cards.
+   Three stacked rounded boxes made this column read as a form, and the
+   inactive two washed out to 0.85 opacity, which reads as "disabled" rather
+   than "available". A numbered index rail with hairline rules matches the
+   section-marker motif already on the page, drops three nested containers
+   worth of chrome, and lets the active row carry real emphasis instead of
+   just a blue outline. */
 .positioningCard {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    background: var(--trust-card-bg);
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    align-items: start;
+    column-gap: 1.1rem;
+    padding: 1.15rem 0.35rem;
+    background: transparent;
     border: none;
-    border-bottom: 1px solid var(--trust-card-border);
-    border-radius: 0px;
-    padding: 3.5rem 4rem 3.5rem 2rem;
-    text-align: right;
+    border-bottom: 1px solid #E6EDF5;
+    border-radius: 0;
+    text-align: left;
     position: relative;
     cursor: pointer;
-    transition: background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 0.35s ease,
-                opacity 0.35s ease;
+    transition: background 0.2s ease;
     user-select: none;
     outline: none;
 }
 
+.positioningCard:first-child {
+    border-top: 1px solid #E6EDF5;
+}
+
+.positioningCard:hover {
+    background: #F7FAFD;
+}
+
 .positioningCard:focus-visible {
-    outline: 2px solid #0072FF;
+    outline: 2px solid var(--talent-blue);
     outline-offset: -2px;
 }
 
-.positioningCardActive {
-    background: linear-gradient(90deg, #f8faff 0%, #f0f7ff 100%);
+.positioningNum {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: #94A3B8;
+    padding-top: 0.3rem;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.2s ease;
 }
 
-.positioningCardInactive {
-    opacity: 0.65;
+.positioningTitle {
+    margin: 0;
+    font-family: var(--font-manrope), Manrope, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1E293B;
+    transition: color 0.2s ease;
 }
 
-.positioningCardInactive:hover {
-    opacity: 0.92;
-    background: #fafcff;
+.positioningDesc {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #64748B;
 }
 
-.positioningCard:last-child {
-    border-bottom: none;
+.positioningMark {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: #CBD5E1;
+    margin-top: 0.55rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.positioningCardActive .positioningNum,
+.positioningCardActive .positioningTitle {
+    color: var(--talent-blue);
+}
+
+.positioningCardActive .positioningMark {
+    background: var(--talent-blue);
+    transform: scale(1.15);
+}
+
+/* The cycle timer runs along the row's own bottom rule rather than floating
+   inside the card as a loose bar that read as a loading indicator. */
+.positioningProgress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    overflow: hidden;
+}
+
+.positioningProgressFill {
+    display: block;
+    height: 100%;
+    background: var(--talent-blue);
+    transform-origin: left;
 }
 
 .positioningCardInner {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
     max-width: 560px;
     width: 100%;
     position: relative;
@@ -1433,7 +1687,7 @@
 .positioningContent {
     display: flex;
     flex-direction: column;
-    text-align: right;
+    text-align: left;
 }
 
 .positioningTitle {
@@ -1469,12 +1723,12 @@
 
 .cardProgressBar {
     position: absolute;
-    right: 0;
+    left: 0;
     top: 0;
     bottom: 0;
     width: 4px;
     background: linear-gradient(180deg, #00C6FF 0%, #0072FF 100%);
-    border-radius: 4px 0 0 4px;
+    border-radius: 0 4px 4px 0;
     box-shadow: 0 0 12px rgba(0, 114, 255, 0.45);
     z-index: 5;
     transform-origin: top;
@@ -1686,6 +1940,15 @@
     .industryTag:hover {
         transform: none;
     }
+
+    /* The hero entrance is CSS, so it opts out here rather than through
+       framer-motion's useReducedMotion like the rest of the page. */
+    .hero .eyebrow,
+    .heroWord,
+    .heroDesc,
+    .heroActions {
+        animation: none;
+    }
 }
 
 /* ------------------------------------------------ Services scroll-snap rail -- */
@@ -1823,6 +2086,15 @@
     flex-shrink: 0;
 }
 
+/* Matches the section marker's mono treatment so the two read as one system. */
+.svcCount {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--medium-grey);
+    font-variant-numeric: tabular-nums;
+}
+
 .svcArrowBtn {
     width: 44px;
     height: 44px;
@@ -1881,6 +2153,8 @@
 
     .trustLayout {
         grid-template-columns: 1fr;
+        min-height: auto;
+        overflow: visible;
     }
 
     .trustCardsCol {
@@ -1962,8 +2236,13 @@
         align-items: flex-start;
     }
 
+    .trustHeadWrap {
+        min-height: auto;
+    }
+
     .trustHead {
         max-width: 100%;
+        position: static;
     }
 
     .trustH2 {
@@ -1980,6 +2259,7 @@
     }
 
     .trustImageWrap {
+        position: static;
         transform: none;
         margin-top: 1.75rem;
         margin-bottom: 0;
@@ -2147,7 +2427,7 @@
     }
 
     .heroActions .btnPrimary {
-        background: linear-gradient(135deg, #00C6FF 0%, #0072FF 100%);
+        background: linear-gradient(135deg, #0090CC 0%, #0072FF 100%);
         color: #ffffff;
         box-shadow: 0 4px 18px rgba(0, 114, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     }
