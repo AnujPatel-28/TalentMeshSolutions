@@ -30,7 +30,7 @@ export default function AboutIndustries() {
         <AnimateOnScroll animation="fadeUp" delay={180} once>
           <aside className={styles.baseCard} aria-label="Company location">
             <Image
-              src="/building bg.png"
+              src="/building bg.webp"
               alt=""
               fill
               loading="lazy"

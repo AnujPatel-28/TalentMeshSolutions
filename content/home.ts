@@ -56,8 +56,8 @@ export const POSITIONING = {
       icon: 'zap',
       rightHeading: 'Uncover Top Talent, Instantly.',
       rightIntro: 'Our recruiters screen every profile against your brief — skills, experience and cultural fit — so the shortlist you see is already worth interviewing.',
-      rightImage: '/cop2.png',
-      rightBackground: '/building bg.png'
+      rightImage: '/cop2.webp',
+      rightBackground: '/building bg.webp'
     },
     {
       title: 'Scale With Flexibility',
@@ -66,7 +66,7 @@ export const POSITIONING = {
       rightHeading: 'Elastic Teams for Dynamic Growth.',
       rightIntro: 'Whether you need a single remote developer or a full bulk hiring drive, we provide permanent, temporary, and contractual staffing to match your exact momentum.',
       rightImage: '/personWithLaptop3.png',
-      rightBackground: '/building bg.png'
+      rightBackground: '/building bg.webp'
     },
     {
       title: 'Simplify Recruitment',
@@ -75,7 +75,7 @@ export const POSITIONING = {
       rightHeading: 'Recruitment on Autopilot.',
       rightIntro: 'From sourcing and screening to onboarding and compliance, our RPO solutions handle the heavy lifting so you can focus on building your business.',
       rightImage: '/withClient.png',
-      rightBackground: '/building bg.png'
+      rightBackground: '/building bg.webp'
     }
   ]
 } as const;
@@ -137,7 +137,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Flexible Workforce Solutions',
     description: 'Access pre-vetted skilled professionals on demand, and scale your team up or down as project requirements shift.',
-    image: '/images/services/flexible_workforce_solutions1.png',
+    image: '/images/services/flexible_workforce_solutions1.webp',
     actionPills: [
       { label: 'Contingent Staffing', href: '/contingent-staffing' },
       { label: 'Contract-to-Hire', href: '/contract-to-hire' },
@@ -146,7 +146,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Scaled Hiring',
     description: 'Bring structure, speed, and consistency to high-volume recruitment programs and enterprise expansion initiatives.',
-    image: '/images/services/scaled_hiring_rpo1.png',
+    image: '/images/services/scaled_hiring_rpo1.webp',
     actionPills: [
       { label: 'Recruitment Process Outsourcing', href: '/recruitment-process-outsourcing' },
       { label: 'Managed Talent Solutions', href: '/managed-talent-solutions' },
@@ -155,7 +155,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Technology & Platform',
     description: 'Hire smarter across borders with connected sourcing tools and dedicated offshore tech teams.',
-    image: '/images/services/technology_platform1.png',
+    image: '/images/services/technology_platform1.webp',
     actionPills: [
       { label: 'Remote Hiring Solutions', href: '/remote-hiring-solutions' },
       { label: 'Technology Talent Sourcing', href: '/technology-talent-sourcing' },
@@ -164,7 +164,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Global Capability Centers (GCC)',
     description: 'End-to-end support to set up, build infrastructure, and scale Global Capability Centers aligned to business goals.',
-    image: '/images/services/global_capability_centers1.png',
+    image: '/images/services/global_capability_centers1.webp',
     actionPills: [
       { label: 'GCC Setup & Build', href: '/gcc-setup-and-build' },
       { label: 'Offshore Staffing', href: '/offshore-staffing' },
@@ -173,7 +173,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Leadership & Strategic Hiring',
     description: 'Identify and place senior leaders and specialist directors who shape long-term business outcomes and market growth.',
-    image: '/images/services/leadership_strategic_hiring1.png',
+    image: '/images/services/leadership_strategic_hiring1.webp',
     actionPills: [
       { label: 'Executive Search', href: '/executive-search' },
       { label: 'Direct Hire Recruitment', href: '/direct-hire-recruitment' },
@@ -182,7 +182,7 @@ export const TALENTMESH_SERVICES: TalentMeshServiceCard[] = [
   {
     title: 'Workforce Creation & Enablement',
     description: 'Build job-ready talent pipelines through structured skill training, designed for long-term impact and sustained delivery.',
-    image: '/images/services/workforce_creation_enablement1.png',
+    image: '/images/services/workforce_creation_enablement1.webp',
     actionPills: [
       { label: 'Hire, Train & Deploy', href: '/hire-train-deploy' },
       { label: 'Skill Upskilling', href: '/skill-upskilling' },

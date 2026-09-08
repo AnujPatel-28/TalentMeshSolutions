@@ -37,8 +37,22 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Static media under public/ is not content-hashed, so it must not be marked
+  // immutable — a replaced file would be stuck in browser caches. A day of hard
+  // caching plus a week of background revalidation keeps repeat visits off the
+  // network with bounded staleness; rename the file if a change must land at once.
+  // Does not apply to /_next/image, which the optimizer caches separately.
   async headers() {
     return [
+      {
+        source: "/:path*.(png|jpg|jpeg|webp|avif|svg|ico|mp4|webm|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
       {
         source: "/(.*)",
         headers: [
