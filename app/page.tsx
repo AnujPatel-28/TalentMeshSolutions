@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   // shares that segment — so this string renders verbatim.
   title: 'Recruitment & Staffing Agency in Ahmedabad | TalentMesh Solutions',
   description:
-    'TalentMesh Solutions is a result-driven recruitment and staffing firm in Ahmedabad offering end-to-end manpower services — permanent and contract staffing, executive search, RPO, campus and bulk hiring across IT, BFSI, Pharma, Manufacturing and more.',
+    'TalentMesh Solutions is a recruitment and staffing firm in Ahmedabad offering permanent, contract, executive search, RPO and bulk hiring across India.',
   keywords: [
     'recruitment agency Ahmedabad',
     'staffing company India',
