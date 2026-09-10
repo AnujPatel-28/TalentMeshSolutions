@@ -29,12 +29,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/hire-train-deploy',
     '/skill-upskilling',
     '/blog',
-    '/login',
   ];
 
+  // Omit lastModified until a reliable content-update date is tracked per page.
   const staticEntries: MetadataRoute.Sitemap = pages.map((page) => ({
     url: `${baseUrl}${page}`,
-    lastModified: new Date(),
     changeFrequency: page === '' ? 'daily' : 'weekly',
     priority: page === '' ? 1 : 0.8,
   }));
