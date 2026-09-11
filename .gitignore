@@ -69,3 +69,6 @@ insforge/functions/**/*.js
 .roo
 .trae
 .windsurf
+.codex/
+.impeccable/
+*.hidden
