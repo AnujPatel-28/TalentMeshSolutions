@@ -267,3 +267,8 @@
     flex-direction: column;
   }
 }
+
+.homeFooter,
+.homeFooter * {
+  font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif !important;
+}

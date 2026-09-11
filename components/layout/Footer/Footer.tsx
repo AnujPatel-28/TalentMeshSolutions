@@ -2,10 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import styles from './Footer.module.css';
 
 const Footer = () => {
+    const pathname = usePathname();
+    const isHome = pathname === '/';
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
@@ -49,7 +52,7 @@ const Footer = () => {
     };
 
     return (
-        <footer className={styles.footer}>
+        <footer className={`${styles.footer} ${isHome ? styles.homeFooter : ''}`}>
             <div className={styles.container}>
                 <div className={styles.grid}>
                     <div className={styles.branding}>

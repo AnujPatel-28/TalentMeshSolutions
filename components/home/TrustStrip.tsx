@@ -84,7 +84,7 @@ export default function TrustStrip() {
                     >
                         {/* Header Intro */}
                         <div>
-                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-manrope">
+                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-schibsted">
                                 Recruitment Engineered for Scale
                             </h2>
                             <p className="text-sm text-slate-500 mt-1 font-normal">

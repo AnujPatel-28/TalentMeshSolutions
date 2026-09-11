@@ -29,6 +29,7 @@ const config: Config = {
         // The `font-manrope` class was already in use in TrustStrip but was
         // never generated, so that heading silently fell back to the body face.
         manrope: ['var(--font-manrope)', 'Manrope', 'sans-serif'],
+        schibsted: ['var(--font-schibsted)', 'Schibsted Grotesk', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -750,3 +750,8 @@
   }
 }
 
+.homeNav,
+.homeNav * {
+  font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+}
+

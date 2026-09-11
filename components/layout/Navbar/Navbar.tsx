@@ -77,7 +77,7 @@ const Navbar = () => {
     const isTransparentNav = (isHome || pathname === '/about') && !isScrolled && !isMenuOpen;
 
     return (
-        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
+        <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
 
             <div className={styles.container}>
                 {/* ── Logo ── */}

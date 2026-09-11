@@ -11,6 +11,7 @@ import {
 } from '@/components/home';
 import { FAQS } from '@/content/home';
 import GridWrapper from '@/components/ui/GridWrapper';
+import homeStyles from '@/components/home/home.module.css';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
 
@@ -82,33 +83,35 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
       
-      <HomeHero />
+      <div className={homeStyles.homeScope}>
+        <HomeHero />
 
-      <GridWrapper>
-        <AnimateOnScroll animation="fadeUp" once>
-          <Services />
-        </AnimateOnScroll>
+        <GridWrapper>
+          <AnimateOnScroll animation="fadeUp" once>
+            <Services />
+          </AnimateOnScroll>
 
-        <TrustStrip />
+          <TrustStrip />
 
-        {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
-        <WhyUs />
+          {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
+          <WhyUs />
 
-        <IndustriesGrid />
+          <IndustriesGrid />
 
-        {/* Parked, not deleted. To bring it back: uncomment, restore the import
-            above, and shift HomeFAQ to index={6} and ContactCTA to index={7} —
-            Process owns [05] and pushes the rest of the sequence down. */}
-        {/* <Process /> */}
+          {/* Parked, not deleted. To bring it back: uncomment, restore the import
+              above, and shift HomeFAQ to index={6} and ContactCTA to index={7} —
+              Process owns [05] and pushes the rest of the sequence down. */}
+          {/* <Process /> */}
 
-        <AnimateOnScroll animation="fadeUp" once>
-          <HomeFAQ />
-        </AnimateOnScroll>
+          <AnimateOnScroll animation="fadeUp" once>
+            <HomeFAQ />
+          </AnimateOnScroll>
 
-        <AnimateOnScroll animation="fadeUp" once>
-          <ContactCTA />
-        </AnimateOnScroll>
-      </GridWrapper>
+          <AnimateOnScroll animation="fadeUp" once>
+            <ContactCTA />
+          </AnimateOnScroll>
+        </GridWrapper>
+      </div>
     </>
   );
 }

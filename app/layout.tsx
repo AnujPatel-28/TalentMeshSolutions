@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Geist, Manrope, Space_Grotesk, Playfair_Display, Instrument_Serif } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Geist, Manrope, Schibsted_Grotesk, Playfair_Display, Instrument_Serif } from "next/font/google";
 import { SiteChrome } from "@/components/layout";
 import { SERVICES } from "@/content/home";
 import "./globals.css";
@@ -13,7 +13,7 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument",
   subsets: ["latin"],
   weight: ["400"],
-  preload: false,
+  style: ["normal", "italic"],
 });
 
 const jakarta = Plus_Jakarta_Sans({
@@ -24,13 +24,13 @@ const jakarta = Plus_Jakarta_Sans({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400", "700", "800"],
+  weight: ["400", "600", "700", "800"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const schibstedGrotesk = Schibsted_Grotesk({
+  variable: "--font-schibsted",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const playfair = Playfair_Display({
@@ -166,7 +166,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body
-        className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${manrope.variable} ${spaceGrotesk.variable} ${playfair.variable} antialiased`}
+        className={`${inter.variable} ${instrumentSerif.variable} ${jakarta.variable} ${manrope.variable} ${schibstedGrotesk.variable} ${playfair.variable} antialiased`}
         suppressHydrationWarning
       >
 
