@@ -1,192 +1,103 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '../blog-image';
 import { notFound } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from 'next-sanity';
+import type { PortableTextBlock } from '@portabletext/types';
+import { ArrowLeft } from 'lucide-react';
 import styles from '../blog.module.css';
-import AnimateOnScroll from '@/components/AnimateOnScroll';
+import ArticleContents from '../article-contents';
 import { sanityClient } from '@/lib/sanity/client';
 import { urlForImage } from '@/lib/sanity/image';
 import { POST_BY_SLUG_QUERY, RELATED_POSTS_QUERY } from '@/lib/sanity/queries';
+import { PostMeta, PostPreview, displayDate, type BlogPost } from '../post-preview';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
-
-// Shared between generateMetadata and the page body so the same request only
-// hits Sanity once per render (React dedupes calls with identical arguments).
-const getPost = cache(async (slug: string) => sanityClient.fetch(POST_BY_SLUG_QUERY, { slug }));
-
-const IconArrowLeft = () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 12H5m7-7-7 7 7 7" />
-    </svg>
-);
-
-const IconArrowRight = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12h14m-7-7 7 7-7 7" />
-    </svg>
-);
-
+type ArticlePost = BlogPost & { body: PortableTextBlock[] };
+export const revalidate = 60;
+const getPost = cache(async (slug: string) => sanityClient.fetch<ArticlePost | null>(POST_BY_SLUG_QUERY, { slug }));
+const headingId = (key = '') => 'section-' + key.replace(/[^a-zA-Z0-9_-]/g, '');
 const ptComponents: PortableTextComponents = {
-    block: {
-        h2: ({ children }) => <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '2.5rem 0 1rem' }}>{children}</h2>,
-        h3: ({ children }) => <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '2rem 0 1rem' }}>{children}</h3>,
-        normal: ({ children }) => <p style={{ margin: '0 0 1.2rem', lineHeight: 1.9 }}>{children}</p>,
+  block: {
+    h1: ({ children, value }) => <h2 id={headingId(value._key)}>{children}</h2>,
+    h2: ({ children, value }) => <h2 id={headingId(value._key)}>{children}</h2>,
+    h3: ({ children, value }) => <h3 id={headingId(value._key)}>{children}</h3>,
+    h4: ({ children, value }) => <h4 id={headingId(value._key)}>{children}</h4>,
+  },
+  marks: {
+    link: ({ children, value }) => {
+      const href = typeof value?.href === 'string' ? value.href : '';
+      if (!/^(https?:\/\/|mailto:|tel:|\/|#)/i.test(href) || href.startsWith('//')) return <>{children}</>;
+      return <a href={href}>{children}</a>;
     },
-    list: {
-        bullet: ({ children }) => <ul style={{ listStyleType: 'disc', listStylePosition: 'outside', margin: '0 0 1.5rem 1.4rem', padding: 0, color: '#334155', lineHeight: 1.8 }}>{children}</ul>,
-        number: ({ children }) => <ol style={{ listStyleType: 'decimal', listStylePosition: 'outside', margin: '0 0 1.5rem 1.4rem', padding: 0, color: '#334155', lineHeight: 1.8 }}>{children}</ol>,
+  },
+  types: {
+    image: ({ value }) => {
+      const src = urlForImage(value)?.width(1400).auto('format').url();
+      if (!src) return null;
+      return <figure>
+        {/* CMS image dimensions vary; preserve the complete image without cropping. */}
+
+        <img src={src} alt={value.alt || ''} loading="lazy" decoding="async" />
+        {value.caption && <figcaption>{value.caption}</figcaption>}
+      </figure>;
     },
-    listItem: {
-        bullet: ({ children }) => <li style={{ marginBottom: '0.65rem' }}>{children}</li>,
-        number: ({ children }) => <li style={{ marginBottom: '0.65rem' }}>{children}</li>,
+    code: ({ value }) => <pre><code>{value.code}</code></pre>,
+    table: ({ value }) => {
+      const rows = value.rows as { _key?: string; cells: string[] }[] | undefined;
+      if (!rows?.length) return null;
+      return <div className={styles.tableScroll} role="region" aria-label="Article table" tabIndex={0}><table><tbody>{rows.map((row, i) => <tr key={row._key || i}>{row.cells.map((cell, j) => <td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>;
     },
-    types: {
-        image: ({ value }) => {
-            const url = urlForImage(value)?.width(900).url();
-            if (!url) return null;
-            return <img src={url} alt="" style={{ width: '100%', borderRadius: 12, margin: '1.5rem 0' }} />;
-        },
-    },
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
-    const post = await getPost(slug);
-
-    if (!post) return {};
-
-    const coverImageUrl = post.coverImage ? urlForImage(post.coverImage)?.width(1200).height(630).url() : undefined;
-
-    return {
-        // Bare title: root layout's title.template appends " | TalentMesh Solutions".
-        title: post.title,
-        description: post.excerpt,
-        alternates: { canonical: `/blog/${slug}` },
-        openGraph: {
-            title: post.title,
-            description: post.excerpt,
-            url: `${SITE_URL}/blog/${slug}`,
-            siteName: 'TalentMesh Solutions',
-            type: 'article',
-            publishedTime: post.publishedAt,
-            authors: post.authorName ? [post.authorName] : undefined,
-            images: coverImageUrl ? [{ url: coverImageUrl }] : undefined,
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: post.title,
-            description: post.excerpt,
-        },
-    };
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) return { title: 'Article not found', robots: { index: false, follow: true } };
+  const image = post.coverImage ? urlForImage(post.coverImage)?.width(1200).height(630).auto('format').url() : undefined;
+  return {
+    title: post.title, description: post.excerpt,
+    alternates: { canonical: '/blog/' + slug },
+    openGraph: { title: post.title, description: post.excerpt, url: SITE_URL + '/blog/' + slug, siteName: 'TalentMesh Solutions', type: 'article', publishedTime: displayDate(post.publishedAt) ? post.publishedAt : undefined, authors: [post.authorName || 'TalentMesh Editorial'], images: image ? [{ url: image, width: 1200, height: 630 }] : undefined },
+    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt, images: image ? [image] : undefined },
+  };
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const post = await getPost(slug);
-
-    if (!post) notFound();
-
-    const related = post.category
-        ? await sanityClient.fetch(RELATED_POSTS_QUERY, { category: post.category, id: post.id })
-        : [];
-
-    const coverImageUrl = post.coverImage ? urlForImage(post.coverImage)?.width(1400).url() : undefined;
-
-    return (
-        <main className={styles.blogWrapper}>
-            <div className="premium-container" style={{ paddingTop: '7rem', position: 'relative', zIndex: 1 }}>
-                <Link href="/blog" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none' }}>
-                    <IconArrowLeft /> Back to Blog
-                </Link>
-            </div>
-
-            <article>
-                <header className={`premium-container ${styles.detailHeader}`}>
-                    <AnimateOnScroll animation="fadeUp">
-                        <span className={styles.detailCategory}>
-                            {post.category}
-                        </span>
-                        <h1 className={styles.detailTitle}>
-                            {post.title}
-                        </h1>
-                        <div className={styles.detailAuthorWrapper}>
-                            <div className={styles.detailAuthorAvatar}>
-                                {(post.authorName || 'A').charAt(0)}
-                            </div>
-                            <div className={styles.detailAuthorInfo}>
-                                <div className={styles.detailAuthorName}>{post.authorName || 'TalentMesh Editorial'}</div>
-                                <div suppressHydrationWarning>{new Date(post.publishedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })} · {post.readTimeMinutes} min read</div>
-                            </div>
-                        </div>
-                    </AnimateOnScroll>
-                </header>
-
-                <AnimateOnScroll animation="fadeUp" delay={100}>
-                    <div className={`premium-container ${styles.detailImageWrapper}`}>
-                        <div className={styles.detailImageContainer}>
-                            <Image
-                                src={coverImageUrl || "/images/tech-office.jpg"}
-                                alt={post.title}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                        </div>
-                    </div>
-                </AnimateOnScroll>
-
-                <div className={styles.detailContentWrapper}>
-                    <AnimateOnScroll animation="fadeUp" delay={200}>
-                        <div className={styles.detailContent}>
-                            {Array.isArray(post.body) && <PortableText value={post.body} components={ptComponents} />}
-                        </div>
-                    </AnimateOnScroll>
-                </div>
-            </article>
-
-            {related.length > 0 && (
-                <section className={styles.relatedSection}>
-                    <div className="premium-container">
-                        <div className={styles.relatedHeader}>
-                            <h2 className={styles.relatedTitle}>Related Articles</h2>
-                            <Link href="/blog" style={{ color: 'var(--primary-blue)', fontWeight: 700, textDecoration: 'none' }}>View All</Link>
-                        </div>
-                        <div className="premium-grid-3">
-                            {related.map((rel: any) => {
-                                const relImageUrl = rel.coverImage ? urlForImage(rel.coverImage)?.width(600).url() : undefined;
-                                return (
-                                    <Link href={`/blog/${rel.slug}`} key={rel.id} style={{ textDecoration: 'none' }}>
-                                        <div className={`${styles.relatedCard} glass-card`}>
-                                            <div className={styles.relatedImageWrapper}>
-                                                <Image src={relImageUrl || "/images/tech-office.jpg"} alt={rel.title} fill style={{ objectFit: 'cover' }} />
-                                            </div>
-                                            <div className={styles.relatedContent}>
-                                                <span className={styles.relatedCategory}>{rel.category}</span>
-                                                <h3 className={styles.relatedCardTitle}>{rel.title}</h3>
-                                                <div className={styles.relatedReadMore}>
-                                                    Read More <IconArrowRight />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            <div className={`premium-container ${styles.detailCtaWrapper}`}>
-                <div className={styles.detailCtaBox}>
-                    <h2 className={styles.detailCtaTitle}>Enjoyed this article?</h2>
-                    <p className={styles.detailCtaDesc}>Explore more insights on hiring, careers, and recruitment.</p>
-                    <Link href="/blog" className={styles.detailCtaBtn}>
-                        Read More Articles
-                    </Link>
-                </div>
-            </div>
-        </main>
-    );
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) notFound();
+  // Related content is supplemental: its outage must not hide a readable article.
+  const related = post.category ? await sanityClient.fetch<BlogPost[]>(RELATED_POSTS_QUERY, { category: post.category, id: post.id }).catch(() => []) : [];
+  const image = post.coverImage ? urlForImage(post.coverImage)?.width(1600).auto('format').url() : undefined;
+  const body = Array.isArray(post.body) ? post.body : [];
+  const headings = body.filter(block => block._type === 'block' && ['h1', 'h2'].includes(block.style || '') && block._key).map(block => ({ id: headingId(block._key), text: block.children.map(child => child.text || '').join('') })).filter(heading => heading.text);
+  const jsonLd = {
+    '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title,
+    description: post.excerpt, mainEntityOfPage: SITE_URL + '/blog/' + slug,
+    image: image ? [image] : undefined,
+    datePublished: displayDate(post.publishedAt) ? post.publishedAt : undefined,
+    author: { '@type': post.authorName && !/talentmesh|editorial/i.test(post.authorName) ? 'Person' : 'Organization', name: post.authorName || 'TalentMesh Editorial' },
+    publisher: { '@type': 'Organization', name: 'TalentMesh Solutions', url: SITE_URL },
+  };
+  return (
+    <main className={styles.journal} id="blog-main">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <div className={styles.articleContainer}>
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}><Link href="/blog">Journal</Link>{post.category && <><span aria-hidden="true">/</span><span>{post.category}</span></>}</nav>
+        <article>
+          <header className={styles.articleHeader}><h1>{post.title}</h1>{post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}<PostMeta post={post} /></header>
+          {image && <div className={styles.articleCover}><Image src={image} alt={post.coverImage?.alt || ''} fill priority sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 980px) calc(100vw - 80px), 900px" /></div>}
+          <div className={headings.length ? styles.readingLayout : undefined}>
+            {headings.length > 0 && <ArticleContents headings={headings} />}
+            <div className={styles.prose}><PortableText value={body} components={ptComponents} /></div>
+          </div>
+        </article>
+        <div className={styles.articleEnd}><Link href="/blog" className={styles.readLink}><ArrowLeft size={18} aria-hidden="true" /> Back to the journal</Link></div>
+      </div>
+      {!!related?.length && <section className={[styles.container, styles.archive].join(' ')} aria-labelledby="related-title"><div className={styles.sectionHeader}><h2 id="related-title">Keep exploring</h2></div><div className={styles.postGrid}>{related.map(item => <PostPreview key={item.id} post={item} />)}</div></section>}
+    </main>
+  );
 }
