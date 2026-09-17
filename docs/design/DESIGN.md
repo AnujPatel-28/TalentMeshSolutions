@@ -8,7 +8,7 @@ colors:
   journal-blue: "#0878b5"
   journal-rule: "#d8e2e9"
   reading-ink: "#253e50"
-  reading-link: "#006da6"
+  reading-link: "#0056B3"
 typography:
   display:
     fontFamily: "Instrument Serif, Georgia, serif"
