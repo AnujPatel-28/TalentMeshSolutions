@@ -210,6 +210,7 @@ html.js-ready .aos[data-aos-visible='false'] {
   --tm-drawer-width: 480px;
   --tm-page-gutter: clamp(1rem, 3vw, 2rem);
   --tm-section-space: clamp(4rem, 8vw, 10rem);
+  --tm-brand: #0056B3;
 }
 
 .premium-container {
