@@ -8,7 +8,20 @@
  */
 
 .homeScope {
+    /* Trial /home-4color: scoped 4-color test.
+       canvas #FFFFFF / surface #F0F8FF / brand #0056B3 / ink #0B1F33.
+       Scoped here so other routes are untouched; revert by deleting block. */
+    --tm-canvas: #FFFFFF;
+    --tm-surface: #F0F8FF;
+    --tm-brand: #0056B3;
+    --tm-ink: #0B1F33;
+    --tm-body: rgba(11, 31, 51, 0.7);
+    background: var(--tm-canvas);
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
+}
+
+.homeScope :global(.text-brand) {
+    color: var(--tm-brand);
 }
 
 .homeScope h1,
@@ -41,7 +54,7 @@
 /* Soft blue tint: a light bluish field with blue headings and grey body copy.
    The eyebrow pill flips to white so it still separates from the tinted field. */
 .sectionTint {
-    background-color: #F0F7FF;
+    background-color: var(--tm-surface);
     background-image: url('/graintest.png');
     background-size: min(580px, 45vw) auto;
     background-position: top right;
@@ -55,11 +68,11 @@
 }
 
 .sectionTint .h2 {
-    color: #0056B3;
+    color: var(--tm-brand);
 }
 
 .sectionTint .lede {
-    color: #64748B;
+    color: var(--tm-body);
 }
 
 /* WhyUs-only mirrored grain: keeps the existing top-right
@@ -178,8 +191,8 @@
     gap: 0.5rem;
     padding: 0.4rem 0.9rem;
     border-radius: 9999px;
-    background: var(--alice-blue);
-    color: var(--twitter-blue);
+    background: var(--tm-surface);
+    color: var(--tm-brand);
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -206,7 +219,7 @@
     line-height: 1.15;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: var(--ink-black);
+    color: var(--tm-ink);
 }
 
 .sectionDark .h2 {
@@ -217,7 +230,7 @@
     margin: 1.1rem 0 0;
     font-size: 1.05rem;
     line-height: 1.7;
-    color: var(--medium-grey);
+    color: var(--tm-body);
 }
 
 .sectionDark .lede {
@@ -225,7 +238,7 @@
 }
 
 .accent {
-    color: var(--primary-blue);
+    color: var(--tm-brand);
 }
 
 /* Buttons */
@@ -296,7 +309,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #071A2B;
+    background: var(--tm-ink);
     overflow: hidden;
 }
 
@@ -457,7 +470,7 @@
 
 .trust {
     padding: 0 1.5rem 5rem;
-    background: linear-gradient(180deg, var(--light-ice-blue) 0%, var(--light-ice-blue) 55%, #fff 100%);
+    background: linear-gradient(180deg, var(--tm-surface) 0%, var(--tm-surface) 55%, var(--tm-canvas) 100%);
 }
 
 .trustGrid {
@@ -489,14 +502,14 @@
     letter-spacing: -0.02em;
     /* Solid brand blue instead of clipped-gradient text — the weight and size
        already carry the emphasis here. */
-    color: var(--talent-blue);
+    color: var(--tm-brand);
 }
 
 .trustLabel {
     margin-top: 0.4rem;
     font-size: 0.9rem;
     line-height: 1.45;
-    color: var(--medium-grey);
+    color: var(--tm-body);
 }
 
 /* -------------------------------------------------------------- services -- */
@@ -515,7 +528,7 @@
     flex-direction: column;
     gap: 0.85rem;
     padding: 2rem 1.75rem;
-    background: #fff;
+    background: var(--tm-canvas);
     border: 1px solid var(--neutral-border);
     border-radius: var(--radius-lg);
     transition: var(--transition-smooth);
@@ -529,7 +542,7 @@
 
 .serviceFeatured {
     grid-column: span 2;
-    background: linear-gradient(135deg, #fff 0%, var(--alice-blue) 100%);
+    background: linear-gradient(135deg, var(--tm-canvas) 0%, var(--tm-surface) 100%);
 }
 
 .serviceIcon {
@@ -539,8 +552,8 @@
     width: 46px;
     height: 46px;
     border-radius: var(--radius-md);
-    background: var(--alice-blue);
-    color: var(--twitter-blue);
+    background: var(--tm-surface);
+    color: var(--tm-brand);
     flex-shrink: 0;
 }
 
@@ -549,14 +562,14 @@
     font-size: 1.15rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: var(--ink-black);
+    color: var(--tm-ink);
 }
 
 .serviceDesc {
     margin: 0;
     font-size: 0.95rem;
     line-height: 1.65;
-    color: var(--medium-grey);
+    color: var(--tm-body);
 }
 
 /* ------------------------------------------------------------ industries -- */
@@ -648,7 +661,7 @@
 
 .processFill {
     height: 100%;
-    background: var(--talent-blue);
+    background: var(--tm-brand);
     transform-origin: left center;
 }
 
@@ -681,7 +694,7 @@
     font-size: 0.72rem;
     letter-spacing: 0.14em;
     font-weight: 500;
-    color: var(--talent-blue);
+    color: var(--tm-brand);
     font-variant-numeric: tabular-nums;
 }
 
@@ -691,14 +704,14 @@
     font-size: 1.15rem;
     font-weight: 700;
     letter-spacing: -0.015em;
-    color: var(--ink-black);
+    color: var(--tm-ink);
 }
 
 .processDesc {
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.6;
-    color: var(--medium-grey);
+    color: var(--tm-body);
     max-width: 22ch;
 }
 
@@ -750,7 +763,7 @@
    resolves reads as a stuck state. */
 @media (hover: hover) {
     .pillar:hover .pillarIcon {
-        color: var(--talent-blue);
+        color: var(--tm-brand);
     }
 }
 
@@ -784,7 +797,7 @@
 
 .pillarIcon {
     display: flex;
-    color: #007BFF;
+    color: var(--tm-brand);
     margin-bottom: 1.1rem;
 }
 
@@ -799,14 +812,14 @@
     font-weight: 700;
     line-height: 1.35;
     letter-spacing: -0.01em;
-    color: #1E293B;
+    color: var(--tm-ink);
 }
 
 .pillarDesc {
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.65;
-    color: #64748B;
+    color: var(--tm-body);
 }
 
 .pillarContent {
@@ -1057,13 +1070,13 @@
         font-weight: 700;
         margin: 0 0 0.35rem;
         line-height: 1.3;
-        color: var(--midnight-navy, #0f172a);
+        color: var(--tm-ink);
     }
 
     .processDesc {
         font-size: 0.9rem;
         line-height: 1.6;
-        color: var(--medium-grey, #64748b);
+        color: var(--tm-body);
         margin: 0;
     }
 
@@ -1115,7 +1128,7 @@
         text-align: left;
         padding: 1.2rem 1.15rem;
         background: #ffffff;
-        border: 1px solid rgba(8, 120, 181, 0.12);
+        border: 1px solid rgba(0, 86, 179, 0.12);
         border-radius: 14px;
         box-shadow: 0 2px 10px rgba(7, 26, 43, 0.04);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1130,7 +1143,7 @@
     }
 
     .pillar:nth-child(n + 3) {
-        border-top: 1px solid rgba(8, 120, 181, 0.12);
+        border-top: 1px solid rgba(0, 86, 179, 0.12);
     }
 
     .pillarIcon {
@@ -1160,13 +1173,13 @@
         font-weight: 700;
         margin: 0 0 0.25rem;
         line-height: 1.35;
-        color: var(--midnight-navy, #0f172a);
+        color: var(--tm-ink);
     }
 
     .pillarDesc {
         font-size: 0.88rem;
         line-height: 1.55;
-        color: var(--medium-grey, #64748b);
+        color: var(--tm-body);
         margin: 0;
     }
 
@@ -1260,19 +1273,19 @@
 }
 
 .visualCard {
-    background: #ffffff;
-    border: 1px solid rgba(8, 120, 181, 0.15);
+    background: var(--tm-canvas);
+    border: 1px solid rgba(0, 86, 179, 0.15);
     border-radius: 0.75rem;
     padding: 1.5rem;
     text-align: left;
-    box-shadow: 0 8px 24px rgba(7, 26, 43, 0.05);
+    box-shadow: 0 8px 24px rgba(11, 31, 51, 0.05);
     transition: all 0.25s ease;
 }
 
 .visualCard:hover {
     transform: translateY(-4px);
-    border-color: var(--talent-blue);
-    box-shadow: 0 12px 30px rgba(7, 26, 43, 0.1);
+    border-color: var(--tm-brand);
+    box-shadow: 0 12px 30px rgba(11, 31, 51, 0.1);
 }
 
 .visualCardHeader {
@@ -1286,8 +1299,8 @@
     width: 42px;
     height: 42px;
     border-radius: 0.5rem;
-    background: var(--mist-blue);
-    color: var(--talent-blue);
+    background: var(--tm-surface);
+    color: var(--tm-brand);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1323,14 +1336,14 @@
     font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
     font-size: 1.15rem;
     font-weight: 600;
-    color: var(--midnight-navy);
+    color: var(--tm-ink);
 }
 
 .visualCardSub {
     margin: 0.15rem 0 0;
     font-family: var(--font-inter), Inter, sans-serif;
     font-size: 0.82rem;
-    color: var(--medium-grey);
+    color: var(--tm-body);
 }
 
 .visualBadge {
@@ -1339,8 +1352,8 @@
     gap: 0.4rem;
     padding: 0.35rem 0.75rem;
     border-radius: 9999px;
-    background: var(--mist-blue);
-    color: var(--midnight-navy);
+    background: var(--tm-surface);
+    color: var(--tm-ink);
     font-family: var(--font-inter), Inter, sans-serif;
     font-size: 0.8rem;
     font-weight: 600;
@@ -1380,15 +1393,15 @@
     /* clip, not hidden — this section contains its own sticky marker, and
        `hidden` would make it a scroll container and disable the stick. */
     overflow-x: clip;
-    background: #ffffff;
+    background: var(--tm-canvas);
     /* Configurable color variables */
-    --trust-cards-bg: #ffffff;        /* Left side (Cards) background */
-    --trust-text-bg: #F0F7FF;         /* Right side (Matches below section #F0F7FF) */
-    --trust-text-color: #0056B3;      /* Matching sectionTint h2 */
-    --trust-text-lede: #64748B;       /* Matching sectionTint lede */
-    --trust-card-bg: #ffffff;         /* Card background */
+    --trust-cards-bg: var(--tm-canvas);        /* Left side (Cards) background */
+    --trust-text-bg: var(--tm-surface);         /* Right side (Matches below section #F0F8FF) */
+    --trust-text-color: var(--tm-brand);      /* Old blue heading: Uncover Top Talent etc. */
+    --trust-text-lede: var(--tm-body);       /* Matching sectionTint lede */
+    --trust-card-bg: var(--tm-canvas);         /* Card background */
     --trust-card-border: #E2E8F0;     /* Card dividers border */
-    --trust-card-hover: #F8FAFC;
+    --trust-card-hover: var(--tm-surface);
 }
 
 .trustContainer {
@@ -1565,11 +1578,11 @@
 }
 
 .positioningCard:hover {
-    background: #F7FAFD;
+    background: var(--tm-surface);
 }
 
 .positioningCard:focus-visible {
-    outline: 2px solid var(--talent-blue);
+    outline: 2px solid var(--tm-brand);
     outline-offset: -2px;
 }
 
@@ -1589,7 +1602,7 @@
     font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: #1E293B;
+    color: var(--tm-ink);
     transition: color 0.2s ease;
 }
 
@@ -1597,7 +1610,7 @@
     margin: 0.3rem 0 0;
     font-size: 0.9rem;
     line-height: 1.55;
-    color: #64748B;
+    color: var(--tm-body);
 }
 
 .positioningMark {
@@ -1611,11 +1624,11 @@
 
 .positioningCardActive .positioningNum,
 .positioningCardActive .positioningTitle {
-    color: var(--talent-blue);
+    color: var(--tm-brand);
 }
 
 .positioningCardActive .positioningMark {
-    background: var(--talent-blue);
+    background: var(--tm-brand);
     transform: scale(1.15);
 }
 
@@ -1633,7 +1646,7 @@
 .positioningProgressFill {
     display: block;
     height: 100%;
-    background: var(--talent-blue);
+    background: var(--tm-brand);
     transform-origin: left;
 }
 
@@ -1655,7 +1668,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #64748b;
+    color: var(--tm-body);
     margin-bottom: 0.4rem;
     transition: color 0.3s ease;
 }
@@ -1706,12 +1719,12 @@
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--midnight-navy);
+    color: var(--tm-ink);
     transition: color 0.3s ease;
 }
 
 .positioningTitleActive {
-    color: #0056B3;
+    color: var(--tm-brand);
 }
 
 .positioningDesc {
@@ -1719,7 +1732,7 @@
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
     font-size: 1.05rem;
     line-height: 1.65;
-    color: var(--medium-grey);
+    color: var(--tm-body);
     transition: color 0.3s ease;
     min-height: 3.3em;
     display: flex;
@@ -1728,7 +1741,7 @@
 }
 
 .positioningDescActive {
-    color: #1e293b;
+    color: var(--tm-ink);
     font-weight: 500;
 }
 
@@ -1778,8 +1791,8 @@
 }
 
 .categoryCard {
-    background: #ffffff;
-    border: 1px solid rgba(8, 120, 181, 0.12);
+    background: var(--tm-canvas);
+    border: 1px solid rgba(0, 86, 179, 0.12);
     border-radius: 0.75rem;
     padding: 2.25rem 1.75rem;
     display: flex;
@@ -1790,7 +1803,7 @@
 
 .categoryCard:hover {
     transform: translateY(-4px);
-    border-color: var(--talent-blue);
+    border-color: var(--tm-brand);
     box-shadow: 0 10px 28px rgba(7, 26, 43, 0.08);
 }
 
@@ -1799,15 +1812,15 @@
     align-items: center;
     gap: 0.85rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--mist-blue);
+    border-bottom: 1px solid var(--tm-surface);
 }
 
 .categoryIconBox {
     width: 46px;
     height: 46px;
     border-radius: 0.5rem;
-    background: var(--mist-blue);
-    color: var(--midnight-navy);
+    background: var(--tm-surface);
+    color: var(--tm-ink);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1819,7 +1832,7 @@
     font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--midnight-navy);
+    color: var(--tm-ink);
 }
 
 .categoryItemList {
@@ -1838,7 +1851,7 @@
     font-family: var(--font-inter), Inter, sans-serif;
     font-size: 0.95rem;
     line-height: 1.5;
-    color: var(--midnight-navy);
+    color: var(--tm-ink);
     font-weight: 500;
 }
 
@@ -1846,8 +1859,8 @@
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: var(--mist-blue);
-    color: var(--talent-blue);
+    background: var(--tm-surface);
+    color: var(--tm-brand);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1902,21 +1915,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--hover-color, var(--primary-blue));
+    color: var(--hover-color, var(--tm-brand));
     transition: all 0.3s ease;
 }
 
 .tagName {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--deep-navy);
+    color: var(--tm-ink);
     letter-spacing: -0.01em;
     white-space: nowrap;
     transition: color 0.3s ease;
 }
 
 .industryTag:hover .tagName {
-    text-shadow: 0 0 15px color-mix(in srgb, var(--hover-color, var(--primary-blue)) 20%, transparent);
+    text-shadow: 0 0 15px color-mix(in srgb, var(--hover-color, var(--tm-brand)) 20%, transparent);
 }
 
 .contactMetaLabel {
@@ -2005,7 +2018,7 @@
 }
 
 .svcRail:focus-visible {
-    outline: 2px solid var(--primary-blue);
+    outline: 2px solid var(--tm-brand);
     outline-offset: -2px;
     border-radius: 0.5rem;
 }
@@ -2013,7 +2026,7 @@
 .svcCard {
     flex: 0 0 var(--svc-card-w);
     scroll-snap-align: start;
-    background: var(--white);
+    background: var(--tm-canvas);
     border: 1px solid var(--neutral-border);
     border-radius: 1rem;
     overflow: hidden;
@@ -2027,7 +2040,7 @@
     width: 100%;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: var(--mist-blue);
+    background: var(--tm-surface);
 }
 
 .svcCardImg {
@@ -2048,7 +2061,7 @@
     font-weight: 700;
     line-height: 1.35;
     letter-spacing: -0.01em;
-    color: var(--midnight-navy);
+    color: var(--tm-ink);
     min-height: 2.7em;
 }
 
@@ -2057,7 +2070,7 @@
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
     font-size: 0.88rem;
     line-height: 1.6;
-    color: var(--medium-grey);
+    color: var(--tm-body);
     flex: 1;
 }
 
@@ -2073,9 +2086,9 @@
     display: inline-block;
     padding: 0.45rem 1rem;
     border-radius: 9999px;
-    background: var(--mist-blue);
-    border: 1px solid rgba(8, 120, 181, 0.18);
-    color: var(--talent-blue);
+    background: var(--tm-surface);
+    border: 1px solid rgba(0, 86, 179, 0.18);
+    color: var(--tm-brand);
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
     font-size: 0.78rem;
     font-weight: 600;
@@ -2085,8 +2098,8 @@
 }
 
 .svcPillBtn:hover {
-    background: var(--talent-blue);
-    border-color: var(--talent-blue);
+    background: var(--tm-brand);
+    border-color: var(--tm-brand);
     color: var(--white);
 }
 
@@ -2102,7 +2115,7 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.75rem;
     letter-spacing: 0.1em;
-    color: var(--medium-grey);
+    color: var(--tm-body);
     font-variant-numeric: tabular-nums;
 }
 
@@ -2111,8 +2124,8 @@
     height: 44px;
     border-radius: 50%;
     border: 1.5px solid var(--neutral-border-active);
-    background: var(--white);
-    color: var(--midnight-navy);
+    background: var(--tm-canvas);
+    color: var(--tm-ink);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2121,9 +2134,9 @@
 }
 
 .svcArrowBtn:hover:not(:disabled) {
-    border-color: var(--talent-blue);
-    color: var(--talent-blue);
-    background: var(--mist-blue);
+    border-color: var(--tm-brand);
+    color: var(--tm-brand);
+    background: var(--tm-surface);
 }
 
 .svcArrowBtn:disabled {
@@ -2153,7 +2166,7 @@
 }
 
 .svcDotActive {
-    background: var(--talent-blue);
+    background: var(--tm-brand);
     width: 24px;
 }
 
@@ -2185,7 +2198,7 @@
         display: block;
         align-items: flex-start;
         background: #ffffff;
-        border: 1px solid rgba(8, 120, 181, 0.12);
+        border: 1px solid rgba(0, 86, 179, 0.12);
         border-radius: 16px;
         box-shadow: 0 4px 16px rgba(7, 26, 43, 0.04);
         text-align: left;
@@ -2202,7 +2215,7 @@
     }
 
     .positioningCard:last-child {
-        border-bottom: 1px solid rgba(8, 120, 181, 0.12);
+        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
     }
 
     .positioningTitle {
@@ -2210,20 +2223,20 @@
         font-weight: 700;
         margin: 0 0 0.3rem;
         line-height: 1.35;
-        color: var(--midnight-navy, #0f172a);
+        color: var(--tm-ink);
     }
 
     .positioningDesc {
         font-size: 0.92rem;
         line-height: 1.55;
-        color: var(--medium-grey, #64748b);
+        color: var(--tm-body);
         min-height: 2.8em;
     }
 
     .positioningCardActive {
-        background: #f0f7ff;
-        border-color: #93c5fd;
-        box-shadow: 0 6px 20px rgba(0, 114, 255, 0.08);
+        background: var(--tm-surface);
+        border-color: rgba(0, 86, 179, 0.35);
+        box-shadow: 0 6px 20px rgba(0, 86, 179, 0.08);
     }
 
     .positioningBadge {
@@ -2324,13 +2337,13 @@
         gap: 1rem;
         align-items: flex-start;
         background: #ffffff;
-        border: 1px solid rgba(8, 120, 181, 0.12);
+        border: 1px solid rgba(0, 86, 179, 0.12);
         border-radius: 14px;
         box-shadow: 0 2px 8px rgba(7, 26, 43, 0.04);
     }
 
     .positioningCard:last-child {
-        border-bottom: 1px solid rgba(8, 120, 181, 0.12);
+        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
     }
 
     .positioningIconBox {
@@ -2352,13 +2365,13 @@
         font-weight: 700;
         margin: 0 0 0.25rem;
         line-height: 1.35;
-        color: var(--midnight-navy, #0f172a);
+        color: var(--tm-ink);
     }
 
     .positioningDesc {
         font-size: 0.88rem;
         line-height: 1.55;
-        color: var(--medium-grey, #64748b);
+        color: var(--tm-body);
     }
 }
 
@@ -2512,11 +2525,11 @@
 
 
 /* ------------------------------------------------------------------ FAQ Section -- */
-.faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: #ffffff; }
+.faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: var(--tm-canvas); }
 .faqLayout { display: grid; grid-template-columns: 1fr 1.35fr; gap: clamp(2.5rem, 5vw, 4.5rem); align-items: flex-start; }
 .faqLeftCol { position: static; }
-.faqHeading { font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif; font-size: clamp(2.35rem, 3.8vw, 3.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; color: #0b0f19; margin: 0; }
-.faqSubtext { margin: 1.35rem 0 0; font-size: 1.05rem; line-height: 1.7; color: #64748b; max-width: 390px; }
+.faqHeading { font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif; font-size: clamp(2.35rem, 3.8vw, 3.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; color: var(--tm-ink); margin: 0; }
+.faqSubtext { margin: 1.35rem 0 0; font-size: 1.05rem; line-height: 1.7; color: var(--tm-body); max-width: 390px; }
 .faqRightCol { min-width: 0; }
 .faqBr { display: block; }
 
