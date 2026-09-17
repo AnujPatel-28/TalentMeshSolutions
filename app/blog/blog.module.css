@@ -48,7 +48,7 @@ take precedence over illustrative mockup photography and navigation. */
 .contents li{font-size:14px;line-height:1.5;padding-inline-start:4px}
 .contents a{color:var(--journal-blue);text-decoration:none}
 .contents a:hover{text-decoration:underline}
-.articleCover{position:relative;aspect-ratio:16/7;border-radius:8px;overflow:hidden;margin-block:34px 42px}
+.articleCover{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;margin-block:34px 42px}
 .articleCover img{object-fit:cover}
 .prose{font-size:18px;line-height:1.65;color:#253e50;max-width:68ch;margin-inline:auto}
 .prose p{margin:0 0 1.3em}
@@ -78,7 +78,7 @@ take precedence over illustrative mockup photography and navigation. */
 .retry{border:1px solid var(--journal-blue);background:transparent;color:var(--journal-blue);border-radius:6px;min-height:44px;padding:10px 20px;cursor:pointer;font:inherit}
 @media(max-width:1000px){.feature{gap:28px;grid-template-columns:1.15fr 1fr}.postGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){
-.journal{padding-block:112px 64px}.container,.articleContainer{width:calc(100% - 40px)}.intro{margin-block-end:36px}.publication{margin-bottom:20px;font-size:11px}.intro h1{font-size:clamp(48px,10.4vw,72px);line-height:1.06}.desktopBreak{display:none}.introDescription{font-size:17px;margin-top:20px}.feature{grid-template-columns:1fr;gap:28px}.feature .cover{aspect-ratio:16/10}.storyCopy h2{font-size:36px}.category{margin-bottom:14px}.excerpt{margin-block:16px}.archive{margin-block-start:56px}.postGrid{grid-template-columns:1fr;gap:40px}.articleHeader h1{font-size:clamp(38px,8vw,56px);line-height:1.13}.articleHeader .excerpt{font-size:17px}.breadcrumb{font-size:13px;margin-bottom:28px}.articleHeader .meta{font-size:13px}.articleHeader .meta>:first-child{flex-basis:100%}.articleCover{aspect-ratio:16/10;margin-block:28px}.contents{margin-block:28px}.prose{font-size:17px;line-height:1.65}.prose h2{font-size:32px}.prose h3{font-size:22px}.sectionHeader{flex-wrap:wrap;gap:12px}.sectionHeader h2{font-size:32px}
+.journal{padding-block:112px 64px}.container,.articleContainer{width:calc(100% - 40px)}.intro{margin-block-end:36px}.publication{margin-bottom:20px;font-size:11px}.intro h1{font-size:clamp(48px,10.4vw,72px);line-height:1.06}.desktopBreak{display:none}.introDescription{font-size:17px;margin-top:20px}.feature{grid-template-columns:1fr;gap:28px}.feature .cover{aspect-ratio:16/10}.storyCopy h2{font-size:36px}.category{margin-bottom:14px}.excerpt{margin-block:16px}.archive{margin-block-start:56px}.postGrid{grid-template-columns:1fr;gap:40px}.articleHeader h1{font-size:clamp(38px,8vw,56px);line-height:1.13}.articleHeader .excerpt{font-size:17px}.breadcrumb{font-size:13px;margin-bottom:28px}.articleHeader .meta{font-size:13px}.articleHeader .meta>:first-child{flex-basis:100%}.articleCover{aspect-ratio:16/9;margin-block:28px}.contents{margin-block:28px}.prose{font-size:17px;line-height:1.65}.prose h2{font-size:32px}.prose h3{font-size:22px}.sectionHeader{flex-wrap:wrap;gap:12px}.sectionHeader h2{font-size:32px}
 }
 @media(prefers-reduced-motion:reduce){.cover img{transition:none}}
 
@@ -116,3 +116,8 @@ take precedence over illustrative mockup photography and navigation. */
 @media(max-width:760px){
 .intro{margin-block-end:36px}.feature{gap:28px}.storyCopy h2{font-size:32px}.articleHeader h1{font-size:clamp(34px,8vw,48px)}.articleHeader .meta{font-size:14px}.prose h2{font-size:28px}
 }
+
+.prose .blogVisual{margin:40px 0 44px;padding:20px 0;border-block:1px solid var(--journal-rule)}
+.prose .blogVisual img{display:block;width:100%;height:auto;border-radius:8px;background:#eaf2f6}
+.prose .blogVisual figcaption{max-width:62ch}
+

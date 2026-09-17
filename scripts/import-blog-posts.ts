@@ -10,7 +10,7 @@
  * block-tools + @sanity/schema + a markdown-to-HTML parser + a local copy of the
  * Studio schema, to convert a markdown subset we author ourselves and fully control.
  *
- * Supported markdown: `##`/`###` headings, paragraphs, `-` bullets, `1.` numbered
+ * Supported markdown: local `![alt](/images/blog/...)` visuals, `##`/`###` headings, paragraphs, `-` bullets, `1.` numbered
  * lists, `**strong**`, `*em*`/`_em_`, and `[text](href)` links. Anything else — code
  * fences, tables, blockquotes, `#` or `####`+ headings, horizontal rules — aborts the
  * run with a file and line number rather than being silently dropped.
@@ -49,6 +49,8 @@ const BLOG_DIR = path.resolve(process.cwd(), 'content/blog');
 
 interface Span { _key: string; _type: 'span'; marks: string[]; text: string }
 interface MarkDef { _key: string; _type: 'link'; href: string }
+interface VisualBlock { _key: string; _type: 'blogVisual'; visual: string; alt: string }
+
 interface Block {
   _key: string;
   _type: 'block';
@@ -114,8 +116,8 @@ function textBlock(style: string, text: string): Block {
 }
 
 /** `lineOffset` is how many lines the frontmatter consumed, so errors cite the real file line. */
-function markdownToBlocks(markdown: string, file: string, lineOffset = 0): Block[] {
-  const blocks: Block[] = [];
+function markdownToBlocks(markdown: string, file: string, lineOffset = 0): (Block | VisualBlock)[] {
+  const blocks: (Block | VisualBlock)[] = [];
   let paragraph: string[] = [];
   let inComment = false;
 
@@ -138,6 +140,13 @@ function markdownToBlocks(markdown: string, file: string, lineOffset = 0): Block
       return;
     }
     if (!line) return flush();
+
+    const visual = /^!\[([^\]]*)\]\((\/images\/blog\/[^)]+)\)$/.exec(line);
+    if (visual) {
+      flush();
+      blocks.push({ _key: newKey(), _type: 'blogVisual', visual: visual[2], alt: visual[1] });
+      return;
+    }
 
     if (line.startsWith('```')) throw new Error(`${where}: code blocks are not styled by app/blog/[slug]/page.tsx`);
     if (line.startsWith('|')) throw new Error(`${where}: tables are not styled by app/blog/[slug]/page.tsx`);
@@ -183,7 +192,7 @@ interface Draft {
   authorName: string;
   publishedAt: string;
   status: string;
-  body: Block[];
+  body: (Block | VisualBlock)[];
 }
 
 const FIELDS = ['title', 'slug', 'excerpt', 'category', 'authorName', 'publishedAt', 'status'] as const;
@@ -214,7 +223,8 @@ function readDraft(filePath: string): Draft {
   const lineOffset = (source.slice(0, end + 4).match(/\n/g) ?? []).length;
   const body = markdownToBlocks(source.slice(end + 4), file, lineOffset);
   if (!body.length) throw new Error(`${file}: body is empty`);
-  if (body[0].style !== 'h2') throw new Error(`${file}: body should open with an H2, found "${body[0].style}"`);
+  const firstHeading = body.find((block) => '_type' in block && block._type === 'block' && block.style === 'h2');
+  if (!firstHeading) throw new Error(file + ': body must include an H2 heading');
 
   return {
     file,
@@ -287,6 +297,14 @@ async function main() {
 
   // Parse everything before touching the network, so a bad file aborts the whole run.
   const drafts = files.map(readDraft);
+  const jsonOutIndex = args.indexOf('--json-out');
+  if (jsonOutIndex !== -1) {
+    const output = args[jsonOutIndex + 1];
+    if (!output) throw new Error('--json-out requires a file path');
+    fs.writeFileSync(path.resolve(process.cwd(), output), JSON.stringify(drafts.map((draft) => ({ _type: 'post', title: draft.title, slug: {_type: 'slug', current: draft.slug}, excerpt: draft.excerpt, category: draft.category, authorName: draft.authorName, publishedAt: draft.publishedAt, status: 'draft', body: draft.body })), null, 2));
+    console.log(`Wrote ${output}`);
+    return;
+  }
   const existing = await fetchExisting();
 
   interface Action { draft: Draft; verb: 'create' | 'update' | 'skip'; target?: Existing; note?: string }

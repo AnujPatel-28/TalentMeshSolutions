@@ -14,7 +14,8 @@ import { POST_BY_SLUG_QUERY, RELATED_POSTS_QUERY } from '@/lib/sanity/queries';
 import { PostMeta, PostPreview, displayDate, type BlogPost } from '../post-preview';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
-type ArticlePost = BlogPost & { body: PortableTextBlock[] };
+type BlogVisual = { _key?: string; _type: 'blogVisual'; visual: string; alt?: string };
+type ArticlePost = BlogPost & { body: (PortableTextBlock | BlogVisual)[] };
 export const revalidate = 60;
 const getPost = cache(async (slug: string) => sanityClient.fetch<ArticlePost | null>(POST_BY_SLUG_QUERY, { slug }));
 const headingId = (key = '') => 'section-' + key.replace(/[^a-zA-Z0-9_-]/g, '');
@@ -33,6 +34,12 @@ const ptComponents: PortableTextComponents = {
     },
   },
   types: {
+    blogVisual: ({ value }: { value: BlogVisual }) => (
+      <figure className={styles.blogVisual}>
+        <img src={value.visual} alt={value.alt || ''} loading="lazy" decoding="async" />
+        {value.alt && <figcaption>{value.alt}</figcaption>}
+      </figure>
+    ),
     image: ({ value }) => {
       const src = urlForImage(value)?.width(1400).auto('format').url();
       if (!src) return null;
@@ -73,7 +80,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const related = post.category ? await sanityClient.fetch<BlogPost[]>(RELATED_POSTS_QUERY, { category: post.category, id: post.id }).catch(() => []) : [];
   const image = post.coverImage ? urlForImage(post.coverImage)?.width(1600).auto('format').url() : undefined;
   const body = Array.isArray(post.body) ? post.body : [];
-  const headings = body.filter(block => block._type === 'block' && ['h1', 'h2'].includes(block.style || '') && block._key).map(block => ({ id: headingId(block._key), text: block.children.map(child => child.text || '').join('') })).filter(heading => heading.text);
+  const headings = body.filter((block): block is PortableTextBlock => block._type === 'block' && ['h1', 'h2'].includes(block.style || '') && Boolean(block._key)).map(block => ({ id: headingId(block._key), text: block.children.map(child => child.text || '').join('') })).filter(heading => heading.text);
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title,
     description: post.excerpt, mainEntityOfPage: SITE_URL + '/blog/' + slug,
@@ -92,7 +99,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           {image && <div className={styles.articleCover}><Image src={image} alt={post.coverImage?.alt || ''} fill priority sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 980px) calc(100vw - 80px), 900px" /></div>}
           <div className={headings.length ? styles.readingLayout : undefined}>
             {headings.length > 0 && <ArticleContents headings={headings} />}
-            <div className={styles.prose}><PortableText value={body} components={ptComponents} /></div>
+            <div className={styles.prose}><PortableText value={body as PortableTextBlock[]} components={ptComponents} /></div>
           </div>
         </article>
         <div className={styles.articleEnd}><Link href="/blog" className={styles.readLink}><ArrowLeft size={18} aria-hidden="true" /> Back to the journal</Link></div>
