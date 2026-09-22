@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
 import { TALENTMESH_SERVICES } from '@/content/home';
 import styles from './Navbar.module.css';
 
@@ -18,7 +19,10 @@ const Navbar = () => {
     const [openNav, setOpenNav] = React.useState<NavKey | null>(null);
     // Which top-level mobile drawer section is expanded — collapsed (null) by default.
     const [expandedMobileSection, setExpandedMobileSection] = React.useState<NavKey | null>(null);
+    const [expandedMobileService, setExpandedMobileService] = React.useState<number | null>(null);
     const pathname = usePathname();
+    const mobileDialog = React.useRef<HTMLDialogElement>(null);
+    const mobileScroll = React.useRef<HTMLDivElement>(null);
 
     // Close mobile menu on route change
     React.useEffect(() => { setIsMenuOpen(false); }, [pathname]);
@@ -33,18 +37,41 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Prevent body scroll when mobile menu is open
+    // Native modal keeps focus inside the menu and makes the page behind it inert.
     React.useEffect(() => {
-        if (isMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-            setExpandedMobileSection(null);
-        }
+        const dialog = mobileDialog.current;
+        if (!isMenuOpen || !dialog) return;
+        const previousOverflow = document.body.style.overflow;
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+        const desktop = window.matchMedia('(min-width: 1025px)');
+        const closeOnDesktop = () => { if (desktop.matches) setIsMenuOpen(false); };
+        desktop.addEventListener('change', closeOnDesktop);
         return () => {
-            document.body.style.overflow = '';
+            dialog.close();
+            document.body.style.overflow = previousOverflow;
+            desktop.removeEventListener('change', closeOnDesktop);
         };
     }, [isMenuOpen]);
+
+    // Run after showModal and the accordion layout settle, including reopening
+    // on a service page. Only the menu's own scroll container is repositioned.
+    React.useEffect(() => {
+        if (!isMenuOpen || !expandedMobileSection) return;
+        const frame = requestAnimationFrame(() => {
+            const scroller = mobileScroll.current;
+            const heading = document.getElementById(`mobile-trigger-${expandedMobileSection}`);
+            if (!scroller || !heading) return;
+            scroller.scrollTop += heading.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+            if (expandedMobileSection === 'solutions' && expandedMobileService !== null) {
+                const service = document.getElementById(`mobile-service-trigger-${expandedMobileService}`);
+                if (service) {
+                    scroller.scrollTop += service.getBoundingClientRect().top - scroller.getBoundingClientRect().top - heading.offsetHeight;
+                }
+            }
+        });
+        return () => cancelAnimationFrame(frame);
+    }, [isMenuOpen, expandedMobileSection, expandedMobileService]);
 
     // ── Hide the Navbar entirely inside the dashboard (it has its own layout) ──
     if (pathname.startsWith('/dashboard')) return null;
@@ -54,7 +81,28 @@ const Navbar = () => {
         setIsMenuOpen(false);
     };
 
-    const toggleMenu = () => setIsMenuOpen(prev => !prev);
+    const toggleMenu = () => {
+        const serviceIndex = TALENTMESH_SERVICES.findIndex(service => service.actionPills.some(pill => pill.href === pathname));
+        setExpandedMobileService(serviceIndex < 0 ? null : serviceIndex);
+        setExpandedMobileSection(serviceIndex >= 0 ? 'solutions' : isPortalActive ? 'portal' : isCompanyActive ? 'company' : null);
+        setIsMenuOpen(prev => !prev);
+    };
+
+    const toggleMobileSection = (section: NavKey) => {
+        setExpandedMobileSection(prev => prev === section ? null : section);
+    };
+
+    const mobileLink = (href: string, label: string) => (
+        <Link
+            key={href}
+            href={href}
+            aria-current={pathname === href ? 'page' : undefined}
+            className={`${styles.mobileNavLink} ${pathname === href ? styles.mobileNavLinkActive : ''}`}
+        >
+            <span>{label}</span>
+            <ChevronRight size={18} aria-hidden="true" />
+        </Link>
+    );
 
     // Helper – returns true when the pathname starts with the given base
     const isActive = (base: string) => pathname.startsWith(base);
@@ -88,13 +136,13 @@ const Navbar = () => {
                     tabIndex={isMenuOpen ? -1 : undefined}
                 >
                     <Image
-                        src="/TalentMesh_page-0002-removebg-preview.png"
-                        alt="TalentMesh"
-                        width={180}
-                        height={50}
+                        src="/talentmesh-solutions-logo-transparent.png"
+                        alt="TalentMesh Solutions"
+                        width={2172}
+                        height={724}
+                        sizes="(max-width: 480px) 180px, 212px"
                         priority
                         className={styles.logoImg}
-                        unoptimized
                     />
                 </Link>
 
@@ -278,99 +326,132 @@ const Navbar = () => {
 
                 {/* ── Mobile Hamburger ── */}
                 <button
-                    className={`${styles.mobileToggle} ${isMenuOpen ? styles.open : ''}`}
+                    type="button"
+                    className={styles.mobileToggle}
                     onClick={toggleMenu}
-                    aria-label="Toggle menu"
+                    aria-label="Open navigation menu"
                     aria-expanded={isMenuOpen}
+                    aria-controls="mobile-navigation"
+                    aria-haspopup="dialog"
                 >
-                    <span className={styles.bar} />
-                    <span className={styles.bar} />
-                    <span className={styles.bar} />
+                    <span>Menu</span>
+                    <Menu size={22} strokeWidth={1.7} aria-hidden="true" />
                 </button>
             </div>
 
             {/* ── Mobile Drawer ── */}
-            <div className={`${styles.mobileNav} ${isMenuOpen ? styles.open : ''}`} aria-hidden={!isMenuOpen}>
-
-                <div className={styles.mobileNavItem}>
-                    <button
-                        type="button"
-                        className={styles.mobileNavSectionHeader}
-                        onClick={() => setExpandedMobileSection(prev => (prev === 'solutions' ? null : 'solutions'))}
-                        aria-expanded={expandedMobileSection === 'solutions'}
-                        aria-controls="mobile-section-solutions"
-                    >
-                        Talent Solutions
-                        <span className={styles.chevron} aria-hidden="true">▼</span>
+            <dialog
+                ref={mobileDialog}
+                id="mobile-navigation"
+                className={styles.mobileNav}
+                aria-label="Main navigation"
+                onCancel={() => setIsMenuOpen(false)}
+                onClick={(event) => {
+                    if ((event.target as Element).closest('a')) setIsMenuOpen(false);
+                }}
+            >
+                <div className={styles.mobileHeader}>
+                    <Link href="/" className={styles.logo} aria-label="TalentMesh Solutions home">
+                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="180px" className={styles.logoImg} />
+                    </Link>
+                    <button type="button" className={styles.mobileClose} onClick={() => setIsMenuOpen(false)} aria-label="Close navigation menu" autoFocus>
+                        <X size={24} strokeWidth={1.7} aria-hidden="true" />
                     </button>
-                    <div id="mobile-section-solutions" className={`${styles.mobileNavSectionBody} ${expandedMobileSection === 'solutions' ? styles.mobileNavSectionBodyOpen : ''}`}>
-                        <Link href="/contact" className={styles.mobileNavLink}>Hire Talent</Link>
-                        {TALENTMESH_SERVICES.map(service => (
-                            <React.Fragment key={service.title}>
-                                <span className={styles.mobileCategoryLabel}>{service.title}</span>
-                                {service.actionPills.map(pill => (
-                                    <Link
-                                        key={pill.href}
-                                        href={pill.href}
-                                        className={`${styles.mobileNavSubLink} ${pathname === pill.href ? styles.mobileNavLinkActive : ''}`}
+                </div>
+                <div ref={mobileScroll} className={styles.mobileScroll}>
+                    <div className={styles.mobileIntro}>
+                        <h2>People. Possibilities.<br /><span>The right connection.</span></h2>
+                    </div>
+                    <Link href="/" className={`${styles.mobileHome} ${isHome ? styles.mobileNavLinkActive : ''}`} aria-current={isHome ? 'page' : undefined}>Home<ArrowUpRight size={19} aria-hidden="true" /></Link>
+
+                    <div className={styles.mobileNavItem}>
+                        <button
+                            id="mobile-trigger-solutions"
+                            type="button"
+                            className={styles.mobileNavSectionHeader}
+                            onClick={() => toggleMobileSection('solutions')}
+                            aria-expanded={expandedMobileSection === 'solutions'}
+                            aria-controls="mobile-section-solutions"
+                        >
+                            <span>Talent Solutions<small>Build and grow your team</small></span>
+                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
+                        </button>
+                        <div id="mobile-section-solutions" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-solutions" hidden={expandedMobileSection !== 'solutions'}>
+                            {mobileLink('/contact', 'Hire Talent')}
+                            {TALENTMESH_SERVICES.map((service, index) => (
+                                <div key={service.title} className={styles.mobileService}>
+                                    <button
+                                        id={`mobile-service-trigger-${index}`}
+                                        type="button"
+                                        className={styles.mobileServiceTrigger}
+                                        onClick={() => setExpandedMobileService(prev => prev === index ? null : index)}
+                                        aria-expanded={expandedMobileService === index}
+                                        aria-controls={`mobile-service-${index}`}
                                     >
-                                        {pill.label}
-                                    </Link>
-                                ))}
-                            </React.Fragment>
-                        ))}
+                                        <span>{service.title}</span>
+                                        <ChevronDown size={18} aria-hidden="true" />
+                                    </button>
+                                    <div id={`mobile-service-${index}`} className={styles.mobileServiceLinks} hidden={expandedMobileService !== index}>
+                                        {service.actionPills.map(pill => mobileLink(pill.href, pill.label))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={styles.mobileNavItem}>
+                        <button
+                            id="mobile-trigger-portal"
+                            type="button"
+                            className={styles.mobileNavSectionHeader}
+                            onClick={() => toggleMobileSection('portal')}
+                            aria-expanded={expandedMobileSection === 'portal'}
+                            aria-controls="mobile-section-portal"
+                        >
+                            <span>Talent Portal<small>Find opportunities. Connect with talent.</small></span>
+                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
+                        </button>
+                        <div id="mobile-section-portal" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-portal" hidden={expandedMobileSection !== 'portal'}>
+                            {mobileLink('/talentmesh-portal', 'TalentMesh Portal')}
+                            {mobileLink('/job-seekers', 'Candidate Benefits')}
+                            {mobileLink('/employers/post-job', 'Post a Job')}
+                        </div>
+                    </div>
+
+                    <div className={styles.mobileNavItem}>
+                        <button
+                            id="mobile-trigger-company"
+                            type="button"
+                            className={styles.mobileNavSectionHeader}
+                            onClick={() => toggleMobileSection('company')}
+                            aria-expanded={expandedMobileSection === 'company'}
+                            aria-controls="mobile-section-company"
+                        >
+                            <span>Company<small>Meet TalentMesh and explore our insights</small></span>
+                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
+                        </button>
+                        <div id="mobile-section-company" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-company" hidden={expandedMobileSection !== 'company'}>
+                            {mobileLink('/about', 'About')}
+                            {mobileLink('/contact', 'Contact')}
+                            {mobileLink('/blog', 'Blog')}
+                            {mobileLink('/career-advice', 'Career Advice')}
+                        </div>
                     </div>
                 </div>
-
-                <div className={styles.mobileNavItem}>
-                    <button
-                        type="button"
-                        className={styles.mobileNavSectionHeader}
-                        onClick={() => setExpandedMobileSection(prev => (prev === 'portal' ? null : 'portal'))}
-                        aria-expanded={expandedMobileSection === 'portal'}
-                        aria-controls="mobile-section-portal"
-                    >
-                        Talent Portal
-                        <span className={styles.chevron} aria-hidden="true">▼</span>
-                    </button>
-                    <div id="mobile-section-portal" className={`${styles.mobileNavSectionBody} ${expandedMobileSection === 'portal' ? styles.mobileNavSectionBodyOpen : ''}`}>
-                        <Link href="/talentmesh-portal" className={`${styles.mobileNavLink} ${pathname === '/talentmesh-portal' ? styles.mobileNavLinkActive : ''}`}>TalentMesh Portal</Link>
-                        <Link href="/job-seekers" className={`${styles.mobileNavLink} ${pathname === '/job-seekers' ? styles.mobileNavLinkActive : ''}`}>Candidate Benefits</Link>
-                        <Link href="/employers/post-job" className={`${styles.mobileNavLink} ${pathname === '/employers/post-job' ? styles.mobileNavLinkActive : ''}`}>Post a Job</Link>
-                    </div>
-                </div>
-
-                <div className={styles.mobileNavItem}>
-                    <button
-                        type="button"
-                        className={styles.mobileNavSectionHeader}
-                        onClick={() => setExpandedMobileSection(prev => (prev === 'company' ? null : 'company'))}
-                        aria-expanded={expandedMobileSection === 'company'}
-                        aria-controls="mobile-section-company"
-                    >
-                        Company
-                        <span className={styles.chevron} aria-hidden="true">▼</span>
-                    </button>
-                    <div id="mobile-section-company" className={`${styles.mobileNavSectionBody} ${expandedMobileSection === 'company' ? styles.mobileNavSectionBodyOpen : ''}`}>
-                        <Link href="/about" className={`${styles.mobileNavLink} ${pathname === '/about' ? styles.mobileNavLinkActive : ''}`}>About</Link>
-                        <Link href="/contact" className={`${styles.mobileNavLink} ${pathname === '/contact' ? styles.mobileNavLinkActive : ''}`}>Contact</Link>
-                        <Link href="/blog" className={`${styles.mobileNavLink} ${pathname === '/blog' ? styles.mobileNavLinkActive : ''}`}>Blog</Link>
-                        <Link href="/career-advice" className={`${styles.mobileNavLink} ${isActive('/career-advice') ? styles.mobileNavLinkActive : ''}`}>Career Advice</Link>
-                    </div>
-                </div>
-
                 <div className={styles.mobileAuth}>
-                    <Link href="/login" className={styles.signupBtn} style={{ textAlign: 'center', justifyContent: 'center' }}>
-                        Get Started
+                    <Link href="/contact" className={styles.mobilePrimary}>
+                        Get Hiring Support<ArrowUpRight size={20} aria-hidden="true" />
                     </Link>
-                    <Link href="/login" className={styles.mobileLogin}>
-                        Candidate Log In
-                    </Link>
-                    <Link href="/login" className={styles.mobileLogin}>
-                        Recruiter Log In
-                    </Link>
+                    <div className={styles.mobileLoginRow}>
+                        <Link href="/login" className={styles.mobileLogin}>
+                            Candidate login
+                        </Link>
+                        <Link href="/login" className={styles.mobileLogin}>
+                            Recruiter login
+                        </Link>
+                    </div>
                 </div>
-            </div>
+            </dialog>
         </nav>
     );
 };
