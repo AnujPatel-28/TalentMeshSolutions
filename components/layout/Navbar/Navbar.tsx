@@ -140,7 +140,7 @@ const Navbar = () => {
                         alt="TalentMesh Solutions"
                         width={2172}
                         height={724}
-                        sizes="(max-width: 480px) 180px, 212px"
+                        sizes="(max-width: 1024px) 162px, 180px"
                         priority
                         className={styles.logoImg}
                     />
@@ -352,7 +352,7 @@ const Navbar = () => {
             >
                 <div className={styles.mobileHeader}>
                     <Link href="/" className={styles.logo} aria-label="TalentMesh Solutions home">
-                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="180px" className={styles.logoImg} />
+                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
                     </Link>
                     <button type="button" className={styles.mobileClose} onClick={() => setIsMenuOpen(false)} aria-label="Close navigation menu" autoFocus>
                         <X size={24} strokeWidth={1.7} aria-hidden="true" />
