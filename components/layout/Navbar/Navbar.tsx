@@ -3,14 +3,25 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronRight } from 'lucide-react';
 import { TALENTMESH_SERVICES } from '@/content/home';
 import styles from './Navbar.module.css';
 
 type NavKey = 'solutions' | 'portal' | 'company' | 'login';
 
+const MENU_EXIT_MS = 200;
+
+const MenuIcon = ({ expanded }: { expanded: boolean }) => (
+    <svg className={`${styles.menuIcon} ${expanded ? styles.menuIconExpanded : ''}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+        <path className={styles.menuIconTop} data-menu-line="top" d="M4 6h16" />
+        <path className={styles.menuIconMiddle} data-menu-line="middle" d="M4 12h16" />
+        <path className={styles.menuIconBottom} data-menu-line="bottom" d="M4 18h16" />
+    </svg>
+);
+
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isMenuClosing, setIsMenuClosing] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
     const [activeService, setActiveService] = React.useState(0);
     // Tracks which desktop dropdown currently has keyboard focus inside it, so its
@@ -24,8 +35,41 @@ const Navbar = () => {
     const mobileDialog = React.useRef<HTMLDialogElement>(null);
     const mobileScroll = React.useRef<HTMLDivElement>(null);
 
+    const finishClosingMenu = React.useCallback(() => {
+        setIsMenuOpen(false);
+        setIsMenuClosing(false);
+    }, []);
+
+    const closeMenu = () => {
+        if (isMenuClosing) return;
+        const dialog = mobileDialog.current;
+        if (!dialog || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            finishClosingMenu();
+            return;
+        }
+        // Capture an interrupted entrance so an early close never jumps to a
+        // fully open panel or icon before reversing. Keep the modal until exit ends.
+        dialog.style.setProperty('--menu-exit-clip', getComputedStyle(dialog).clipPath);
+        for (const line of ['top', 'middle', 'bottom']) {
+            const path = dialog.querySelector(`[data-menu-line="${line}"]`);
+            if (path) {
+                dialog.style.setProperty(`--icon-${line}-exit`, getComputedStyle(path).transform);
+                if (line === 'middle') dialog.style.setProperty('--icon-middle-opacity', getComputedStyle(path).opacity);
+            }
+        }
+        setIsMenuClosing(true);
+    };
+
+    // A fallback also releases focus/scroll if animationend is interrupted or
+    // the motion preference changes while the panel is closing.
+    React.useEffect(() => {
+        if (!isMenuClosing) return;
+        const timer = window.setTimeout(finishClosingMenu, MENU_EXIT_MS + 50);
+        return () => window.clearTimeout(timer);
+    }, [isMenuClosing, finishClosingMenu]);
+
     // Close mobile menu on route change
-    React.useEffect(() => { setIsMenuOpen(false); }, [pathname]);
+    React.useEffect(() => { finishClosingMenu(); }, [pathname, finishClosingMenu]);
 
     // Track page scroll position for transparent vs glassmorphic header
     React.useEffect(() => {
@@ -45,14 +89,14 @@ const Navbar = () => {
         dialog.showModal();
         document.body.style.overflow = 'hidden';
         const desktop = window.matchMedia('(min-width: 1025px)');
-        const closeOnDesktop = () => { if (desktop.matches) setIsMenuOpen(false); };
+        const closeOnDesktop = () => { if (desktop.matches) finishClosingMenu(); };
         desktop.addEventListener('change', closeOnDesktop);
         return () => {
             dialog.close();
             document.body.style.overflow = previousOverflow;
             desktop.removeEventListener('change', closeOnDesktop);
         };
-    }, [isMenuOpen]);
+    }, [isMenuOpen, finishClosingMenu]);
 
     // Run after showModal and the accordion layout settle, including reopening
     // on a service page. Only the menu's own scroll container is repositioned.
@@ -78,10 +122,11 @@ const Navbar = () => {
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setIsMenuOpen(false);
+        finishClosingMenu();
     };
 
     const toggleMenu = () => {
+        setIsMenuClosing(false);
         const serviceIndex = TALENTMESH_SERVICES.findIndex(service => service.actionPills.some(pill => pill.href === pathname));
         setExpandedMobileService(serviceIndex < 0 ? null : serviceIndex);
         setExpandedMobileSection(serviceIndex >= 0 ? 'solutions' : isPortalActive ? 'portal' : isCompanyActive ? 'company' : null);
@@ -334,8 +379,7 @@ const Navbar = () => {
                     aria-controls="mobile-navigation"
                     aria-haspopup="dialog"
                 >
-                    <span>Menu</span>
-                    <Menu size={22} strokeWidth={1.7} aria-hidden="true" />
+                    <MenuIcon expanded={isMenuOpen && !isMenuClosing} />
                 </button>
             </div>
 
@@ -345,17 +389,22 @@ const Navbar = () => {
                 id="mobile-navigation"
                 className={styles.mobileNav}
                 aria-label="Main navigation"
-                onCancel={() => setIsMenuOpen(false)}
+                data-closing={isMenuClosing}
+                style={{ '--menu-exit-duration': `${MENU_EXIT_MS}ms` } as React.CSSProperties}
+                onCancel={(event) => { event.preventDefault(); closeMenu(); }}
+                onAnimationEnd={(event) => {
+                    if (event.target === event.currentTarget && isMenuClosing) finishClosingMenu();
+                }}
                 onClick={(event) => {
-                    if ((event.target as Element).closest('a')) setIsMenuOpen(false);
+                    if ((event.target as Element).closest('a')) closeMenu();
                 }}
             >
                 <div className={styles.mobileHeader}>
                     <Link href="/" className={styles.logo} aria-label="TalentMesh Solutions home">
                         <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
                     </Link>
-                    <button type="button" className={styles.mobileClose} onClick={() => setIsMenuOpen(false)} aria-label="Close navigation menu" autoFocus>
-                        <X size={24} strokeWidth={1.7} aria-hidden="true" />
+                    <button type="button" className={styles.mobileClose} onClick={closeMenu} aria-label="Close navigation menu" autoFocus>
+                        <MenuIcon expanded={isMenuOpen && !isMenuClosing} />
                     </button>
                 </div>
                 <div ref={mobileScroll} className={styles.mobileScroll}>
