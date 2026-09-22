@@ -217,8 +217,8 @@ const Navbar = () => {
                                     <h3 className={styles.megaIntroTitle}>Talent Solutions</h3>
                                     <p className={styles.megaIntroText}>
                                         From flexible staffing to global capability centers, we design
-                                        end-to-end workforce solutions that scale with your business
-                                        and fit the way your team hires today.
+                                        end-to-end workforce solutions that scale with your business,
+                                        whichever hiring model fits your team today.
                                     </p>
                                     <div className={styles.megaIntroActions}>
                                         <Link href="/contact" className={styles.megaCtaPrimary}>Hire Talent</Link>
