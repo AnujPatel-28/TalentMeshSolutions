@@ -57,7 +57,7 @@ const Footer = () => {
                 <div className={styles.grid}>
                     <div className={styles.branding}>
                         <Link href="/" className={styles.logo}>
-                            <Image src="/TalentMesh_page-0002-removebg-preview.png" alt="TalentMesh" width={150} height={34} />
+                            <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="180px" />
                         </Link>
                         <p className={styles.description}>
                             Trusted Recruitment & Staffing Partner Across India
