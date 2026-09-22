@@ -48,7 +48,7 @@ const Features = () => {
                 </div>
 
                 <div className={styles.featureAction}>
-                    <Link href="/signup" className={styles.ctaBtn}>
+                    <Link href="/login" className={styles.ctaBtn}>
                         Start Hiring Now
                     </Link>
                 </div>

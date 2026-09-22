@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import styles from '@/app/dashboard/shared-dashboard.module.css';
+import styles from './skeleton.module.css';
 
 interface SkeletonProps {
     width?: string | number;

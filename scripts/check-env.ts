@@ -20,8 +20,7 @@ if (!envLoaded) {
 }
 
 const REQUIRED_PUBLIC_VARS = [
-  'NEXT_PUBLIC_INSFORGE_URL',
-  'NEXT_PUBLIC_INSFORGE_ANON_KEY'
+  'NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY'
 ];
 
 // Validator script for environment governance
@@ -42,16 +41,7 @@ REQUIRED_PUBLIC_VARS.forEach((key) => {
   }
 });
 
-// 2. Verify Server variables (Service key can be named either INSFORGE_SERVICE_KEY or INSFORGE_ADMIN_KEY)
-const serviceKey = process.env.INSFORGE_SERVICE_KEY || process.env.INSFORGE_ADMIN_KEY;
-if (!serviceKey) {
-  missingRequired.push('INSFORGE_SERVICE_KEY');
-  failed = true;
-} else {
-  console.log(`  ✓ INSFORGE_SERVICE_KEY (or INSFORGE_ADMIN_KEY) is set`);
-}
-
-// 3. Verify prefix safety
+// 2. Verify prefix safety
 Object.keys(process.env).forEach((key) => {
   if (key.startsWith('NEXT_PUBLIC_')) {
     // It is public. Ensure it doesn't contain terms suggesting it holds secret keys

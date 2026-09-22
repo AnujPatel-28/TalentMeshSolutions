@@ -1,0 +1,1030 @@
+/*
+ * Styles for `/about` only.
+ * Tokens from app/globals.css (:root). Light-only page.
+ * Premium but approachable: generous air, serif vision moment,
+ * quiet cards, one tinted band. No dark sections.
+ */
+
+.section {
+  position: relative;
+  padding: 5.5rem 1.5rem;
+  overflow: hidden;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  background: var(--fresh-sky, #dcecf5);
+  color: #0369a1;
+  border: 1px solid rgba(3, 105, 161, 0.18);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--deep-navy, #000);
+  text-wrap: balance;
+  margin-bottom: 1rem;
+}
+
+.lede {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--medium-grey, #475569);
+  max-width: 46rem;
+  text-wrap: pretty;
+}
+
+/* ---------- cinematic hero (full-bleed, dark) ---------- */
+
+.heroCinematic {
+  position: relative;
+  min-height: 92vh;
+  min-height: 92svh;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  background: #071a2b;
+  isolation: isolate;
+}
+
+/* fill injects its own positioning; the wrapper owns the box so the
+   mobile stacked layout can resize it with pure CSS. */
+.heroCinematicMedia {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroCinematicBg {
+  object-fit: cover;
+  object-position: 28% center;
+}
+
+/* Left-to-right legibility gradient + bottom vignette + brand-blue bloom.
+   Tuned so white text holds 4.5:1 over both the lamp-lit faces (left)
+   and the dark negative space (right). */
+.heroCinematicScrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(7, 26, 43, 0.6) 0%, rgba(7, 26, 43, 0.35) 38%, rgba(7, 26, 43, 0.35) 55%, rgba(7, 26, 43, 0.72) 100%),
+    linear-gradient(0deg, rgba(7, 26, 43, 0.82) 0%, transparent 34%),
+    radial-gradient(820px 420px at 12% 18%, rgba(8, 120, 181, 0.38), transparent 62%);
+}
+
+.heroCinematicInner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  /* Photography owns the left; copy docks right over the dark negative space. */
+  padding: 7.5rem 1.5rem 5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.heroCinematicCopy {
+  max-width: 600px;
+  display: grid;
+  gap: 1rem;
+  align-content: center;
+}
+
+.heroCinematicEyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.heroCinematicEyebrow::after {
+  content: '';
+  display: block;
+  width: 2.25rem;
+  height: 2px;
+  background: var(--talent-blue, #0878b5);
+  margin-top: 0.9rem;
+}
+
+.heroCinematicTitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: #fff;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.heroCinematicTitleLight {
+  font-weight: 300;
+}
+
+.heroCinematicTitleAccent {
+  background: linear-gradient(90deg, #5ec2f2 0%, #2f9fe0 60%, #0878b5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heroCinematicSub {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 26rem;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.heroCinematicActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 0.62rem;
+}
+
+/* Same vivid gradient as the navbar "Get Started" button. */
+.btnPrimaryBlue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #00c6ff 0%, #007bff 60%, #0056b3 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  box-shadow: 0 6px 24px rgba(0, 123, 255, 0.35);
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.btnPrimaryBlue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0, 123, 255, 0.5);
+}
+
+.btnOutlineLight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.7rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.btnOutlineLight:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.heroCinematicTrust {
+  list-style: none;
+  padding: 1.25rem 0 0;
+  margin: 0.5rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  gap: 1.5rem;
+}
+
+.heroCinematicTrust li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  color: var(--sky-blue, #78b9d9);
+}
+
+.heroCinematicTrust li + li {
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  padding-left: 1.5rem;
+}
+
+.heroCinematicTrust span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.heroCinematicTrust strong {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.heroCinematicTrust small {
+  display: block;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.heroCinematicStrip {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.heroCinematicStrip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.heroCinematicStrip span::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ---------- shared buttons (AboutCTA + hero) ---------- */
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.75rem;
+  border-radius: 100px;
+  background: var(--talent-blue, #0878b5);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-glow-blue, 0 4px 20px rgba(8, 120, 181, 0.25));
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-hover, 0 8px 30px rgba(8, 120, 181, 0.4));
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.75rem;
+  border-radius: 100px;
+  background: #fff;
+  color: var(--ink-black, #071a2b);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1px solid var(--tm-border, #e2e5ea);
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.btnSecondary:hover {
+  border-color: var(--talent-blue, #0878b5);
+  color: var(--talent-blue, #0878b5);
+  transform: translateY(-2px);
+}
+
+/* ---------- vision (full-viewport editorial statement) ---------- */
+
+.vision {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 1.5rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.visionInner {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0;
+  justify-items: center;
+}
+
+/* Flanking editorial cards: one pinned to each corner of the section,
+   framing the text block. GSAP owns `transform` for the one-shot settle-in;
+   these rules just anchor the resting corner, so the two never fight. */
+.visionSide {
+  position: absolute;
+  top: 8%;
+  /* Smaller than a flanking pair needed — all 4 are visible together now,
+     so each one carries less visual weight. */
+  width: clamp(140px, 14vw, 190px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.visionSideLeft {
+  left: clamp(0.75rem, 3vw, 3rem);
+}
+
+.visionSideRight {
+  right: clamp(0.75rem, 3vw, 3rem);
+}
+
+/* Trust pair anchors to the bottom corners instead of the top. */
+.visionSideLower {
+  top: auto;
+  bottom: 8%;
+}
+
+.visionSideImage {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(7, 26, 43, 0.08);
+  /* Mutes the source photos' stock-bright grade toward the brand's documented
+     muted/desaturated editorial tone, without flattening to grayscale. */
+  filter: saturate(0.85) contrast(1.03);
+  box-shadow:
+    0 16px 32px -8px rgba(7, 26, 43, 0.16),
+    0 4px 10px rgba(7, 26, 43, 0.06);
+}
+
+/* Wrapper is invisible on desktop so absolute corners still anchor to the
+   section; on mobile it becomes the 2x2 grid below the copy. */
+.visionSides {
+  display: contents;
+}
+
+@media (max-width: 1100px) {
+  .vision {
+    flex-direction: column;
+  }
+
+  .visionInner {
+    order: 1;
+  }
+
+  .visionSides {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    order: 2;
+    width: 100%;
+    max-width: 420px;
+    margin: 2rem auto 0;
+  }
+
+  .visionSide {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+  }
+
+  .visionSideImage {
+    border-radius: 12px;
+  }
+}
+
+.visionKicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--talent-blue, #0878b5);
+  margin: 0 0 1.25rem;
+}
+
+.visionQuote {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ink-black, #071a2b);
+  text-wrap: balance;
+  margin: 0 0 2rem;
+}
+
+/* Upright brand-blue accent — no italic. Calm, confident, uniform. */
+.visionQuote em {
+  font-style: normal;
+  color: var(--talent-blue, #0878b5);
+}
+
+/* Upright brand-blue accent for the SplitText accent span — mirrors
+   .visionQuote em (the reduced-motion/noscript fallback's accent markup). */
+.visionQuoteAccent {
+  font-style: normal;
+  color: var(--talent-blue, #0878b5);
+}
+
+.visionBody {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--medium-grey, #475569);
+  max-width: 40rem;
+  margin: 0 auto 1.25rem;
+  text-wrap: pretty;
+  /* BlurText renders as flex-wrap; center its word spans. No-op on plain <p>. */
+  justify-content: center;
+}
+
+.visionPositioning {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #64748b;
+  border-top: 1px solid var(--tm-border, #e2e5ea);
+  padding-top: 1.25rem;
+  max-width: 38rem;
+  margin: 0 auto;
+  text-wrap: pretty;
+  /* Same flex-centering note as .visionBody above. */
+  justify-content: center;
+}
+
+/* ---------- cards (principles / services) ---------- */
+
+.tint {
+  background-color: #f0f7ff;
+}
+
+/* Matches the font treatment of the homepage's "More Than Recruitment. A
+   Hiring Partner." heading (home.module.css .h2 + .sectionTint .h2). */
+.tint .h2 {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #0056b3;
+}
+
+/* "What We Stand For" grain treatment — mirrors home WhyUs (.whyTint):
+   top-right grain + 180°-rotated bottom-left copy via a pseudo-element
+   (backgrounds can't be rotated individually). Scoped here so the other
+   about sections are unaffected. Same file = no extra image request.
+   (.tint already supplies the #f0f7ff base; repeated for explicitness.) */
+.principlesGrain {
+  background-color: #f0f7ff;
+  background-image: url('/graintest.png');
+  background-size: min(580px, 45vw) auto;
+  background-position: top right;
+  background-repeat: no-repeat;
+}
+
+.principlesGrain::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(580px, 45vw);
+  aspect-ratio: 810 / 700;
+  background-image: url('/graintest.png');
+  background-size: contain;
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  transform: rotate(180deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.principlesGrain .inner {
+  position: relative;
+  z-index: 1;
+}
+
+.cardGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+/* One shared grain accent across the three "What We Do" cards: the same
+   /graintest.png asset on each card, top-right corner like the home
+   treatment. The file is faint alpha grain (~8% mean opacity), so card
+   text contrast is unaffected. Scoped to .servicesGrid so the Principles
+   cards reusing .card stay clean. Backgrounds paint below content, so no
+   z-index work is needed. */
+.servicesGrid .card {
+  background-image: url('/graintest.png');
+  background-size: 240px auto;
+  background-position: top right;
+  background-repeat: no-repeat;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--tm-border, #e2e5ea);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(7, 26, 43, 0.05));
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(7, 26, 43, 0.1));
+  border-color: rgba(8, 120, 181, 0.3);
+}
+
+.cardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fresh-sky, #dcecf5);
+  color: var(--talent-blue, #0878b5);
+  margin-bottom: 1rem;
+}
+
+.cardIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink-black, #071a2b);
+  margin-bottom: 0.5rem;
+}
+
+.cardDesc {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--medium-grey, #475569);
+  text-wrap: pretty;
+}
+
+.cardList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.cardList li {
+  font-size: 0.92rem;
+  color: #334155;
+  padding-left: 1.25rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.cardList li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--talent-blue, #0878b5);
+  font-weight: 800;
+}
+
+/* ---------- process ---------- */
+
+.processGrid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+.processImage {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg, 24px);
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(7, 26, 43, 0.1));
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
+.stepList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--tm-border, #e2e5ea);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  align-items: start;
+}
+
+.stepNum {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-black, #071a2b);
+  background: var(--fresh-sky, #dcecf5);
+  border-radius: 100px;
+  padding: 0.3rem 0.7rem;
+  white-space: nowrap;
+}
+
+.stepTitle {
+  font-weight: 800;
+  color: var(--ink-black, #071a2b);
+  margin-bottom: 0.25rem;
+}
+
+.stepDesc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--medium-grey, #475569);
+}
+
+/* ---------- industries + base ---------- */
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  align-items: start;
+}
+
+.pillWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pill {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  background: #fff;
+  border: 1px solid var(--tm-border, #e2e5ea);
+  border-radius: 100px;
+  padding: 0.55rem 1rem;
+  white-space: nowrap;
+}
+
+.baseCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  color: var(--deep-navy, #071a2b);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(7, 26, 43, 0.1));
+}
+
+.baseCardOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.baseCardContent {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.baseCard h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+.baseCard p {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--medium-grey, #475569);
+  margin-bottom: 1rem;
+}
+
+.baseMeta {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--medium-grey, #475569);
+}
+
+.baseMeta strong {
+  color: var(--deep-navy, #071a2b);
+}
+
+/* ---------- about CTA ---------- */
+
+.ctaCard {
+  /* ASCII-dot texture over the brand gradient: navy scrim holds white-text
+     contrast over the image's bright top-center; deep navy fallback while
+     the image loads. (Same scrim technique as .heroCinematicScrim.) */
+  background:
+    linear-gradient(135deg, rgba(7, 26, 43, 0.55) 0%, rgba(7, 26, 43, 0.15) 100%),
+    url('/images/about/ascii-magic-2.png') center / cover no-repeat,
+    var(--deep-blue-gradient, linear-gradient(135deg, #071a2b 0%, #0878b5 100%));
+  border-radius: var(--radius-lg, 24px);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2.5rem;
+  align-items: center;
+  color: #fff;
+  box-shadow: var(--shadow-xl, 0 20px 35px rgba(7, 26, 43, 0.12));
+}
+
+.ctaHeading {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin-bottom: 1rem;
+}
+
+.ctaDesc {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+  max-width: 30rem;
+}
+
+.ctaCard .btnPrimary {
+  background: #fff;
+  color: var(--ink-black, #071a2b);
+  box-shadow: none;
+}
+
+.ctaDetails {
+  display: grid;
+  gap: 1rem;
+  font-style: normal;
+  font-size: 0.95rem;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaRow svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ctaRow a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1024px) {
+  .processGrid,
+  .splitGrid,
+  .ctaCard {
+    grid-template-columns: 1fr;
+  }
+
+  .cardGrid3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .principlesGrain::after {
+    width: min(420px, 70vw);
+  }
+
+  .heroCinematic {
+    min-height: auto;
+  }
+
+  .heroCinematicCopy {
+    max-width: 540px;
+  }
+
+  .heroCinematicBg {
+    object-position: 35% center;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 4rem 1.25rem;
+  }
+
+  .baseCard {
+    min-height: 220px;
+  }
+
+  .baseCardContent {
+    padding: 1.5rem;
+  }
+
+  /* Vision: kill forced viewport height on mobile — content sizes the
+     section. Kicker hidden here because the sticky SectionMarker already
+     says "Our Vision". */
+  .vision {
+    min-height: auto;
+    padding: 4rem 1.25rem 3rem;
+  }
+
+  .visionKicker {
+    display: none;
+  }
+
+  .visionQuote {
+    font-size: clamp(1.9rem, 8vw, 2.4rem);
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .visionBody {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+
+  .visionPositioning {
+    font-size: 0.88rem;
+    padding-top: 1rem;
+  }
+
+  .cardGrid3 {
+    grid-template-columns: 1fr;
+  }
+
+  .servicesGrid .card {
+    background-size: 200px auto;
+  }
+
+  /* Photo becomes a compact top crop; copy flows below on solid navy. */
+  .heroCinematic {
+    display: block;
+  }
+
+  .heroCinematicMedia {
+    position: relative;
+    height: 32svh;
+    min-height: 220px;
+  }
+
+  /* Feather photo bottom into navy copy — mobile only, easy to remove. */
+  .heroCinematicMedia::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 88px;
+    background: linear-gradient(
+      to bottom,
+      rgba(7, 26, 43, 0) 0%,
+      rgba(7, 26, 43, 0.55) 45%,
+      #071a2b 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .heroCinematicBg {
+    /* Left-biased: keep people (left), crop dusk city (right). */
+    object-position: 18% 30%;
+  }
+
+  .heroCinematicScrim {
+    background:
+      linear-gradient(0deg, rgba(7, 26, 43, 0.9) 0%, rgba(7, 26, 43, 0.4) 40%, transparent 65%),
+      radial-gradient(600px 300px at 50% 0%, rgba(8, 120, 181, 0.3), transparent 65%);
+  }
+
+  .heroCinematicInner {
+    position: relative;
+    margin-top: -32px;
+    padding: 2rem 1.25rem calc(2.5rem + env(safe-area-inset-bottom, 0px));
+    padding-top: calc(2rem + 32px);
+  }
+
+  .heroCinematicCopy {
+    max-width: none;
+    gap: 0.85rem;
+  }
+
+  /* 0.32em tracking overflowed at 320px — tighten for mobile. */
+  .heroCinematicEyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    line-height: 1.5;
+    max-width: 100%;
+    text-wrap: balance;
+  }
+
+  .heroCinematicEyebrow::after {
+    margin-top: 0.7rem;
+  }
+
+  .heroCinematicTitle {
+    font-size: clamp(2.3rem, 9vw, 2.7rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .heroCinematicSub {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+
+  .heroCinematicActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .btnPrimaryBlue,
+  .btnOutlineLight {
+    width: 100%;
+    min-height: 52px;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  /* AA fix mobile-only: raw #00C6FF start drops to ~2:1 on white.
+     Matches the home hero's #0090CC floor. */
+  .btnPrimaryBlue {
+    background: linear-gradient(90deg, #0090CC 0%, #007BFF 45%, #0056b3 100%);
+  }
+
+  .btnPrimaryBlue:active {
+    transform: scale(0.98);
+  }
+
+  .btnOutlineLight:active {
+    background: rgba(255, 255, 255, 0.22);
+    transform: scale(0.98);
+  }
+
+  /* Mobile-only: hide trust pills, keep desktop row intact. */
+  .heroCinematicTrust {
+    display: none;
+  }
+
+  .heroCinematicStrip {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .btnPrimary,
+  .btnSecondary {
+    transition: none;
+  }
+}

@@ -1,0 +1,33 @@
+/* React Bits TextType — base styles (verbatim) plus TalentMesh vision scoping. */
+
+.text-type {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.text-type__cursor {
+  margin-left: 0.25rem;
+  display: inline-block;
+  opacity: 1;
+}
+
+.text-type__cursor--hidden {
+  display: none;
+}
+
+/* Vision statement typing: blinking cursor in brand blue. */
+.vision-typing .text-type__cursor {
+  color: var(--talent-blue, #0878b5);
+  font-weight: 400;
+}
+
+/* The accent phrase keeps its gradient-italic serif treatment while typing.
+   `!important` beats the inline `color` style TextType sets on its content
+   span; the base (unsplit, static) sentence needs no override. */
+.vision-typing-accent .text-type__content {
+  font-style: italic;
+  background: var(--blue-gradient, linear-gradient(135deg, #0878b5 0%, #78b9d9 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}

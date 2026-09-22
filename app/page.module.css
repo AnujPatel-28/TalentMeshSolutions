@@ -9,7 +9,7 @@
 /* Removed Hero styles as they are now in components/landing/landing.module.css */
 
 .features {
-  padding: 8rem 2rem;
+  padding: clamp(4rem, 8vw, 8rem) var(--tm-page-gutter);
   background: var(--white);
 }
 
@@ -37,15 +37,15 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .featureCard {
   background: var(--white);
-  padding: 2.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   border-radius: 1.5rem;
   border: 1px solid rgba(0, 52, 89, 0.05); /* very light deep space blue */
   transition: all 0.3s ease;

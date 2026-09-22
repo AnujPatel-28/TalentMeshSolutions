@@ -1,16 +1,5 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "cleanUrls": true,
-  "functions": {
-    "app/api/candidate-profile/route.ts": {
-      "maxDuration": 30
-    },
-    "app/api/upload-resume/route.ts": {
-      "maxDuration": 30
-    },
-    "app/api/ai/**/*.ts": {
-      "maxDuration": 30
-    }
-  }
+  "cleanUrls": true
 }

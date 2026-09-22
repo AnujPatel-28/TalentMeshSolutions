@@ -1,21 +1,15 @@
 import type { NextConfig } from "next";
 
-const insforgeUrl = process.env.NEXT_PUBLIC_INSFORGE_URL;
-
-if (!insforgeUrl) {
-  console.warn('⚠️ WARNING: Missing NEXT_PUBLIC_INSFORGE_URL environment variable. API connections and images may fail.');
-}
-
-// Comprehensive Content Security Policy granting Next.js development access 
-// while explicitly clamping frame-ancestors and restricting API connections to self / InsForge.
+// Content Security Policy for the marketing site: no backend, so connect-src only needs
+// Web3Forms (lead-capture forms) and Sanity (blog content + images).
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cal.com https://*.cal.com https://app.cal.com;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://cal.com https://*.cal.com https://app.cal.com https://*.insforge.app https://cdn.insforge.dev https://insforge-storage.s3.us-east-2.amazonaws.com https://*.s3.us-east-2.amazonaws.com https://avatars.githubusercontent.com https://lh3.googleusercontent.com https://images.unsplash.com;
+    img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://api.web3forms.com https://cal.com https://*.cal.com https://app.cal.com https://*.insforge.app ${insforgeUrl} https://insforge-storage.s3.us-east-2.amazonaws.com https://*.s3.us-east-2.amazonaws.com https://api.anthropic.com wss:;
-    frame-src 'self' blob: https://cal.com https://*.cal.com https://app.cal.com;
+    connect-src 'self' https://api.web3forms.com https://*.api.sanity.io https://*.apicdn.sanity.io;
+    frame-src 'self' blob:;
     frame-ancestors 'none';
 `;
 
@@ -32,32 +26,33 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.insforge.app",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.insforge.dev",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
       {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+      },
     ],
   },
+  // Static media under public/ is not content-hashed, so it must not be marked
+  // immutable — a replaced file would be stuck in browser caches. A day of hard
+  // caching plus a week of background revalidation keeps repeat visits off the
+  // network with bounded staleness; rename the file if a change must land at once.
+  // Does not apply to /_next/image, which the optimizer caches separately.
   async headers() {
     return [
+      {
+        source: "/:path*.(png|jpg|jpeg|webp|avif|svg|ico|mp4|webm|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
       {
         source: "/(.*)",
         headers: [
@@ -96,20 +91,8 @@ const nextConfig: NextConfig = {
         destination: '/portals/jobs/job-seekers',
       },
       {
-        source: '/about',
-        destination: '/portals/jobs/about',
-      },
-      {
         source: '/contact',
         destination: '/portals/jobs/contact',
-      },
-      {
-        source: '/candidates',
-        destination: '/dashboard/admin/candidates',
-      },
-      {
-        source: '/recruiters',
-        destination: '/dashboard/admin/recruiters',
       },
     ];
 

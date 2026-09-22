@@ -1,170 +1,110 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
+import type { Metadata } from 'next';
+import { cache } from 'react';
 import Link from 'next/link';
+import Image from '../blog-image';
+import { notFound } from 'next/navigation';
+import { PortableText, type PortableTextComponents } from 'next-sanity';
+import type { PortableTextBlock } from '@portabletext/types';
+import { ArrowLeft } from 'lucide-react';
 import styles from '../blog.module.css';
-import AnimateOnScroll from '@/components/AnimateOnScroll';
-import { SafeBlogContent } from '@/components/blog/SafeBlogContent';
-import { publicInsforge } from '@/lib/insforge';
-import HeroBg from '@/components/ui/HeroBg/HeroBg';
-import { LoadingScreen } from '@/components/ui';
+import ArticleContents from '../article-contents';
+import { sanityClient } from '@/lib/sanity/client';
+import { urlForImage } from '@/lib/sanity/image';
+import { POST_BY_SLUG_QUERY, RELATED_POSTS_QUERY } from '@/lib/sanity/queries';
+import { PostMeta, PostPreview, displayDate, type BlogPost } from '../post-preview';
 
-const IconArrowLeft = () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 12H5m7-7-7 7 7 7" />
-    </svg>
-);
+const SITE_URL = 'https://talentmeshsolutions.com';
+type BlogVisual = { _key?: string; _type: 'blogVisual'; visual: string; alt?: string };
+type ArticlePost = BlogPost & { body: (PortableTextBlock | BlogVisual)[] };
+export const revalidate = 60;
+const getPost = cache(async (slug: string) => sanityClient.fetch<ArticlePost | null>(POST_BY_SLUG_QUERY, { slug }));
+const headingId = (key = '') => 'section-' + key.replace(/[^a-zA-Z0-9_-]/g, '');
+const ptComponents: PortableTextComponents = {
+  block: {
+    h1: ({ children, value }) => <h2 id={headingId(value._key)}>{children}</h2>,
+    h2: ({ children, value }) => <h2 id={headingId(value._key)}>{children}</h2>,
+    h3: ({ children, value }) => <h3 id={headingId(value._key)}>{children}</h3>,
+    h4: ({ children, value }) => <h4 id={headingId(value._key)}>{children}</h4>,
+  },
+  marks: {
+    link: ({ children, value }) => {
+      const href = typeof value?.href === 'string' ? value.href : '';
+      if (!/^(https?:\/\/|mailto:|tel:|\/|#)/i.test(href) || href.startsWith('//')) return <>{children}</>;
+      return <a href={href}>{children}</a>;
+    },
+  },
+  types: {
+    blogVisual: ({ value }: { value: BlogVisual }) => (
+      <figure className={styles.blogVisual}>
+        <img src={value.visual} alt={value.alt || ''} loading="lazy" decoding="async" />
+        {value.alt && <figcaption>{value.alt}</figcaption>}
+      </figure>
+    ),
+    image: ({ value }) => {
+      const src = urlForImage(value)?.width(1400).auto('format').url();
+      if (!src) return null;
+      return <figure>
+        {/* CMS image dimensions vary; preserve the complete image without cropping. */}
 
-const IconArrowRight = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12h14m-7-7 7 7-7 7" />
-    </svg>
-);
+        <img src={src} alt={value.alt || ''} loading="lazy" decoding="async" />
+        {value.caption && <figcaption>{value.caption}</figcaption>}
+      </figure>;
+    },
+    code: ({ value }) => <pre><code>{value.code}</code></pre>,
+    table: ({ value }) => {
+      const rows = value.rows as { _key?: string; cells: string[] }[] | undefined;
+      if (!rows?.length) return null;
+      return <div className={styles.tableScroll} role="region" aria-label="Article table" tabIndex={0}><table><tbody>{rows.map((row, i) => <tr key={row._key || i}>{row.cells.map((cell, j) => <td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>;
+    },
+  },
+};
 
-export default function BlogDetailPage() {
-    const { slug } = useParams();
-    const router = useRouter();
-    const [post, setPost] = useState<any>(null);
-    const [related, setRelated] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) return { title: 'Article not found', robots: { index: false, follow: true } };
+  const image = post.coverImage ? urlForImage(post.coverImage)?.width(1200).height(630).auto('format').url() : undefined;
+  return {
+    title: post.title, description: post.excerpt,
+    alternates: { canonical: '/blog/' + slug },
+    openGraph: { title: post.title, description: post.excerpt, url: SITE_URL + '/blog/' + slug, siteName: 'TalentMesh Solutions', type: 'article', publishedTime: displayDate(post.publishedAt) ? post.publishedAt : undefined, authors: [post.authorName || 'TalentMesh Editorial'], images: image ? [{ url: image, width: 1200, height: 630 }] : undefined },
+    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt, images: image ? [image] : undefined },
+  };
+}
 
-    useEffect(() => {
-        async function fetchPost() {
-            try {
-                const slugStr = Array.isArray(slug) ? slug[0] : slug;
-
-                // Fetch article by slug
-                const { data: postData, error: postError } = await publicInsforge.database
-                    .from('blog')
-                    .select('id, title, slug, excerpt, content, category, cover_image, status, created_at, author_id, author:profiles(name)')
-                    .eq('slug', slugStr)
-                    .eq('status', 'published')
-                    .single();
-
-                if (postError || !postData) {
-                    throw new Error('Not found');
-                }
-
-                setPost(postData);
-
-                // Fetch related posts in same category, excluding current article
-                const { data: relatedData } = await publicInsforge.database
-                    .from('blog')
-                    .select('id, title, slug, category, cover_image, created_at')
-                    .eq('status', 'published')
-                    .eq('category', postData.category)
-                    .neq('id', postData.id)
-                    .order('created_at', { ascending: false })
-                    .limit(3);
-
-                setRelated(relatedData || []);
-            } catch (err) {
-                console.error(err);
-                router.push('/blog');
-            } finally {
-                setLoading(false);
-            }
-        }
-        if (slug) fetchPost();
-    }, [slug, router]);
-
-    if (loading) return <LoadingScreen />;
-
-    if (!post) return null;
-
-    return (
-        <main className={styles.blogWrapper}>
-            <HeroBg src="/bg2.png" fixed />
-            <div className="premium-container" style={{ paddingTop: '2rem', position: 'relative', zIndex: 1 }}>
-                <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#64748b', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
-                    <IconArrowLeft /> Back to Blog
-                </button>
-            </div>
-
-            <article>
-                <header className={`premium-container ${styles.detailHeader}`}>
-                    <AnimateOnScroll animation="fadeUp">
-                        <span className={styles.detailCategory}>
-                            {post.category}
-                        </span>
-                        <h1 className={styles.detailTitle}>
-                            {post.title}
-                        </h1>
-                        <div className={styles.detailAuthorWrapper}>
-                            <div className={styles.detailAuthorAvatar}>
-                                {post.author?.name?.charAt(0) || 'A'}
-                            </div>
-                            <div className={styles.detailAuthorInfo}>
-                                <div className={styles.detailAuthorName}>{post.author?.name || 'TalentMesh Editorial'}</div>
-                                <div suppressHydrationWarning>{new Date(post.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })} · {post.read_minutes || 5} min read</div>
-                            </div>
-                        </div>
-                    </AnimateOnScroll>
-                </header>
-
-                <AnimateOnScroll animation="fadeUp" delay={100}>
-                    <div className={`premium-container ${styles.detailImageWrapper}`}>
-                        <div className={styles.detailImageContainer}>
-                            <Image
-                                src={post.cover_image || "/images/tech-office.jpg"}
-                                alt={post.title}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                        </div>
-                    </div>
-                </AnimateOnScroll>
-
-                <div className={styles.detailContentWrapper}>
-                    <AnimateOnScroll animation="fadeUp" delay={200}>
-                        <div className={styles.detailContent}>
-                            <SafeBlogContent content={post.content || ''} />
-                        </div>
-                    </AnimateOnScroll>
-                </div>
-            </article>
-
-            {related.length > 0 && (
-                <section className={styles.relatedSection}>
-                    <div className="premium-container">
-                        <div className={styles.relatedHeader}>
-                            <h2 className={styles.relatedTitle}>Related Articles</h2>
-                            <Link href="/blog" style={{ color: 'var(--primary-blue)', fontWeight: 700, textDecoration: 'none' }}>View All</Link>
-                        </div>
-                        <div className="premium-grid-3">
-                            {related.map(rel => (
-                                <Link href={`/blog/${rel.slug}`} key={rel.id} style={{ textDecoration: 'none' }}>
-                                    <div className={`${styles.relatedCard} glass-card`}>
-                                        <div className={styles.relatedImageWrapper}>
-                                            <Image src={rel.cover_image || "/images/tech-office.jpg"} alt={rel.title} fill style={{ objectFit: 'cover' }} />
-                                        </div>
-                                        <div className={styles.relatedContent}>
-                                            <span className={styles.relatedCategory}>{rel.category}</span>
-                                            <h3 className={styles.relatedCardTitle}>{rel.title}</h3>
-                                            <div className={styles.relatedReadMore}>
-                                                Read More <IconArrowRight />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            <div className={`premium-container ${styles.detailCtaWrapper}`}>
-                <div className={styles.detailCtaBox}>
-                    <h2 className={styles.detailCtaTitle}>Enjoyed this article?</h2>
-                    <p className={styles.detailCtaDesc}>Subscribe to our newsletter and never miss an update on AI recruitment.</p>
-                    <div className={styles.detailCtaForm}>
-                        <input type="email" placeholder="your@email.com" className={styles.detailCtaInput} />
-                        <button className={styles.detailCtaBtn}>Subscribe Now</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    );
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) notFound();
+  // Related content is supplemental: its outage must not hide a readable article.
+  const related = post.category ? await sanityClient.fetch<BlogPost[]>(RELATED_POSTS_QUERY, { category: post.category, id: post.id }).catch(() => []) : [];
+  const image = post.coverImage ? urlForImage(post.coverImage)?.width(1600).auto('format').url() : undefined;
+  const body = Array.isArray(post.body) ? post.body : [];
+  const headings = body.filter((block): block is PortableTextBlock => block._type === 'block' && ['h1', 'h2'].includes(block.style || '') && Boolean(block._key)).map(block => ({ id: headingId(block._key), text: block.children.map(child => child.text || '').join('') })).filter(heading => heading.text);
+  const jsonLd = {
+    '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title,
+    description: post.excerpt, mainEntityOfPage: SITE_URL + '/blog/' + slug,
+    image: image ? [image] : undefined,
+    datePublished: displayDate(post.publishedAt) ? post.publishedAt : undefined,
+    author: { '@type': post.authorName && !/talentmesh|editorial/i.test(post.authorName) ? 'Person' : 'Organization', name: post.authorName || 'TalentMesh Editorial' },
+    publisher: { '@type': 'Organization', name: 'TalentMesh Solutions', url: SITE_URL },
+  };
+  return (
+    <main className={styles.journal} id="blog-main">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <div className={styles.articleContainer}>
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}><Link href="/blog">Journal</Link>{post.category && <><span aria-hidden="true">/</span><span>{post.category}</span></>}</nav>
+        <article>
+          <header className={styles.articleHeader}><h1>{post.title}</h1>{post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}<PostMeta post={post} /></header>
+          {image && <div className={styles.articleCover}><Image src={image} alt={post.coverImage?.alt || ''} fill priority sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 980px) calc(100vw - 80px), 900px" /></div>}
+          <div className={headings.length ? styles.readingLayout : undefined}>
+            {headings.length > 0 && <ArticleContents headings={headings} />}
+            <div className={styles.prose}><PortableText value={body as PortableTextBlock[]} components={ptComponents} /></div>
+          </div>
+        </article>
+        <div className={styles.articleEnd}><Link href="/blog" className={styles.readLink}><ArrowLeft size={18} aria-hidden="true" /> Back to the journal</Link></div>
+      </div>
+      {!!related?.length && <section className={[styles.container, styles.archive].join(' ')} aria-labelledby="related-title"><div className={styles.sectionHeader}><h2 id="related-title">Keep exploring</h2></div><div className={styles.postGrid}>{related.map(item => <PostPreview key={item.id} post={item} />)}</div></section>}
+    </main>
+  );
 }

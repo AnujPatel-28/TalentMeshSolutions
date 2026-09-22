@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import styles from '@/app/dashboard/shared-dashboard.module.css';
+import styles from './skeleton.module.css';
 
 interface ErrorViewProps {
   error: Error & { digest?: string };

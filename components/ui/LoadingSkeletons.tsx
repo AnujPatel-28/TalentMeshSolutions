@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Skeleton from './Skeleton';
-import styles from '@/app/dashboard/shared-dashboard.module.css';
+import styles from './skeleton.module.css';
 
 export function DashboardHomeSkeleton() {
   return (

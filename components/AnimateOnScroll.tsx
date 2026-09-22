@@ -85,18 +85,29 @@ export default function AnimateOnScroll({
         blurIn: 'none',
     };
 
+    // The hidden state is expressed in CSS (globals.css `.aos`) gated on
+    // `html.js-ready`, not as an inline `opacity: 0`. Rendering it inline meant
+    // every wrapped section shipped invisible in the server HTML and stayed
+    // that way if the bundle never arrived. `data-aos-visible` is identical on
+    // server and client, so hydration still matches; the gating class is added
+    // by a blocking script in app/layout.tsx before first paint.
     const animStyle: React.CSSProperties = {
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'none' : transforms[animation],
-        filter: animation === 'blurIn' ? (visible ? 'blur(0)' : 'blur(4px)') : undefined,
+        '--aos-from': transforms[animation],
+        '--aos-blur': animation === 'blurIn' ? 'blur(4px)' : 'none',
         transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms, filter ${duration}ms ease-out ${delay}ms`,
         willChange: animating ? 'opacity, transform, filter' : 'auto',
         ...style,
-    };
+    } as React.CSSProperties;
 
     return React.createElement(
         Tag,
-        { ref, className, style: animStyle, onTransitionEnd: handleTransitionEnd },
+        {
+            ref,
+            className: className ? `aos ${className}` : 'aos',
+            'data-aos-visible': visible ? 'true' : 'false',
+            style: animStyle,
+            onTransitionEnd: handleTransitionEnd,
+        },
         children
     );
 }

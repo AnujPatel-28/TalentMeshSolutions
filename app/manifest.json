@@ -1,6 +1,6 @@
 {
-  "name": "Talentmesh",
-  "short_name": "Talentmesh",
+  "name": "TalentMesh Solutions",
+  "short_name": "TalentMesh",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -16,6 +16,6 @@
     }
   ],
   "theme_color": "#0168cf",
-  "background_color": "#0168cf",
+  "background_color": "#ffffff",
   "display": "standalone"
 }

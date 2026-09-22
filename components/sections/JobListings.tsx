@@ -207,7 +207,7 @@ const JobListings = () => {
                                                 <span className={`${styles.badge} ${badgeClass[job.badge]}`}>
                                                     {job.type}
                                                 </span>
-                                                <Link href="/browse-jobs" className={styles.viewBtn}>
+                                                <Link href="/login" className={styles.viewBtn}>
                                                     View Job
                                                 </Link>
                                             </div>
@@ -223,7 +223,7 @@ const JobListings = () => {
 
                 {/* CTA */}
                 <div className={styles.ctaWrapper}>
-                    <Link href="/browse-jobs" className={styles.browseBtn}>
+                    <Link href="/login" className={styles.browseBtn}>
                         Browse all jobs
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />

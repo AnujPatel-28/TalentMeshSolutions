@@ -1,0 +1,2588 @@
+/*
+ * Styles for the `/` landing page only.
+ * Deliberately separate from components/sections/sections.module.css, which is
+ * shared by /talentmesh-portal, /employers/* and /portals/jobs/* — editing that
+ * file ripples into three other route groups.
+ *
+ * Tokens come from app/globals.css (:root).
+ */
+
+.homeScope {
+    /* Trial /home-4color: scoped 4-color test.
+       canvas #FFFFFF / surface #F0F8FF / brand #0056B3 / ink #0B1F33.
+       Scoped here so other routes are untouched; revert by deleting block. */
+    --tm-canvas: #FFFFFF;
+    --tm-surface: #F0F8FF;
+    --tm-brand: #0056B3;
+    --tm-ink: #0B1F33;
+    --tm-body: rgba(11, 31, 51, 0.7);
+    background: var(--tm-canvas);
+    font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
+}
+
+.homeScope :global(.text-brand) {
+    color: var(--tm-brand);
+}
+
+.homeScope h1,
+.homeScope h2,
+.homeScope h3,
+.homeScope h4,
+.homeScope h5,
+.homeScope h6 {
+    font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
+}
+
+/* ---------------------------------------------------------------- shared -- */
+
+.section {
+    position: relative;
+    padding: 7rem 1.5rem;
+    overflow: hidden;
+}
+
+/* Currently unused — kept as the dark alternative to .sectionTint.
+   Same gradient as the navbar "Get Started" button; raw, its cyan end drops
+   body text to 2:1, so the scrim is the lightest that clears 4.5:1 everywhere. */
+.sectionDark {
+    background:
+        linear-gradient(rgba(7, 26, 43, 0.55), rgba(7, 26, 43, 0.55)),
+        linear-gradient(90deg, #00C6FF 0%, #007BFF 60%, #0056b3 100%);
+    color: #fff;
+}
+
+/* Soft blue tint: a light bluish field with blue headings and grey body copy.
+   The eyebrow pill flips to white so it still separates from the tinted field. */
+.sectionTint {
+    background-color: var(--tm-surface);
+    background-image: url('/graintest.png');
+    background-size: min(580px, 45vw) auto;
+    background-position: top right;
+    background-repeat: no-repeat;
+}
+
+.sectionTint .eyebrow {
+    background: #E0F2FE;
+    color: #0369A1;
+    border: 1px solid rgba(3, 105, 161, 0.18);
+}
+
+.sectionTint .h2 {
+    color: var(--tm-brand);
+}
+
+.sectionTint .lede {
+    color: var(--tm-body);
+}
+
+/* WhyUs-only mirrored grain: keeps the existing top-right
+   `background-image` untouched and adds a 180°-rotated copy at the
+   bottom-left via a pseudo-element (backgrounds can't be rotated
+   individually). Scoped to .whyTint so Process.tsx, which reuses
+   .sectionTint, is unaffected. Same file = no extra image request. */
+.whyTint::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(580px, 45vw);
+    aspect-ratio: 810 / 700;
+    background-image: url('/graintest.png');
+    background-size: contain;
+    background-position: bottom left;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.whyTint .inner {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 1024px) {
+    .whyTint::after {
+        width: min(420px, 70vw);
+    }
+}
+
+/* Narrower than .head's 760px so the lede lands inside the 60-75 character
+   measure; balance stops the h2 breaking to a one-word second line. */
+.head.whyHead {
+    max-width: 34rem;
+}
+
+.whyHead .h2 {
+    text-wrap: balance;
+}
+
+.whyTopRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2.5rem;
+    margin-bottom: 3.5rem;
+}
+
+.whyTopRow .head {
+    margin: 0;
+}
+
+.whyImageWrap {
+    flex-shrink: 0;
+    position: relative;
+    width: 680px;
+    max-width: 680px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: -14rem;
+    z-index: 20;
+}
+
+.whyImage {
+    width: 100%;
+    max-width: 1720px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 75px rgba(0, 86, 179, 0.22));
+}
+
+@media (max-width: 1024px) {
+    .whyTopRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .whyHead {
+        max-width: 100%;
+    }
+
+    .whyImageWrap {
+        align-self: center;
+        width: 100%;
+        max-width: 520px;
+        margin-top: 0;
+    }
+}
+
+.inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.head {
+    max-width: 760px;
+    margin: 0 auto 4rem;
+    text-align: center;
+}
+
+.headLeft {
+    text-align: left;
+    margin-left: 0;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.sectionDark .eyebrow {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sky-blue);
+}
+
+.eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.h2 {
+    margin: 1.25rem 0 0;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--tm-ink);
+}
+
+.sectionDark .h2 {
+    color: #fff;
+}
+
+.lede {
+    margin: 1.1rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--tm-body);
+}
+
+.sectionDark .lede {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.accent {
+    color: var(--tm-brand);
+}
+
+/* Buttons */
+
+.btnPrimary,
+.btnSecondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.95rem 1.75rem;
+    border-radius: 9999px;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+}
+
+/* Every stop clears 4.5:1 against the white label. The old cyan start
+   (#00C6FF) measured 2.0:1, so the leading ~60% of the button failed AA —
+   the same trap the section-gradient comment at the top of this file warns
+   about. Keep any future stop at or below #0090CC. */
+.btnPrimary {
+    background: linear-gradient(90deg, #0090CC 0%, #007BFF 45%, #0056b3 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.35);
+}
+
+.btnPrimary:hover {
+    background: linear-gradient(90deg, #0084bd 0%, #0062cc 45%, #004494 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 123, 255, 0.5);
+}
+
+
+.btnSecondary {
+    background: #fff;
+    color: var(--ink-black);
+    border: 1px solid var(--neutral-border);
+}
+
+.btnSecondary:hover {
+    transform: translateY(-2px);
+    border-color: var(--sky-blue);
+    box-shadow: var(--shadow-md);
+}
+
+.sectionDark .btnSecondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.sectionDark .btnSecondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.32);
+}
+
+/* ------------------------------------------------------------------ hero -- */
+
+.hero {
+    position: relative;
+    min-height: calc(100vh - 90px);
+    min-height: 88vh;
+    padding: 13rem 1.5rem 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tm-ink);
+    overflow: hidden;
+}
+
+
+.heroVideoBg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 1;
+}
+
+
+.heroInner {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.hero .eyebrow {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--sky-blue);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.hero .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00C6FF;
+    box-shadow: 0 0 8px rgba(0, 198, 255, 0.8);
+    animation: dotPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0.4;
+    }
+}
+
+.heroTitle {
+    margin: 1.5rem 0 0;
+    font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
+    font-size: clamp(2.8rem, 6.2vw, 4.5rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+}
+
+
+.heroWord {
+    display: inline-block;
+    margin-right: 0.28em;
+    color: #ffffff;
+}
+
+.mobileBreak {
+    display: none;
+}
+
+.heroWord.accent {
+    font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.08em;
+    color: var(--sky-blue);
+    letter-spacing: normal;
+}
+
+
+.heroDesc {
+    max-width: 700px;
+    margin: 1.5rem auto 0;
+    font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
+    font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
+}
+
+.heroActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.25rem;
+    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
+}
+
+/* Hero entrance. This lives in CSS rather than framer-motion on purpose: the
+   hero is the LCP element, and motion `initial` props serialise to inline
+   `opacity:0` in the server HTML, which left the headline, lede and both CTAs
+   invisible until React hydrated. As keyframes the markup ships opaque and the
+   animation starts on first paint, so a slow or failed bundle costs the
+   entrance, not the content. Delays mirror the previous stagger.
+   Disabled wholesale in the reduced-motion block further down. */
+@keyframes heroEyebrowIn {
+    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes heroWordIn {
+    from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes heroRiseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+}
+
+.hero .eyebrow {
+    animation: heroEyebrowIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
+.heroWord {
+    animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 65ms);
+}
+
+.heroActions .btnSecondary {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.heroActions .btnSecondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+
+/* ------------------------------------------------------------ trust strip -- */
+
+.trust {
+    padding: 0 1.5rem 5rem;
+    background: linear-gradient(180deg, var(--tm-surface) 0%, var(--tm-surface) 55%, var(--tm-canvas) 100%);
+}
+
+.trustGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2.25rem 1.5rem;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(12px);
+}
+
+.trustItem {
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.trustItem + .trustItem {
+    border-left: 1px solid var(--neutral-border);
+}
+
+.trustValue {
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    /* Solid brand blue instead of clipped-gradient text — the weight and size
+       already carry the emphasis here. */
+    color: var(--tm-brand);
+}
+
+.trustLabel {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--tm-body);
+}
+
+/* -------------------------------------------------------------- services -- */
+
+.serviceGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    /* 10 cards, 2 of them spanning 2 columns = 12 cells = exactly 4 full rows.
+       `dense` back-fills the cell a wrapped wide card would otherwise leave. */
+    grid-auto-flow: dense;
+}
+
+.serviceCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 2rem 1.75rem;
+    background: var(--tm-canvas);
+    border: 1px solid var(--neutral-border);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-smooth);
+}
+
+.serviceCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--sky-blue);
+    box-shadow: var(--shadow-lg);
+}
+
+.serviceFeatured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--tm-canvas) 0%, var(--tm-surface) 100%);
+}
+
+.serviceIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-md);
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    flex-shrink: 0;
+}
+
+.serviceTitle {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+}
+
+.serviceDesc {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--tm-body);
+}
+
+/* ------------------------------------------------------------ industries -- */
+
+.industryWrap {
+    position: relative;
+}
+
+.industryList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+}
+
+.industryPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: default;
+    transition: var(--transition-smooth);
+}
+
+.industryPill:hover {
+    background: rgba(255, 255, 255, 0.11);
+    border-color: var(--cool-sky);
+    color: #fff;
+}
+
+.industryDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cool-sky);
+    flex-shrink: 0;
+}
+
+.industryPreview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: 300px;
+    height: 190px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: var(--shadow-xl);
+}
+
+.industryPreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --------------------------------------------------------------- process -- */
+
+/* The five steps used to be outlined circles on a hairline, centred — the most
+   category-interchangeable timeline on the internet, and it needed enormous
+   vertical space to justify itself. Rebuilt to speak the page's own language:
+   mono numerals and hairline rules, the same vocabulary as the section markers,
+   so the process reads as part of the system rather than a fifth pattern.
+   The spine is now the columns' shared top rule, and it fills on scroll. */
+.processWrap {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 3.25rem;
+}
+
+.processTrack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--neutral-border);
+    overflow: hidden;
+}
+
+.processFill {
+    height: 100%;
+    background: var(--tm-brand);
+    transform-origin: left center;
+}
+
+.processStep {
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    padding: 1.6rem 1.5rem 0 0;
+}
+
+/* Tick marking where each step meets the spine. */
+.processStep::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 12px;
+    background: var(--neutral-border);
+}
+
+.processStep:first-child::before {
+    display: none;
+}
+
+.processNum {
+    display: block;
+    margin-bottom: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+    color: var(--tm-brand);
+    font-variant-numeric: tabular-nums;
+}
+
+.processTitle {
+    margin: 0 0 0.45rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--tm-ink);
+}
+
+.processDesc {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--tm-body);
+    max-width: 22ch;
+}
+
+/* --------------------------------------------------------------- why us -- */
+
+/* Four differentiators across one dark band. No card surfaces — the only
+   borders here are hairline dividers, which carry structure rather than
+   faking elevation. Nothing in the row is interactive, so there is no hover. */
+/* Cursor-reactive lift.
+   A soft light follows the pointer across the row and the column under it
+   raises slightly. Nothing is ever hidden — the four differentiators are the
+   section's argument, so the interaction adds attention rather than gating
+   content. Coordinates arrive as CSS custom properties set straight on the
+   node (see WhyUs.tsx), so pointer movement never triggers a React render. */
+.pillarRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: relative;
+}
+
+.pillarRow::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -1.5rem;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.35) 38%,
+        transparent 68%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.pillarRow:hover::before {
+    opacity: 1;
+}
+
+.pillar {
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Pointer devices only — there is no hover on touch, and a lift that never
+   resolves reads as a stuck state. */
+@media (hover: hover) {
+    .pillar:hover .pillarIcon {
+        color: var(--tm-brand);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pillarRow::before {
+        display: none;
+    }
+
+    .pillar {
+        transition: none;
+    }
+}
+
+@media (hover: none) {
+    .pillarRow::before {
+        display: none;
+    }
+}
+
+.pillar:not(:first-child) {
+    border-left: 1px solid #E2E8F0;
+}
+
+.pillar:first-child {
+    padding-left: 0;
+}
+
+.pillar:last-child {
+    padding-right: 0;
+}
+
+.pillarIcon {
+    display: flex;
+    color: var(--tm-brand);
+    margin-bottom: 1.1rem;
+}
+
+.pillarIcon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.pillarTitle {
+    margin: 0 0 0.55rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+}
+
+.pillarDesc {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--tm-body);
+}
+
+.pillarContent {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ------------------------------------------------------------------ faq -- */
+
+.faqWrap {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+/* -------------------------------------------------------------- contact -- */
+
+.contactCard {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    box-sizing: border-box;
+    min-height: 0;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    align-items: center;
+    padding: clamp(2rem, 4vw, 3rem);
+    /* Same ASCII-dot texture treatment as the about CTA card: navy scrim
+       holds white-text contrast over the image's bright top-center, deep
+       navy fallback while the image loads. Height is content-defined (no
+       aspect-ratio lock) so the panoramic image crops less. */
+    background-color: #041B3D;
+    background-image:
+        linear-gradient(135deg, rgba(7, 26, 43, 0.55) 0%, rgba(7, 26, 43, 0.15) 100%),
+        url('/images/about/ascii-magic-2.png'),
+        linear-gradient(135deg, #041B3D 0%, #062C5E 55%, #03204E 100%);
+    background-size: cover, cover, cover;
+    background-position: center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    border-radius: var(--radius-xl);
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 16px 35px -14px rgba(2, 36, 85, 0.28);
+    border: none;
+}
+
+.contactCard::after {
+    display: none;
+}
+
+.contactHeading {
+    margin: 0;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.contactDesc {
+    margin: 1.1rem 0 2rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.03rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 480px;
+}
+
+.contactDetails {
+    position: relative;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-style: normal;
+    background: rgba(3, 24, 60, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.contactRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-size: 0.97rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.contactRow svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #38bdf8;
+}
+
+.contactRow a {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.contactRow a:hover {
+    color: #38bdf8;
+    text-decoration: underline;
+}
+
+.contactMetaLabel {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7dd3fc;
+    margin-bottom: 0.2rem;
+}
+
+.contactLink {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    word-break: break-all;
+}
+
+.contactAddressLine {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.contactResponse {
+    margin: 0;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #7dd3fc;
+}
+
+/* ---------------------------------------------------------- breakpoints -- */
+
+@media (max-width: 1024px) {
+    .section {
+        padding: 5rem 1.25rem;
+    }
+
+    .categoryGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .trustLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .trustCardsCol,
+    .trustTextCol {
+        padding: 3rem 2rem;
+    }
+
+    .visualGrid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Option 1: Connected Vertical Stepper Timeline on tablet & mobile */
+    .processWrap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 540px;
+        margin: 2rem auto 0;
+        padding-left: 0.5rem;
+        text-align: left;
+    }
+
+    .processTrack {
+        display: block;
+        position: absolute;
+        left: 27px;
+        top: 24px;
+        bottom: 24px;
+        width: 2px;
+        height: auto;
+        right: auto;
+        background: linear-gradient(to bottom, #00C6FF 0%, #0072FF 100%);
+        border-radius: 9999px;
+        z-index: 0;
+        opacity: 0.7;
+    }
+
+    .processFill {
+        display: none;
+    }
+
+    .processStep {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: flex-start;
+        text-align: left;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        transition: transform 0.2s ease;
+    }
+
+    /* The desktop spine tick and measure belong to the horizontal rail only —
+       this breakpoint runs the vertical stepper instead. */
+    .processStep::before {
+        display: none;
+    }
+
+    .processDesc {
+        max-width: none;
+    }
+
+    .processNum {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 0;
+        margin-top: 0;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2.5px solid #0284c7;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.16), 0 0 0 4px #ffffff;
+        color: #0284c7;
+        font-size: 0.95rem;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .processTitle {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0 0 0.35rem;
+        line-height: 1.3;
+        color: var(--tm-ink);
+    }
+
+    .processDesc {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--tm-body);
+        margin: 0;
+    }
+
+    .contactCard {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        aspect-ratio: auto;
+        padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 4.5vw, 2.25rem);
+        border-radius: 28px;
+        background-color: #041B3D;
+        background-image:
+            linear-gradient(135deg, rgba(7, 26, 43, 0.55) 0%, rgba(7, 26, 43, 0.15) 100%),
+            url('/images/about/ascii-magic-2.png'),
+            linear-gradient(160deg, #041B3D 0%, #062C5E 60%, #03204E 100%);
+        background-size: cover, cover, cover;
+        background-position: center, center, center;
+        background-repeat: no-repeat, no-repeat, no-repeat;
+    }
+
+    .contactHeading {
+        font-size: clamp(1.75rem, 5.5vw, 2.25rem);
+        line-height: 1.2;
+    }
+
+    .contactDesc {
+        font-size: 0.98rem;
+        line-height: 1.65;
+        margin: 1rem 0 1.85rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 100%;
+    }
+
+    /* Horizontal Feature Card Stack on tablet & mobile */
+    .pillarRow {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        margin-top: 2rem;
+        width: 100%;
+    }
+
+    .pillar,
+    .pillar:first-child,
+    .pillar:last-child {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 1rem;
+        align-items: flex-start;
+        text-align: left;
+        padding: 1.2rem 1.15rem;
+        background: #ffffff;
+        border: 1px solid rgba(0, 86, 179, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(7, 26, 43, 0.04);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pillar:nth-child(odd) {
+        padding-left: 1.15rem;
+    }
+
+    .pillar:nth-child(-n + 2) {
+        padding-top: 1.2rem;
+    }
+
+    .pillar:nth-child(n + 3) {
+        border-top: 1px solid rgba(0, 86, 179, 0.12);
+    }
+
+    .pillarIcon {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .pillarIcon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .pillarContent {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pillarTitle {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+        line-height: 1.35;
+        color: var(--tm-ink);
+    }
+
+    .pillarDesc {
+        font-size: 0.88rem;
+        line-height: 1.55;
+        color: var(--tm-body);
+        margin: 0;
+    }
+
+    /* Modern Frosted Pill Cloud for Industries on tablet & mobile */
+    .industriesContainer {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.65rem 0.55rem;
+        width: 100%;
+        max-width: 480px;
+        margin: 2rem auto 0;
+    }
+
+    .industryRow {
+        display: contents;
+    }
+
+    .industryTag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(224, 242, 254, 0.65);
+        border: 1px solid rgba(3, 105, 161, 0.2);
+        border-radius: 9999px;
+        padding: 0.55rem 1rem;
+        box-shadow: 0 2px 6px rgba(7, 26, 43, 0.04);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        filter: none;
+        opacity: 1;
+        cursor: default;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .industryTag:active {
+        transform: scale(0.95);
+        background: rgba(186, 230, 253, 0.85);
+        border-color: rgba(3, 105, 161, 0.35);
+    }
+
+    .tagIcon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--hover-color, #0284c7);
+        flex-shrink: 0;
+    }
+
+    .tagIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .tagName {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #0369a1;
+        white-space: nowrap;
+        line-height: 1;
+    }
+}
+
+@media (max-width: 720px) {
+    .categoryGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .heroActions .btnPrimary,
+    .heroActions .btnSecondary {
+        flex: 1 1 100%;
+    }
+}
+
+/* -------------------------------------------------------- redesign add-ons -- */
+
+.heroVisual {
+    margin-top: 3.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.visualGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.visualCard {
+    background: var(--tm-canvas);
+    border: 1px solid rgba(0, 86, 179, 0.15);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(11, 31, 51, 0.05);
+    transition: all 0.25s ease;
+}
+
+.visualCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--tm-brand);
+    box-shadow: 0 12px 30px rgba(11, 31, 51, 0.1);
+}
+
+.visualCardHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.visualIconBox {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.5rem;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.visualIconBoxAlt {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.5rem;
+    background: #fef3c7;
+    color: #d97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.visualIconBoxShield {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.5rem;
+    background: #e6f4ea;
+    color: #137333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.visualCardTitle {
+    margin: 0;
+    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--tm-ink);
+}
+
+.visualCardSub {
+    margin: 0.15rem 0 0;
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 0.82rem;
+    color: var(--tm-body);
+}
+
+.visualBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    background: var(--tm-surface);
+    color: var(--tm-ink);
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.visualBadgeAlt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    background: #fef3d6;
+    color: #b45309;
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.visualBadgeShield {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    background: #e6f4ea;
+    color: #137333;
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Positioning Section (Split Left & Right Layout) */
+.trustSection {
+    position: relative;
+    padding: 0;
+    width: 100%;
+    /* clip, not hidden — this section contains its own sticky marker, and
+       `hidden` would make it a scroll container and disable the stick. */
+    overflow-x: clip;
+    background: var(--tm-canvas);
+    /* Configurable color variables */
+    --trust-cards-bg: var(--tm-canvas);        /* Left side (Cards) background */
+    --trust-text-bg: var(--tm-surface);         /* Right side (Matches below section #F0F8FF) */
+    --trust-text-color: var(--tm-brand);      /* Old blue heading: Uncover Top Talent etc. */
+    --trust-text-lede: var(--tm-body);       /* Matching sectionTint lede */
+    --trust-card-bg: var(--tm-canvas);         /* Card background */
+    --trust-card-border: #E2E8F0;     /* Card dividers border */
+    --trust-card-hover: var(--tm-surface);
+}
+
+.trustContainer {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.trustLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    min-height: 750px;
+    border-radius: 0px;
+    overflow: hidden;
+    border: none;
+    box-shadow: none;
+    position: relative;
+}
+
+/* Left Side: Cards */
+.trustCardsCol {
+    background: var(--trust-cards-bg);
+    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
+    display: flex;
+    flex-direction: column;
+    /* `space-between` against .trustLayout's 750px min-height was flinging the
+       heading, the rail and the metric row to the extremes and opening ~120px
+       of dead air under the heading. Centre the group instead and let the gaps
+       be deliberate. */
+    justify-content: center;
+    gap: 2rem;
+    height: 100%;
+    width: 100%;
+    border-right: 1px solid var(--trust-card-border);
+}
+
+.trustCardsCol .positioningStack {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: none;
+    box-shadow: none;
+}
+
+/* Right Side: Text */
+.trustTextCol {
+    background: var(--trust-text-bg);
+    padding: 3.25rem max(3.5rem, calc((100vw - 1440px) / 2)) 5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+}
+
+.trustHeadWrap {
+    position: relative;
+    min-height: 190px;
+    width: 100%;
+}
+
+.trustHead {
+    width: 100%;
+    max-width: 620px;
+    text-align: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.trustEyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    background: #E0F2FE;
+    color: #0369A1;
+    border: 1px solid rgba(3, 105, 161, 0.18);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.trustEyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.trustH2 {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(2rem, 3.1vw, 2.9rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--trust-text-color);
+}
+
+.trustLede {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--trust-text-lede);
+}
+
+.trustImageWrap {
+    width: 100%;
+    max-width: 1720px;
+    margin-top: 2rem;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 20;
+    pointer-events: none;
+    transform: translateX(-105px);
+}
+
+.whyHeadFull {
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Full Left Column Cards (Zero outside gap, full edge-to-edge left block) */
+.positioningStack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: none;
+    border-radius: 0px;
+    overflow: hidden;
+}
+
+/* Capability rail — deliberately not cards.
+   Three stacked rounded boxes made this column read as a form, and the
+   inactive two washed out to 0.85 opacity, which reads as "disabled" rather
+   than "available". A numbered index rail with hairline rules matches the
+   section-marker motif already on the page, drops three nested containers
+   worth of chrome, and lets the active row carry real emphasis instead of
+   just a blue outline. */
+.positioningCard {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    align-items: start;
+    column-gap: 1.1rem;
+    padding: 1.15rem 0.35rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #E6EDF5;
+    border-radius: 0;
+    text-align: left;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    user-select: none;
+    outline: none;
+}
+
+.positioningCard:first-child {
+    border-top: 1px solid #E6EDF5;
+}
+
+.positioningCard:hover {
+    background: var(--tm-surface);
+}
+
+.positioningCard:focus-visible {
+    outline: 2px solid var(--tm-brand);
+    outline-offset: -2px;
+}
+
+.positioningNum {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: #94A3B8;
+    padding-top: 0.3rem;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.2s ease;
+}
+
+.positioningTitle {
+    margin: 0;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+    transition: color 0.2s ease;
+}
+
+.positioningDesc {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--tm-body);
+}
+
+.positioningMark {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: #CBD5E1;
+    margin-top: 0.55rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.positioningCardActive .positioningNum,
+.positioningCardActive .positioningTitle {
+    color: var(--tm-brand);
+}
+
+.positioningCardActive .positioningMark {
+    background: var(--tm-brand);
+    transform: scale(1.15);
+}
+
+/* The cycle timer runs along the row's own bottom rule rather than floating
+   inside the card as a loose bar that read as a loading indicator. */
+.positioningProgress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    overflow: hidden;
+}
+
+.positioningProgressFill {
+    display: block;
+    height: 100%;
+    background: var(--tm-brand);
+    transform-origin: left;
+}
+
+.positioningCardInner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.positioningBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tm-body);
+    margin-bottom: 0.4rem;
+    transition: color 0.3s ease;
+}
+
+.positioningBadgeActive {
+    color: #0284c7;
+}
+
+.positioningBadgeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.3s ease;
+}
+
+.positioningBadgeDotActive {
+    background: #0072FF;
+    box-shadow: 0 0 8px rgba(0, 114, 255, 0.65);
+    animation: pulseDot 2s infinite ease-in-out;
+}
+
+.positioningIconBox {
+    width: 56px;
+    height: 56px;
+    border-radius: 0px; /* Sharp corners */
+    background: #e0f2fe;
+    color: #0284c7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.positioningIconBox svg {
+    width: 28px;
+    height: 28px;
+}
+
+.positioningContent {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.positioningTitle {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--tm-ink);
+    transition: color 0.3s ease;
+}
+
+.positioningTitleActive {
+    color: var(--tm-brand);
+}
+
+.positioningDesc {
+    margin: 0;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--tm-body);
+    transition: color 0.3s ease;
+    min-height: 3.3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.positioningDescActive {
+    color: var(--tm-ink);
+    font-weight: 500;
+}
+
+.cardProgressBar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #00C6FF 0%, #0072FF 100%);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 12px rgba(0, 114, 255, 0.45);
+    z-index: 5;
+    transform-origin: top;
+}
+
+.typewriterWrapper {
+    display: inline;
+}
+
+.typewriterCursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background-color: #0072FF;
+    margin-left: 2px;
+    vertical-align: -1px;
+    border-radius: 1px;
+    animation: blinkCursor 0.75s infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+}
+
+/* Categorized Services */
+.categoryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.categoryCard {
+    background: var(--tm-canvas);
+    border: 1px solid rgba(0, 86, 179, 0.12);
+    border-radius: 0.75rem;
+    padding: 2.25rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: all 0.25s ease;
+}
+
+.categoryCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--tm-brand);
+    box-shadow: 0 10px 28px rgba(7, 26, 43, 0.08);
+}
+
+.categoryHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--tm-surface);
+}
+
+.categoryIconBox {
+    width: 46px;
+    height: 46px;
+    border-radius: 0.5rem;
+    background: var(--tm-surface);
+    color: var(--tm-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.categoryTitle {
+    margin: 0;
+    font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--tm-ink);
+}
+
+.categoryItemList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.categoryItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--tm-ink);
+    font-weight: 500;
+}
+
+.checkIcon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Industries — icon + label rows, matching /employers/sourcing */
+
+/* The title is long; let it span the container so it stays on one line
+   instead of wrapping inside .head's 760px cap. */
+.industriesHead {
+    max-width: none;
+}
+
+.industriesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    margin-top: 3rem;
+}
+
+.industryRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 3rem;
+    width: 100%;
+}
+
+/* Dimmed and desaturated until hovered, so the hovered industry reads as
+   the focus and the row stays quiet at rest. */
+.industryTag {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: all 0.3s ease;
+}
+
+.industryTag:hover {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.tagIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hover-color, var(--tm-brand));
+    transition: all 0.3s ease;
+}
+
+.tagName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--tm-ink);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.industryTag:hover .tagName {
+    text-shadow: 0 0 15px color-mix(in srgb, var(--hover-color, var(--tm-brand)) 20%, transparent);
+}
+
+.contactMetaLabel {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sky-blue);
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+}
+
+.contactLink {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff !important;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.contactLink:hover {
+    color: var(--sky-blue) !important;
+    text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btnPrimary:hover,
+    .btnSecondary:hover,
+    .categoryCard:hover,
+    .positioningCard:hover,
+    .visualCard:hover,
+    .industryTag:hover {
+        transform: none;
+    }
+
+    /* The hero entrance is CSS, so it opts out here rather than through
+       framer-motion's useReducedMotion like the rest of the page. */
+    .hero .eyebrow,
+    .heroWord,
+    .heroDesc,
+    .heroActions {
+        animation: none;
+    }
+}
+
+/* ------------------------------------------------ Services scroll-snap rail -- */
+
+.svcWrapper {
+    --svc-gap: 1.5rem;
+    --svc-cards: 3;
+    --svc-card-w: calc((100% - (var(--svc-cards) - 1) * var(--svc-gap)) / var(--svc-cards));
+    position: relative;
+}
+
+/* Heading and carousel controls share one row: heading on the leading edge,
+   controls trailing. Both sit on the same left edge as the cards below. */
+.svcTop {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.svcHeadText {
+    max-width: 34rem;
+}
+
+.svcRail {
+    display: flex;
+    gap: var(--svc-gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.25rem;
+    padding: 0.5rem 0.25rem 1.5rem;
+    /* Cancel the inline padding so card edges align with the heading above;
+       the padding itself stays, giving hover shadows room inside the scroller. */
+    margin-inline: -0.25rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.svcRail::-webkit-scrollbar {
+    display: none;
+}
+
+.svcRail:focus-visible {
+    outline: 2px solid var(--tm-brand);
+    outline-offset: -2px;
+    border-radius: 0.5rem;
+}
+
+.svcCard {
+    flex: 0 0 var(--svc-card-w);
+    scroll-snap-align: start;
+    background: var(--tm-canvas);
+    border: 1px solid var(--neutral-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+}
+
+.svcImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--tm-surface);
+}
+
+.svcCardImg {
+    object-fit: cover;
+}
+
+.svcCardBody {
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.svcCardTitle {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+    min-height: 2.7em;
+}
+
+.svcCardDesc {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--tm-body);
+    flex: 1;
+}
+
+.svcPillGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: auto;
+}
+
+.svcPillBtn {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    background: var(--tm-surface);
+    border: 1px solid rgba(0, 86, 179, 0.18);
+    color: var(--tm-brand);
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.3;
+    transition: var(--transition-fast);
+}
+
+.svcPillBtn:hover {
+    background: var(--tm-brand);
+    border-color: var(--tm-brand);
+    color: var(--white);
+}
+
+.svcControls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* Matches the section marker's mono treatment so the two read as one system. */
+.svcCount {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--tm-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.svcArrowBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--neutral-border-active);
+    background: var(--tm-canvas);
+    color: var(--tm-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.svcArrowBtn:hover:not(:disabled) {
+    border-color: var(--tm-brand);
+    color: var(--tm-brand);
+    background: var(--tm-surface);
+}
+
+.svcArrowBtn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.svcDots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.svcDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--neutral-border-active);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    padding: 0;
+}
+
+.svcDot:hover {
+    background: var(--sky-blue);
+}
+
+.svcDotActive {
+    background: var(--tm-brand);
+    width: 24px;
+}
+
+@media (max-width: 1024px) {
+    .svcWrapper {
+        --svc-cards: 2;
+    }
+
+    .trustLayout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        overflow: visible;
+    }
+
+    .trustCardsCol {
+        padding: 2.5rem 1.5rem 0;
+        width: 100%;
+        background: transparent;
+    }
+
+    .trustCardsCol .positioningStack {
+        max-width: 100%;
+        border: none;
+        gap: 0.85rem;
+    }
+
+    .positioningCard {
+        padding: 1.25rem 1.25rem;
+        display: block;
+        align-items: flex-start;
+        background: #ffffff;
+        border: 1px solid rgba(0, 86, 179, 0.12);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(7, 26, 43, 0.04);
+        text-align: left;
+    }
+
+    .positioningCardInner {
+        display: block;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .positioningContent {
+        text-align: left;
+    }
+
+    .positioningCard:last-child {
+        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
+    }
+
+    .positioningTitle {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0 0 0.3rem;
+        line-height: 1.35;
+        color: var(--tm-ink);
+    }
+
+    .positioningDesc {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--tm-body);
+        min-height: 2.8em;
+    }
+
+    .positioningCardActive {
+        background: var(--tm-surface);
+        border-color: rgba(0, 86, 179, 0.35);
+        box-shadow: 0 6px 20px rgba(0, 86, 179, 0.08);
+    }
+
+    .positioningBadge {
+        margin-bottom: 0.25rem;
+    }
+
+    .positioningCard .cardProgressBar {
+        right: 0;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 3px;
+        border-radius: 0 0 16px 16px;
+        background: linear-gradient(90deg, #00C6FF 0%, #0072FF 100%);
+        transform-origin: left;
+    }
+
+    .trustTextCol {
+        padding: 3.5rem 1.5rem 2rem;
+        align-items: flex-start;
+    }
+
+    .trustHeadWrap {
+        min-height: auto;
+    }
+
+    .trustHead {
+        max-width: 100%;
+        position: static;
+    }
+
+    .trustH2 {
+        font-size: clamp(1.85rem, 6.2vw, 2.4rem);
+        line-height: 1.18;
+        letter-spacing: -0.025em;
+        margin-bottom: 1rem;
+    }
+
+    .trustLede {
+        font-size: 0.96rem;
+        line-height: 1.65;
+        max-width: 520px;
+    }
+
+    .trustImageWrap {
+        position: static;
+        transform: none;
+        margin-top: 1.75rem;
+        margin-bottom: 0;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .whyImage {
+        width: 100%;
+        max-width: 380px;
+        height: auto;
+        filter: drop-shadow(0 20px 40px rgba(0, 86, 179, 0.12));
+    }
+}
+
+/* Heading text and controls stop fitting side by side around here, so stack them
+   on the same leading edge rather than at a device-preset width. */
+@media (max-width: 860px) {
+    .svcTop {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.75rem;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 720px) {
+    .svcWrapper {
+        --svc-cards: 1;
+        --svc-gap: 1rem;
+    }
+
+    .svcCardBody {
+        padding: 1.25rem 1.1rem;
+    }
+
+    .trustCardsCol {
+        padding: 1.75rem 1rem 0;
+        width: 100%;
+    }
+
+    .trustCardsCol .positioningStack {
+        max-width: 100%;
+        border: none;
+        gap: 0.75rem;
+    }
+
+    .positioningCard {
+        padding: 1.15rem 1.1rem;
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 1rem;
+        align-items: flex-start;
+        background: #ffffff;
+        border: 1px solid rgba(0, 86, 179, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(7, 26, 43, 0.04);
+    }
+
+    .positioningCard:last-child {
+        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
+    }
+
+    .positioningIconBox {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+        color: #0284c7;
+        margin-top: 2px;
+    }
+
+    .positioningIconBox svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .positioningTitle {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+        line-height: 1.35;
+        color: var(--tm-ink);
+    }
+
+    .positioningDesc {
+        font-size: 0.88rem;
+        line-height: 1.55;
+        color: var(--tm-body);
+    }
+}
+
+@media (max-width: 640px) {
+    .mobileBreak {
+        display: block;
+    }
+
+    .hero {
+        min-height: 100dvh;
+        min-height: 100svh;
+        padding: calc(72px + 1.5rem) 1.25rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .heroInner {
+        padding: 0;
+        max-width: 380px;
+        width: 100%;
+    }
+
+    .hero .eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        padding: 0.45rem 1rem;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .heroTitle {
+        font-size: clamp(2.15rem, 8.8vw, 2.7rem);
+        line-height: 1.12;
+        letter-spacing: -0.035em;
+        margin-top: 1.1rem;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .heroDesc {
+        font-size: 0.94rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.88);
+        margin: 1.15rem auto 0;
+        max-width: 350px;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .heroActions {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 0.65rem;
+        margin-top: 1.85rem;
+        width: 100%;
+    }
+
+    .heroActions .btnPrimary,
+    .heroActions .btnSecondary {
+        flex: 1 1 0;
+        max-width: 175px;
+        min-width: 0;
+        min-height: 48px;
+        padding: 0.75rem 0.6rem;
+        font-size: 0.86rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        text-align: center;
+        justify-content: center;
+        border-radius: 9999px;
+    }
+
+    .heroActions .btnPrimary {
+        background: linear-gradient(135deg, #0090CC 0%, #0072FF 100%);
+        color: #ffffff;
+        box-shadow: 0 4px 18px rgba(0, 114, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .heroActions .btnSecondary {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        border: 1.5px solid rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .heroActions .btnSecondary:active {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.7);
+        transform: scale(0.98);
+    }
+
+    .industriesContainer {
+        gap: 0.55rem 0.45rem;
+        margin-top: 1.5rem;
+    }
+
+    .industryTag {
+        padding: 0.48rem 0.85rem;
+        gap: 0.45rem;
+    }
+
+    .tagIcon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tagName {
+        font-size: 0.82rem;
+    }
+
+    .processWrap {
+        gap: 1.75rem;
+        margin-top: 1.5rem;
+        padding-left: 0.25rem;
+    }
+
+    .processTrack {
+        left: 23px;
+        top: 22px;
+        bottom: 22px;
+    }
+
+    .processStep {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 1.1rem;
+    }
+
+    .processNum {
+        width: 42px;
+        height: 42px;
+        font-size: 0.88rem;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15), 0 0 0 3px #ffffff;
+    }
+
+    .processTitle {
+        font-size: 1.02rem;
+    }
+
+    .processDesc {
+        font-size: 0.86rem;
+    }
+}
+
+
+/* ------------------------------------------------------------------ FAQ Section -- */
+.faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: var(--tm-canvas); }
+.faqLayout { display: grid; grid-template-columns: 1fr 1.35fr; gap: clamp(2.5rem, 5vw, 4.5rem); align-items: flex-start; }
+.faqLeftCol { position: static; }
+.faqHeading { font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif; font-size: clamp(2.35rem, 3.8vw, 3.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; color: var(--tm-ink); margin: 0; }
+.faqSubtext { margin: 1.35rem 0 0; font-size: 1.05rem; line-height: 1.7; color: var(--tm-body); max-width: 390px; }
+.faqRightCol { min-width: 0; }
+.faqBr { display: block; }
+
+@media (max-width: 900px) {
+    .faqSection {
+        padding: clamp(3.5rem, 7vw, 5rem) 1.25rem;
+    }
+
+    .faqLayout {
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+        align-items: center;
+    }
+
+    .faqLeftCol {
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .faqHeading {
+        text-align: center;
+        font-size: clamp(2rem, 6vw, 2.5rem);
+    }
+
+    .faqBr {
+        display: none;
+    }
+
+    .faqSubtext {
+        text-align: center;
+        margin: 0.85rem auto 0;
+        max-width: 540px;
+        font-size: 1rem;
+    }
+
+    .faqRightCol {
+        width: 100%;
+        max-width: 768px;
+        margin: 0 auto;
+    }
+
+    /* Style the accordion items on mobile to match the /job-seekers card aesthetic */
+    .faqRightCol > div > div > div {
+        background: #f4f4f5 !important;
+        border: 1px solid rgba(228, 228, 231, 0.8) !important;
+        border-radius: 20px !important;
+        overflow: hidden;
+        margin-bottom: 6px;
+    }
+
+    .faqRightCol button {
+        padding: 18px 20px !important;
+    }
+}

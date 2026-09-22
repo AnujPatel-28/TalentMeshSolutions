@@ -13,7 +13,7 @@ const CTA = ({
     title = 'Ready to Transform Your Hiring?',
     description = 'Join 10,000+ companies and job seekers using TalentMesh today. Start for free, no credit card required.',
     buttonText = 'Get Started Now',
-    buttonLink = '/portals/jobs/contact',
+    buttonLink = '/contact',
     glass = false,
 }: CTAProps) => {
     return (

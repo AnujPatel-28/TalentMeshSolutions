@@ -50,7 +50,7 @@ const Pricing = () => {
                             <li><span className={styles.checkIcon}>✓</span> Advanced Analytics</li>
                             <li><span className={styles.checkIcon}>✓</span> Candidate Filtering</li>
                         </ul>
-                        <Link href="/employers" className={styles.secondaryBtn}>Contact Sales</Link>
+                        <Link href="/contact" className={styles.secondaryBtn}>Contact Sales</Link>
                     </div>
                 </div>
             </div>
