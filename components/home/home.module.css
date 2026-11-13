@@ -325,6 +325,19 @@
     opacity: 1;
 }
 
+/* Scrim over the video, under the copy: a light navy wash for the headline
+   plus a darker band at the top so the transparent navbar stays readable
+   when the lit tower windows drift behind it. */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
+        rgba(5, 11, 26, 0.2);
+}
 
 .heroInner {
     position: relative;

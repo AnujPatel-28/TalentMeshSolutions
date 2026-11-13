@@ -36,22 +36,22 @@ export default function HomeHero() {
 
     return (
         <section className={styles.hero}>
-            {/* 1280x720, 10s, audio stripped: 661KB webm / 733KB mp4, re-encoded
-                from a 26MB 1080p master (still in git history). `preload="none"`
-                keeps even that off the critical path, and reduced-motion visitors
-                get the poster frame instead of playback. */}
+            {/* 1280x720, audio stripped: 712KB webm / 1.2MB mp4. The 10s source
+                plays forward then reversed (20s) so the loop has no visible jump.
+                `preload="none"` keeps it off the critical path, and reduced-motion
+                visitors get the poster frame instead of playback. */}
             <video
                 ref={videoRef}
                 className={styles.heroVideoBg}
                 preload="none"
-                poster="/images/hero-poster.webp"
+                poster="/images/hero-towers-poster.webp"
                 loop
                 muted
                 playsInline
                 aria-hidden="true"
             >
-                <source src="/images/hero-loop.webm" type="video/webm" />
-                <source src="/images/hero-loop.mp4" type="video/mp4" />
+                <source src="/images/hero-towers.webm" type="video/webm" />
+                <source src="/images/hero-towers.mp4" type="video/mp4" />
             </video>
 
             <div className={styles.heroInner}>
