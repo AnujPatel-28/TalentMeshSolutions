@@ -2370,7 +2370,6 @@
         font-size: clamp(2.15rem, 8.8vw, 2.7rem);
         line-height: 1.12;
         letter-spacing: -0.035em;
-        margin-top: 1.1rem;
         text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
     }
 
