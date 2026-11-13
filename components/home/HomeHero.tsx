@@ -68,7 +68,7 @@ export default function HomeHero() {
                             >
                                 {word.text}
                             </span>
-                            {(word.text === 'Connecting' || word.text === 'With') && (
+                            {(word.text === 'Businesses' || word.text === 'the') && (
                                 <br className={styles.mobileBreak} />
                             )}
                         </React.Fragment>

@@ -2365,20 +2365,25 @@
         width: 100%;
     }
 
+    /* A portrait hero only shows about a quarter of the 16:9 frame. Centred,
+       that is empty sky, so shift right to bring the right tower's edge and
+       the road below it into view. */
+    .heroVideoBg {
+        object-position: 78% center;
+    }
+
     .heroTitle {
         font-size: clamp(2.15rem, 8.8vw, 2.7rem);
-        line-height: 1.12;
+        line-height: 1.08;
         letter-spacing: -0.035em;
-        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
     }
 
     .heroDesc {
         font-size: 0.94rem;
         line-height: 1.6;
-        color: rgba(255, 255, 255, 0.88);
+        color: rgba(255, 255, 255, 0.8);
         margin: 1.15rem auto 0;
-        max-width: 350px;
-        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        max-width: 330px;
     }
 
     .heroActions {
