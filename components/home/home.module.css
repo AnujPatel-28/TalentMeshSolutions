@@ -347,41 +347,8 @@
     text-align: center;
 }
 
-.hero .eyebrow {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--sky-blue);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(8px);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.hero .eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #00C6FF;
-    box-shadow: 0 0 8px rgba(0, 198, 255, 0.8);
-    animation: dotPulse 2.4s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 0.9;
-    }
-    50% {
-        transform: scale(1.35);
-        opacity: 0.4;
-    }
-}
-
 .heroTitle {
-    margin: 1.5rem 0 0;
+    margin: 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
     font-size: clamp(2.8rem, 6.2vw, 4.5rem);
     line-height: 1.14;
@@ -439,11 +406,6 @@
    animation starts on first paint, so a slow or failed bundle costs the
    entrance, not the content. Delays mirror the previous stagger.
    Disabled wholesale in the reduced-motion block further down. */
-@keyframes heroEyebrowIn {
-    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-    to { opacity: 1; transform: none; }
-}
-
 @keyframes heroWordIn {
     from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
     to { opacity: 1; transform: none; filter: blur(0); }
@@ -452,10 +414,6 @@
 @keyframes heroRiseIn {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: none; }
-}
-
-.hero .eyebrow {
-    animation: heroEyebrowIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
 /* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
@@ -1980,7 +1938,6 @@
 
     /* The hero entrance is CSS, so it opts out here rather than through
        framer-motion's useReducedMotion like the rest of the page. */
-    .hero .eyebrow,
     .heroWord,
     .heroDesc,
     .heroActions {
@@ -2407,18 +2364,6 @@
         padding: 0;
         max-width: 380px;
         width: 100%;
-    }
-
-    .hero .eyebrow {
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        font-weight: 700;
-        padding: 0.45rem 1rem;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
     .heroTitle {

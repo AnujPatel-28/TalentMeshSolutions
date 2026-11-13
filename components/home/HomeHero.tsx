@@ -56,8 +56,6 @@ export default function HomeHero() {
 
             <div className={styles.heroInner}>
 
-                <p className={styles.eyebrow}>{HERO.eyebrow}</p>
-
                 {/* Words carry `--i` so home.module.css can stagger the entrance
                     without any of this depending on JavaScript. */}
                 <h1 className={styles.heroTitle} aria-label={HERO.headlinePlain}>

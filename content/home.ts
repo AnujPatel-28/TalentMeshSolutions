@@ -28,7 +28,6 @@ export const CONTACT = {
 } as const;
 
 export const HERO = {
-  eyebrow: 'Recruitment & Staffing Solutions',
   /** Word-by-word reveal; words flagged `accent` render in brand blue. */
   headline: [
     { text: 'Connecting' },
