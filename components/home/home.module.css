@@ -309,7 +309,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--tm-ink);
+    /* Poster frame for the video above it; see HomeHero.tsx. */
+    background: var(--tm-ink) url('/images/hero-towers-poster.webp') center / cover no-repeat;
     overflow: hidden;
 }
 
@@ -2353,6 +2354,7 @@
         min-height: 100dvh;
         min-height: 100svh;
         padding: calc(72px + 1.5rem) 1.25rem 2.5rem;
+        background-image: url('/images/hero-towers-mobile-poster.webp');
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -2363,13 +2365,6 @@
         padding: 0;
         max-width: 380px;
         width: 100%;
-    }
-
-    /* A portrait hero only shows about a quarter of the 16:9 frame. Centred,
-       that is empty sky, so shift right to bring the right tower's edge and
-       the road below it into view. */
-    .heroVideoBg {
-        object-position: 78% center;
     }
 
     .heroTitle {
