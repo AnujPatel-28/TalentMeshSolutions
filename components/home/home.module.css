@@ -309,7 +309,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--tm-ink);
+    /* Poster frame for the video above it; see HomeHero.tsx. */
+    background: var(--tm-ink) url('/images/hero-towers-poster.webp') center / cover no-repeat;
     overflow: hidden;
 }
 
@@ -325,6 +326,19 @@
     opacity: 1;
 }
 
+/* Scrim over the video, under the copy: a light navy wash for the headline
+   plus a darker band at the top so the transparent navbar stays readable
+   when the lit tower windows drift behind it. */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
+        rgba(5, 11, 26, 0.3);
+}
 
 .heroInner {
     position: relative;
@@ -334,48 +348,14 @@
     text-align: center;
 }
 
-.hero .eyebrow {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--sky-blue);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(8px);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.hero .eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #00C6FF;
-    box-shadow: 0 0 8px rgba(0, 198, 255, 0.8);
-    animation: dotPulse 2.4s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 0.9;
-    }
-    50% {
-        transform: scale(1.35);
-        opacity: 0.4;
-    }
-}
-
 .heroTitle {
-    margin: 1.5rem 0 0;
+    margin: 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: clamp(2.8rem, 6.2vw, 4.5rem);
-    line-height: 1.14;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.5rem, 5.6vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     color: #ffffff;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -385,28 +365,24 @@
     color: #ffffff;
 }
 
-.mobileBreak {
-    display: none;
-}
-
 .heroWord.accent {
     font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
     font-style: italic;
     font-weight: 400;
     font-size: 1.08em;
-    color: var(--sky-blue);
-    letter-spacing: normal;
+    color: #ffffff;
+    letter-spacing: -0.01em;
 }
 
 
 .heroDesc {
-    max-width: 700px;
+    max-width: 34rem;
     margin: 1.5rem auto 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: clamp(1.02rem, 1.4vw, 1.15rem);
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+    text-wrap: balance;
     animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
 }
 
@@ -414,8 +390,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 2.25rem;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
     animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
 }
 
@@ -426,11 +403,6 @@
    animation starts on first paint, so a slow or failed bundle costs the
    entrance, not the content. Delays mirror the previous stagger.
    Disabled wholesale in the reduced-motion block further down. */
-@keyframes heroEyebrowIn {
-    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-    to { opacity: 1; transform: none; }
-}
-
 @keyframes heroWordIn {
     from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
     to { opacity: 1; transform: none; filter: blur(0); }
@@ -441,28 +413,33 @@
     to { opacity: 1; transform: none; }
 }
 
-.hero .eyebrow {
-    animation: heroEyebrowIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
-}
-
 /* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
 .heroWord {
     animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
     animation-delay: calc(120ms + var(--i, 0) * 65ms);
 }
 
+.heroActions .btnPrimary {
+    padding: 1rem 2rem;
+}
+
+/* One primary action per view: the second CTA is a text link, not a pill. */
 .heroActions .btnSecondary {
-    background: rgba(255, 255, 255, 0.14);
+    padding: 1rem 0;
+    background: transparent;
     color: #ffffff;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 0;
+}
+
+.heroActions .btnSecondary::after {
+    content: '\2192';
 }
 
 .heroActions .btnSecondary:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: #ffffff;
-    color: #ffffff;
+    transform: none;
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
 }
 
 
@@ -1249,11 +1226,6 @@
     .categoryGrid {
         grid-template-columns: 1fr;
     }
-
-    .heroActions .btnPrimary,
-    .heroActions .btnSecondary {
-        flex: 1 1 100%;
-    }
 }
 
 /* -------------------------------------------------------- redesign add-ons -- */
@@ -1967,7 +1939,6 @@
 
     /* The hero entrance is CSS, so it opts out here rather than through
        framer-motion's useReducedMotion like the rest of the page. */
-    .hero .eyebrow,
     .heroWord,
     .heroDesc,
     .heroActions {
@@ -2376,99 +2347,60 @@
 }
 
 @media (max-width: 640px) {
-    .mobileBreak {
-        display: block;
-    }
-
+    /* Phone hero: copy anchored bottom-left on one edge, over a bottom scrim. */
     .hero {
         min-height: 100dvh;
         min-height: 100svh;
-        padding: calc(72px + 1.5rem) 1.25rem 2.5rem;
+        padding: calc(72px + 1.5rem) 1rem 3rem;
+        background-image: url('/images/hero-towers-mobile-poster.webp');
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-end;
+        align-items: stretch;
+    }
+
+    .hero::after {
+        background:
+            linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
+            linear-gradient(0deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 60%),
+            rgba(5, 11, 26, 0.3);
     }
 
     .heroInner {
-        padding: 0;
-        max-width: 380px;
-        width: 100%;
+        max-width: none;
+        margin: 0;
+        text-align: left;
     }
 
-    .hero .eyebrow {
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        font-weight: 700;
-        padding: 0.45rem 1rem;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
+    /* Fluid between 30px and 36px so "With the Right Talent" stays on one
+       line down to a 320px-wide screen. */
     .heroTitle {
-        font-size: clamp(2.15rem, 8.8vw, 2.7rem);
-        line-height: 1.12;
-        letter-spacing: -0.035em;
-        margin-top: 1.1rem;
-        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+        font-size: clamp(1.875rem, 9.2vw, 2.25rem);
     }
 
     .heroDesc {
-        font-size: 0.94rem;
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.88);
-        margin: 1.15rem auto 0;
-        max-width: 350px;
-        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        max-width: none;
+        margin: 1rem 0 0;
+        font-size: 1rem;
+        line-height: 1.5;
+        text-wrap: wrap;
     }
 
     .heroActions {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 0.65rem;
-        margin-top: 1.85rem;
-        width: 100%;
-    }
-
-    .heroActions .btnPrimary,
-    .heroActions .btnSecondary {
-        flex: 1 1 0;
-        max-width: 175px;
-        min-width: 0;
-        min-height: 48px;
-        padding: 0.75rem 0.6rem;
-        font-size: 0.86rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        text-align: center;
-        justify-content: center;
-        border-radius: 9999px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
     }
 
     .heroActions .btnPrimary {
-        background: linear-gradient(135deg, #0090CC 0%, #0072FF 100%);
-        color: #ffffff;
-        box-shadow: 0 4px 18px rgba(0, 114, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        min-height: 48px;
+        padding: 0.875rem 1.5rem;
     }
 
     .heroActions .btnSecondary {
-        background: rgba(255, 255, 255, 0.12);
-        color: #ffffff;
-        border: 1.5px solid rgba(255, 255, 255, 0.45);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-
-    .heroActions .btnSecondary:active {
-        background: rgba(255, 255, 255, 0.22);
-        border-color: rgba(255, 255, 255, 0.7);
-        transform: scale(0.98);
+        min-height: 44px;
+        padding: 0.75rem 0;
     }
 
     .industriesContainer {

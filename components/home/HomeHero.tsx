@@ -26,37 +26,50 @@ export default function HomeHero() {
             video.play().catch(() => {});
         };
 
+        // The browser picks a <source> once, at load(). Pick again whenever the
+        // viewport crosses the phone breakpoint (rotation, resize), or a page
+        // opened wide keeps the landscape cut after it narrows.
+        const phone = window.matchMedia('(max-width: 640px)');
+        phone.addEventListener('change', start);
+
         if (document.readyState === 'complete') {
             start();
-            return;
+        } else {
+            window.addEventListener('load', start, { once: true });
         }
-        window.addEventListener('load', start, { once: true });
-        return () => window.removeEventListener('load', start);
+        return () => {
+            phone.removeEventListener('change', start);
+            window.removeEventListener('load', start);
+        };
     }, [reduceMotion]);
 
     return (
         <section className={styles.hero}>
-            {/* 1280x720, 10s, audio stripped: 661KB webm / 733KB mp4, re-encoded
-                from a 26MB 1080p master (still in git history). `preload="none"`
-                keeps even that off the critical path, and reduced-motion visitors
-                get the poster frame instead of playback. */}
+            {/* Two static-camera loops, audio stripped; the last 1.5s of each
+                dissolve into the first for a seamless 8.5s loop. Phones get a
+                720x1280 portrait cut (332KB webm / 592KB mp4), everything else
+                the 1280x720 one (291KB webm / 502KB mp4). The breakpoint matches
+                the 640px mobile block in home.module.css, which also swaps the
+                poster: it is the hero's CSS background rather than a `poster`
+                attribute, because `poster` cannot vary by viewport.
+                `preload="none"` keeps the video off the critical path, and
+                reduced-motion visitors keep the poster instead of playback. */}
             <video
                 ref={videoRef}
                 className={styles.heroVideoBg}
                 preload="none"
-                poster="/images/hero-poster.webp"
                 loop
                 muted
                 playsInline
                 aria-hidden="true"
             >
-                <source src="/images/hero-loop.webm" type="video/webm" />
-                <source src="/images/hero-loop.mp4" type="video/mp4" />
+                <source media="(max-width: 640px)" src="/images/hero-towers-mobile.webm" type="video/webm" />
+                <source media="(max-width: 640px)" src="/images/hero-towers-mobile.mp4" type="video/mp4" />
+                <source src="/images/hero-towers.webm" type="video/webm" />
+                <source src="/images/hero-towers.mp4" type="video/mp4" />
             </video>
 
             <div className={styles.heroInner}>
-
-                <p className={styles.eyebrow}>{HERO.eyebrow}</p>
 
                 {/* Words carry `--i` so home.module.css can stagger the entrance
                     without any of this depending on JavaScript. */}
@@ -70,9 +83,7 @@ export default function HomeHero() {
                             >
                                 {word.text}
                             </span>
-                            {(word.text === 'Connecting' || word.text === 'With') && (
-                                <br className={styles.mobileBreak} />
-                            )}
+                            {word.text === 'Businesses' && <br />}
                         </React.Fragment>
                     ))}
                 </h1>
