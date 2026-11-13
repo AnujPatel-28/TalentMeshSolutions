@@ -28,7 +28,7 @@ export const CONTACT = {
 } as const;
 
 export const HERO = {
-  /** Word-by-word reveal; words flagged `accent` render in brand blue. */
+  /** Word-by-word reveal; words flagged `accent` render in the serif italic. */
   headline: [
     { text: 'Connecting' },
     { text: 'Businesses' },
