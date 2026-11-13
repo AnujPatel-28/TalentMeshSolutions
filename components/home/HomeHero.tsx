@@ -36,8 +36,8 @@ export default function HomeHero() {
 
     return (
         <section className={styles.hero}>
-            {/* 1280x720, audio stripped: 712KB webm / 1.2MB mp4. The 10s source
-                plays forward then reversed (20s) so the loop has no visible jump.
+            {/* 1280x720, audio stripped: 291KB webm / 502KB mp4. Static-camera shot;
+                the last 1.5s dissolve into the first, giving a seamless 8.5s loop.
                 `preload="none"` keeps it off the critical path, and reduced-motion
                 visitors get the poster frame instead of playback. */}
             <video

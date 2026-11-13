@@ -336,7 +336,7 @@
     pointer-events: none;
     background:
         linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
-        rgba(5, 11, 26, 0.2);
+        rgba(5, 11, 26, 0.3);
 }
 
 .heroInner {
