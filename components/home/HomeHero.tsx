@@ -26,12 +26,21 @@ export default function HomeHero() {
             video.play().catch(() => {});
         };
 
+        // The browser picks a <source> once, at load(). Pick again whenever the
+        // viewport crosses the phone breakpoint (rotation, resize), or a page
+        // opened wide keeps the landscape cut after it narrows.
+        const phone = window.matchMedia('(max-width: 640px)');
+        phone.addEventListener('change', start);
+
         if (document.readyState === 'complete') {
             start();
-            return;
+        } else {
+            window.addEventListener('load', start, { once: true });
         }
-        window.addEventListener('load', start, { once: true });
-        return () => window.removeEventListener('load', start);
+        return () => {
+            phone.removeEventListener('change', start);
+            window.removeEventListener('load', start);
+        };
     }, [reduceMotion]);
 
     return (
