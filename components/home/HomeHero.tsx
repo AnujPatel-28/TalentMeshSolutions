@@ -84,6 +84,7 @@ export default function HomeHero() {
                                 {word.text}
                             </span>
                             {word.text === 'Businesses' && <br />}
+                            {word.text === 'the' && <br className={styles.mobileBreak} />}
                         </React.Fragment>
                     ))}
                 </h1>
