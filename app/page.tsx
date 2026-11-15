@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import {
+  HomeIntro,
   HomeHero,
   TrustStrip,
   Services,
@@ -84,6 +85,7 @@ export default function Home() {
       />
       
       <div className={homeStyles.homeScope}>
+        <HomeIntro />
         <HomeHero />
 
         <GridWrapper>

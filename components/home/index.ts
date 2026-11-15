@@ -1,3 +1,4 @@
+export { default as HomeIntro } from './HomeIntro';
 export { default as HomeHero } from './HomeHero';
 export { default as TrustStrip } from './TrustStrip';
 export { default as Services } from './Services';
