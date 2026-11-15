@@ -2428,9 +2428,10 @@
 
 @media (max-width: 640px) {
     /* Phone hero: headline and description at the top under the navbar, both
-       CTAs pinned to the bottom in thumb reach, video showing between them.
-       The bottom padding keeps the CTAs clear of the floating WhatsApp button
-       (56px + 16px offset). */
+       CTAs pinned to the bottom-left in thumb reach, video showing between
+       them. The CTAs hug their labels, so they end well left of the floating
+       WhatsApp button in the bottom-right corner (it starts 72px from the
+       right edge) and can share its band of the screen. */
     .mobileBreak {
         display: block;
     }
@@ -2438,7 +2439,7 @@
     .hero {
         min-height: 100dvh;
         min-height: 100svh;
-        padding: calc(72px + 1.5rem) 1rem 5.5rem;
+        padding: calc(72px + 1.5rem) 1rem 2.5rem;
         background-image: url('/images/hero-day-mobile-poster.webp');
         display: flex;
         flex-direction: column;
@@ -2480,26 +2481,24 @@
         text-wrap: wrap;
     }
 
-    /* Two full-width pills, so both labels share the same edges and centre. */
+    /* The text link is indented by the pill's own side padding, so its label
+       starts on the same line as the pill's label. */
     .heroActions {
         flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
+        align-items: flex-start;
+        gap: 0.25rem;
         margin-top: auto;
         padding-top: 2rem;
     }
 
-    .heroActions .btnPrimary,
-    .heroActions .btnSecondary {
-        min-height: 52px;
+    .heroActions .btnPrimary {
+        min-height: 48px;
         padding: 0.875rem 1.5rem;
     }
 
     .heroActions .btnSecondary {
-        background: rgba(5, 11, 26, 0.3);
-        border: 1.5px solid rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        min-height: 44px;
+        padding: 0.75rem 1.5rem;
     }
 
     .industriesContainer {
