@@ -24,6 +24,9 @@ export const CONTACT = {
   postalCode: '380009',
   phoneDisplay: '9898161106',
   phoneHref: 'tel:9898161106',
+  /** wa.me wants the number with country code and no symbols; `text` pre-fills the first message. */
+  whatsappHref:
+    'https://wa.me/919898161106?text=Hi%20TalentMesh%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services.',
   email: 'info@talentmeshsolutions.com',
 } as const;
 
@@ -42,7 +45,7 @@ export const HERO = {
   description:
     'End-to-end recruitment and staffing that helps you hire skilled people and scale teams faster.',
   primaryCta: { label: 'Get Hiring Support', href: '/contact' },
-  secondaryCta: { label: 'Talk to Our Team', href: '/contact' },
+  secondaryCta: { label: 'Looking for a Job?', href: '/job-seekers' },
 } as const;
 
 export const POSITIONING = {
