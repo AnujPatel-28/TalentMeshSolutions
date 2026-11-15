@@ -314,7 +314,7 @@
     align-items: center;
     justify-content: center;
     /* Poster frame for the video above it; see HomeHero.tsx. */
-    background: var(--tm-ink) url('/images/hero-towers-poster.webp') center / cover no-repeat;
+    background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
 }
 
@@ -330,9 +330,9 @@
     opacity: 1;
 }
 
-/* Scrim over the video, under the copy: a light navy wash for the headline
-   plus a darker band at the top so the transparent navbar stays readable
-   when the lit tower windows drift behind it. */
+/* Scrim over the video, under the copy. The video is a daytime shot, so the
+   navy wash is heavy enough (42%) for white text to read against bright sky,
+   with a darker band at the top for the transparent navbar. */
 .hero::after {
     content: '';
     position: absolute;
@@ -340,8 +340,8 @@
     z-index: 0;
     pointer-events: none;
     background:
-        linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
-        rgba(5, 11, 26, 0.3);
+        linear-gradient(180deg, rgba(5, 11, 26, 0.55) 0%, rgba(5, 11, 26, 0) 30%),
+        rgba(5, 11, 26, 0.42);
 }
 
 .heroInner {
@@ -2427,7 +2427,7 @@
         min-height: 100dvh;
         min-height: 100svh;
         padding: calc(72px + 1.5rem) 1rem 3rem;
-        background-image: url('/images/hero-towers-mobile-poster.webp');
+        background-image: url('/images/hero-day-mobile-poster.webp');
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -2436,8 +2436,8 @@
 
     .hero::after {
         background:
-            linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
-            linear-gradient(0deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 60%),
+            linear-gradient(180deg, rgba(5, 11, 26, 0.55) 0%, rgba(5, 11, 26, 0) 30%),
+            linear-gradient(0deg, rgba(5, 11, 26, 0.75) 0%, rgba(5, 11, 26, 0) 60%),
             rgba(5, 11, 26, 0.3);
     }
 

@@ -47,8 +47,8 @@ export default function HomeHero() {
         <section className={styles.hero}>
             {/* Two static-camera loops, audio stripped; the last 1.5s of each
                 dissolve into the first for a seamless 8.5s loop. Phones get a
-                720x1280 portrait cut (332KB webm / 592KB mp4), everything else
-                the 1280x720 one (291KB webm / 502KB mp4). The breakpoint matches
+                720x1280 portrait cut (242KB webm / 399KB mp4), everything else
+                the 1280x720 one (360KB webm / 567KB mp4). The breakpoint matches
                 the 640px mobile block in home.module.css, which also swaps the
                 poster: it is the hero's CSS background rather than a `poster`
                 attribute, because `poster` cannot vary by viewport.
@@ -63,10 +63,10 @@ export default function HomeHero() {
                 playsInline
                 aria-hidden="true"
             >
-                <source media="(max-width: 640px)" src="/images/hero-towers-mobile.webm" type="video/webm" />
-                <source media="(max-width: 640px)" src="/images/hero-towers-mobile.mp4" type="video/mp4" />
-                <source src="/images/hero-towers.webm" type="video/webm" />
-                <source src="/images/hero-towers.mp4" type="video/mp4" />
+                <source media="(max-width: 640px)" src="/images/hero-day-mobile.webm" type="video/webm" />
+                <source media="(max-width: 640px)" src="/images/hero-day-mobile.mp4" type="video/mp4" />
+                <source src="/images/hero-day.webm" type="video/webm" />
+                <source src="/images/hero-day.mp4" type="video/mp4" />
             </video>
 
             <div className={styles.heroInner}>
