@@ -28,8 +28,7 @@ export const CONTACT = {
 } as const;
 
 export const HERO = {
-  eyebrow: 'Recruitment & Staffing Solutions',
-  /** Word-by-word reveal; words flagged `accent` render in brand blue. */
+  /** Word-by-word reveal; words flagged `accent` render in the serif italic. */
   headline: [
     { text: 'Connecting' },
     { text: 'Businesses' },
@@ -41,7 +40,7 @@ export const HERO = {
   /** Same string, unsplit — used for the `og:title` and screen-reader label. */
   headlinePlain: 'Connecting Businesses With the Right Talent',
   description:
-    'End-to-end recruitment and staffing solutions designed to help businesses hire skilled professionals, scale teams, and build high-performing workforces.',
+    'End-to-end recruitment and staffing that helps you hire skilled people and scale teams faster.',
   primaryCta: { label: 'Get Hiring Support', href: '/contact' },
   secondaryCta: { label: 'Talk to Our Team', href: '/contact' },
 } as const;
