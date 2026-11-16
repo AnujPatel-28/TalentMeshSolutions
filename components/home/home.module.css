@@ -1164,26 +1164,21 @@ p.whyStatement {
     }
 }
 
-/* Wide screens: a caption either side of the card, level with its middle,
-   over a scrim that darkens the photo's edges just enough to read on. The
-   captions ride with the card when the sequence is pinned. */
-@media (min-width: 1025px) {
-    .whyItem::after,
-    [data-pinned] .whyStage::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-        background: linear-gradient(
-            90deg,
-            rgba(7, 26, 43, 0.6),
-            rgba(7, 26, 43, 0) 30%,
-            rgba(7, 26, 43, 0) 70%,
-            rgba(7, 26, 43, 0.6)
-        );
-    }
+/* One flat, neutral tint over each whole photo, so white captions read on
+   it and the card stands out, without shifting the photo's colours or
+   darkening only part of the frame. */
+.whyItem::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: rgba(8, 12, 18, 0.3);
+}
 
+/* Wide screens: a caption either side of the card, level with its middle.
+   The captions ride with the card when the sequence is pinned. */
+@media (min-width: 1025px) {
     .whyCaption {
         display: block;
         position: absolute;
@@ -1197,6 +1192,7 @@ p.whyStatement {
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #fff;
+        text-shadow: 0 1px 14px rgba(8, 12, 18, 0.55);
         transform: translate3d(0, calc(-50% + var(--why-y, 0px)), 0);
     }
 
@@ -1244,6 +1240,12 @@ p.whyStatement {
        a photo fading in must not cover the previous card on its way out. */
     [data-pinned] .whyItem {
         display: contents;
+    }
+
+    /* A dissolved item's tint still draws, as a child of the stage, so
+       four would stack over the photos. Keep the first one only. */
+    [data-pinned] .whyItem:not(:first-child)::after {
+        content: none;
     }
 
     [data-pinned] .whyPhoto {
