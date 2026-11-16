@@ -20,7 +20,7 @@ const UserSegments = () => {
                         <div className={styles.segmentBadge}>For Employers</div>
                         <h3 className={styles.segmentTitle}>Transform Your Hiring Process</h3>
                         <p className={styles.segmentDesc}>
-                            Post jobs, manage applications, and connect with qualified candidates—all from one recruitment platform.
+                            Post jobs, manage applications, and connect with qualified candidates, all from one recruitment platform.
                         </p>
 
                         <ul className={styles.segmentFeatures}>
@@ -68,7 +68,7 @@ const UserSegments = () => {
                         <div className={styles.segmentBadge}>For Candidates</div>
                         <h3 className={styles.segmentTitle}>Accelerate Your Career Growth</h3>
                         <p className={styles.segmentDesc}>
-                            Don't just apply—get noticed. Let our intelligent algorithms highlight your strengths to the world's best companies.
+                            Don't just apply, get noticed. Let our intelligent algorithms highlight your strengths to the world's best companies.
                         </p>
 
                         <ul className={styles.segmentFeatures}>

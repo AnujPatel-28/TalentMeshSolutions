@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Target, Layers, LifeBuoy, Briefcase, Check } from 'lucide-react';
 import { WHY_TALENTMESH, INDUSTRY_ROWS } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 const POINT_ICONS = {
@@ -168,8 +167,6 @@ export default function WhyUs() {
 
     return (
         <section className="relative" id="why-talentmesh">
-            <SectionMarker label="What Sets Us Apart" index={3} />
-
             <div className={`${styles.section} ${styles.sectionTint} ${styles.whyTint}`}>
                 <div className={styles.inner}>
                     <div className={styles.whyTopRow}>

@@ -141,14 +141,6 @@
     z-index: 20;
 }
 
-.whyImage {
-    width: 100%;
-    max-width: 1720px;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 30px 75px rgba(0, 86, 179, 0.22));
-}
-
 @media (max-width: 1024px) {
     .whyTopRow {
         flex-direction: column;
@@ -275,7 +267,6 @@
     box-shadow: 0 6px 24px rgba(0, 123, 255, 0.5);
 }
 
-
 .btnSecondary {
     background: #fff;
     color: var(--ink-black);
@@ -317,7 +308,6 @@
     background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
 }
-
 
 .heroVideoBg {
     position: absolute;
@@ -362,7 +352,6 @@
     color: #ffffff;
 }
 
-
 .heroWord {
     display: inline-block;
     margin-right: 0.28em;
@@ -383,7 +372,6 @@
     letter-spacing: -0.01em;
 }
 
-
 .heroDesc {
     max-width: 34rem;
     margin: 1.5rem auto 0;
@@ -392,7 +380,6 @@
     line-height: 1.55;
     color: rgba(255, 255, 255, 0.78);
     text-wrap: balance;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
 }
 
 .heroActions {
@@ -402,19 +389,53 @@
     align-items: center;
     gap: 1rem 2rem;
     margin-top: 2.5rem;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
 }
 
-/* Hero entrance. This lives in CSS rather than framer-motion on purpose: the
-   hero is the LCP element, and motion `initial` props serialise to inline
-   `opacity:0` in the server HTML, which left the headline, lede and both CTAs
-   invisible until React hydrated. As keyframes the markup ships opaque and the
-   animation starts on first paint, so a slow or failed bundle costs the
-   entrance, not the content. Delays mirror the previous stagger.
+/* Hero entrance. This lives in CSS rather than framer-motion on purpose:
+   motion `initial` props serialise to inline `opacity:0` in the server HTML,
+   which left the headline, lede and both CTAs invisible until React hydrated.
+   As keyframes the animation starts on first paint, so a slow or failed bundle
+   costs the entrance, not the content.
+
+   Each headline line rises from behind the lower edge of its mask. On a first
+   visit the white intro cover (below) is still up at first paint, so the start
+   waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
-@keyframes heroWordIn {
-    from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
+.hero {
+    --hero-start: 1.5s;
+}
+
+:global(.tm-intro-seen) .hero {
+    --hero-start: 0.15s;
+}
+
+/* The padding/negative-margin pair gives descenders (the italic "g") room
+   inside the clip without moving the lines apart. */
+.heroLineMask {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+}
+
+/* `--l` is the line index, set in HomeHero.tsx. */
+.heroLine {
+    display: inline-block;
+    animation: heroLineUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--hero-start) + var(--l, 0) * 130ms);
+}
+
+.heroDesc {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 610ms) both;
+}
+
+.heroActions {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 730ms) both;
+}
+
+@keyframes heroLineUp {
+    from { transform: translateY(112%); }
 }
 
 @keyframes heroRiseIn {
@@ -422,10 +443,61 @@
     to { opacity: 1; transform: none; }
 }
 
-/* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
-.heroWord {
-    animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-    animation-delay: calc(120ms + var(--i, 0) * 65ms);
+/* Scroll exit, desktop and phone: the hero pins while the page below slides
+   up over it, and HomeHero.tsx scales the video and lifts the copy with the
+   scroll. Pinned only when motion is welcome and the screen is tall enough
+   that a pinned hero cannot hide its own lower edge. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 560px) {
+    .hero {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.heroVideoBg,
+.heroInner {
+    will-change: transform;
+}
+
+/* Magnetic primary CTA. The wrapper is the pointer catch area: 14px of padding
+   cancelled by the same negative margin, so layout is unchanged. HomeHero.tsx
+   writes --mx/--my while a mouse is over it and adds `.magnetTracking`. */
+.heroMagnet {
+    display: inline-flex;
+    padding: 14px;
+    margin: -14px;
+}
+
+.heroActions .btnPrimary,
+.heroActions .btnPrimary:hover {
+    position: relative;
+    overflow: hidden;
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.heroActions .btnPrimary.magnetTracking {
+    transition: transform 0.18s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* Light sweep across the pill on hover. */
+.heroActions .btnPrimary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .heroActions .btnPrimary:hover::after {
+        transform: translateX(340%) skewX(-18deg);
+        transition: transform 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+    }
 }
 
 .heroActions .btnPrimary {
@@ -442,6 +514,20 @@
 
 .heroActions .btnSecondary::after {
     content: '\2192';
+    transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+    /* A small nudge every few seconds, so the arrow also moves on touch
+       screens, where there is no hover. Off in the reduced-motion block. */
+    animation: heroArrowNudge 2.8s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite;
+}
+
+.heroActions .btnSecondary:hover::after {
+    animation: none;
+    transform: translateX(6px);
+}
+
+@keyframes heroArrowNudge {
+    0%, 60%, 100% { transform: none; }
+    30% { transform: translateX(5px); }
 }
 
 .heroActions .btnSecondary:hover {
@@ -450,7 +536,6 @@
     text-decoration: underline;
     text-underline-offset: 0.3em;
 }
-
 
 /* ----------------------------------------------------------------- intro -- */
 
@@ -502,20 +587,6 @@
 
 @keyframes introLogoOut {
     to { opacity: 0; transform: translate(-50%, -260%); }
-}
-
-/* The hero copy settles upward as the cover lifts. Transform only: its opacity
-   is left alone so the headline still counts as painted from the first frame. */
-.heroInner {
-    animation: heroSettle 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.35s backwards;
-}
-
-:global(.tm-intro-seen) .heroInner {
-    animation: none;
-}
-
-@keyframes heroSettle {
-    from { transform: translateY(24px); }
 }
 
 /* ------------------------------------------------------------ trust strip -- */
@@ -1279,15 +1350,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .trustLayout {
-        grid-template-columns: 1fr;
-    }
-
-    .trustCardsCol,
-    .trustTextCol {
-        padding: 3rem 2rem;
-    }
-
     .visualGrid {
         grid-template-columns: 1fr;
     }
@@ -1608,97 +1670,6 @@
     font-weight: 600;
 }
 
-/* Positioning Section (Split Left & Right Layout) */
-.trustSection {
-    position: relative;
-    padding: 0;
-    width: 100%;
-    /* clip, not hidden — this section contains its own sticky marker, and
-       `hidden` would make it a scroll container and disable the stick. */
-    overflow-x: clip;
-    background: var(--tm-canvas);
-    /* Configurable color variables */
-    --trust-cards-bg: var(--tm-canvas);        /* Left side (Cards) background */
-    --trust-text-bg: var(--tm-surface);         /* Right side (Matches below section #F0F8FF) */
-    --trust-text-color: var(--tm-brand);      /* Old blue heading: Uncover Top Talent etc. */
-    --trust-text-lede: var(--tm-body);       /* Matching sectionTint lede */
-    --trust-card-bg: var(--tm-canvas);         /* Card background */
-    --trust-card-border: #E2E8F0;     /* Card dividers border */
-    --trust-card-hover: var(--tm-surface);
-}
-
-.trustContainer {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-}
-
-.trustLayout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    min-height: 750px;
-    border-radius: 0px;
-    overflow: hidden;
-    border: none;
-    box-shadow: none;
-    position: relative;
-}
-
-/* Left Side: Cards */
-.trustCardsCol {
-    background: var(--trust-cards-bg);
-    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
-    display: flex;
-    flex-direction: column;
-    /* `space-between` against .trustLayout's 750px min-height was flinging the
-       heading, the rail and the metric row to the extremes and opening ~120px
-       of dead air under the heading. Centre the group instead and let the gaps
-       be deliberate. */
-    justify-content: center;
-    gap: 2rem;
-    height: 100%;
-    width: 100%;
-    border-right: 1px solid var(--trust-card-border);
-}
-
-.trustCardsCol .positioningStack {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    border: none;
-    box-shadow: none;
-}
-
-/* Right Side: Text */
-.trustTextCol {
-    background: var(--trust-text-bg);
-    padding: 3.25rem max(3.5rem, calc((100vw - 1440px) / 2)) 5rem 4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    position: relative;
-}
-
-.trustHeadWrap {
-    position: relative;
-    min-height: 190px;
-    width: 100%;
-}
-
-.trustHead {
-    width: 100%;
-    max-width: 620px;
-    text-align: left;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
 .trustEyebrow {
     display: inline-flex;
     align-items: center;
@@ -1723,154 +1694,9 @@
     background: currentColor;
 }
 
-.trustH2 {
-    margin: 0 0 1.5rem;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: clamp(2rem, 3.1vw, 2.9rem);
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--trust-text-color);
-}
-
-.trustLede {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.75;
-    color: var(--trust-text-lede);
-}
-
-.trustImageWrap {
-    width: 100%;
-    max-width: 1720px;
-    margin-top: 2rem;
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 20;
-    pointer-events: none;
-    transform: translateX(-105px);
-}
-
 .whyHeadFull {
     max-width: 48rem;
     margin-bottom: 2.5rem;
-}
-
-/* Full Left Column Cards (Zero outside gap, full edge-to-edge left block) */
-.positioningStack {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: none;
-    border-radius: 0px;
-    overflow: hidden;
-}
-
-/* Capability rail — deliberately not cards.
-   Three stacked rounded boxes made this column read as a form, and the
-   inactive two washed out to 0.85 opacity, which reads as "disabled" rather
-   than "available". A numbered index rail with hairline rules matches the
-   section-marker motif already on the page, drops three nested containers
-   worth of chrome, and lets the active row carry real emphasis instead of
-   just a blue outline. */
-.positioningCard {
-    display: grid;
-    grid-template-columns: 2.25rem 1fr auto;
-    align-items: start;
-    column-gap: 1.1rem;
-    padding: 1.15rem 0.35rem;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #E6EDF5;
-    border-radius: 0;
-    text-align: left;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    user-select: none;
-    outline: none;
-}
-
-.positioningCard:first-child {
-    border-top: 1px solid #E6EDF5;
-}
-
-.positioningCard:hover {
-    background: var(--tm-surface);
-}
-
-.positioningCard:focus-visible {
-    outline: 2px solid var(--tm-brand);
-    outline-offset: -2px;
-}
-
-.positioningNum {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    color: #94A3B8;
-    padding-top: 0.3rem;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.2s ease;
-}
-
-.positioningTitle {
-    margin: 0;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--tm-ink);
-    transition: color 0.2s ease;
-}
-
-.positioningDesc {
-    margin: 0.3rem 0 0;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    color: var(--tm-body);
-}
-
-.positioningMark {
-    width: 7px;
-    height: 7px;
-    border-radius: 2px;
-    background: #CBD5E1;
-    margin-top: 0.55rem;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.positioningCardActive .positioningNum,
-.positioningCardActive .positioningTitle {
-    color: var(--tm-brand);
-}
-
-.positioningCardActive .positioningMark {
-    background: var(--tm-brand);
-    transform: scale(1.15);
-}
-
-/* The cycle timer runs along the row's own bottom rule rather than floating
-   inside the card as a loose bar that read as a loading indicator. */
-.positioningProgress {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 2px;
-    overflow: hidden;
-}
-
-.positioningProgressFill {
-    display: block;
-    height: 100%;
-    background: var(--tm-brand);
-    transform-origin: left;
 }
 
 .positioningCardInner {
@@ -1937,30 +1763,8 @@
     text-align: left;
 }
 
-.positioningTitle {
-    margin: 0 0 0.5rem;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--tm-ink);
-    transition: color 0.3s ease;
-}
-
 .positioningTitleActive {
     color: var(--tm-brand);
-}
-
-.positioningDesc {
-    margin: 0;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.65;
-    color: var(--tm-body);
-    transition: color 0.3s ease;
-    min-height: 3.3em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
 .positioningDescActive {
@@ -2182,7 +1986,6 @@
     .btnPrimary:hover,
     .btnSecondary:hover,
     .categoryCard:hover,
-    .positioningCard:hover,
     .visualCard:hover,
     .industryTag:hover {
         transform: none;
@@ -2190,15 +1993,250 @@
 
     /* The hero entrance is CSS, so it opts out here rather than through
        framer-motion's useReducedMotion like the rest of the page. */
-    .heroWord,
+    .heroLine,
     .heroDesc,
     .heroActions,
-    .heroInner {
+    .heroActions .btnSecondary::after {
         animation: none;
     }
 
     .intro {
         display: none;
+    }
+}
+
+/* ------------------------------------------- Recruitment engineered for scale -- */
+
+/* Three photo panels (TrustStrip.tsx). The open one takes most of the row and
+   shows its headline and copy; the other two fold to a strip with a vertical
+   title. Below 860px they stack and open downwards instead. */
+.scaleHead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.scaleHead .h2 {
+    margin: 0;
+}
+
+.scaleAccent {
+    font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.08em;
+    letter-spacing: -0.01em;
+    color: var(--tm-brand);
+}
+
+.scaleChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.scaleChips li {
+    padding: 0.45rem 0.9rem;
+    border-radius: 9999px;
+    border: 1px solid #CFE0F3;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.scaleRow {
+    display: flex;
+    gap: 0.75rem;
+    height: clamp(400px, 38vw, 520px);
+}
+
+.scalePanel {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #DFEAF8 url('/building%20bg.webp') center bottom / cover no-repeat;
+    transition: flex-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scalePanelOpen {
+    flex-grow: 3.4;
+}
+
+/* Wash behind the copy so it reads over the skyline. */
+.scalePanel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(240, 248, 255, 0.96) 0%, rgba(240, 248, 255, 0.6) 34%, rgba(240, 248, 255, 0) 60%);
+    pointer-events: none;
+}
+
+.scaleTab {
+    position: static;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--tm-ink);
+    text-align: left;
+    cursor: pointer;
+}
+
+.scaleTab::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+}
+
+.scalePanelOpen .scaleTab {
+    cursor: default;
+}
+
+.scaleTab:focus-visible::after {
+    outline: 2px solid var(--tm-brand);
+    outline-offset: -2px;
+    border-radius: 20px;
+}
+
+.scaleNum {
+    position: absolute;
+    z-index: 2;
+    left: 1.4rem;
+    top: 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--tm-brand);
+}
+
+.scaleTitle {
+    position: absolute;
+    z-index: 2;
+    left: 1.4rem;
+    bottom: 1.4rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.scalePanelOpen .scaleTitle {
+    opacity: 0;
+}
+
+.scaleBody {
+    position: absolute;
+    z-index: 2;
+    left: 1.4rem;
+    top: 3.25rem;
+    width: min(21rem, calc(100% - 2.8rem));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.3s;
+}
+
+.scalePanelOpen .scaleBody {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0.22s;
+}
+
+.scaleBody h3 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.2vw, 2.1rem);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--tm-brand);
+    text-wrap: balance;
+}
+
+.scaleBody p {
+    margin: 0.8rem 0 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--tm-body);
+}
+
+.scaleImg {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 64%;
+    max-width: none;
+    /* Shown only in the open panel: cropped to a closed strip, a person
+       reads as a stray slice of a face. */
+    opacity: 0;
+    transform: translateX(8%);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.scalePanelOpen .scaleImg {
+    opacity: 1;
+    transform: none;
+}
+
+@media (max-width: 860px) {
+    .scaleRow {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .scalePanel {
+        flex: none;
+        height: 76px;
+        transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scalePanelOpen {
+        height: 470px;
+    }
+
+    .scaleTitle {
+        writing-mode: horizontal-tb;
+        transform: none;
+        left: 3.9rem;
+        top: 1.5rem;
+        bottom: auto;
+        font-size: 1.02rem;
+    }
+
+    .scaleNum {
+        top: 1.7rem;
+    }
+
+    .scaleBody {
+        top: 3.6rem;
+    }
+
+    .scaleImg {
+        height: 40%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scalePanel,
+    .scaleBody,
+    .scaleImg,
+    .scaleTitle {
+        transition: none;
     }
 }
 
@@ -2397,38 +2435,134 @@
     width: 24px;
 }
 
-@media (max-width: 1024px) {
-    .svcWrapper {
-        --svc-cards: 2;
+/* Pinned side-scroll (Services.tsx). On a wide, tall enough screen the section
+   pins for one viewport: the title opens centred and settles into place as
+   the cards come in, then vertical scroll moves the rail sideways, from the
+   first card starting at the centre line to the last card ending on it. The
+   section's extra height, --svc-dist, is the scroll that takes and is written
+   by Services.tsx together with `data-pinned`; until then, and on phones, short
+   screens and for reduced motion, the rail stays the swipeable carousel above. */
+/* Transforms need a box; see the lede in Services.tsx. */
+.svcLedeWord {
+    display: inline-block;
+}
+
+.svcMeter {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    margin-bottom: 0.75rem;
+}
+
+.svcCounter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--tm-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.svcProgress {
+    width: 220px;
+    height: 3px;
+    border-radius: 3px;
+    background: #DBE7F4;
+    overflow: hidden;
+}
+
+.svcOutro {
+    display: none;
+}
+
+.svcProgress i {
+    display: block;
+    height: 100%;
+    background: var(--tm-brand);
+    transform-origin: left;
+    transform: scaleX(var(--svc-progress, 0));
+}
+
+@media (min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+    .svcPin {
+        height: calc(100vh + var(--svc-dist, 0px));
     }
 
-    .trustLayout {
-        grid-template-columns: 1fr;
-        min-height: auto;
+    /* 60px clears the fixed navbar. */
+    .svcStage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Cards run to the viewport edge rather than stopping at the 1200px
+       column; the page wrapper clips them there. */
+    .svcStage > .section {
+        padding-block: 0;
         overflow: visible;
     }
 
-    .trustCardsCol {
-        padding: 2.5rem 1.5rem 0;
-        width: 100%;
-        background: transparent;
+    .svcPin[data-pinned] .svcHeadText .h2,
+    .svcPin[data-pinned] .svcLedeWord {
+        will-change: transform;
     }
 
-    .trustCardsCol .positioningStack {
-        max-width: 100%;
-        border: none;
-        gap: 0.85rem;
+    /* --svc-scale / --svc-dim are written per card by Services.tsx. */
+    .svcPin[data-pinned] .svcCard {
+        transform: scale(var(--svc-scale, 1));
+        opacity: var(--svc-dim, 1);
     }
 
-    .positioningCard {
-        padding: 1.25rem 1.25rem;
+    .svcPin[data-pinned] .svcRail {
+        overflow: visible;
+        scroll-snap-type: none;
+        will-change: transform;
+    }
+
+    .svcPin[data-pinned] .svcControls {
+        display: none;
+    }
+
+    .svcPin[data-pinned] .svcMeter {
+        display: flex;
+    }
+
+    /* Follows the last card in the rail, so it can never overlap one. The
+       rail stops with that card's right edge on the centre line, which leaves
+       this block in the right half. */
+    .svcPin[data-pinned] .svcOutro {
         display: block;
-        align-items: flex-start;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 16px;
-        box-shadow: 0 4px 16px rgba(7, 26, 43, 0.04);
-        text-align: left;
+        flex: 0 0 min(28rem, 40vw);
+        align-self: center;
+        margin-left: 2.5rem;
+    }
+
+    .svcOutro h3 {
+        margin: 0;
+        font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+        line-height: 1.12;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--tm-ink);
+        text-wrap: balance;
+    }
+
+    .svcOutro p {
+        margin: 0.9rem 0 1.75rem;
+        max-width: 26rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: var(--tm-body);
+    }
+}
+
+@media (max-width: 1024px) {
+    .svcWrapper {
+        --svc-cards: 2;
     }
 
     .positioningCardInner {
@@ -2441,90 +2575,11 @@
         text-align: left;
     }
 
-    .positioningCard:last-child {
-        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
-    .positioningTitle {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin: 0 0 0.3rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
-    }
-
-    .positioningDesc {
-        font-size: 0.92rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-        min-height: 2.8em;
-    }
-
-    .positioningCardActive {
-        background: var(--tm-surface);
-        border-color: rgba(0, 86, 179, 0.35);
-        box-shadow: 0 6px 20px rgba(0, 86, 179, 0.08);
-    }
-
     .positioningBadge {
         margin-bottom: 0.25rem;
     }
 
-    .positioningCard .cardProgressBar {
-        right: 0;
-        left: 0;
-        top: auto;
-        bottom: 0;
-        width: 100%;
-        height: 3px;
-        border-radius: 0 0 16px 16px;
-        background: linear-gradient(90deg, #00C6FF 0%, #0072FF 100%);
-        transform-origin: left;
     }
-
-    .trustTextCol {
-        padding: 3.5rem 1.5rem 2rem;
-        align-items: flex-start;
-    }
-
-    .trustHeadWrap {
-        min-height: auto;
-    }
-
-    .trustHead {
-        max-width: 100%;
-        position: static;
-    }
-
-    .trustH2 {
-        font-size: clamp(1.85rem, 6.2vw, 2.4rem);
-        line-height: 1.18;
-        letter-spacing: -0.025em;
-        margin-bottom: 1rem;
-    }
-
-    .trustLede {
-        font-size: 0.96rem;
-        line-height: 1.65;
-        max-width: 520px;
-    }
-
-    .trustImageWrap {
-        position: static;
-        transform: none;
-        margin-top: 1.75rem;
-        margin-bottom: 0;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .whyImage {
-        width: 100%;
-        max-width: 380px;
-        height: auto;
-        filter: drop-shadow(0 20px 40px rgba(0, 86, 179, 0.12));
-    }
-}
 
 /* Heading text and controls stop fitting side by side around here, so stack them
    on the same leading edge rather than at a device-preset width. */
@@ -2547,32 +2602,6 @@
         padding: 1.25rem 1.1rem;
     }
 
-    .trustCardsCol {
-        padding: 1.75rem 1rem 0;
-        width: 100%;
-    }
-
-    .trustCardsCol .positioningStack {
-        max-width: 100%;
-        border: none;
-        gap: 0.75rem;
-    }
-
-    .positioningCard {
-        padding: 1.15rem 1.1rem;
-        grid-template-columns: 44px minmax(0, 1fr);
-        gap: 1rem;
-        align-items: flex-start;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(7, 26, 43, 0.04);
-    }
-
-    .positioningCard:last-child {
-        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
     .positioningIconBox {
         width: 44px;
         height: 44px;
@@ -2587,20 +2616,7 @@
         height: 22px;
     }
 
-    .positioningTitle {
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin: 0 0 0.25rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
     }
-
-    .positioningDesc {
-        font-size: 0.88rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-    }
-}
 
 @media (max-width: 640px) {
     /* Phone hero: headline and description at the top under the navbar, both
@@ -2728,7 +2744,6 @@
         font-size: 0.86rem;
     }
 }
-
 
 /* ------------------------------------------------------------------ FAQ Section -- */
 .faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: var(--tm-canvas); }

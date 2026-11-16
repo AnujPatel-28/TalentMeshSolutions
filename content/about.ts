@@ -139,7 +139,7 @@ export const ABOUT_INDUSTRIES = {
   ],
   baseTitle: 'Based in Ahmedabad, serving India',
   baseBody:
-    'Headquartered in Navrangpura, Ahmedabad — recruiting for on-site, hybrid and remote roles across India.',
+    'Headquartered in Navrangpura, Ahmedabad, recruiting for on-site, hybrid and remote roles across India.',
 } as const;
 
 export const ABOUT_CTA = {

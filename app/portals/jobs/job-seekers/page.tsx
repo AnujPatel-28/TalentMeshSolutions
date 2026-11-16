@@ -494,7 +494,7 @@ export default function JobSeekersPage() {
                                 Your Journey with <span className={styles.highlightText}>TalentMesh</span>
                             </h2>
                             <p className={styles.sectionDesc}>
-                                TalentMesh keeps your entire job search organized—from your first application to your next opportunity.
+                                TalentMesh keeps your entire job search organized, from your first application to your next opportunity.
                             </p>
                         </div>
 
