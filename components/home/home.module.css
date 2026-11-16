@@ -843,136 +843,120 @@
 /* Four differentiators across one dark band. No card surfaces — the only
    borders here are hairline dividers, which carry structure rather than
    faking elevation. Nothing in the row is interactive, so there is no hover. */
-/* Why-us bento.
-   Four tiles on a 12-column grid: one inverted hero (two rows) and three
-   supporting tiles, each a different kind of picture so no two neighbours
-   repeat. The resting CSS is the finished state; WhyUs.tsx only animates
-   towards it once on scroll-in, so reduced-motion users get the same frame. */
-.bento {
+/* Why-us photo sequence.
+   A heading whose words fill in, then four full-bleed photos, each with a
+   white card. The rules here are the plain stack: four photo panels one
+   after another, every word at full strength. The pinned, scroll-driven
+   version is layered on at the end of this block and only where WhyUs.tsx
+   has set `data-pinned`, so without script (or with reduced motion, or on a
+   small screen) the stack is what shows. */
+.whyIntro {
+    padding-bottom: 4rem;
+}
+
+.whyLine {
+    display: block;
+}
+
+/* Words light up in order as --why-fill runs 0 to 1; unset, all are lit. */
+.whyWord {
+    opacity: clamp(0.22, calc(var(--why-fill, 1) * var(--why-words) - var(--i)), 1);
+}
+
+.whyItem {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 1rem;
+    place-items: center;
+    min-height: 36rem;
+    padding: 4rem 1.25rem;
+    overflow: hidden;
 }
 
-.bentoTile {
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
-    min-width: 0;
-    padding: 1.75rem;
+.whyPhoto {
+    object-fit: cover;
+}
+
+.whyCard {
+    position: relative;
+    z-index: 1;
+    width: min(27rem, 100%);
+    padding: 2rem;
     background: #fff;
-    border: 1px solid rgba(0, 86, 179, 0.12);
     border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(7, 26, 43, 0.28);
 }
 
-.bentoHero {
-    grid-column: span 5;
-    grid-row: span 2;
-    background: var(--tm-ink);
-    border-color: var(--tm-ink);
-}
-
-/* The content order is quality, flexible, support, industry; `order` puts the
-   wide support tile beside the hero's top half so the two narrow tiles share
-   the row under it. */
-.bentoSupport {
-    grid-column: span 7;
-    order: 1;
-}
-
-.bentoFlex {
-    grid-column: span 4;
-    order: 2;
-}
-
-.bentoIndustry {
-    grid-column: span 3;
-    order: 2;
-}
-
-.bentoIcon {
+.whyIcon {
     display: flex;
     color: var(--tm-brand);
     margin-bottom: 1rem;
 }
 
-.bentoIcon svg {
+.whyIcon svg {
     width: 28px;
     height: 28px;
 }
 
-.bentoTitle {
+.whyTitle {
     margin: 0 0 0.45rem;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: -0.01em;
     color: var(--tm-ink);
 }
 
-.bentoDesc {
+.whyDesc {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     line-height: 1.6;
     color: var(--tm-body);
 }
 
-.bentoHero .bentoIcon {
-    color: #7CC4F5;
+.whyVisual {
+    margin-top: 1.75rem;
 }
 
-.bentoHero .bentoTitle {
-    color: #fff;
-}
-
-.bentoHero .bentoDesc {
-    color: rgba(255, 255, 255, 0.72);
-}
-
-.bentoVisual {
-    margin-top: auto;
-}
-
-/* Hero: one match card */
-.bentoMatch {
+/* Quality: one match panel */
+.whyMatch {
     display: flex;
     align-items: center;
     gap: 1.25rem;
     padding: 1.25rem;
-    background: #fff;
+    background: var(--tm-surface);
     border-radius: 14px;
 }
 
-.bentoRing {
+.whyRing {
     position: relative;
     flex: none;
     width: 96px;
     height: 96px;
 }
 
-.bentoRing svg {
+.whyRing svg {
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
 }
 
-.bentoRing circle {
+.whyRing circle {
     fill: none;
     stroke-width: 4;
 }
 
-.bentoRingTrack {
-    stroke: #E0F0FF;
+.whyRingTrack {
+    stroke: #D3E8FB;
 }
 
 /* r = 16, so the circumference is 100.53; 92.5 of it is the 92% arc. */
-.bentoRingArc {
+.whyRingArc {
     stroke: var(--tm-brand);
     stroke-linecap: round;
     stroke-dasharray: 92.5 100.53;
 }
 
-.bentoRingValue {
+.whyRingValue {
     position: absolute;
     inset: 0;
     display: flex;
@@ -985,24 +969,24 @@
     color: var(--tm-ink);
 }
 
-.bentoRingValue small {
+.whyRingValue small {
     font-size: 0.68rem;
     font-weight: 500;
     color: var(--tm-body);
 }
 
-.bentoMatchBody {
+.whyMatchBody {
     min-width: 0;
 }
 
-.bentoMatchRole {
+.whyMatchRole {
     font-size: 0.95rem;
     font-weight: 600;
     line-height: 1.3;
     color: var(--tm-ink);
 }
 
-.bentoChecks {
+.whyChecks {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -1011,7 +995,7 @@
     list-style: none;
 }
 
-.bentoChecks li {
+.whyChecks li {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -1020,7 +1004,7 @@
     color: var(--tm-body);
 }
 
-.bentoChecks svg {
+.whyChecks svg {
     flex: none;
     width: 16px;
     height: 16px;
@@ -1028,14 +1012,14 @@
 }
 
 /* Support: three stops on one line */
-.bentoSteps {
+.whySteps {
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
 
-.bentoStepsTrack,
-.bentoStepsLine {
+.whyStepsTrack,
+.whyStepsLine {
     position: absolute;
     top: 9px;
     left: calc(100% / 6);
@@ -1043,16 +1027,16 @@
     height: 2px;
 }
 
-.bentoStepsTrack {
+.whyStepsTrack {
     background: #E0F0FF;
 }
 
-.bentoStepsLine {
+.whyStepsLine {
     background: var(--tm-brand);
     transform-origin: left;
 }
 
-.bentoStep {
+.whyStep {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1065,7 +1049,7 @@
     text-align: center;
 }
 
-.bentoStep::before {
+.whyStep::before {
     content: '';
     width: 20px;
     height: 20px;
@@ -1074,14 +1058,14 @@
     border: 5px solid var(--tm-brand);
 }
 
-/* Flex: the five staffing models */
-.bentoChips {
+/* Flexible: the five staffing models */
+.whyChips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.bentoChip {
+.whyChip {
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
     font-weight: 500;
@@ -1093,7 +1077,7 @@
 }
 
 /* Industry: sector names drifting past, faded at both edges */
-.bentoMarquee {
+.whyMarquee {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -1102,18 +1086,18 @@
     mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
 }
 
-.bentoMarqueeRow {
+.whyMarqueeRow {
     display: flex;
     gap: 0.5rem;
     width: max-content;
-    animation: bentoMarquee 32s linear infinite;
+    animation: whyMarquee 32s linear infinite;
 }
 
-.bentoMarqueeRow:nth-child(2) {
+.whyMarqueeRow:nth-child(2) {
     animation-direction: reverse;
 }
 
-.bentoMarqueeRow span {
+.whyMarqueeRow span {
     padding: 0.4rem 0.75rem;
     font-size: 0.85rem;
     font-weight: 500;
@@ -1125,78 +1109,75 @@
 }
 
 /* Each row holds its list twice; half its width plus half a gap is one list. */
-@keyframes bentoMarquee {
+@keyframes whyMarquee {
     to {
         transform: translateX(calc(-50% - 0.25rem));
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .bentoMarqueeRow {
+    .whyMarqueeRow {
         animation: none;
     }
 }
 
-/* The hero is tall on desktop, so its card stacks and the ring grows to
-   fill the tile instead of leaving a void above a short row. */
-@media (min-width: 1025px) {
-    .bentoHero .bentoMatch {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-        padding: 1.75rem;
-    }
-
-    .bentoHero .bentoRing {
-        width: 132px;
-        height: 132px;
-    }
-
-    .bentoHero .bentoRingValue {
-        font-size: 1.85rem;
-    }
-
-    .bentoHero .bentoRingValue small {
-        font-size: 0.8rem;
-    }
-
-    .bentoHero .bentoMatchRole {
-        font-size: 1.05rem;
-    }
-
-    .bentoHero .bentoChecks li {
-        font-size: 0.92rem;
-    }
-}
-
-@media (max-width: 1024px) {
-    .bentoHero,
-    .bentoSupport {
-        grid-column: span 12;
-        grid-row: auto;
-    }
-
-    .bentoFlex,
-    .bentoIndustry {
-        grid-column: span 6;
-    }
-}
-
 @media (max-width: 640px) {
-    .bentoFlex,
-    .bentoIndustry {
-        grid-column: span 12;
+    .whyItem {
+        min-height: 30rem;
+        padding: 3rem 1rem;
     }
 
-    .bentoTile {
-        padding: 1.35rem;
+    .whyCard {
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 380px) {
-    .bentoMatch {
+    .whyMatch {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+/* Pinned sequence. Must match PIN_QUERY in WhyUs.tsx, which also sets the
+   custom properties: --why-dist (scroll the four cards take), --why-grow
+   (0 to 1 as the stage arrives), and per item --why-y and --why-show. */
+@media (min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+    [data-pinned] > .whyTrack {
+        height: calc(100vh + var(--why-dist, 0px));
+    }
+
+    /* Comes up the screen as an inset, rounded frame and opens to full
+       bleed by the time it pins. */
+    [data-pinned] .whyStage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: var(--tm-ink);
+        clip-path: inset(
+            0 calc((1 - var(--why-grow, 1)) * 14%) round calc((1 - var(--why-grow, 1)) * 28px)
+        );
+    }
+
+    /* The items dissolve so every photo sits in one layer under every card:
+       a photo fading in must not cover the previous card on its way out. */
+    [data-pinned] .whyItem {
+        display: contents;
+    }
+
+    [data-pinned] .whyPhoto {
+        opacity: var(--why-show, 1);
+    }
+
+    /* Centred in the stage below the 60px navbar, then moved by --why-y. */
+    [data-pinned] .whyCard {
+        position: absolute;
+        inset: 60px 0 0;
+        margin: auto;
+        height: fit-content;
+        transform: translate3d(0, var(--why-y, 0px), 0);
+        will-change: transform;
     }
 }
 
