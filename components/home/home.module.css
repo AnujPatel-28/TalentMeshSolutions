@@ -2266,6 +2266,11 @@
    section's extra height, --svc-dist, is the scroll that takes and is written
    by Services.tsx together with `data-pinned`; until then, and on phones, short
    screens and for reduced motion, the rail stays the swipeable carousel above. */
+/* Transforms need a box; see the lede in Services.tsx. */
+.svcLedeWord {
+    display: inline-block;
+}
+
 .svcMeter {
     display: none;
     align-items: center;
@@ -2326,7 +2331,7 @@
     }
 
     .svcPin[data-pinned] .svcHeadText .h2,
-    .svcPin[data-pinned] .svcHeadText .lede {
+    .svcPin[data-pinned] .svcLedeWord {
         will-change: transform;
     }
 

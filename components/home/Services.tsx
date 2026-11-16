@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { Fragment, useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useReducedMotion } from 'framer-motion';
@@ -10,6 +10,8 @@ import styles from './home.module.css';
 
 // Must match the pinned-side-scroll media query in home.module.css.
 const PIN_QUERY = '(min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)';
+
+const LEDE = 'End-to-end recruitment, staffing, and capability enablement tailored to your strategic business goals.';
 
 export default function Services() {
     const pinRef = useRef<HTMLElement>(null);
@@ -79,18 +81,19 @@ export default function Services() {
         let cardW = 0;
         let pitch = 0;
         const title = pin.querySelector('h2') as HTMLElement;
-        const lede = title.nextElementSibling as HTMLElement;
+        const words = Array.from(title.nextElementSibling!.children) as HTMLElement[];
+        let wordX: number[] = []; // per word: its line's offset to centred
         const meter = pin.querySelector(`.${styles.svcMeter}`) as HTMLElement;
         const counter = meter.firstElementChild as HTMLElement;
         const cards = Array.from(rail.querySelectorAll('article'));
         let cardX: number[] = []; // each card's centre with the rail at rest
-        // Offsets from each heading line's place to its centred intro spot.
-        const head = { tx: 0, ty: 0, lx: 0, ly: 0 };
+        // Offsets from the heading's place to its centred intro spot.
+        const head = { tx: 0, ty: 0, ly: 0 };
 
         const clearPinned = () => {
             rail.style.transform = '';
             title.style.transform = '';
-            lede.style.transform = '';
+            words.forEach((word) => { word.style.transform = ''; });
             meter.style.opacity = '';
             cards.forEach((card) => {
                 card.style.removeProperty('--svc-scale');
@@ -108,7 +111,10 @@ export default function Services() {
             const x = startX + enterX * rest - p * travel;
 
             title.style.transform = `translate3d(${(head.tx * rest).toFixed(1)}px, ${(head.ty * rest).toFixed(1)}px, 0) scale(${(1 + 0.3 * rest).toFixed(3)})`;
-            lede.style.transform = `translate3d(${(head.lx * rest).toFixed(1)}px, ${(head.ly * rest).toFixed(1)}px, 0)`;
+            // Each lede line is centred at first and slides to the left edge.
+            words.forEach((word, i) => {
+                word.style.transform = `translate3d(${(wordX[i] * rest).toFixed(1)}px, ${(head.ly * rest).toFixed(1)}px, 0)`;
+            });
             // The counter and progress bar wait until the heading has landed.
             meter.style.opacity = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
             rail.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
@@ -126,7 +132,7 @@ export default function Services() {
                 }
                 const away = Math.min(1, Math.max(0, (off - cardW / 2) / (pitch * 0.6)));
                 card.style.setProperty('--svc-scale', (1 - 0.05 * away).toFixed(3));
-                card.style.setProperty('--svc-dim', (1 - 0.4 * away).toFixed(3));
+                card.style.setProperty('--svc-dim', (1 - 0.22 * away).toFixed(3));
             });
             const label = `${String(current + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
             if (counter.textContent !== label) counter.textContent = label;
@@ -145,20 +151,29 @@ export default function Services() {
                 cardW = rects[0].width;
                 pitch = rects.length > 1 ? rects[1].left - rects[0].left : cardW;
 
-                // Heading: each line is centred on the centre line, and the
-                // pair is centred in the stage below the navbar. The title
-                // also grows by 30%, so the lede drops by the extra height.
+                // Heading: the title and every lede line are centred on the
+                // centre line, and the group is centred in the stage below
+                // the navbar. The title also grows by 30%, so the lede drops
+                // by the extra height.
                 const range = document.createRange();
                 range.selectNodeContents(title);
                 const t = range.getBoundingClientRect();
-                range.selectNodeContents(lede);
-                const l = range.getBoundingClientRect();
+                const w = words.map((word) => word.getBoundingClientRect());
+                const lines = new Map<number, { left: number; right: number }>();
+                w.forEach((r) => {
+                    const line = lines.get(Math.round(r.top));
+                    if (line) line.right = r.right;
+                    else lines.set(Math.round(r.top), { left: r.left, right: r.right });
+                });
+                wordX = w.map((r) => {
+                    const line = lines.get(Math.round(r.top))!;
+                    return centre - (line.left + line.right) / 2;
+                });
                 const stage = pin.firstElementChild!.getBoundingClientRect();
-                const dy = stage.top + 30 + stage.height / 2 - (t.top + l.bottom) / 2;
+                const dy = stage.top + 30 + stage.height / 2 - (t.top + w[w.length - 1].bottom) / 2;
                 title.style.transformOrigin = `${(t.width / 2).toFixed(1)}px 50%`;
                 head.tx = centre - (t.left + t.width / 2);
                 head.ty = dy - t.height * 0.15;
-                head.lx = centre - (l.left + l.width / 2);
                 head.ly = dy + t.height * 0.15;
 
                 intro = window.innerHeight * 0.6;
@@ -244,8 +259,15 @@ export default function Services() {
                         <div className={styles.svcTop}>
                             <div className={styles.svcHeadText}>
                                 <h2 className={styles.h2}>Customized Solutions</h2>
+                                {/* One span per word, so the pinned intro can
+                                    centre each line and then slide it back to
+                                    the left edge (text-align cannot animate). */}
                                 <p className={styles.lede}>
-                                    End-to-end recruitment, staffing, and capability enablement tailored to your strategic business goals.
+                                    {LEDE.split(' ').map((word, i) => (
+                                        <Fragment key={i}>
+                                            <span className={styles.svcLedeWord}>{word}</span>{' '}
+                                        </Fragment>
+                                    ))}
                                 </p>
                             </div>
 
