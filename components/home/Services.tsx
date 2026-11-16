@@ -55,49 +55,85 @@ export default function Services() {
     }, [measure]);
 
     // Pinned side-scroll. Where PIN_QUERY matches, home.module.css pins the
-    // section for one viewport and this maps vertical scroll onto the rail's
-    // translateX. The rail starts with the first card's left edge on the
-    // viewport's centre line and ends with the last card's right edge on it;
-    // the section is made taller by that travel distance. Elsewhere the rail
-    // stays the swipeable carousel above.
+    // section for one viewport and this maps vertical scroll onto it in two
+    // phases. Intro: the title starts large in the middle of the stage with
+    // no cards, then settles into its place while the cards come in from the
+    // right edge. Travel: the rail moves from the first card's left edge on
+    // the viewport's centre line to the last card's right edge on it. The
+    // section is made taller by the scroll both phases take. Elsewhere the
+    // rail stays the swipeable carousel above.
     useEffect(() => {
         const pin = pinRef.current;
         const rail = railRef.current;
         if (!pin || !rail) return;
 
         const mq = window.matchMedia(PIN_QUERY);
-        let dist = 0;
+        let travel = 0; // px the rail moves sideways
+        let dist = 0; // px of scroll that takes
         let startX = 0;
         let frame = 0;
+        let intro = 0; // px of scroll for the intro
+        let enterX = 0; // how far right of its start the rail waits
+        let headDx = 0; // title offset from its place to the stage centre
+        let headDy = 0;
+        const title = pin.querySelector('h2') as HTMLElement;
+        const fades = [title.nextElementSibling, pin.querySelector(`.${styles.svcProgress}`)] as HTMLElement[];
+        const clearIntro = () => {
+            title.style.transform = '';
+            fades.forEach((el) => { el.style.opacity = ''; });
+        };
 
         const update = () => {
             frame = 0;
             if (!dist) return;
-            const p = Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / dist));
-            rail.style.transform = `translate3d(${(startX - p * dist).toFixed(1)}px, 0, 0)`;
+            const scrolled = -pin.getBoundingClientRect().top;
+            const q = Math.min(1, Math.max(0, scrolled / intro));
+            const rest = 1 - q * q * (3 - 2 * q);
+            const p = Math.min(1, Math.max(0, (scrolled - intro) / dist));
+            title.style.transform = `translate3d(${(headDx * rest).toFixed(1)}px, ${(headDy * rest).toFixed(1)}px, 0) scale(${(1 + 0.3 * rest).toFixed(3)})`;
+            // The lede and progress bar wait until the title has nearly landed.
+            const fade = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
+            fades.forEach((el) => { el.style.opacity = fade; });
+            rail.style.transform = `translate3d(${(startX + enterX * rest - p * travel).toFixed(1)}px, 0, 0)`;
             pin.style.setProperty('--svc-progress', p.toFixed(3));
         };
         const layout = () => {
             dist = 0;
+            travel = 0;
             const first = rail.firstElementChild;
             // The last card, not the last child: the closing call to action
             // follows it in the rail and comes to rest in the right half.
             const last = rail.querySelector('article:last-of-type');
             if (mq.matches && first && last) {
+                // Measure in the pinned layout, which is what will be shown.
+                pin.dataset.pinned = '';
                 rail.scrollLeft = 0;
                 rail.style.transform = '';
-                const centre = document.documentElement.clientWidth / 2;
+                title.style.transform = '';
+                const vw = document.documentElement.clientWidth;
+                const text = document.createRange();
+                text.selectNodeContents(title);
+                const t = text.getBoundingClientRect();
+                const stage = pin.firstElementChild!.getBoundingClientRect();
+                title.style.transformOrigin = `${(t.width / 2).toFixed(1)}px 50%`;
+                headDx = vw / 2 - (t.left + t.width / 2);
+                headDy = stage.top + 30 + stage.height / 2 - (t.top + t.height / 2);
+                intro = window.innerHeight * 0.6;
+                enterX = vw / 2 + 40;
+                const centre = vw / 2;
                 startX = centre - first.getBoundingClientRect().left;
-                dist = Math.max(0, startX - (centre - last.getBoundingClientRect().right));
+                travel = Math.max(0, startX - (centre - last.getBoundingClientRect().right));
+                // Slightly geared up, so the intro does not lengthen the pin.
+                dist = travel * 0.8;
             }
             if (dist) {
-                pin.dataset.pinned = '';
-                pin.style.setProperty('--svc-dist', `${dist}px`);
+                pin.style.setProperty('--svc-dist', `${dist + intro}px`);
                 update();
             } else {
                 delete pin.dataset.pinned;
                 pin.style.removeProperty('--svc-dist');
                 rail.style.transform = '';
+                clearIntro();
             }
         };
         const onScroll = () => {
@@ -113,7 +149,8 @@ export default function Services() {
             if (r.left >= 0 && r.right <= window.innerWidth) return;
             // Scroll to the point where this card sits on the centre line.
             const offset = r.left + r.width / 2 - first.getBoundingClientRect().left;
-            window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + Math.min(dist, offset) });
+            const at = intro + (Math.min(travel, offset) / travel) * dist;
+            window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + at });
         };
 
         layout();
@@ -127,6 +164,7 @@ export default function Services() {
             window.removeEventListener('scroll', onScroll);
             rail.removeEventListener('focusin', onFocusIn);
             cancelAnimationFrame(frame);
+            clearIntro();
         };
     }, []);
 
