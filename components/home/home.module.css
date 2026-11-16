@@ -2276,6 +2276,10 @@
     margin-bottom: 0.75rem;
 }
 
+.svcOutro {
+    display: none;
+}
+
 .svcProgress i {
     display: block;
     height: 100%;
@@ -2319,6 +2323,49 @@
 
     .svcPin[data-pinned] .svcProgress {
         display: block;
+    }
+
+    .svcRailWrap {
+        position: relative;
+    }
+
+    /* Right half of the stage, level with the cards. Stays out of the tab
+       order (visibility) until the rail has finished. */
+    .svcPin[data-pinned] .svcOutro {
+        display: block;
+        position: absolute;
+        left: calc(50% + 4rem);
+        right: 0;
+        top: 50%;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(28px, -50%);
+        transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.45s;
+    }
+
+    .svcPin[data-pinned][data-outro] .svcOutro {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(0, -50%);
+        transition-delay: 0s;
+    }
+
+    .svcOutro h3 {
+        margin: 0;
+        font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+        line-height: 1.12;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--tm-ink);
+        text-wrap: balance;
+    }
+
+    .svcOutro p {
+        margin: 0.9rem 0 1.75rem;
+        max-width: 26rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: var(--tm-body);
     }
 }
 
