@@ -56,12 +56,13 @@ export default function Services() {
 
     // Pinned side-scroll. Where PIN_QUERY matches, home.module.css pins the
     // section for one viewport and this maps vertical scroll onto it in two
-    // phases. Intro: the title starts large in the middle of the stage with
-    // no cards, then settles into its place while the cards come in from the
+    // phases. Intro: the title and lede start in the middle of the stage with
+    // no cards, then settle into their place while the cards come in from the
     // right edge. Travel: the rail moves from the first card's left edge on
-    // the viewport's centre line to the last card's right edge on it. The
-    // section is made taller by the scroll both phases take. Elsewhere the
-    // rail stays the swipeable carousel above.
+    // the viewport's centre line to the last card's right edge on it; the card
+    // on the centre line is full size and the others step back. The section
+    // is made taller by the scroll both phases take. Elsewhere the rail stays
+    // the swipeable carousel above.
     useEffect(() => {
         const pin = pinRef.current;
         const rail = railRef.current;
@@ -74,13 +75,27 @@ export default function Services() {
         let frame = 0;
         let intro = 0; // px of scroll for the intro
         let enterX = 0; // how far right of its start the rail waits
-        let headDx = 0; // title offset from its place to the stage centre
-        let headDy = 0;
+        let centre = 0; // viewport centre line
+        let cardW = 0;
+        let pitch = 0;
         const title = pin.querySelector('h2') as HTMLElement;
-        const fades = [title.nextElementSibling, pin.querySelector(`.${styles.svcProgress}`)] as HTMLElement[];
-        const clearIntro = () => {
+        const lede = title.nextElementSibling as HTMLElement;
+        const meter = pin.querySelector(`.${styles.svcMeter}`) as HTMLElement;
+        const counter = meter.firstElementChild as HTMLElement;
+        const cards = Array.from(rail.querySelectorAll('article'));
+        let cardX: number[] = []; // each card's centre with the rail at rest
+        // Offsets from each heading line's place to its centred intro spot.
+        const head = { tx: 0, ty: 0, lx: 0, ly: 0 };
+
+        const clearPinned = () => {
+            rail.style.transform = '';
             title.style.transform = '';
-            fades.forEach((el) => { el.style.opacity = ''; });
+            lede.style.transform = '';
+            meter.style.opacity = '';
+            cards.forEach((card) => {
+                card.style.removeProperty('--svc-scale');
+                card.style.removeProperty('--svc-dim');
+            });
         };
 
         const update = () => {
@@ -90,39 +105,66 @@ export default function Services() {
             const q = Math.min(1, Math.max(0, scrolled / intro));
             const rest = 1 - q * q * (3 - 2 * q);
             const p = Math.min(1, Math.max(0, (scrolled - intro) / dist));
-            title.style.transform = `translate3d(${(headDx * rest).toFixed(1)}px, ${(headDy * rest).toFixed(1)}px, 0) scale(${(1 + 0.3 * rest).toFixed(3)})`;
-            // The lede and progress bar wait until the title has nearly landed.
-            const fade = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
-            fades.forEach((el) => { el.style.opacity = fade; });
-            rail.style.transform = `translate3d(${(startX + enterX * rest - p * travel).toFixed(1)}px, 0, 0)`;
+            const x = startX + enterX * rest - p * travel;
+
+            title.style.transform = `translate3d(${(head.tx * rest).toFixed(1)}px, ${(head.ty * rest).toFixed(1)}px, 0) scale(${(1 + 0.3 * rest).toFixed(3)})`;
+            lede.style.transform = `translate3d(${(head.lx * rest).toFixed(1)}px, ${(head.ly * rest).toFixed(1)}px, 0)`;
+            // The counter and progress bar wait until the heading has landed.
+            meter.style.opacity = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
+            rail.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
             pin.style.setProperty('--svc-progress', p.toFixed(3));
+
+            // A card is full size while the centre line is on it, and steps
+            // back the further its nearest edge is from that line.
+            let current = 0;
+            let nearest = Infinity;
+            cards.forEach((card, i) => {
+                const off = Math.abs(cardX[i] + x - centre);
+                if (off < nearest) {
+                    nearest = off;
+                    current = i;
+                }
+                const away = Math.min(1, Math.max(0, (off - cardW / 2) / (pitch * 0.6)));
+                card.style.setProperty('--svc-scale', (1 - 0.05 * away).toFixed(3));
+                card.style.setProperty('--svc-dim', (1 - 0.4 * away).toFixed(3));
+            });
+            const label = `${String(current + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
+            if (counter.textContent !== label) counter.textContent = label;
         };
         const layout = () => {
             dist = 0;
             travel = 0;
-            const first = rail.firstElementChild;
-            // The last card, not the last child: the closing call to action
-            // follows it in the rail and comes to rest in the right half.
-            const last = rail.querySelector('article:last-of-type');
-            if (mq.matches && first && last) {
+            if (mq.matches && cards.length) {
                 // Measure in the pinned layout, which is what will be shown.
                 pin.dataset.pinned = '';
                 rail.scrollLeft = 0;
-                rail.style.transform = '';
-                title.style.transform = '';
-                const vw = document.documentElement.clientWidth;
-                const text = document.createRange();
-                text.selectNodeContents(title);
-                const t = text.getBoundingClientRect();
+                clearPinned();
+                centre = document.documentElement.clientWidth / 2;
+                const rects = cards.map((card) => card.getBoundingClientRect());
+                cardX = rects.map((r) => r.left + r.width / 2);
+                cardW = rects[0].width;
+                pitch = rects.length > 1 ? rects[1].left - rects[0].left : cardW;
+
+                // Heading: each line is centred on the centre line, and the
+                // pair is centred in the stage below the navbar. The title
+                // also grows by 30%, so the lede drops by the extra height.
+                const range = document.createRange();
+                range.selectNodeContents(title);
+                const t = range.getBoundingClientRect();
+                range.selectNodeContents(lede);
+                const l = range.getBoundingClientRect();
                 const stage = pin.firstElementChild!.getBoundingClientRect();
+                const dy = stage.top + 30 + stage.height / 2 - (t.top + l.bottom) / 2;
                 title.style.transformOrigin = `${(t.width / 2).toFixed(1)}px 50%`;
-                headDx = vw / 2 - (t.left + t.width / 2);
-                headDy = stage.top + 30 + stage.height / 2 - (t.top + t.height / 2);
+                head.tx = centre - (t.left + t.width / 2);
+                head.ty = dy - t.height * 0.15;
+                head.lx = centre - (l.left + l.width / 2);
+                head.ly = dy + t.height * 0.15;
+
                 intro = window.innerHeight * 0.6;
-                enterX = vw / 2 + 40;
-                const centre = vw / 2;
-                startX = centre - first.getBoundingClientRect().left;
-                travel = Math.max(0, startX - (centre - last.getBoundingClientRect().right));
+                enterX = centre + 40;
+                startX = centre - rects[0].left;
+                travel = Math.max(0, startX - (centre - rects[rects.length - 1].right));
                 // Slightly geared up, so the intro does not lengthen the pin.
                 dist = travel * 0.8;
             }
@@ -132,8 +174,7 @@ export default function Services() {
             } else {
                 delete pin.dataset.pinned;
                 pin.style.removeProperty('--svc-dist');
-                rail.style.transform = '';
-                clearIntro();
+                clearPinned();
             }
         };
         const onScroll = () => {
@@ -164,7 +205,7 @@ export default function Services() {
             window.removeEventListener('scroll', onScroll);
             rail.removeEventListener('focusin', onFocusIn);
             cancelAnimationFrame(frame);
-            clearIntro();
+            clearPinned();
         };
     }, []);
 
@@ -208,8 +249,13 @@ export default function Services() {
                                 </p>
                             </div>
 
-                            <div className={styles.svcProgress} aria-hidden="true">
-                                <i />
+                            {/* Pinned side-scroll only: which card is on the
+                                centre line, and how far along the rail is. */}
+                            <div className={styles.svcMeter} aria-hidden="true">
+                                <span className={styles.svcCounter}>01 / 06</span>
+                                <div className={styles.svcProgress}>
+                                    <i />
+                                </div>
                             </div>
 
                             <div className={styles.svcControls}>

@@ -2266,15 +2266,28 @@
    section's extra height, --svc-dist, is the scroll that takes and is written
    by Services.tsx together with `data-pinned`; until then, and on phones, short
    screens and for reduced motion, the rail stays the swipeable carousel above. */
-.svcProgress {
+.svcMeter {
     display: none;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    margin-bottom: 0.75rem;
+}
+
+.svcCounter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--tm-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.svcProgress {
     width: 220px;
     height: 3px;
     border-radius: 3px;
     background: #DBE7F4;
     overflow: hidden;
-    flex-shrink: 0;
-    margin-bottom: 0.75rem;
 }
 
 .svcOutro {
@@ -2312,8 +2325,15 @@
         overflow: visible;
     }
 
-    .svcPin[data-pinned] .svcHeadText .h2 {
+    .svcPin[data-pinned] .svcHeadText .h2,
+    .svcPin[data-pinned] .svcHeadText .lede {
         will-change: transform;
+    }
+
+    /* --svc-scale / --svc-dim are written per card by Services.tsx. */
+    .svcPin[data-pinned] .svcCard {
+        transform: scale(var(--svc-scale, 1));
+        opacity: var(--svc-dim, 1);
     }
 
     .svcPin[data-pinned] .svcRail {
@@ -2326,8 +2346,8 @@
         display: none;
     }
 
-    .svcPin[data-pinned] .svcProgress {
-        display: block;
+    .svcPin[data-pinned] .svcMeter {
+        display: flex;
     }
 
     /* Follows the last card in the rail, so it can never overlap one. The
