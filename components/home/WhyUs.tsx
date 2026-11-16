@@ -1,9 +1,8 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Target, Layers, LifeBuoy, Briefcase } from 'lucide-react';
-import { WHY_TALENTMESH } from '@/content/home';
+import { Target, Layers, LifeBuoy, Briefcase, Check } from 'lucide-react';
+import { WHY_TALENTMESH, INDUSTRY_ROWS } from '@/content/home';
 import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
@@ -13,6 +12,21 @@ const POINT_ICONS = {
     lifeBuoy: LifeBuoy,
     briefcase: Briefcase,
 };
+
+// Grid placement per point, keyed like POINT_ICONS.
+const TILE_CLASS = {
+    target: styles.bentoHero,
+    layers: styles.bentoFlex,
+    lifeBuoy: styles.bentoSupport,
+    briefcase: styles.bentoIndustry,
+};
+
+const MATCH_CHECKS = ['Skills', 'Experience', 'Notice period'];
+const SUPPORT_STEPS = ['Coordinate', 'Verify', 'Onboard'];
+const STAFFING_MODELS = ['Permanent', 'Contractual', 'Temporary', 'Remote', 'Volume'];
+const INDUSTRY_NAMES = INDUSTRY_ROWS.flat().map((tag) => tag.name);
+const half = Math.ceil(INDUSTRY_NAMES.length / 2);
+const MARQUEE_ROWS = [INDUSTRY_NAMES.slice(0, half), INDUSTRY_NAMES.slice(half)];
 
 const headVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -43,7 +57,7 @@ const containerVariants = {
     },
 };
 
-const pillarVariants = {
+const tileVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
@@ -52,20 +66,105 @@ const pillarVariants = {
     },
 };
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+// The tile pictures rest in their finished state in CSS; these only play the
+// way in, once, as the grid scrolls into view.
+const ringVariants = {
+    hidden: { strokeDashoffset: 92.5 },
+    visible: { strokeDashoffset: 0, transition: { duration: 1.2, delay: 0.3, ease: EASE } },
+};
+
+const lineVariants = {
+    hidden: { scaleX: 0 },
+    visible: { scaleX: 1, transition: { duration: 1.2, delay: 0.4, ease: EASE } },
+};
+
+const chipVariants = {
+    hidden: { backgroundColor: '#FFFFFF', color: '#5A6B7C', borderColor: '#D9E2EC' },
+    visible: (i: number) => ({
+        backgroundColor: '#E0F0FF',
+        color: '#0056B3',
+        borderColor: '#9CC7F0',
+        transition: { duration: 0.3, delay: 0.5 + i * 0.18 },
+    }),
+};
+
 export default function WhyUs() {
     const reduceMotion = useReducedMotion();
-    const rowRef = useRef<HTMLDivElement>(null);
 
-    // Written straight to the node as custom properties rather than held in
-    // state: pointermove fires constantly, and routing it through React would
-    // re-render the whole row on every frame for a purely visual effect.
-    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        const el = rowRef.current;
-        if (!el || e.pointerType !== 'mouse') return;
-        const rect = el.getBoundingClientRect();
-        el.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
-        el.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
-    }, []);
+    const visuals = {
+        target: (
+            <div className={styles.bentoMatch}>
+                <div className={styles.bentoRing}>
+                    <svg viewBox="0 0 40 40">
+                        <circle className={styles.bentoRingTrack} cx="20" cy="20" r="16" />
+                        <motion.circle
+                            className={styles.bentoRingArc}
+                            cx="20"
+                            cy="20"
+                            r="16"
+                            variants={reduceMotion ? undefined : ringVariants}
+                        />
+                    </svg>
+                    <span className={styles.bentoRingValue}>
+                        92%
+                        <small>match</small>
+                    </span>
+                </div>
+                <div className={styles.bentoMatchBody}>
+                    <div className={styles.bentoMatchRole}>Senior Backend Engineer</div>
+                    <ul className={styles.bentoChecks}>
+                        {MATCH_CHECKS.map((label) => (
+                            <li key={label}>
+                                <Check strokeWidth={2.5} />
+                                {label}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        ),
+        layers: (
+            <div className={styles.bentoChips}>
+                {STAFFING_MODELS.map((label, i) => (
+                    <motion.span
+                        key={label}
+                        className={styles.bentoChip}
+                        custom={i}
+                        variants={reduceMotion ? undefined : chipVariants}
+                    >
+                        {label}
+                    </motion.span>
+                ))}
+            </div>
+        ),
+        lifeBuoy: (
+            <div className={styles.bentoSteps}>
+                <span className={styles.bentoStepsTrack} />
+                <motion.span
+                    className={styles.bentoStepsLine}
+                    variants={reduceMotion ? undefined : lineVariants}
+                />
+                {SUPPORT_STEPS.map((label) => (
+                    <span key={label} className={styles.bentoStep}>
+                        {label}
+                    </span>
+                ))}
+            </div>
+        ),
+        briefcase: (
+            <div className={styles.bentoMarquee}>
+                {MARQUEE_ROWS.map((row, r) => (
+                    <div key={r} className={styles.bentoMarqueeRow}>
+                        {[...row, ...row].map((name, i) => (
+                            <span key={i}>{name}</span>
+                        ))}
+                    </div>
+                ))}
+            </div>
+        ),
+    };
 
     return (
         <section className="relative" id="why-talentmesh">
@@ -93,30 +192,30 @@ export default function WhyUs() {
                     </div>
 
                     <motion.div
-                        ref={rowRef}
-                        onPointerMove={handlePointerMove}
-                        className={styles.pillarRow}
+                        className={styles.bento}
                         variants={reduceMotion ? undefined : containerVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.3 }}
                     >
                         {WHY_TALENTMESH.points.map((pt) => {
-                            const Icon = POINT_ICONS[pt.icon as keyof typeof POINT_ICONS] || Target;
+                            const Icon = POINT_ICONS[pt.icon];
                             return (
                                 <motion.article
                                     key={pt.title}
-                                    className={styles.pillar}
-                                    variants={reduceMotion ? undefined : pillarVariants}
-                                    whileHover={reduceMotion ? undefined : { y: -2, transition: { duration: 0.2 } }}
-                                    whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                                    className={`${styles.bentoTile} ${TILE_CLASS[pt.icon]}`}
+                                    variants={reduceMotion ? undefined : tileVariants}
                                 >
-                                    <span className={styles.pillarIcon}>
-                                        <Icon strokeWidth={2} aria-hidden="true" />
-                                    </span>
-                                    <div className={styles.pillarContent}>
-                                        <h3 className={styles.pillarTitle}>{pt.title}</h3>
-                                        <p className={styles.pillarDesc}>{pt.description}</p>
+                                    <div>
+                                        <span className={styles.bentoIcon}>
+                                            <Icon strokeWidth={2} aria-hidden="true" />
+                                        </span>
+                                        <h3 className={styles.bentoTitle}>{pt.title}</h3>
+                                        <p className={styles.bentoDesc}>{pt.description}</p>
+                                    </div>
+                                    {/* Decorative: each picture restates the copy above it. */}
+                                    <div className={styles.bentoVisual} aria-hidden="true">
+                                        {visuals[pt.icon]}
                                     </div>
                                 </motion.article>
                             );

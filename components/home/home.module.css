@@ -772,111 +772,361 @@
 /* Four differentiators across one dark band. No card surfaces — the only
    borders here are hairline dividers, which carry structure rather than
    faking elevation. Nothing in the row is interactive, so there is no hover. */
-/* Cursor-reactive lift.
-   A soft light follows the pointer across the row and the column under it
-   raises slightly. Nothing is ever hidden — the four differentiators are the
-   section's argument, so the interaction adds attention rather than gating
-   content. Coordinates arrive as CSS custom properties set straight on the
-   node (see WhyUs.tsx), so pointer movement never triggers a React render. */
-.pillarRow {
+/* Why-us bento.
+   Four tiles on a 12-column grid: one inverted hero (two rows) and three
+   supporting tiles, each a different kind of picture so no two neighbours
+   repeat. The resting CSS is the finished state; WhyUs.tsx only animates
+   towards it once on scroll-in, so reduced-motion users get the same frame. */
+.bento {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    position: relative;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
 }
 
-.pillarRow::before {
-    content: '';
-    position: absolute;
-    inset: -2.5rem -1.5rem;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-        360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-        rgba(255, 255, 255, 0.85),
-        rgba(255, 255, 255, 0.35) 38%,
-        transparent 68%
-    );
-    opacity: 0;
-    transition: opacity 0.35s ease;
+.bentoTile {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    min-width: 0;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid rgba(0, 86, 179, 0.12);
+    border-radius: 20px;
 }
 
-.pillarRow:hover::before {
-    opacity: 1;
+.bentoHero {
+    grid-column: span 5;
+    grid-row: span 2;
+    background: var(--tm-ink);
+    border-color: var(--tm-ink);
 }
 
-.pillar {
-    padding: 0 2rem;
-    position: relative;
-    z-index: 1;
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+/* The content order is quality, flexible, support, industry; `order` puts the
+   wide support tile beside the hero's top half so the two narrow tiles share
+   the row under it. */
+.bentoSupport {
+    grid-column: span 7;
+    order: 1;
 }
 
-/* Pointer devices only — there is no hover on touch, and a lift that never
-   resolves reads as a stuck state. */
-@media (hover: hover) {
-    .pillar:hover .pillarIcon {
-        color: var(--tm-brand);
-    }
+.bentoFlex {
+    grid-column: span 4;
+    order: 2;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .pillarRow::before {
-        display: none;
-    }
-
-    .pillar {
-        transition: none;
-    }
+.bentoIndustry {
+    grid-column: span 3;
+    order: 2;
 }
 
-@media (hover: none) {
-    .pillarRow::before {
-        display: none;
-    }
-}
-
-.pillar:not(:first-child) {
-    border-left: 1px solid #E2E8F0;
-}
-
-.pillar:first-child {
-    padding-left: 0;
-}
-
-.pillar:last-child {
-    padding-right: 0;
-}
-
-.pillarIcon {
+.bentoIcon {
     display: flex;
     color: var(--tm-brand);
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
 }
 
-.pillarIcon svg {
+.bentoIcon svg {
     width: 28px;
     height: 28px;
 }
 
-.pillarTitle {
-    margin: 0 0 0.55rem;
-    font-size: 1.05rem;
+.bentoTitle {
+    margin: 0 0 0.45rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.3;
     letter-spacing: -0.01em;
     color: var(--tm-ink);
 }
 
-.pillarDesc {
+.bentoDesc {
     margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.65;
+    font-size: 0.95rem;
+    line-height: 1.6;
     color: var(--tm-body);
 }
 
-.pillarContent {
+.bentoHero .bentoIcon {
+    color: #7CC4F5;
+}
+
+.bentoHero .bentoTitle {
+    color: #fff;
+}
+
+.bentoHero .bentoDesc {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.bentoVisual {
+    margin-top: auto;
+}
+
+/* Hero: one match card */
+.bentoMatch {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 14px;
+}
+
+.bentoRing {
+    position: relative;
+    flex: none;
+    width: 96px;
+    height: 96px;
+}
+
+.bentoRing svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.bentoRing circle {
+    fill: none;
+    stroke-width: 4;
+}
+
+.bentoRingTrack {
+    stroke: #E0F0FF;
+}
+
+/* r = 16, so the circumference is 100.53; 92.5 of it is the 92% arc. */
+.bentoRingArc {
+    stroke: var(--tm-brand);
+    stroke-linecap: round;
+    stroke-dasharray: 92.5 100.53;
+}
+
+.bentoRingValue {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--tm-ink);
+}
+
+.bentoRingValue small {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--tm-body);
+}
+
+.bentoMatchBody {
+    min-width: 0;
+}
+
+.bentoMatchRole {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--tm-ink);
+}
+
+.bentoChecks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bentoChecks li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: var(--tm-body);
+}
+
+.bentoChecks svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: #157A45;
+}
+
+/* Support: three stops on one line */
+.bentoSteps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.bentoStepsTrack,
+.bentoStepsLine {
+    position: absolute;
+    top: 9px;
+    left: calc(100% / 6);
+    width: calc(100% * 2 / 3);
+    height: 2px;
+}
+
+.bentoStepsTrack {
+    background: #E0F0FF;
+}
+
+.bentoStepsLine {
+    background: var(--tm-brand);
+    transform-origin: left;
+}
+
+.bentoStep {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--tm-ink);
+    text-align: center;
+}
+
+.bentoStep::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 5px solid var(--tm-brand);
+}
+
+/* Flex: the five staffing models */
+.bentoChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.bentoChip {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+    border: 1px solid #9CC7F0;
+    border-radius: 9999px;
+    background: #E0F0FF;
+    color: #0056B3;
+}
+
+/* Industry: sector names drifting past, faded at both edges */
+.bentoMarquee {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+
+.bentoMarqueeRow {
+    display: flex;
+    gap: 0.5rem;
+    width: max-content;
+    animation: bentoMarquee 32s linear infinite;
+}
+
+.bentoMarqueeRow:nth-child(2) {
+    animation-direction: reverse;
+}
+
+.bentoMarqueeRow span {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    border-radius: 8px;
+    background: var(--tm-surface);
+    color: var(--tm-ink);
+}
+
+/* Each row holds its list twice; half its width plus half a gap is one list. */
+@keyframes bentoMarquee {
+    to {
+        transform: translateX(calc(-50% - 0.25rem));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bentoMarqueeRow {
+        animation: none;
+    }
+}
+
+/* The hero is tall on desktop, so its card stacks and the ring grows to
+   fill the tile instead of leaving a void above a short row. */
+@media (min-width: 1025px) {
+    .bentoHero .bentoMatch {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 1.75rem;
+    }
+
+    .bentoHero .bentoRing {
+        width: 132px;
+        height: 132px;
+    }
+
+    .bentoHero .bentoRingValue {
+        font-size: 1.85rem;
+    }
+
+    .bentoHero .bentoRingValue small {
+        font-size: 0.8rem;
+    }
+
+    .bentoHero .bentoMatchRole {
+        font-size: 1.05rem;
+    }
+
+    .bentoHero .bentoChecks li {
+        font-size: 0.92rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .bentoHero,
+    .bentoSupport {
+        grid-column: span 12;
+        grid-row: auto;
+    }
+
+    .bentoFlex,
+    .bentoIndustry {
+        grid-column: span 6;
+    }
+}
+
+@media (max-width: 640px) {
+    .bentoFlex,
+    .bentoIndustry {
+        grid-column: span 12;
+    }
+
+    .bentoTile {
+        padding: 1.35rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .bentoMatch {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 /* ------------------------------------------------------------------ faq -- */
@@ -1159,80 +1409,6 @@
         margin: 1rem 0 1.85rem;
         color: rgba(255, 255, 255, 0.9);
         max-width: 100%;
-    }
-
-    /* Horizontal Feature Card Stack on tablet & mobile */
-    .pillarRow {
-        display: flex;
-        flex-direction: column;
-        gap: 0.85rem;
-        margin-top: 2rem;
-        width: 100%;
-    }
-
-    .pillar,
-    .pillar:first-child,
-    .pillar:last-child {
-        display: grid;
-        grid-template-columns: 44px minmax(0, 1fr);
-        gap: 1rem;
-        align-items: flex-start;
-        text-align: left;
-        padding: 1.2rem 1.15rem;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(7, 26, 43, 0.04);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .pillar:nth-child(odd) {
-        padding-left: 1.15rem;
-    }
-
-    .pillar:nth-child(-n + 2) {
-        padding-top: 1.2rem;
-    }
-
-    .pillar:nth-child(n + 3) {
-        border-top: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
-    .pillarIcon {
-        width: 44px;
-        height: 44px;
-        border-radius: 11px;
-        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-        color: #0284c7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .pillarIcon svg {
-        width: 22px;
-        height: 22px;
-    }
-
-    .pillarContent {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pillarTitle {
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin: 0 0 0.25rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
-    }
-
-    .pillarDesc {
-        font-size: 0.88rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-        margin: 0;
     }
 
     /* Modern Frosted Pill Cloud for Industries on tablet & mobile */
