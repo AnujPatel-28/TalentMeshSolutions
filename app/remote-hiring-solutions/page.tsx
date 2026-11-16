@@ -75,7 +75,7 @@ export default function RemoteHiringSolutionsPage() {
             formTitleDark={<>Build <br />beyond</>}
             formTitleAccent="geographic boundaries."
             formSubtitle={
-                <p>Find the talent your team needs—wherever they are.</p>
+                <p>Find the talent your team needs, wherever they are.</p>
             }
             contactPhoneDisplay={STRONG_CTA.phoneDisplay}
             contactPhoneHref={STRONG_CTA.phoneHref}

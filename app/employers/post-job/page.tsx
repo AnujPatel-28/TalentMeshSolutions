@@ -102,7 +102,7 @@ export default function PostJobPage() {
                     experience_level: form.exp,
                     skills: skills.join(', '),
                     description: form.description,
-                    subject: `New Job Post Draft — ${form.title || 'Untitled role'} @ ${form.company || 'Unknown company'}`,
+                    subject: `New Job Post Draft: ${form.title || 'Untitled role'} @ ${form.company || 'Unknown company'}`,
                     from_name: 'TalentMesh Post-a-Job Preview',
                 }),
             });
@@ -260,7 +260,7 @@ export default function PostJobPage() {
                                         <textarea className={`${styles.textarea} ${aiGenerated ? styles.textareaAi : ''}`}
                                             rows={14} placeholder="Or write your job description here..."
                                             value={form.description} onChange={e => set('description', e.target.value)} />
-                                        {aiGenerated && <div className={styles.aiNote}><SparkleIco /> AI-generated — review and edit before posting</div>}
+                                        {aiGenerated && <div className={styles.aiNote}><SparkleIco /> AI-generated. Review and edit before posting</div>}
                                         <div className={styles.stepBtns}>
                                             <button className={styles.backBtn} onClick={() => setStep(0)}>← Back</button>
                                             <button className={styles.nextBtn} onClick={() => setStep(2)}>Preview Job →</button>

@@ -33,7 +33,7 @@ const MILESTONES = [
     {
         year: '2023',
         title: 'Series B & Platform Launch',
-        desc: '$28M raised. The full employer + candidate platform shipped — analytics, ATS integrations, and talent marketplace.'
+        desc: '$28M raised. The full employer + candidate platform shipped: analytics, ATS integrations, and talent marketplace.'
     },
     {
         year: '2024',
@@ -392,7 +392,7 @@ export default function AboutPage() {
                                 A world where every person finds work that <span className={styles.highlight}>truly fits.</span>
                             </h2>
                             <p className={styles.visionText}>
-                                Talent is evenly distributed — opportunity is not. TalentMesh exists to close that gap,
+                                Talent is evenly distributed; opportunity is not. TalentMesh exists to close that gap,
                                 removing geographic, demographic, and informational barriers that keep great people from great roles.
                                 We envision a future where hiring is frictionless, bias-free, and based on potential.
                             </p>

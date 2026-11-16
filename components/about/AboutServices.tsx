@@ -6,7 +6,7 @@ export default function AboutServices() {
     <div className={styles.inner}>
       <h2 className={styles.h2}>What we do</h2>
       <p className={styles.lede}>
-        End-to-end support across the recruitment lifecycle — sourcing, screening, coordination,
+        End-to-end support across the recruitment lifecycle: sourcing, screening, coordination,
         verification and onboarding.
       </p>
       <div className={`${styles.cardGrid3} ${styles.servicesGrid}`}>

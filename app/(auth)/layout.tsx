@@ -14,7 +14,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
     title: "Early Access",
-    description: "Get early access to TalentMesh Solutions — a next-gen recruiting platform.",
+    description: "Get early access to TalentMesh Solutions, a next-gen recruiting platform.",
     robots: { index: false, follow: true },
     alternates: { canonical: null },
 };

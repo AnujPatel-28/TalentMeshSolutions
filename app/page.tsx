@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'TalentMesh Solutions | Recruitment & Staffing Agency in India',
     description:
-      'End-to-end manpower services — permanent and contract staffing, executive search, RPO, campus and bulk hiring across ten industries.',
+      'End-to-end manpower services: permanent and contract staffing, executive search, RPO, campus and bulk hiring across ten industries.',
     url: SITE_URL,
     siteName: 'TalentMesh Solutions',
     type: 'website',

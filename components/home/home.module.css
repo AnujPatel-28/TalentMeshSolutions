@@ -2005,8 +2005,10 @@
     width: auto;
     height: 64%;
     max-width: none;
-    opacity: 0.55;
-    transform: translateX(22%);
+    /* Shown only in the open panel: cropped to a closed strip, a person
+       reads as a stray slice of a face. */
+    opacity: 0;
+    transform: translateX(8%);
     transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
 }
 
@@ -2050,7 +2052,6 @@
 
     .scaleImg {
         height: 40%;
-        opacity: 0;
     }
 }
 

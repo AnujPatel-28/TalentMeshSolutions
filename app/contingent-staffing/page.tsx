@@ -59,7 +59,7 @@ export default function ContingentStaffingPage() {
                 <p>Business needs change quickly. Projects expand, workloads fluctuate, and new priorities emerge.</p>
             }
             approachBody={
-                <p>Our contingent staffing approach helps you bring in qualified professionals for the work you need today—giving your team the flexibility to scale capacity as requirements evolve.</p>
+                <p>Our contingent staffing approach helps you bring in qualified professionals for the work you need today, giving your team the flexibility to scale capacity as requirements evolve.</p>
             }
             approachSteps={APPROACH_STEPS}
             formTitleDark={<>Ready to Find<br />Your Next</>}

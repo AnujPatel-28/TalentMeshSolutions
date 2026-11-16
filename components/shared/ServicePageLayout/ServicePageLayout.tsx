@@ -115,7 +115,7 @@ export default function ServicePageLayout(props: ServicePageLayoutProps) {
                     category: data.category,
                     message: data.message,
                     service: serviceName,
-                    subject: `New ${serviceName} enquiry — ${[data.first_name, data.last_name].filter(Boolean).join(' ') || 'Website visitor'}`,
+                    subject: `New ${serviceName} enquiry: ${[data.first_name, data.last_name].filter(Boolean).join(' ') || 'Website visitor'}`,
                     from_name: 'TalentMesh Website',
                     replyto: data.email,
                 }),
@@ -381,7 +381,7 @@ export default function ServicePageLayout(props: ServicePageLayoutProps) {
                             <div aria-live="polite">
                                 {status === 'success' && (
                                     <div className={styles.formSuccess}>
-                                        Thanks — we&apos;ve got your enquiry and will come back to you
+                                        Thanks, we&apos;ve got your enquiry and will come back to you
                                         within one working day. Need us sooner? Call{' '}
                                         {contactPhoneDisplay || 'our team'}.
                                     </div>

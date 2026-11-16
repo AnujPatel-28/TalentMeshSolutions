@@ -57,8 +57,8 @@ export const POSITIONING = {
       description: 'Skilled candidates matched to your requirements.',
       icon: 'zap',
       rightHeading: 'Uncover Top Talent, Instantly.',
-      rightIntro: 'Our recruiters screen every profile against your brief — skills, experience and cultural fit — so the shortlist you see is already worth interviewing.',
-      rightImage: '/cop2.webp',
+      rightIntro: 'Our recruiters screen every profile against your brief on skills, experience and cultural fit, so the shortlist you see is already worth interviewing.',
+      rightImage: '/cop1.png',
       rightBackground: '/building bg.webp'
     },
     {
@@ -291,7 +291,7 @@ export const FAQS = [
   {
     question: 'How quickly can you share a shortlist?',
     answer:
-      'For most mandates we deliver a screened shortlist within 48 to 72 hours of requirement sign-off. Niche, senior and confidential searches take longer because the candidate universe is smaller and engagement is one-to-one — we will tell you the realistic timeline at intake rather than after.',
+      'For most mandates we deliver a screened shortlist within 48 to 72 hours of requirement sign-off. Niche, senior and confidential searches take longer because the candidate universe is smaller and engagement is one-to-one. We will tell you the realistic timeline at intake rather than after.',
   },
   {
     question: 'Which industries do you recruit for?',

@@ -69,7 +69,7 @@ export default function RecruitmentProcessOutsourcingPage() {
                 <p>When hiring volumes increase, recruitment can quickly become a bottleneck.</p>
             }
             approachBody={
-                <p>Our RPO support extends your hiring capability with dedicated recruitment expertise—from candidate sourcing and screening to interview coordination.</p>
+                <p>Our RPO support extends your hiring capability with dedicated recruitment expertise, from candidate sourcing and screening to interview coordination.</p>
             }
             approachSteps={APPROACH_STEPS}
             formTitleDark={<>Scaling <br />your</>}

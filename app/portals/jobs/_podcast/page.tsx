@@ -144,7 +144,7 @@ export default function PodcastPage() {
                             centered
                             tag="TalentMesh Podcasts"
                             title={<>Discover Stories That Inspire <span className={styles.highlightText}>Your Mind.</span></>}
-                            description="Listen to world-class podcasts from creators, entrepreneurs, and storytellers — anytime, anywhere."
+                            description="Listen to world-class podcasts from creators, entrepreneurs, and storytellers, anytime, anywhere."
                         />
                         <div className={styles.heroBtnGroup}>
                             <button className={styles.primaryBtn} onClick={() => togglePlay("Main Hero Episode")}>
