@@ -55,9 +55,11 @@ export default function Services() {
     }, [measure]);
 
     // Pinned side-scroll. Where PIN_QUERY matches, home.module.css pins the
-    // section for one viewport; this measures how far the rail overflows, makes
-    // the section that much taller, and maps vertical scroll onto the rail's
-    // translateX. Elsewhere the rail stays the swipeable carousel above.
+    // section for one viewport and this maps vertical scroll onto the rail's
+    // translateX. The rail starts with the first card's left edge on the
+    // viewport's centre line and ends with the last card's right edge on it;
+    // the section is made taller by that travel distance. Elsewhere the rail
+    // stays the swipeable carousel above.
     useEffect(() => {
         const pin = pinRef.current;
         const rail = railRef.current;
@@ -65,19 +67,28 @@ export default function Services() {
 
         const mq = window.matchMedia(PIN_QUERY);
         let dist = 0;
+        let startX = 0;
         let frame = 0;
 
         const update = () => {
             frame = 0;
             if (!dist) return;
             const p = Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / dist));
-            rail.style.transform = `translate3d(${(-p * dist).toFixed(1)}px, 0, 0)`;
+            rail.style.transform = `translate3d(${(startX - p * dist).toFixed(1)}px, 0, 0)`;
             pin.style.setProperty('--svc-progress', p.toFixed(3));
         };
         const layout = () => {
-            dist = mq.matches ? Math.max(0, rail.scrollWidth - rail.clientWidth) : 0;
-            if (dist) {
+            dist = 0;
+            const first = rail.firstElementChild;
+            const last = rail.lastElementChild;
+            if (mq.matches && first && last) {
                 rail.scrollLeft = 0;
+                rail.style.transform = '';
+                const centre = document.documentElement.clientWidth / 2;
+                startX = centre - first.getBoundingClientRect().left;
+                dist = Math.max(0, startX - (centre - last.getBoundingClientRect().right));
+            }
+            if (dist) {
                 pin.dataset.pinned = '';
                 pin.style.setProperty('--svc-dist', `${dist}px`);
                 update();
@@ -94,10 +105,12 @@ export default function Services() {
         // would otherwise stay out of view, so scroll the page to bring it in.
         const onFocusIn = (e: FocusEvent) => {
             const card = (e.target as HTMLElement).closest('article');
-            if (!dist || !card) return;
+            const first = rail.firstElementChild;
+            if (!dist || !card || !first) return;
             const r = card.getBoundingClientRect();
             if (r.left >= 0 && r.right <= window.innerWidth) return;
-            const offset = r.left - rail.getBoundingClientRect().left;
+            // Scroll to the point where this card sits on the centre line.
+            const offset = r.left + r.width / 2 - first.getBoundingClientRect().left;
             window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + Math.min(dist, offset) });
         };
 

@@ -2260,8 +2260,9 @@
 }
 
 /* Pinned side-scroll (Services.tsx). On a wide, tall enough screen the section
-   pins for one viewport and vertical scroll moves the rail sideways. The
-   section's extra height, --svc-dist, is the rail's overflow and is written by
+   pins for one viewport and vertical scroll moves the rail sideways, from the
+   first card starting at the centre line to the last card ending on it. The
+   section's extra height, --svc-dist, is that travel and is written by
    Services.tsx together with `data-pinned`; until then, and on phones, short
    screens and for reduced motion, the rail stays the swipeable carousel above. */
 .svcProgress {
