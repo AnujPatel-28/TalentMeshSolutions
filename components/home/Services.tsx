@@ -76,6 +76,7 @@ export default function Services() {
         let dist = 0; // px of scroll that takes
         let startX = 0;
         let intro = 0; // px of scroll for the intro
+        let hold = 0; // px at its start during which nothing moves
         let enterX = 0; // how far right of its start the rail waits
         let centre = 0; // viewport centre line
         let cardW = 0;
@@ -105,7 +106,9 @@ export default function Services() {
         // smoothed by the scrub below.
         const update = (scrolled: number) => {
             if (!dist) return;
-            const q = Math.min(1, Math.max(0, scrolled / intro));
+            // The heading rests in the centre for `hold`, then takes the rest
+            // of the intro to settle.
+            const q = Math.min(1, Math.max(0, (scrolled - hold) / (intro - hold)));
             const rest = 1 - q * q * (3 - 2 * q);
             const p = Math.min(1, Math.max(0, (scrolled - intro) / dist));
             const x = startX + enterX * rest - p * travel;
@@ -180,7 +183,8 @@ export default function Services() {
                 head.ty = dy - t.height * 0.15;
                 head.ly = dy + t.height * 0.15;
 
-                intro = window.innerHeight * 0.6;
+                intro = window.innerHeight * 1.05;
+                hold = window.innerHeight * 0.15;
                 enterX = centre + 40;
                 startX = centre - rects[0].left;
                 travel = Math.max(0, startX - (centre - rects[rects.length - 1].right));
