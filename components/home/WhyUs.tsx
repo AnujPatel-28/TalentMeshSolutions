@@ -3,19 +3,12 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Target, Layers, LifeBuoy, Briefcase, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { WHY_TALENTMESH, INDUSTRY_ROWS } from '@/content/home';
 import { createScrub } from './scrub';
 import styles from './home.module.css';
 
-const POINT_ICONS = {
-    target: Target,
-    layers: Layers,
-    lifeBuoy: LifeBuoy,
-    briefcase: Briefcase,
-};
-
-// Full-screen photo behind each point's card, keyed like POINT_ICONS.
+// Full-screen photo behind each point's card, keyed by the point's `icon`.
 const POINT_PHOTOS = {
     target: '/images/why/quality.webp',
     layers: '/images/why/flexible.webp',
@@ -26,6 +19,7 @@ const POINT_PHOTOS = {
 // Must match the pinned-sequence media query in home.module.css.
 const PIN_QUERY = '(min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)';
 
+const LABEL = 'What Sets Us Apart';
 const HEADING_LINES = ['More Than Recruitment.', 'A Hiring Partner.'];
 const LEDE = 'We build strategic talent relationships to support your long-term organizational growth.';
 const HEADING_WORDS = HEADING_LINES.map((line) => line.split(' '));
@@ -230,28 +224,27 @@ export default function WhyUs() {
 
     return (
         <section ref={pinRef} className="relative" id="why-talentmesh">
-            <div className={`${styles.section} ${styles.sectionTint} ${styles.whyTint} ${styles.whyIntro}`}>
-                <div className={styles.inner}>
-                    <div
-                        className={`${styles.head} ${styles.headLeft} ${styles.whyHeadFull}`}
-                        style={{ '--why-words': WORD_COUNT } as React.CSSProperties}
-                    >
-                        <h2 className={styles.h2}>
+            <div className={`${styles.section} ${styles.whyIntro}`}>
+                <div className={`${styles.inner} ${styles.whyIntroGrid}`}>
+                    <p className={styles.whyLabel}>{LABEL}</p>
+                    <div style={{ '--why-words': WORD_COUNT } as React.CSSProperties}>
+                        <h2 className={styles.whyStatement}>
                             {HEADING_WORDS.map((line, i) => (
                                 <span key={i} className={styles.whyLine}>
                                     {line.map(word)}
                                 </span>
                             ))}
                         </h2>
-                        <p className={styles.lede}>{LEDE_WORDS.map(word)}</p>
+                        <p className={styles.whyStatement}>{LEDE_WORDS.map(word)}</p>
                     </div>
                 </div>
             </div>
 
             <div className={styles.whyTrack}>
                 <div className={styles.whyStage}>
-                    {WHY_TALENTMESH.points.map((pt) => {
-                        const Icon = POINT_ICONS[pt.icon];
+                    {WHY_TALENTMESH.points.map((pt, i) => {
+                        // Two-tone title: the last word takes the accent line.
+                        const cut = pt.title.lastIndexOf(' ');
                         return (
                             <article key={pt.title} className={styles.whyItem}>
                                 <Image
@@ -261,13 +254,16 @@ export default function WhyUs() {
                                     sizes="100vw"
                                     className={styles.whyPhoto}
                                 />
+                                <p className={`${styles.whyCaption} ${styles.whyCaptionLeft}`}>{pt.caption}</p>
                                 <div className={styles.whyCard}>
-                                    <span className={styles.whyIcon}>
-                                        <Icon strokeWidth={2} aria-hidden="true" />
+                                    <span className={styles.whyCount} aria-hidden="true">
+                                        {String(i + 1).padStart(2, '0')}
+                                        <i> / {String(WHY_TALENTMESH.points.length).padStart(2, '0')}</i>
                                     </span>
-                                    <h3 className={styles.whyTitle}>{pt.title}</h3>
-                                    <p className={styles.whyDesc}>{pt.description}</p>
-                                    {/* Decorative: each picture restates the copy above it. */}
+                                    <h3 className={styles.whyTitle}>
+                                        {pt.title.slice(0, cut)} <strong>{pt.title.slice(cut + 1)}</strong>
+                                    </h3>
+                                    {/* Decorative: each picture restates the copy below it. */}
                                     <motion.div
                                         className={styles.whyVisual}
                                         aria-hidden="true"
@@ -277,7 +273,9 @@ export default function WhyUs() {
                                     >
                                         {visuals[pt.icon]}
                                     </motion.div>
+                                    <p className={styles.whyDesc}>{pt.description}</p>
                                 </div>
+                                <p className={`${styles.whyCaption} ${styles.whyCaptionRight}`}>{pt.tagline}</p>
                             </article>
                         );
                     })}

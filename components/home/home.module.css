@@ -75,38 +75,6 @@
     color: var(--tm-body);
 }
 
-/* WhyUs-only mirrored grain: keeps the existing top-right
-   `background-image` untouched and adds a 180°-rotated copy at the
-   bottom-left via a pseudo-element (backgrounds can't be rotated
-   individually). Scoped to .whyTint so Process.tsx, which reuses
-   .sectionTint, is unaffected. Same file = no extra image request. */
-.whyTint::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: min(580px, 45vw);
-    aspect-ratio: 810 / 700;
-    background-image: url('/graintest.png');
-    background-size: contain;
-    background-position: bottom left;
-    background-repeat: no-repeat;
-    transform: rotate(180deg);
-    pointer-events: none;
-    z-index: 0;
-}
-
-.whyTint .inner {
-    position: relative;
-    z-index: 1;
-}
-
-@media (max-width: 1024px) {
-    .whyTint::after {
-        width: min(420px, 70vw);
-    }
-}
-
 /* Narrower than .head's 760px so the lede lands inside the 60-75 character
    measure; balance stops the h2 breaking to a one-word second line. */
 .head.whyHead {
@@ -115,18 +83,6 @@
 
 .whyHead .h2 {
     text-wrap: balance;
-}
-
-.whyTopRow {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 2.5rem;
-    margin-bottom: 3.5rem;
-}
-
-.whyTopRow .head {
-    margin: 0;
 }
 
 .whyImageWrap {
@@ -142,13 +98,6 @@
 }
 
 @media (max-width: 1024px) {
-    .whyTopRow {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2.5rem;
-        margin-bottom: 2.5rem;
-    }
-
     .whyHead {
         max-width: 100%;
     }
@@ -844,14 +793,54 @@
    borders here are hairline dividers, which carry structure rather than
    faking elevation. Nothing in the row is interactive, so there is no hover. */
 /* Why-us photo sequence.
-   A heading whose words fill in, then four full-bleed photos, each with a
-   white card. The rules here are the plain stack: four photo panels one
-   after another, every word at full strength. The pinned, scroll-driven
-   version is layered on at the end of this block and only where WhyUs.tsx
-   has set `data-pinned`, so without script (or with reduced motion, or on a
-   small screen) the stack is what shows. */
+   A plain statement whose words fill in, then four full-bleed photos, each
+   with a centred poster card and a caption either side. The rules here are
+   the plain stack: four photo panels one after another, every word at full
+   strength. The pinned, scroll-driven version is layered on at the end of
+   this block and only where WhyUs.tsx has set `data-pinned`, so without
+   script (or with reduced motion, or on a small screen) the stack is what
+   shows. */
 .whyIntro {
-    padding-bottom: 4rem;
+    padding-block: 6rem 3.5rem;
+    background: var(--tm-canvas);
+}
+
+.whyIntroGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Sits on the statement's first baseline rather than its cap line. */
+.whyLabel {
+    margin: 0;
+    padding-top: 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tm-ink);
+}
+
+/* Heading and description are one block of type at one size. */
+.whyStatement {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.9vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    color: var(--tm-ink);
+    text-wrap: pretty;
+}
+
+h2.whyStatement {
+    color: var(--tm-brand);
+}
+
+p.whyStatement {
+    margin-top: 1.1em;
 }
 
 .whyLine {
@@ -867,7 +856,7 @@
     position: relative;
     display: grid;
     place-items: center;
-    min-height: 36rem;
+    min-height: 40rem;
     padding: 4rem 1.25rem;
     overflow: hidden;
 }
@@ -876,55 +865,78 @@
     object-fit: cover;
 }
 
+/* Side captions need the width; narrower, the card speaks alone. */
+.whyCaption {
+    display: none;
+}
+
 .whyCard {
     position: relative;
-    z-index: 1;
-    width: min(27rem, 100%);
-    padding: 2rem;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 24px 60px rgba(7, 26, 43, 0.28);
+    z-index: 2;
+    width: min(23rem, 100%);
+    padding: 2rem 2rem 2.25rem;
+    background: #F7F9FC;
+    border-radius: 8px;
+    box-shadow: 0 14px 40px rgba(7, 26, 43, 0.22);
+    text-align: center;
 }
 
-.whyIcon {
-    display: flex;
-    color: var(--tm-brand);
-    margin-bottom: 1rem;
+.whyCount {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--tm-ink);
 }
 
-.whyIcon svg {
-    width: 28px;
-    height: 28px;
+.whyCount i {
+    font-style: normal;
+    opacity: 0.35;
 }
 
 .whyTitle {
-    margin: 0 0 0.45rem;
-    font-size: 1.35rem;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    margin: 1.1rem 0 0;
+    font-size: 1.9rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     color: var(--tm-ink);
+}
+
+.whyTitle strong {
+    display: block;
+    font-weight: 700;
+    color: var(--tm-brand);
+}
+
+/* The card's picture: every visual sits centred in the same tinted panel. */
+.whyVisual {
+    display: grid;
+    align-items: center;
+    min-height: 9.5rem;
+    margin: 1.5rem 0 1.4rem;
+    padding: 1.25rem;
+    background: #E8F2FC;
+    border-radius: 8px;
+    text-align: left;
 }
 
 .whyDesc {
     margin: 0;
-    font-size: 0.98rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.55;
     color: var(--tm-body);
-}
-
-.whyVisual {
-    margin-top: 1.75rem;
+    text-wrap: balance;
 }
 
 /* Quality: one match panel */
 .whyMatch {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1.25rem;
-    padding: 1.25rem;
-    background: var(--tm-surface);
-    border-radius: 14px;
 }
 
 .whyRing {
@@ -946,7 +958,7 @@
 }
 
 .whyRingTrack {
-    stroke: #D3E8FB;
+    stroke: #fff;
 }
 
 /* r = 16, so the circumference is 100.53; 92.5 of it is the 92% arc. */
@@ -1028,7 +1040,7 @@
 }
 
 .whyStepsTrack {
-    background: #E0F0FF;
+    background: #fff;
 }
 
 .whyStepsLine {
@@ -1062,6 +1074,7 @@
 .whyChips {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.5rem;
 }
 
@@ -1072,7 +1085,7 @@
     line-height: 1.3;
     border: 1px solid #9CC7F0;
     border-radius: 9999px;
-    background: #E0F0FF;
+    background: #fff;
     color: #0056B3;
 }
 
@@ -1104,7 +1117,7 @@
     line-height: 1.3;
     white-space: nowrap;
     border-radius: 8px;
-    background: var(--tm-surface);
+    background: #fff;
     color: var(--tm-ink);
 }
 
@@ -1121,14 +1134,79 @@
     }
 }
 
+@media (max-width: 1024px) {
+    .whyIntro {
+        padding-block: 4rem 2.5rem;
+    }
+
+    .whyIntroGrid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .whyLabel {
+        padding-top: 0;
+    }
+}
+
 @media (max-width: 640px) {
     .whyItem {
-        min-height: 30rem;
+        min-height: 34rem;
         padding: 3rem 1rem;
     }
 
     .whyCard {
-        padding: 1.5rem;
+        padding: 1.5rem 1.5rem 1.75rem;
+    }
+
+    .whyTitle {
+        font-size: 1.6rem;
+    }
+}
+
+/* Wide screens: a caption either side of the card, level with its middle,
+   over a scrim that darkens the photo's edges just enough to read on. The
+   captions ride with the card when the sequence is pinned. */
+@media (min-width: 1025px) {
+    .whyItem::after,
+    [data-pinned] .whyStage::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(
+            90deg,
+            rgba(7, 26, 43, 0.6),
+            rgba(7, 26, 43, 0) 30%,
+            rgba(7, 26, 43, 0) 70%,
+            rgba(7, 26, 43, 0.6)
+        );
+    }
+
+    .whyCaption {
+        display: block;
+        position: absolute;
+        top: var(--why-mid, 50%);
+        z-index: 2;
+        max-width: 15rem;
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 700;
+        line-height: 1.4;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #fff;
+        transform: translate3d(0, calc(-50% + var(--why-y, 0px)), 0);
+    }
+
+    .whyCaptionLeft {
+        left: 2.5rem;
+    }
+
+    .whyCaptionRight {
+        right: 2.5rem;
+        text-align: right;
     }
 }
 
@@ -1150,6 +1228,8 @@
     /* Comes up the screen as an inset, rounded frame and opens to full
        bleed by the time it pins. */
     [data-pinned] .whyStage {
+        /* Middle of the stage below the 60px navbar. */
+        --why-mid: calc(50% + 30px);
         position: sticky;
         top: 0;
         height: 100vh;
@@ -1673,11 +1753,6 @@
     height: 6px;
     border-radius: 50%;
     background: currentColor;
-}
-
-.whyHeadFull {
-    max-width: 48rem;
-    margin-bottom: 2.5rem;
 }
 
 .positioningCardInner {
