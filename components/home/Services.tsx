@@ -76,14 +76,13 @@ export default function Services() {
             const p = Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / dist));
             rail.style.transform = `translate3d(${(startX - p * dist).toFixed(1)}px, 0, 0)`;
             pin.style.setProperty('--svc-progress', p.toFixed(3));
-            // The closing call to action fills the right half as the last
-            // card comes to rest on the centre line.
-            pin.toggleAttribute('data-outro', p > 0.88);
         };
         const layout = () => {
             dist = 0;
             const first = rail.firstElementChild;
-            const last = rail.lastElementChild;
+            // The last card, not the last child: the closing call to action
+            // follows it in the rail and comes to rest in the right half.
+            const last = rail.querySelector('article:last-of-type');
             if (mq.matches && first && last) {
                 rail.scrollLeft = 0;
                 rail.style.transform = '';
@@ -97,7 +96,6 @@ export default function Services() {
                 update();
             } else {
                 delete pin.dataset.pinned;
-                pin.removeAttribute('data-outro');
                 pin.style.removeProperty('--svc-dist');
                 rail.style.transform = '';
             }
@@ -108,7 +106,7 @@ export default function Services() {
         // Keyboard: a focused link in a card that is still off to the side
         // would otherwise stay out of view, so scroll the page to bring it in.
         const onFocusIn = (e: FocusEvent) => {
-            const card = (e.target as HTMLElement).closest('article');
+            const card = (e.target as HTMLElement).closest(`article, .${styles.svcOutro}`);
             const first = rail.firstElementChild;
             if (!dist || !card || !first) return;
             const r = card.getBoundingClientRect();
@@ -219,7 +217,6 @@ export default function Services() {
                             </div>
                         </div>
 
-                        <div className={styles.svcRailWrap}>
                         <div
                             id="services-rail"
                             className={styles.svcRail}
@@ -257,17 +254,17 @@ export default function Services() {
                                     </div>
                                 </article>
                             ))}
-                        </div>
 
-                        {/* Pinned side-scroll only (hidden otherwise): shown
-                            beside the last card once the rail has finished. */}
-                        <div className={styles.svcOutro}>
-                            <h3>Not sure which model fits?</h3>
-                            <p>Tell us the role and we will recommend the right way to hire for it.</p>
-                            <Link href={HERO.primaryCta.href} className={styles.btnPrimary}>
-                                {HERO.primaryCta.label}
-                            </Link>
-                        </div>
+                            {/* Pinned side-scroll only (hidden otherwise): it
+                                rides in behind the last card and ends in the
+                                right half of the screen. */}
+                            <div className={styles.svcOutro}>
+                                <h3>Not sure which model fits?</h3>
+                                <p>Tell us the role and we will recommend the right way to hire for it.</p>
+                                <Link href={HERO.primaryCta.href} className={styles.btnPrimary}>
+                                    {HERO.primaryCta.label}
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
