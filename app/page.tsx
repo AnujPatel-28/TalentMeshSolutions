@@ -89,8 +89,10 @@ export default function Home() {
 
         {/* Full-bleed: no GridWrapper frame here, so section backgrounds run edge
             to edge. Each section centres its own copy (`.inner`, 1200px).
-            overflow-x-clip contains horizontal bleed from the entrance animations. */}
-        <div className="w-full overflow-x-clip bg-white">
+            overflow-x-clip contains horizontal bleed from the entrance animations.
+            `relative z-10` puts it above the hero, which pins while this slides
+            up over it. */}
+        <div className="relative z-10 w-full overflow-x-clip bg-white">
           <AnimateOnScroll animation="fadeUp" once>
             <Services />
           </AnimateOnScroll>

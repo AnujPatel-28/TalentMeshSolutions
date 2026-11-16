@@ -392,7 +392,6 @@
     line-height: 1.55;
     color: rgba(255, 255, 255, 0.78);
     text-wrap: balance;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
 }
 
 .heroActions {
@@ -402,19 +401,53 @@
     align-items: center;
     gap: 1rem 2rem;
     margin-top: 2.5rem;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
 }
 
-/* Hero entrance. This lives in CSS rather than framer-motion on purpose: the
-   hero is the LCP element, and motion `initial` props serialise to inline
-   `opacity:0` in the server HTML, which left the headline, lede and both CTAs
-   invisible until React hydrated. As keyframes the markup ships opaque and the
-   animation starts on first paint, so a slow or failed bundle costs the
-   entrance, not the content. Delays mirror the previous stagger.
+/* Hero entrance. This lives in CSS rather than framer-motion on purpose:
+   motion `initial` props serialise to inline `opacity:0` in the server HTML,
+   which left the headline, lede and both CTAs invisible until React hydrated.
+   As keyframes the animation starts on first paint, so a slow or failed bundle
+   costs the entrance, not the content.
+
+   Each headline line rises from behind the lower edge of its mask. On a first
+   visit the white intro cover (below) is still up at first paint, so the start
+   waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
-@keyframes heroWordIn {
-    from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
+.hero {
+    --hero-start: 1.5s;
+}
+
+:global(.tm-intro-seen) .hero {
+    --hero-start: 0.15s;
+}
+
+/* The padding/negative-margin pair gives descenders (the italic "g") room
+   inside the clip without moving the lines apart. */
+.heroLineMask {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+}
+
+/* `--l` is the line index, set in HomeHero.tsx. */
+.heroLine {
+    display: inline-block;
+    animation: heroLineUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--hero-start) + var(--l, 0) * 130ms);
+}
+
+.heroDesc {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 610ms) both;
+}
+
+.heroActions {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 730ms) both;
+}
+
+@keyframes heroLineUp {
+    from { transform: translateY(112%); }
 }
 
 @keyframes heroRiseIn {
@@ -422,10 +455,61 @@
     to { opacity: 1; transform: none; }
 }
 
-/* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
-.heroWord {
-    animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-    animation-delay: calc(120ms + var(--i, 0) * 65ms);
+/* Scroll exit, desktop and phone: the hero pins while the page below slides
+   up over it, and HomeHero.tsx scales the video and lifts the copy with the
+   scroll. Pinned only when motion is welcome and the screen is tall enough
+   that a pinned hero cannot hide its own lower edge. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 560px) {
+    .hero {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.heroVideoBg,
+.heroInner {
+    will-change: transform;
+}
+
+/* Magnetic primary CTA. The wrapper is the pointer catch area: 14px of padding
+   cancelled by the same negative margin, so layout is unchanged. HomeHero.tsx
+   writes --mx/--my while a mouse is over it and adds `.magnetTracking`. */
+.heroMagnet {
+    display: inline-flex;
+    padding: 14px;
+    margin: -14px;
+}
+
+.heroActions .btnPrimary,
+.heroActions .btnPrimary:hover {
+    position: relative;
+    overflow: hidden;
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.heroActions .btnPrimary.magnetTracking {
+    transition: transform 0.18s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* Light sweep across the pill on hover. */
+.heroActions .btnPrimary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .heroActions .btnPrimary:hover::after {
+        transform: translateX(340%) skewX(-18deg);
+        transition: transform 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+    }
 }
 
 .heroActions .btnPrimary {
@@ -442,6 +526,20 @@
 
 .heroActions .btnSecondary::after {
     content: '\2192';
+    transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+    /* A small nudge every few seconds, so the arrow also moves on touch
+       screens, where there is no hover. Off in the reduced-motion block. */
+    animation: heroArrowNudge 2.8s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite;
+}
+
+.heroActions .btnSecondary:hover::after {
+    animation: none;
+    transform: translateX(6px);
+}
+
+@keyframes heroArrowNudge {
+    0%, 60%, 100% { transform: none; }
+    30% { transform: translateX(5px); }
 }
 
 .heroActions .btnSecondary:hover {
@@ -502,20 +600,6 @@
 
 @keyframes introLogoOut {
     to { opacity: 0; transform: translate(-50%, -260%); }
-}
-
-/* The hero copy settles upward as the cover lifts. Transform only: its opacity
-   is left alone so the headline still counts as painted from the first frame. */
-.heroInner {
-    animation: heroSettle 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.35s backwards;
-}
-
-:global(.tm-intro-seen) .heroInner {
-    animation: none;
-}
-
-@keyframes heroSettle {
-    from { transform: translateY(24px); }
 }
 
 /* ------------------------------------------------------------ trust strip -- */
@@ -2017,10 +2101,10 @@
 
     /* The hero entrance is CSS, so it opts out here rather than through
        framer-motion's useReducedMotion like the rest of the page. */
-    .heroWord,
+    .heroLine,
     .heroDesc,
     .heroActions,
-    .heroInner {
+    .heroActions .btnSecondary::after {
         animation: none;
     }
 
