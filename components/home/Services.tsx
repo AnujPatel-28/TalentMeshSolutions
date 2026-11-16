@@ -8,7 +8,11 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { TALENTMESH_SERVICES } from '@/content/home';
 import styles from './home.module.css';
 
+// Must match the pinned-side-scroll media query in home.module.css.
+const PIN_QUERY = '(min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)';
+
 export default function Services() {
+    const pinRef = useRef<HTMLElement>(null);
     const railRef = useRef<HTMLDivElement>(null);
     const reduceMotion = useReducedMotion();
 
@@ -50,6 +54,67 @@ export default function Services() {
         };
     }, [measure]);
 
+    // Pinned side-scroll. Where PIN_QUERY matches, home.module.css pins the
+    // section for one viewport; this measures how far the rail overflows, makes
+    // the section that much taller, and maps vertical scroll onto the rail's
+    // translateX. Elsewhere the rail stays the swipeable carousel above.
+    useEffect(() => {
+        const pin = pinRef.current;
+        const rail = railRef.current;
+        if (!pin || !rail) return;
+
+        const mq = window.matchMedia(PIN_QUERY);
+        let dist = 0;
+        let frame = 0;
+
+        const update = () => {
+            frame = 0;
+            if (!dist) return;
+            const p = Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / dist));
+            rail.style.transform = `translate3d(${(-p * dist).toFixed(1)}px, 0, 0)`;
+            pin.style.setProperty('--svc-progress', p.toFixed(3));
+        };
+        const layout = () => {
+            dist = mq.matches ? Math.max(0, rail.scrollWidth - rail.clientWidth) : 0;
+            if (dist) {
+                rail.scrollLeft = 0;
+                pin.dataset.pinned = '';
+                pin.style.setProperty('--svc-dist', `${dist}px`);
+                update();
+            } else {
+                delete pin.dataset.pinned;
+                pin.style.removeProperty('--svc-dist');
+                rail.style.transform = '';
+            }
+        };
+        const onScroll = () => {
+            if (!frame) frame = requestAnimationFrame(update);
+        };
+        // Keyboard: a focused link in a card that is still off to the side
+        // would otherwise stay out of view, so scroll the page to bring it in.
+        const onFocusIn = (e: FocusEvent) => {
+            const card = (e.target as HTMLElement).closest('article');
+            if (!dist || !card) return;
+            const r = card.getBoundingClientRect();
+            if (r.left >= 0 && r.right <= window.innerWidth) return;
+            const offset = r.left - rail.getBoundingClientRect().left;
+            window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + Math.min(dist, offset) });
+        };
+
+        layout();
+        mq.addEventListener('change', layout);
+        window.addEventListener('resize', layout);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        rail.addEventListener('focusin', onFocusIn);
+        return () => {
+            mq.removeEventListener('change', layout);
+            window.removeEventListener('resize', layout);
+            window.removeEventListener('scroll', onScroll);
+            rail.removeEventListener('focusin', onFocusIn);
+            cancelAnimationFrame(frame);
+        };
+    }, []);
+
     const behavior: ScrollBehavior = reduceMotion ? 'auto' : 'smooth';
 
     const scrollByPage = useCallback(
@@ -72,7 +137,8 @@ export default function Services() {
     );
 
     return (
-        <section className="relative" id="services">
+        <section ref={pinRef} className={`relative ${styles.svcPin}`} id="services">
+            <div className={styles.svcStage}>
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div
@@ -87,6 +153,10 @@ export default function Services() {
                                 <p className={styles.lede}>
                                     End-to-end recruitment, staffing, and capability enablement tailored to your strategic business goals.
                                 </p>
+                            </div>
+
+                            <div className={styles.svcProgress} aria-hidden="true">
+                                <i />
                             </div>
 
                             <div className={styles.svcControls}>
@@ -172,6 +242,7 @@ export default function Services() {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
     );

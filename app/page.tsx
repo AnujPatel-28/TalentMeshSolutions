@@ -94,12 +94,13 @@ export default function Home() {
             up over it. */}
         <div className="relative z-10 w-full overflow-x-clip bg-white">
           <AnimateOnScroll animation="fadeUp" once>
-            <Services />
+            <TrustStrip />
           </AnimateOnScroll>
 
-          <TrustStrip />
+          {/* Not wrapped: Services pins itself and scrolls its cards sideways. */}
+          <Services />
 
-          {/* Not wrapped: WhyUs staggers its own entrance, like TrustStrip. */}
+          {/* Not wrapped: WhyUs staggers its own entrance. */}
           <WhyUs />
 
           <IndustriesGrid />
