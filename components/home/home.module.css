@@ -1213,10 +1213,11 @@ p.whyStatement {
     }
 }
 
-/* Pinned sequence. Must match PIN_QUERY in WhyUs.tsx, which also sets the
-   custom properties: --why-dist (scroll the four cards take), --why-grow
-   (0 to 1 as the stage arrives), and per item --why-y and --why-show. */
-@media (min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+/* Pinned sequence, at every width. Must match PIN_QUERY in WhyUs.tsx, which
+   also sets the custom properties: --why-dist (scroll the four cards take),
+   --why-grow (0 to 1 as the stage arrives), and per item --why-y and
+   --why-show. */
+@media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
     [data-pinned] > .whyTrack {
         height: calc(100vh + var(--why-dist, 0px));
     }
@@ -1256,6 +1257,7 @@ p.whyStatement {
     [data-pinned] .whyCard {
         position: absolute;
         inset: 60px 0 0;
+        width: min(23rem, calc(100% - 2rem));
         margin: auto;
         height: fit-content;
         transform: translate3d(0, var(--why-y, 0px), 0);

@@ -17,7 +17,9 @@ const POINT_PHOTOS = {
 };
 
 // Must match the pinned-sequence media query in home.module.css.
-const PIN_QUERY = '(min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)';
+// Any width, phones included; the height floor is what the tallest card needs
+// under the navbar, which rules out a phone held sideways.
+const PIN_QUERY = '(min-height: 640px) and (prefers-reduced-motion: no-preference)';
 
 const LABEL = 'What Sets Us Apart';
 const HEADING_LINES = ['More Than Recruitment.', 'A Hiring Partner.'];
@@ -73,6 +75,7 @@ export default function WhyUs() {
         const pin = pinRef.current;
         if (!pin) return;
         const track = pin.querySelector(`.${styles.whyTrack}`) as HTMLElement;
+        const stage = track.firstElementChild as HTMLElement;
         const items = Array.from(track.querySelectorAll('article'));
         const mq = window.matchMedia(PIN_QUERY);
         let vh = 0;
@@ -114,9 +117,12 @@ export default function WhyUs() {
         );
         const layout = () => {
             if (mq.matches) {
-                vh = window.innerHeight;
-                seg = vh * 0.75;
                 pin.dataset.pinned = '';
+                // The stage's own height, not the window's: on a phone the
+                // window changes height as the address bar slides away, and
+                // the cards must not jump when it does.
+                vh = stage.offsetHeight;
+                seg = vh * 0.75;
                 pin.style.setProperty('--why-dist', `${seg * items.length}px`);
                 scrub.snap();
             } else {
