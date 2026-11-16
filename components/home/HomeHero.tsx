@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useReducedMotion } from 'framer-motion';
 import { HERO } from '@/content/home';
+import { createScrub } from './scrub';
 import styles from './home.module.css';
 
 // The headline reveals line by line; a line ends after each of these words.
@@ -25,8 +26,8 @@ export default function HomeHero() {
 
     // Scroll exit: as the hero scrolls away the video scales up slightly and
     // the copy lifts and fades, while the page below slides over the pinned
-    // hero (see `.hero` in home.module.css). One rAF-throttled passive
-    // listener; nothing runs once the hero is fully off screen.
+    // hero (see `.hero` in home.module.css). One passive listener; the scrub
+    // stops its frame loop as soon as it has caught up with the scroll.
     useEffect(() => {
         if (reduceMotion) return;
         const hero = heroRef.current;
@@ -34,23 +35,22 @@ export default function HomeHero() {
         const inner = innerRef.current;
         if (!hero || !video || !inner) return;
 
-        let frame = 0;
-        const update = () => {
-            frame = 0;
-            const p = Math.min(1, Math.max(0, window.scrollY / hero.offsetHeight));
-            video.style.transform = `scale(${1 + 0.08 * p})`;
-            inner.style.transform = `translate3d(0, ${-90 * p}px, 0)`;
-            inner.style.opacity = String(Math.max(0, 1 - 1.5 * p));
-        };
-        const onScroll = () => {
-            if (!frame) frame = requestAnimationFrame(update);
-        };
+        // Smoothed, so a hard flick of the wheel glides rather than jumps.
+        const scrub = createScrub(
+            () => Math.min(hero.offsetHeight, Math.max(0, window.scrollY)),
+            (y) => {
+                const p = y / hero.offsetHeight;
+                video.style.transform = `scale(${1 + 0.08 * p})`;
+                inner.style.transform = `translate3d(0, ${-90 * p}px, 0)`;
+                inner.style.opacity = String(Math.max(0, 1 - 1.5 * p));
+            }
+        );
 
-        update();
-        window.addEventListener('scroll', onScroll, { passive: true });
+        scrub.snap();
+        window.addEventListener('scroll', scrub.kick, { passive: true });
         return () => {
-            window.removeEventListener('scroll', onScroll);
-            cancelAnimationFrame(frame);
+            window.removeEventListener('scroll', scrub.kick);
+            scrub.stop();
             video.style.transform = '';
             inner.style.transform = '';
             inner.style.opacity = '';

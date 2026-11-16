@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { HERO, TALENTMESH_SERVICES } from '@/content/home';
+import { createScrub } from './scrub';
 import styles from './home.module.css';
 
 // Must match the pinned-side-scroll media query in home.module.css.
@@ -74,7 +75,6 @@ export default function Services() {
         let travel = 0; // px the rail moves sideways
         let dist = 0; // px of scroll that takes
         let startX = 0;
-        let frame = 0;
         let intro = 0; // px of scroll for the intro
         let enterX = 0; // how far right of its start the rail waits
         let centre = 0; // viewport centre line
@@ -101,10 +101,10 @@ export default function Services() {
             });
         };
 
-        const update = () => {
-            frame = 0;
+        // `scrolled` is how far the page is into the pinned stretch, already
+        // smoothed by the scrub below.
+        const update = (scrolled: number) => {
             if (!dist) return;
-            const scrolled = -pin.getBoundingClientRect().top;
             const q = Math.min(1, Math.max(0, scrolled / intro));
             const rest = 1 - q * q * (3 - 2 * q);
             const p = Math.min(1, Math.max(0, (scrolled - intro) / dist));
@@ -137,6 +137,10 @@ export default function Services() {
             const label = `${String(current + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
             if (counter.textContent !== label) counter.textContent = label;
         };
+        const scrub = createScrub(
+            () => Math.min(intro + dist, Math.max(0, -pin.getBoundingClientRect().top)),
+            update
+        );
         const layout = () => {
             dist = 0;
             travel = 0;
@@ -185,7 +189,7 @@ export default function Services() {
             }
             if (dist) {
                 pin.style.setProperty('--svc-dist', `${dist + intro}px`);
-                update();
+                scrub.snap();
             } else {
                 delete pin.dataset.pinned;
                 pin.style.removeProperty('--svc-dist');
@@ -193,7 +197,7 @@ export default function Services() {
             }
         };
         const onScroll = () => {
-            if (!frame) frame = requestAnimationFrame(update);
+            if (dist) scrub.kick();
         };
         // Keyboard: a focused link in a card that is still off to the side
         // would otherwise stay out of view, so scroll the page to bring it in.
@@ -219,7 +223,7 @@ export default function Services() {
             window.removeEventListener('resize', layout);
             window.removeEventListener('scroll', onScroll);
             rail.removeEventListener('focusin', onFocusIn);
-            cancelAnimationFrame(frame);
+            scrub.stop();
             clearPinned();
         };
     }, []);
