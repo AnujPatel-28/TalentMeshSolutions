@@ -98,14 +98,16 @@ export default function Home() {
           {/* Not wrapped: Services pins itself and scrolls its cards sideways. */}
           <Services />
 
+          {/* Ahead of WhyUs, whose last card is about industries: the list
+              reads as groundwork there rather than as a repeat after it. */}
+          <IndustriesGrid />
+
           <AnimateOnScroll animation="fadeUp" once>
             <TrustStrip />
           </AnimateOnScroll>
 
-          {/* Not wrapped: WhyUs staggers its own entrance. */}
+          {/* Not wrapped: WhyUs drives its own scroll sequence. */}
           <WhyUs />
-
-          <IndustriesGrid />
 
           {/* Parked, not deleted. To bring it back: uncomment and restore the
               import above. */}

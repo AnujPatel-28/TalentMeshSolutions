@@ -20,7 +20,7 @@ export default function HomeFAQ() {
                                 Frequently asked <br className={styles.faqBr} />questions.
                             </h2>
                             <p className={styles.faqSubtext}>
-                                TalentMesh is designed to address common inquiries effectively, ensuring a seamless hiring partnership.
+                                Straight answers on timelines, industries, engagement models and verification.
                             </p>
                         </div>
 

@@ -68,7 +68,8 @@ export default function WhyUs() {
     // Pinned photo sequence. Where PIN_QUERY matches, the stage of photos
     // pins for one viewport and scroll drives three things: the heading's
     // words fill in as it comes up the screen, the stage widens from an inset
-    // frame to full bleed as it arrives, and then each card rides up to the
+    // frame to full bleed as it arrives (and closes again as it leaves), and
+    // then each card rides up to the
     // centre, rests, and leaves as the next photo fades in behind the next
     // card. Elsewhere the four photo cards simply stack.
     useEffect(() => {
@@ -95,7 +96,11 @@ export default function WhyUs() {
         const update = (v: number) => {
             if (!seg) return;
             pin.style.setProperty('--why-fill', clamp01((v + vh + 240) / (vh * 0.45 + 240)).toFixed(3));
-            pin.style.setProperty('--why-grow', clamp01(1 + v / vh).toFixed(3));
+            // The frame opens as the stage arrives and closes again as it
+            // leaves, once the last card's stretch is over.
+            const leaving = clamp01((v - seg * items.length) / vh);
+            const grow = Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
+            pin.style.setProperty('--why-grow', grow.toFixed(3));
 
             // Each card takes the first 60% of its stretch to arrive and
             // rests for the remainder. `at` is the card on the centre line,
@@ -112,7 +117,7 @@ export default function WhyUs() {
             });
         };
         const scrub = createScrub(
-            () => Math.min(seg * items.length, Math.max(-vh - 400, -track.getBoundingClientRect().top)),
+            () => Math.min(seg * items.length + vh, Math.max(-vh - 400, -track.getBoundingClientRect().top)),
             update
         );
         const layout = () => {
@@ -122,7 +127,7 @@ export default function WhyUs() {
                 // window changes height as the address bar slides away, and
                 // the cards must not jump when it does.
                 vh = stage.offsetHeight;
-                seg = vh * 0.75;
+                seg = vh * 0.6;
                 pin.style.setProperty('--why-dist', `${seg * items.length}px`);
                 scrub.snap();
             } else {

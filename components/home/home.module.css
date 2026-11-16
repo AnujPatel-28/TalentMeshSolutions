@@ -876,7 +876,7 @@ p.whyStatement {
     width: min(23rem, 100%);
     padding: 2rem 2rem 2.25rem;
     background: #F7F9FC;
-    border-radius: 8px;
+    border-radius: 18px;
     box-shadow: 0 14px 40px rgba(7, 26, 43, 0.22);
     text-align: center;
 }
@@ -919,7 +919,7 @@ p.whyStatement {
     margin: 1.5rem 0 1.4rem;
     padding: 1.25rem;
     background: #E8F2FC;
-    border-radius: 8px;
+    border-radius: 12px;
     text-align: left;
 }
 
@@ -1222,8 +1222,8 @@ p.whyStatement {
         height: calc(100vh + var(--why-dist, 0px));
     }
 
-    /* Comes up the screen as an inset, rounded frame and opens to full
-       bleed by the time it pins. */
+    /* Comes up the screen as an inset, rounded frame, opens to full bleed
+       by the time it pins, and closes again as it leaves. */
     [data-pinned] .whyStage {
         /* Middle of the stage below the 60px navbar. */
         --why-mid: calc(50% + 30px);
@@ -1543,12 +1543,12 @@ p.whyStatement {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 0.65rem 0.55rem;
         width: 100%;
         max-width: 480px;
-        margin: 2rem auto 0;
+        margin: 2rem 0 0;
     }
 
     .industryRow {
@@ -1566,8 +1566,6 @@ p.whyStatement {
         box-shadow: 0 2px 6px rgba(7, 26, 43, 0.04);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        filter: none;
-        opacity: 1;
         cursor: default;
         transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
     }
@@ -1959,42 +1957,47 @@ p.whyStatement {
 
 /* The title is long; let it span the container so it stays on one line
    instead of wrapping inside .head's 760px cap. */
-.industriesHead {
-    max-width: none;
+/* The heading borrows WhyUs's label-and-statement layout (.whyIntroGrid,
+   .whyLabel, .whyStatement), in ink rather than brand blue. */
+h2.industriesTitle {
+    color: var(--tm-ink);
+}
+
+.industriesLede {
+    margin: 1.1rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--tm-body);
 }
 
 .industriesContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.75rem;
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 }
 
 .industryRow {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 1rem 3rem;
     width: 100%;
 }
 
-/* Dimmed and desaturated until hovered, so the hovered industry reads as
-   the focus and the row stays quiet at rest. */
+/* Full strength at rest: ink names with brand-blue icons. Hover lifts the
+   tag and turns its icon to the industry's own colour. */
 .industryTag {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
-    filter: grayscale(1);
-    opacity: 0.55;
     transition: all 0.3s ease;
 }
 
 .industryTag:hover {
-    filter: grayscale(0);
-    opacity: 1;
     transform: translateY(-2px);
 }
 
@@ -2002,8 +2005,28 @@ p.whyStatement {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--hover-color, var(--tm-brand));
+    color: var(--tm-brand);
     transition: all 0.3s ease;
+}
+
+.industryTag:hover .tagIcon {
+    color: var(--hover-color, var(--tm-brand));
+}
+
+/* The small-screen pill cloud is declared earlier in this file, so the
+   rules above would win over it: restate the wrapping row and dissolve the
+   rows here so the pills flow as one even, left-aligned cloud. */
+@media (max-width: 1024px) {
+    .industriesContainer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem 0.55rem;
+    }
+
+    .industryRow {
+        display: contents;
+    }
 }
 
 .tagName {
