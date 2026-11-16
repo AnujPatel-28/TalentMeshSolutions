@@ -2,7 +2,6 @@
 
 import { MotionAccordion } from '@/components/ui/MotionAccordion';
 import { FAQS } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 /**
@@ -12,8 +11,6 @@ import styles from './home.module.css';
 export default function HomeFAQ() {
     return (
         <section className="relative" id="faq">
-            <SectionMarker label="FAQ" index={5} />
-
             <div className={styles.faqSection}>
                 <div className={styles.inner}>
                     <div className={styles.faqLayout}>

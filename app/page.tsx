@@ -11,7 +11,6 @@ import {
   ContactCTA,
 } from '@/components/home';
 import { FAQS } from '@/content/home';
-import GridWrapper from '@/components/ui/GridWrapper';
 import homeStyles from '@/components/home/home.module.css';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
@@ -88,7 +87,10 @@ export default function Home() {
         <HomeIntro />
         <HomeHero />
 
-        <GridWrapper>
+        {/* Full-bleed: no GridWrapper frame here, so section backgrounds run edge
+            to edge. Each section centres its own copy (`.inner`, 1200px).
+            overflow-x-clip contains horizontal bleed from the entrance animations. */}
+        <div className="w-full overflow-x-clip bg-white">
           <AnimateOnScroll animation="fadeUp" once>
             <Services />
           </AnimateOnScroll>
@@ -100,9 +102,8 @@ export default function Home() {
 
           <IndustriesGrid />
 
-          {/* Parked, not deleted. To bring it back: uncomment, restore the import
-              above, and shift HomeFAQ to index={6} and ContactCTA to index={7} —
-              Process owns [05] and pushes the rest of the sequence down. */}
+          {/* Parked, not deleted. To bring it back: uncomment and restore the
+              import above. */}
           {/* <Process /> */}
 
           <AnimateOnScroll animation="fadeUp" once>
@@ -112,7 +113,7 @@ export default function Home() {
           <AnimateOnScroll animation="fadeUp" once>
             <ContactCTA />
           </AnimateOnScroll>
-        </GridWrapper>
+        </div>
       </div>
     </>
   );

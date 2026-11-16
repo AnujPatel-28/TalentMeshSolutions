@@ -23,7 +23,6 @@ import {
     Headphones,
 } from 'lucide-react';
 import { INDUSTRY_ROWS } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 const ICONS = {
@@ -76,8 +75,6 @@ export default function IndustriesGrid() {
 
     return (
         <section className="relative" id="industries" onMouseMove={handleMouseMove}>
-            <SectionMarker label="Industries" index={4} />
-
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div className={`${styles.head} ${styles.industriesHead}`}>

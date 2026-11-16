@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { Pause, Play } from 'lucide-react';
 import { POSITIONING } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 // The right-hand intros run 27-32 words, which is roughly 7-9 seconds of
@@ -70,8 +69,6 @@ export default function TrustStrip() {
 
     return (
         <section className={`${styles.trustSection} relative`} aria-label="Why TalentMesh">
-            <SectionMarker label="Why TalentMesh" index={2} />
-
             <div className={styles.trustContainer}>
                 <div className={styles.trustLayout}>
                     {/* Left Side: Cards with Auto-Cycle */}

@@ -1472,7 +1472,8 @@
 /* Left Side: Cards */
 .trustCardsCol {
     background: var(--trust-cards-bg);
-    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
+    /* Left edge lines up with `.inner` (1200px) now the section is full-bleed. */
+    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1200px) / 2));
     display: flex;
     flex-direction: column;
     /* `space-between` against .trustLayout's 750px min-height was flinging the
@@ -1566,7 +1567,9 @@
 
 .trustImageWrap {
     width: 100%;
-    max-width: 1720px;
+    /* Capped at its 1440px-viewport size: the section is full-bleed, and an
+       uncapped image grows up into the lede on wider screens. */
+    max-width: 720px;
     margin-top: 2rem;
     flex: 1;
     display: flex;

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { TALENTMESH_SERVICES } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import styles from './home.module.css';
 
 export default function Services() {
@@ -74,8 +73,6 @@ export default function Services() {
 
     return (
         <section className="relative" id="services">
-            <SectionMarker label="Our Suite of Services" index={1} />
-
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div
