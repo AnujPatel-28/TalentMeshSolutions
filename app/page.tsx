@@ -93,12 +93,12 @@ export default function Home() {
             `relative z-10` puts it above the hero, which pins while this slides
             up over it. */}
         <div className="relative z-10 w-full overflow-x-clip bg-white">
+          {/* Not wrapped: Services pins itself and scrolls its cards sideways. */}
+          <Services />
+
           <AnimateOnScroll animation="fadeUp" once>
             <TrustStrip />
           </AnimateOnScroll>
-
-          {/* Not wrapped: Services pins itself and scrolls its cards sideways. */}
-          <Services />
 
           {/* Not wrapped: WhyUs staggers its own entrance. */}
           <WhyUs />
