@@ -345,10 +345,12 @@
     min-height: 600px;
   }
 
+  /* Same width and gutter as the navbar, so the copy's right edge lines up
+     with the "Get Started" button and the strip with the logo and button. */
   .heroCinematicInner,
   .heroCinematicStrip {
-    max-width: clamp(1280px, 84vw, 1720px);
-    padding-inline: clamp(1.5rem, 3vw, 3rem);
+    max-width: 1280px;
+    padding-inline: clamp(1rem, 3vw, 2rem);
   }
 
   /* Top clears the 60px navbar; bottom clears the strip. */
@@ -358,12 +360,19 @@
   }
 
   .heroCinematicCopy {
-    max-width: clamp(580px, 46vw, 900px);
+    /* As wide as its own content, not a fixed column, so it sits against
+       the right edge and clear of the people. */
+    width: fit-content;
+    /* Tied to the title size: wide enough for "interview-ready talent" on
+       one line, no wider, so the title keeps its three lines. */
+    max-width: calc(clamp(2.4rem, min(4.4vw, 8.6vh), 3.75rem) * 10.6);
     gap: clamp(0.6rem, 2vh, 1.4rem);
   }
 
   .heroCinematicTitle {
-    font-size: clamp(2.4rem, min(4.4vw, 8.6vh), 6rem);
+    /* Capped so the copy, which is about ten title-heights wide, stays in
+       the right half of the screen and clear of the people. */
+    font-size: clamp(2.4rem, min(4.4vw, 8.6vh), 3.75rem);
   }
 
   /* The serif accent reads as one phrase; never break it mid-way. */
