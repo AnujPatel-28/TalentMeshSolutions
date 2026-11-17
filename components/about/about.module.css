@@ -186,15 +186,16 @@
   object-position: 28% center;
 }
 
-/* Left-to-right legibility gradient + bottom vignette. Tuned so white text
-   holds 4.5:1 over both the lamp-lit faces (left) and the dark right side. */
+/* Left-to-right legibility gradient + bottom vignette, in a neutral near-black
+   rather than navy: the photo is already blue hour, and a navy wash on top
+   pushed the whole frame blue. Lighter over the faces, darker behind the copy. */
 .heroCinematicScrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(11, 31, 51, 0.6) 0%, rgba(11, 31, 51, 0.35) 38%, rgba(11, 31, 51, 0.38) 55%, rgba(11, 31, 51, 0.76) 100%),
-    linear-gradient(0deg, rgba(11, 31, 51, 0.85) 0%, transparent 34%);
+    linear-gradient(90deg, rgba(8, 12, 18, 0.42) 0%, rgba(8, 12, 18, 0.18) 36%, rgba(8, 12, 18, 0.34) 54%, rgba(8, 12, 18, 0.7) 100%),
+    linear-gradient(0deg, rgba(8, 12, 18, 0.78) 0%, transparent 32%);
 }
 
 .heroCinematicInner {
@@ -331,6 +332,69 @@
   width: 2rem;
   height: 1px;
   background: rgba(255, 255, 255, 0.4);
+}
+
+/* Laptops and desktops: the hero fills exactly one screen, and its type and
+   spacing scale with the window's height as well as its width, so short
+   Windows laptops (1366 x 657) keep the whole hero above the fold and large
+   monitors get a proportionally larger layout instead of a small island. */
+@media (min-width: 1025px) {
+  .heroCinematic {
+    height: 100vh;
+    height: 100svh;
+    min-height: 600px;
+  }
+
+  .heroCinematicInner,
+  .heroCinematicStrip {
+    max-width: clamp(1280px, 84vw, 1720px);
+    padding-inline: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  /* Top clears the 60px navbar; bottom clears the strip. */
+  .heroCinematicInner {
+    padding-top: calc(60px + clamp(1rem, 4vh, 3rem));
+    padding-bottom: clamp(3.5rem, 9vh, 6rem);
+  }
+
+  .heroCinematicCopy {
+    max-width: clamp(580px, 46vw, 900px);
+    gap: clamp(0.6rem, 2vh, 1.4rem);
+  }
+
+  .heroCinematicTitle {
+    font-size: clamp(2.4rem, min(4.4vw, 8.6vh), 6rem);
+  }
+
+  /* The serif accent reads as one phrase; never break it mid-way. */
+  .heroCinematicTitleAccent {
+    white-space: nowrap;
+  }
+
+  .heroCinematicSub {
+    max-width: 32em;
+    font-size: clamp(1rem, min(1.15vw, 2.2vh), 1.4rem);
+  }
+
+  .heroCinematicActions {
+    margin-top: clamp(0.25rem, 1.5vh, 1rem);
+  }
+
+  .heroCinematicTrust {
+    margin-top: clamp(0.25rem, 1.5vh, 1rem);
+    padding-top: clamp(0.85rem, 2.2vh, 1.5rem);
+  }
+
+  .heroCinematicStrip {
+    padding-bottom: clamp(0.9rem, 2.4vh, 1.75rem);
+  }
+}
+
+/* Very short windows: the trust row is the first thing to give way. */
+@media (min-width: 1025px) and (max-height: 640px) {
+  .heroCinematicTrust {
+    display: none;
+  }
 }
 
 /* ------------------------------------------------------------ who we are -- */
