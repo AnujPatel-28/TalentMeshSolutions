@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Contract-to-Hire',
     description: "Create a flexible path from contract engagement to permanent employment while giving both the organization and candidate time to establish the right fit.",
     alternates: { canonical: '/contract-to-hire' },
     openGraph: {
-        title: 'Contract-to-Hire | TalentMesh Solutions',
+        title: 'Contract-to-Hire | Talentmesh Solutions',
         description: "Create a flexible path from contract engagement to permanent employment while giving both the organization and candidate time to establish the right fit.",
         url: `${SITE_URL}/contract-to-hire`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/contract-to-hire.webp`, alt: "Two colleagues working side by side, one reviewing the other's work on screen" }],
     },

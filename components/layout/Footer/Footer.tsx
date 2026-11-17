@@ -32,7 +32,7 @@ const Footer = () => {
                     access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '',
                     email,
                     subject: `New Newsletter Subscription: ${email}`,
-                    from_name: 'TalentMesh Newsletter',
+                    from_name: 'Talentmesh Newsletter',
                 }),
             });
 
@@ -57,13 +57,13 @@ const Footer = () => {
                 <div className={styles.grid}>
                     <div className={styles.branding}>
                         <Link href="/" className={styles.logo}>
-                            <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="180px" />
+                            <Image src="/talentmesh-solutions-logo-transparent.png" alt="Talentmesh Solutions" width={2172} height={724} sizes="180px" />
                         </Link>
                         <p className={styles.description}>
                             Trusted Recruitment & Staffing Partner Across India
                         </p>
                         <div className={styles.newsletter}>
-                            <h4 className={styles.newsletterTitle}>Get TalentMesh Insights</h4>
+                            <h4 className={styles.newsletterTitle}>Get Talentmesh Insights</h4>
                             {status === 'success' ? (
                                 <p className={styles.newsletterSuccess}>{message}</p>
                             ) : (
@@ -110,7 +110,7 @@ const Footer = () => {
 
                     <div className={styles.column}>
                         <h4>Talent Portal</h4>
-                        <Link href="/talentmesh-portal">TalentMesh Portal</Link>
+                        <Link href="/talentmesh-portal">Talentmesh Portal</Link>
                         <Link href="/job-seekers">Candidate Benefits</Link>
                         <Link href="/employers/post-job">Post a Job</Link>
                     </div>
@@ -125,7 +125,7 @@ const Footer = () => {
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>&copy; 2026 TalentMesh Solutions. All rights reserved.</p>
+                    <p>&copy; 2026 Talentmesh Solutions. All rights reserved.</p>
                     <div className={styles.socials}>
                         <a href="https://x.com/TalentmeshS" className={`${styles.socialIcon} ${styles.twitter}`} aria-label="X (Twitter)">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

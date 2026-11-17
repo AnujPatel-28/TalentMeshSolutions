@@ -57,7 +57,7 @@ export default function ServicePageLayout(props: ServicePageLayoutProps) {
         heroDescription,
         heroCtaText = "Find Your Talent",
         imageSrc = "/contingent-team.png",
-        imageAlt = "TalentMesh Service Team",
+        imageAlt = "Talentmesh Service Team",
         approachCategory,
         approachHeadingDark,
         approachHeadingAccent,
@@ -116,7 +116,7 @@ export default function ServicePageLayout(props: ServicePageLayoutProps) {
                     message: data.message,
                     service: serviceName,
                     subject: `New ${serviceName} enquiry: ${[data.first_name, data.last_name].filter(Boolean).join(' ') || 'Website visitor'}`,
-                    from_name: 'TalentMesh Website',
+                    from_name: 'Talentmesh Website',
                     replyto: data.email,
                 }),
             });

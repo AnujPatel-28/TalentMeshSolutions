@@ -22,7 +22,7 @@ const ValueShowcase = () => {
         <section className={styles.section}>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <span className={styles.tag}>Why TalentMesh</span>
+                    <span className={styles.tag}>Why Talentmesh</span>
                     <h2 className={styles.title}>The next evolution of <span className={styles.highlight}>recruitment.</span></h2>
                     <p className={styles.desc}>We don&apos;t just match keywords; we architect the teams that build the future.</p>
                 </div>

@@ -1,10 +1,10 @@
 /**
- * Copy for the `/about` page (TalentMesh Solutions corporate site).
+ * Copy for the `/about` page (Talentmesh Solutions corporate site).
  *
  * Rules (from docs/specs/companyContext.md + content/home.ts):
  * 1. Vision-led, not history-led. Do not add founding date, headcount,
  *    revenue, client counts, placements, awards or testimonials.
- * 2. Brand = "TalentMesh Solutions". Legal = "Talentmesh Solution Pvt. Ltd."
+ * 2. Brand = "Talentmesh Solutions". Legal = "Talentmesh Solution Pvt. Ltd."
  *    (hero/footer use brand; legal line uses legal name).
  * 3. Every claim must trace to companyContext: sourcing, pre-screening
  *    (qualifications / experience / skills / role-fit), interview
@@ -31,7 +31,7 @@ export const ABOUT_HERO = {
   stripLeft: 'People Power Progress',
   stripRight: 'Ahmedabad, India',
   imageSrc: '/images/about/about-hero-editorial1.png',
-  imageAlt: 'Two TalentMesh consultants reviewing candidate profiles across a table at dusk',
+  imageAlt: 'Two Talentmesh consultants reviewing candidate profiles across a table at dusk',
 } as const;
 
 export const ABOUT_VISION = {

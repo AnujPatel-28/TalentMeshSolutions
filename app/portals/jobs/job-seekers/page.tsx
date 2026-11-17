@@ -253,20 +253,20 @@ export default function JobSeekersPage() {
 
     const FAQS = [
         {
-            question: "Is TalentMesh free for job seekers?",
-            answer: "Yes. Creating a TalentMesh profile and applying for jobs is free for candidates."
+            question: "Is Talentmesh free for job seekers?",
+            answer: "Yes. Creating a Talentmesh profile and applying for jobs is free for candidates."
         },
         {
             question: "Can I track my job applications?",
-            answer: "Yes. TalentMesh allows you to monitor your applications throughout the hiring process."
+            answer: "Yes. Talentmesh allows you to monitor your applications throughout the hiring process."
         },
         {
             question: "Are employers verified?",
             answer: "We work to ensure job opportunities come from trusted employers and recruitment partners."
         },
         {
-            question: "Can fresh graduates use TalentMesh?",
-            answer: "Yes. TalentMesh supports students, fresh graduates, and experienced professionals."
+            question: "Can fresh graduates use Talentmesh?",
+            answer: "Yes. Talentmesh supports students, fresh graduates, and experienced professionals."
         },
         {
             question: "Will I receive job alerts?",
@@ -314,14 +314,14 @@ export default function JobSeekersPage() {
                 </section>
             </div>
 
-            {/* SECTION 2: Why Candidates Choose TalentMesh */}
+            {/* SECTION 2: Why Candidates Choose Talentmesh */}
             <AnimateOnScroll animation="fadeUp">
                 <section className={`${styles.section} ${styles.sectionWhiteBg}`}>
                     <div className={styles.sectionInner}>
                         <div className={styles.sectionHeader}>
                             <div className={styles.sectionBadge}>Benefits</div>
                             <h2 className={styles.sectionTitle}>
-                                Why Candidates Choose <span className={styles.highlightText}>TalentMesh</span>
+                                Why Candidates Choose <span className={styles.highlightText}>Talentmesh</span>
                             </h2>
                             <p className={styles.sectionDesc}>
                                 Everything you need to manage your job search with confidence.
@@ -484,17 +484,17 @@ export default function JobSeekersPage() {
                 </section>
             </AnimateOnScroll>
 
-            {/* SECTION 3: Your Journey with TalentMesh */}
+            {/* SECTION 3: Your Journey with Talentmesh */}
             <AnimateOnScroll animation="fadeUp">
                 <section className={styles.section}>
                     <div className={styles.sectionInner}>
                         <div className={styles.sectionHeader}>
                             <div className={styles.sectionBadge}>Timeline</div>
                             <h2 className={styles.sectionTitle}>
-                                Your Journey with <span className={styles.highlightText}>TalentMesh</span>
+                                Your Journey with <span className={styles.highlightText}>Talentmesh</span>
                             </h2>
                             <p className={styles.sectionDesc}>
-                                TalentMesh keeps your entire job search organized, from your first application to your next opportunity.
+                                Talentmesh keeps your entire job search organized, from your first application to your next opportunity.
                             </p>
                         </div>
 
@@ -595,14 +595,14 @@ export default function JobSeekersPage() {
                     </section>
                 </AnimateOnScroll>
 
-                {/* SECTION 6: Why TalentMesh? (Commented out for future reference)
+                {/* SECTION 6: Why Talentmesh? (Commented out for future reference)
                 <AnimateOnScroll animation="fadeUp">
                     <section className={styles.section}>
                         <div className={styles.sectionInner}>
                             <div className={styles.sectionHeader}>
                                 <div className={styles.sectionBadge}>Comparison</div>
                                 <h2 className={styles.sectionTitle}>
-                                    Why <span className={styles.highlightText}>TalentMesh?</span>
+                                    Why <span className={styles.highlightText}>Talentmesh?</span>
                                 </h2>
                                 <p className={styles.sectionDesc}>
                                     Uncompromising value compared to traditional, noisy job boards.
@@ -620,7 +620,7 @@ export default function JobSeekersPage() {
                                                 <SparklesIcon size={12} />
                                                 <span>THE SMARTER CHOICE</span>
                                             </div>
-                                            <span className={styles.talentMeshTitle}>TalentMesh</span>
+                                            <span className={styles.talentMeshTitle}>Talentmesh</span>
                                         </div>
                                     </div>
                                     <div className={styles.tableBody}>
@@ -682,7 +682,7 @@ export default function JobSeekersPage() {
                     <div className={styles.ctaContainer}>
                         <h2 className={styles.ctaTitle}>Ready for Your Next Opportunity?</h2>
                         <p className={styles.ctaDesc}>
-                            Create your free TalentMesh profile, connect with verified employers, and take the next step in your career.
+                            Create your free Talentmesh profile, connect with verified employers, and take the next step in your career.
                         </p>
                         <div className={styles.ctaButtons}>
                             <Link href="/login" className={styles.ctaPrimary}>

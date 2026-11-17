@@ -5,7 +5,7 @@ title: "Background Verification in India: What Employers Should Check Before Onb
 slug: "background-verification-in-india-employer-guide"
 excerpt: "What a background check should actually cover in India, how each element is verified, how long it takes, and the consent and privacy obligations employers carry."
 category: "Compliance & Workforce"
-authorName: "TalentMesh Editorial"
+authorName: "Talentmesh Editorial"
 publishedAt: "2026-07-21T09:00:00.000Z"
 status: "published"
 coverImage: "Upload in Studio — see 'Cover image brief' below. Required: the blog listing hero does not render without it."
@@ -148,6 +148,6 @@ The one category that generally justifies a firm line, regardless of role, is de
 
 ## Verification as part of hiring, not after it
 
-The reason we treat verification as a hiring stage rather than an administrative one is the timing problem described above: checks started after joining are checks you cannot act on cleanly. At TalentMesh Solutions, background verification and reference checks — employment history, education and professional references — run alongside onboarding assistance and documentation support, so the offer-to-joining window is used rather than lost.
+The reason we treat verification as a hiring stage rather than an administrative one is the timing problem described above: checks started after joining are checks you cannot act on cleanly. At Talentmesh Solutions, background verification and reference checks — employment history, education and professional references — run alongside onboarding assistance and documentation support, so the offer-to-joining window is used rather than lost.
 
 If your current process starts verification after day one, that is the single change worth making first. [Talk to our team](/portals/jobs/contact) if you want a second view on how to sequence it, or see how [sourcing and screening](/technology-talent-sourcing) sets up what verification later confirms.

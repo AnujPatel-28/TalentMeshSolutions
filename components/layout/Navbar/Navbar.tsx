@@ -182,7 +182,7 @@ const Navbar = () => {
                 >
                     <Image
                         src="/talentmesh-solutions-logo-transparent.png"
-                        alt="TalentMesh Solutions"
+                        alt="Talentmesh Solutions"
                         width={2172}
                         height={724}
                         sizes="(max-width: 1024px) 162px, 180px"
@@ -294,7 +294,7 @@ const Navbar = () => {
                             Talent Portal <span className={styles.chevron} aria-hidden="true">▼</span>
                         </button>
                         <div id="dropdown-portal" className={styles.dropdown}>
-                            <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>TalentMesh Portal</Link>
+                            <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>Talentmesh Portal</Link>
                             <Link href="/job-seekers" className={`${styles.dropdownLink} ${pathname === '/job-seekers' ? styles.dropdownLinkActive : ''}`}>Candidate Benefits</Link>
                             <Link href="/employers/post-job" className={`${styles.dropdownLink} ${pathname === '/employers/post-job' ? styles.dropdownLinkActive : ''}`}>Post a Job</Link>
                         </div>
@@ -400,8 +400,8 @@ const Navbar = () => {
                 }}
             >
                 <div className={styles.mobileHeader}>
-                    <Link href="/" className={styles.logo} aria-label="TalentMesh Solutions home">
-                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
+                    <Link href="/" className={styles.logo} aria-label="Talentmesh Solutions home">
+                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="Talentmesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
                     </Link>
                     <button type="button" className={styles.mobileClose} onClick={closeMenu} aria-label="Close navigation menu" autoFocus>
                         <MenuIcon expanded={isMenuOpen && !isMenuClosing} />
@@ -461,7 +461,7 @@ const Navbar = () => {
                             <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
                         </button>
                         <div id="mobile-section-portal" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-portal" hidden={expandedMobileSection !== 'portal'}>
-                            {mobileLink('/talentmesh-portal', 'TalentMesh Portal')}
+                            {mobileLink('/talentmesh-portal', 'Talentmesh Portal')}
                             {mobileLink('/job-seekers', 'Candidate Benefits')}
                             {mobileLink('/employers/post-job', 'Post a Job')}
                         </div>
@@ -476,7 +476,7 @@ const Navbar = () => {
                             aria-expanded={expandedMobileSection === 'company'}
                             aria-controls="mobile-section-company"
                         >
-                            <span>Company<small>Meet TalentMesh and explore our insights</small></span>
+                            <span>Company<small>Meet Talentmesh and explore our insights</small></span>
                             <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
                         </button>
                         <div id="mobile-section-company" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-company" hidden={expandedMobileSection !== 'company'}>

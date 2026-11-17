@@ -18,7 +18,7 @@ export function displayDate(value?: string) {
 
 export function PostMeta({ post }: { post: BlogPost }) {
   const date = displayDate(post.publishedAt);
-  return <div className={styles.meta}><span>{post.authorName || 'TalentMesh Editorial'}</span>{date && <time dateTime={post.publishedAt}>{date}</time>}{!!post.readTimeMinutes && post.readTimeMinutes > 0 && <span>{post.readTimeMinutes} min read</span>}</div>;
+  return <div className={styles.meta}><span>{post.authorName || 'Talentmesh Editorial'}</span>{date && <time dateTime={post.publishedAt}>{date}</time>}{!!post.readTimeMinutes && post.readTimeMinutes > 0 && <span>{post.readTimeMinutes} min read</span>}</div>;
 }
 
 export function PostPreview({ post, featured = false }: { post: BlogPost; featured?: boolean }) {

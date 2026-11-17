@@ -16,13 +16,13 @@ import styles from '@/components/about/about.module.css';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-  // Bare title on purpose: the root layout's title.template ("%s | TalentMesh
+  // Bare title on purpose: the root layout's title.template ("%s | Talentmesh
   // Solutions") applies to this segment and appends the suffix automatically.
   title: 'About Us',
   description:
-    'TalentMesh Solutions is an Ahmedabad-based recruitment and staffing solutions provider offering end-to-end talent acquisition, staffing, hiring coordination, and workforce support services across multiple industries.',
+    'Talentmesh Solutions is an Ahmedabad-based recruitment and staffing solutions provider offering end-to-end talent acquisition, staffing, hiring coordination, and workforce support services across multiple industries.',
   keywords: [
-    'about TalentMesh Solutions',
+    'about Talentmesh Solutions',
     'recruitment agency Ahmedabad',
     'staffing company India',
     'hiring partner India',
@@ -30,16 +30,16 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/about' },
   openGraph: {
-    title: 'About TalentMesh Solutions | Recruitment & Staffing Partner in India',
+    title: 'About Talentmesh Solutions | Recruitment & Staffing Partner in India',
     description:
       'A trusted recruitment and workforce solutions partner helping organizations find skilled talent and build high-performing teams.',
     url: `${SITE_URL}/about`,
-    siteName: 'TalentMesh Solutions',
+    siteName: 'Talentmesh Solutions',
     type: 'website',
     images: [
       {
         url: `${SITE_URL}/images/about/about-hero-editorial.png`,
-        alt: 'Two TalentMesh consultants reviewing candidate profiles across a table at dusk',
+        alt: 'Two Talentmesh consultants reviewing candidate profiles across a table at dusk',
       },
     ],
   },
@@ -54,7 +54,7 @@ const aboutJsonLd = {
   '@type': 'AboutPage',
   '@id': `${SITE_URL}/about#page`,
   url: `${SITE_URL}/about`,
-  name: 'About TalentMesh Solutions',
+  name: 'About Talentmesh Solutions',
   description:
     'Ahmedabad-based recruitment and staffing solutions provider offering end-to-end talent acquisition and workforce support.',
   isPartOf: { '@id': `${SITE_URL}/#website` },

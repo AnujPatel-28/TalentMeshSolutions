@@ -13,7 +13,7 @@ const MILESTONES = [
     {
         year: '2019',
         title: 'The Founding Idea',
-        desc: 'Two ex-recruiters and an ML engineer frustrated by broken hiring sketched TalentMesh on a napkin in a coffee shop.'
+        desc: 'Two ex-recruiters and an ML engineer frustrated by broken hiring sketched Talentmesh on a napkin in a coffee shop.'
     },
     {
         year: '2020',
@@ -69,7 +69,7 @@ const STATS_TESTIMONIALS = [
     {
         metric: '98%',
         label: 'Client satisfaction rate',
-        quote: 'TalentMesh has completely transformed how we build teams. The combination of AI screening and specialist verification is unmatched.',
+        quote: 'Talentmesh has completely transformed how we build teams. The combination of AI screening and specialist verification is unmatched.',
         author: 'David Callahan',
         role: 'VP of Talent, Spotify',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80'
@@ -197,7 +197,7 @@ export default function AboutPage() {
                                 </div>
                                 <div className={styles.authorMeta}>
                                     <cite className={styles.authorName}>Aryan Mehta</cite>
-                                    <span className={styles.authorRole}>Co-Founder & CEO, TalentMesh</span>
+                                    <span className={styles.authorRole}>Co-Founder & CEO, Talentmesh</span>
                                 </div>
                             </div>
                         </div>
@@ -320,7 +320,7 @@ export default function AboutPage() {
                             <h2 className={styles.sectionTitle}>
                                 Why work <span className={styles.highlight}>with us?</span>
                             </h2>
-                            <p className={styles.whyUsSub}>Find out why TalentMesh is better than traditional agencies.</p>
+                            <p className={styles.whyUsSub}>Find out why Talentmesh is better than traditional agencies.</p>
                         </div>
 
                         <div className={styles.comparisonGrid}>
@@ -351,9 +351,9 @@ export default function AboutPage() {
                                 </ul>
                             </div>
 
-                            {/* TalentMesh */}
+                            {/* Talentmesh */}
                             <div className={`${styles.comparisonCard} ${styles.compCardActive} glass-card`}>
-                                <h3 className={styles.compCardTitle}>TalentMesh:</h3>
+                                <h3 className={styles.compCardTitle}>Talentmesh:</h3>
                                 <ul className={styles.compList}>
                                     <li className={styles.compItemPlus}>
                                         <span className={styles.compIconPlus}>✓</span>
@@ -392,7 +392,7 @@ export default function AboutPage() {
                                 A world where every person finds work that <span className={styles.highlight}>truly fits.</span>
                             </h2>
                             <p className={styles.visionText}>
-                                Talent is evenly distributed; opportunity is not. TalentMesh exists to close that gap,
+                                Talent is evenly distributed; opportunity is not. Talentmesh exists to close that gap,
                                 removing geographic, demographic, and informational barriers that keep great people from great roles.
                                 We envision a future where hiring is frictionless, bias-free, and based on potential.
                             </p>

@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Direct Hire Recruitment',
     description: "Talentmesh helps organizations identify, assess and connect with professionals for permanent roles across functions and industries.",
     alternates: { canonical: '/direct-hire-recruitment' },
     openGraph: {
-        title: 'Direct Hire Recruitment | TalentMesh Solutions',
+        title: 'Direct Hire Recruitment | Talentmesh Solutions',
         description: "Talentmesh helps organizations identify, assess and connect with professionals for permanent roles across functions and industries.",
         url: `${SITE_URL}/direct-hire-recruitment`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/direct-hire-recruitment.webp`, alt: "A hiring manager welcoming a new permanent employee on an open-plan office floor" }],
     },

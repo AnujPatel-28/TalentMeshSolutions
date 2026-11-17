@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'GCC Setup & Build',
     description: "Create a workforce strategy designed around the people, skills and hiring requirements needed to establish and grow your capability center.",
     alternates: { canonical: '/gcc-setup-and-build' },
     openGraph: {
-        title: 'GCC Setup & Build | TalentMesh Solutions',
+        title: 'GCC Setup & Build | Talentmesh Solutions',
         description: "Create a workforce strategy designed around the people, skills and hiring requirements needed to establish and grow your capability center.",
         url: `${SITE_URL}/gcc-setup-and-build`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/gcc-setup-and-build.webp`, alt: "A wide view across a newly occupied office floor with people walking and talking" }],
     },

@@ -12,7 +12,7 @@ const TRUST_ICONS = {
 
 export default function AboutHero() {
   return (
-    <section className={styles.heroCinematic} aria-label="About TalentMesh Solutions">
+    <section className={styles.heroCinematic} aria-label="About Talentmesh Solutions">
       <div className={styles.heroCinematicMedia}>
         <Image
           src={ABOUT_HERO.imageSrc}
@@ -42,7 +42,7 @@ export default function AboutHero() {
               {ABOUT_HERO.secondaryCta.label}
             </Link>
           </div>
-          <ul className={styles.heroCinematicTrust} aria-label="Why TalentMesh">
+          <ul className={styles.heroCinematicTrust} aria-label="Why Talentmesh">
             {ABOUT_HERO.trust.map((item) => {
               const Icon = TRUST_ICONS[item.icon as keyof typeof TRUST_ICONS] ?? Users;
               return (

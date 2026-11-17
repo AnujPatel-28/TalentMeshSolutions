@@ -18,7 +18,7 @@ const faqItems: MotionAccordionItem[] = [
   },
   {
     question: "Do you support remote jobs?",
-    answer: "Yes! Over 60% of the roles on TalentMesh are remote-friendly or fully remote, spanning across 40+ countries."
+    answer: "Yes! Over 60% of the roles on Talentmesh are remote-friendly or fully remote, spanning across 40+ countries."
   }
 ];
 

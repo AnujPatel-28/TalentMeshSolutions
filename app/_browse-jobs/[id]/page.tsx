@@ -128,7 +128,7 @@ export default function JobDetailPage() {
                     interested_role: job?.title,
                     interested_company: job?.company_profiles?.company_name,
                     subject: `New Talent Pool signup: ${job?.title} @ ${job?.company_profiles?.company_name}`,
-                    from_name: 'TalentMesh Talent Pool',
+                    from_name: 'Talentmesh Talent Pool',
                 }),
             });
             if (response.ok) {
@@ -175,7 +175,7 @@ export default function JobDetailPage() {
 
     const handleShare = async () => {
         const url = window.location.href;
-        const companyName = job?.company_profiles?.company_name || 'TalentMesh Company';
+        const companyName = job?.company_profiles?.company_name || 'Talentmesh Company';
         const shareData = { 
             title: job?.title || 'Job Opportunity', 
             text: `Check out this ${job?.title} position at ${companyName}`, 

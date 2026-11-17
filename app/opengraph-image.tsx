@@ -5,7 +5,7 @@ import { ImageResponse } from 'next/og';
 // no metadata hand-wiring is needed in layout.tsx or page.tsx.
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'TalentMesh Solutions | Recruitment & Staffing Agency in Ahmedabad, India';
+export const alt = 'Talentmesh Solutions | Recruitment & Staffing Agency in Ahmedabad, India';
 
 export default function OpengraphImage() {
     return new ImageResponse(
@@ -55,7 +55,7 @@ export default function OpengraphImage() {
                             display: 'flex',
                         }}
                     >
-                        TalentMesh Solutions
+                        Talentmesh Solutions
                     </div>
                 </div>
 

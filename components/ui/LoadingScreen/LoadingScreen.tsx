@@ -11,7 +11,7 @@ export default function LoadingScreen({ label }: { label?: string }) {
                 <div className={styles.logoWrapper}>
                     <Image
                         src="/TalentMesh_page-0002-removebg-preview.png"
-                        alt="TalentMesh"
+                        alt="Talentmesh"
                         width={200}
                         height={56}
                         priority

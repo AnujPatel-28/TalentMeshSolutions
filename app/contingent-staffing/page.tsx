@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Contingent Staffing',
     description: "Access skilled professionals without committing to a permanent workforce structure. We help businesses respond to changing project demands with flexible staffing solutions built around their immediate requirements.",
     alternates: { canonical: '/contingent-staffing' },
     openGraph: {
-        title: 'Contingent Staffing | TalentMesh Solutions',
+        title: 'Contingent Staffing | Talentmesh Solutions',
         description: "Access skilled professionals without committing to a permanent workforce structure. We help businesses respond to changing project demands with flexible staffing solutions built around their immediate requirements.",
         url: `${SITE_URL}/contingent-staffing`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/contingent-staffing.webp`, alt: "A project team bringing a newly joined colleague up to speed at a standing desk" }],
     },

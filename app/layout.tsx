@@ -45,28 +45,28 @@ const SITE_URL = "https://talentmeshsolutions.com";
 
 export const metadata: Metadata = {
   title: {
-    default: "TalentMesh Solutions | Next-Gen Recruitment Platform",
-    template: "%s | TalentMesh Solutions",
+    default: "Talentmesh Solutions | Next-Gen Recruitment Platform",
+    template: "%s | Talentmesh Solutions",
   },
-  description: "TalentMesh Solutions is a next-generation recruitment platform connecting employers and job seekers across India. Post jobs, source talent, and get expert recruitment assistance in one place.",
-  keywords: ["TalentMesh Solutions", "Recruitment Platform India", "Job Board", "Talent Sourcing", "Post a Job", "Recruitment Agency India", "Hiring Platform"],
-  authors: [{ name: "TalentMesh Solutions" }],
+  description: "Talentmesh Solutions is a next-generation recruitment platform connecting employers and job seekers across India. Post jobs, source talent, and get expert recruitment assistance in one place.",
+  keywords: ["Talentmesh Solutions", "Recruitment Platform India", "Job Board", "Talent Sourcing", "Post a Job", "Recruitment Agency India", "Hiring Platform"],
+  authors: [{ name: "Talentmesh Solutions" }],
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "TalentMesh Solutions | Next-Gen Recruitment Platform",
+    title: "Talentmesh Solutions | Next-Gen Recruitment Platform",
     description: "Connecting employers and job seekers with a next-generation, streamlined hiring platform.",
     url: SITE_URL,
-    siteName: "TalentMesh Solutions",
+    siteName: "Talentmesh Solutions",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TalentMesh Solutions | Next-Gen Recruitment Platform",
-    description: "Post jobs, source talent, and hire faster with TalentMesh Solutions.",
+    title: "Talentmesh Solutions | Next-Gen Recruitment Platform",
+    description: "Post jobs, source talent, and hire faster with Talentmesh Solutions.",
   },
   robots: {
     index: true,
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   appleWebApp: {
-    title: 'TalentMesh Solutions',
+    title: 'Talentmesh Solutions',
     statusBarStyle: 'default',
     capable: true,
   },
@@ -94,16 +94,16 @@ export const metadata: Metadata = {
 
 // Structured data (schema.org Organization) — helps both traditional search
 // engines and AI answer engines (Perplexity, ChatGPT search, Google AI
-// Overviews) identify and cite TalentMesh Solutions accurately.
+// Overviews) identify and cite Talentmesh Solutions accurately.
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": ["Organization", "EmploymentAgency"],
   "@id": `${SITE_URL}/#org`,
-  name: "TalentMesh Solutions",
+  name: "Talentmesh Solutions",
   legalName: "Talentmesh Solution Pvt. Ltd.",
   url: SITE_URL,
   logo: `${SITE_URL}/TalentMesh_page-0002-removebg-preview.png`,
-  description: "TalentMesh Solutions is a professional, result-driven recruitment and staffing firm delivering end-to-end manpower services across India.",
+  description: "Talentmesh Solutions is a professional, result-driven recruitment and staffing firm delivering end-to-end manpower services across India.",
   email: "info@talentmeshsolutions.com",
   telephone: "+91-98981-61106",
   areaServed: { "@type": "Country", name: "India" },

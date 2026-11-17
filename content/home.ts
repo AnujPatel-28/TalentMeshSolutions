@@ -1,5 +1,5 @@
 /**
- * Copy and data for the `/` landing page (TalentMesh Solutions corporate site).
+ * Copy and data for the `/` landing page (Talentmesh Solutions corporate site).
  *
  * Sourced from the company business proposal and LinkedIn overview. Two rules
  * apply when editing this file:
@@ -12,7 +12,7 @@
 
 export const CONTACT = {
   legalName: 'Talentmesh Solution Pvt. Ltd.',
-  brandName: 'TalentMesh Solutions',
+  brandName: 'Talentmesh Solutions',
   addressLines: [
     '7-B, Amrut Bag Colony, Opp. Stadium,',
     'Nr. Hindu Colony, Navrangpura,',
@@ -26,7 +26,7 @@ export const CONTACT = {
   phoneHref: 'tel:9898161106',
   /** wa.me wants the number with country code and no symbols; `text` pre-fills the first message. */
   whatsappHref:
-    'https://wa.me/919898161106?text=Hi%20TalentMesh%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services.',
+    'https://wa.me/919898161106?text=Hi%20Talentmesh%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services.',
   email: 'info@talentmeshsolutions.com',
 } as const;
 
@@ -49,7 +49,7 @@ export const HERO = {
 } as const;
 
 export const POSITIONING = {
-  sectionTitle: 'Why TalentMesh',
+  sectionTitle: 'Why Talentmesh',
   badge: 'POSITIONING',
   columns: [
     {
@@ -124,7 +124,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
 export const SERVICES = SERVICE_CATEGORIES.flatMap((cat) =>
   cat.items.map((item) => ({
     title: item,
-    description: `${item} solutions provided by TalentMesh Solutions.`,
+    description: `${item} solutions provided by Talentmesh Solutions.`,
   }))
 );
 

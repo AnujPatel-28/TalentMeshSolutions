@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   // Brand spelled out here on purpose: Next's `title.template` in the root
   // layout does not apply to the segment it is defined in, and app/page.tsx
   // shares that segment — so this string renders verbatim.
-  title: 'Recruitment & Staffing Agency in Ahmedabad | TalentMesh Solutions',
+  title: 'Recruitment & Staffing Agency in Ahmedabad | Talentmesh Solutions',
   description:
-    'TalentMesh Solutions is a recruitment and staffing firm in Ahmedabad offering permanent, contract, executive search, RPO and bulk hiring across India.',
+    'Talentmesh Solutions is a recruitment and staffing firm in Ahmedabad offering permanent, contract, executive search, RPO and bulk hiring across India.',
   keywords: [
     'recruitment agency Ahmedabad',
     'staffing company India',
@@ -36,11 +36,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'TalentMesh Solutions | Recruitment & Staffing Agency in India',
+    title: 'Talentmesh Solutions | Recruitment & Staffing Agency in India',
     description:
       'End-to-end manpower services: permanent and contract staffing, executive search, RPO, campus and bulk hiring across ten industries.',
     url: SITE_URL,
-    siteName: 'TalentMesh Solutions',
+    siteName: 'Talentmesh Solutions',
     type: 'website',
     // No `images` key: app/opengraph-image.tsx supplies it via file convention.
   },
@@ -58,7 +58,7 @@ const homeJsonLd = {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: 'TalentMesh Solutions',
+      name: 'Talentmesh Solutions',
       description:
         'Recruitment and staffing firm in Ahmedabad delivering end-to-end manpower services across India.',
       inLanguage: 'en-IN',

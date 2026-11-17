@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Technology Talent Sourcing',
     description: "Technology hiring is about more than matching keywords. Talentmesh helps organizations identify professionals whose skills, experience and technical background align with the role.",
     alternates: { canonical: '/technology-talent-sourcing' },
     openGraph: {
-        title: 'Technology Talent Sourcing | TalentMesh Solutions',
+        title: 'Technology Talent Sourcing | Talentmesh Solutions',
         description: "Technology hiring is about more than matching keywords. Talentmesh helps organizations identify professionals whose skills, experience and technical background align with the role.",
         url: `${SITE_URL}/technology-talent-sourcing`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/technology-talent-sourcing.webp`, alt: "Two engineers at a dual-monitor desk, one explaining something on screen" }],
     },

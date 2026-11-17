@@ -59,7 +59,7 @@ export default function ContactPage() {
                     userType: formData.userType,
                     message: formData.message,
                     subject: `New Contact Form Submission from ${formData.fullName}`,
-                    from_name: 'TalentMesh Contact Form',
+                    from_name: 'Talentmesh Contact Form',
                 }),
             });
             const result = await response.json();
@@ -87,7 +87,7 @@ export default function ContactPage() {
                         <div className={styles.success} ref={resultRef} tabIndex={-1}>
                             <Check size={36} aria-hidden="true" />
                             <h2 id="form-title">Thanks for reaching out.</h2>
-                            <p>Your message has been sent to TalentMesh Solutions. Our team will get in touch using the details you shared.</p>
+                            <p>Your message has been sent to Talentmesh Solutions. Our team will get in touch using the details you shared.</p>
                             <button className={styles.submit} onClick={() => { restoreFormFocus.current = true; setFormData(EMPTY_FORM); setSent(false); }}>Send another message <ArrowRight size={18} aria-hidden="true" /></button>
                         </div>
                     ) : (
@@ -145,7 +145,7 @@ export default function ContactPage() {
                     )}
                 </section>
 
-                <aside className={styles.details} aria-label="Contact TalentMesh Solutions">
+                <aside className={styles.details} aria-label="Contact Talentmesh Solutions">
                     <h2>A direct line to our team.</h2>
                     <div className={styles.contactItem}>
                         <span>Email us</span>
