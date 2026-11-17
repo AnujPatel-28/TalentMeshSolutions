@@ -536,23 +536,142 @@
   margin: 0;
 }
 
-.principleList {
+/* Pinned story. Base rules are the no-script fallback: an ordinary rounded
+   stage with the first photo and all three principles stacked. Pinning and
+   the one-at-a-time swap only switch on under html.js-ready. */
+.pinWrap {
+  position: relative;
+}
+
+.pinStage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 560px;
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 6vw, 5rem);
+  border-radius: 28px;
+  background: var(--tm-ink-deep);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pinPhotos {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.pinPhoto {
+  object-fit: cover;
+  object-position: 72% 50%;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.9s ease, transform 6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pinPhoto.isOn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Darkest on the left where the text sits; the people stay clear on the right. */
+.pinWash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(6, 18, 31, 0.96) 0%, rgba(6, 18, 31, 0.9) 32%, rgba(6, 18, 31, 0.55) 58%, rgba(6, 18, 31, 0.2) 82%, rgba(6, 18, 31, 0.15) 100%),
+    linear-gradient(0deg, rgba(6, 18, 31, 0.55) 0%, rgba(6, 18, 31, 0) 30%);
+}
+
+.pinStory {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 3rem;
+  max-width: 30rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.principle {
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+.pinDots {
+  display: none;
+}
+
+:global(html.js-ready) .pinWrap {
+  height: 300vh;
+}
+
+:global(html.js-ready) .pinStage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  min-height: 0;
+  max-height: 900px;
+  /* Clears the fixed navbar so the text centres in the visible area. */
+  padding-top: clamp(5.5rem, 10vh, 7rem);
+}
+
+/* All items share one grid cell so the stage keeps the tallest one's height. */
+:global(html.js-ready) .pinStory {
+  grid-template-areas: 'item';
+}
+
+:global(html.js-ready) .pinItem {
+  grid-area: item;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:global(html.js-ready) .pinItem.isOn {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.15s;
+}
+
+:global(html.js-ready) .pinItem.isPast {
+  transform: translateY(-32px);
+}
+
+:global(html.js-ready) .pinDots {
+  position: absolute;
+  left: clamp(1.5rem, 6vw, 5rem);
+  bottom: clamp(1.5rem, 4vw, 2.5rem);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pinDots i {
+  width: 2.25rem;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background-color 0.3s ease;
+}
+
+.pinDots i.isOn {
+  background: #8cc4ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pinPhoto,
+  :global(html.js-ready) .pinItem {
+    transition: none;
+  }
+
+  .pinPhoto {
+    transform: none;
+  }
 }
 
 .principleNum {
   display: block;
-  font-size: clamp(4rem, 7vw, 6rem);
+  font-size: clamp(5rem, 10vw, 8.5rem);
   line-height: 0.9;
   font-weight: 700;
   letter-spacing: -0.05em;
@@ -561,8 +680,8 @@
 }
 
 .principleTitle {
-  margin: 1.75rem 0 0;
-  font-size: 1.4rem;
+  margin: 1.5rem 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
   line-height: 1.25;
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -570,9 +689,9 @@
 }
 
 .principleDesc {
-  margin: 0.75rem 0 0;
-  max-width: 22rem;
-  font-size: 1rem;
+  margin: 1rem 0 0;
+  max-width: 26rem;
+  font-size: 1.05rem;
   line-height: 1.65;
   color: rgba(255, 255, 255, 0.72);
 }
@@ -904,10 +1023,6 @@
     grid-template-columns: 1fr;
   }
 
-  .principleList {
-    gap: 2.5rem;
-  }
-
   .panels {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -931,23 +1046,21 @@
     max-width: 520px;
   }
 
-  .principleList {
-    grid-template-columns: 1fr;
+  /* Phones: text sits low over a wash that darkens towards the bottom. */
+  .pinStage {
+    justify-content: flex-end;
   }
 
-  .principle {
-    display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    column-gap: 1.5rem;
+  :global(html.js-ready) .pinStage {
+    padding-bottom: 4.5rem;
   }
 
-  .principleNum {
-    grid-row: span 2;
-    font-size: 4.5rem;
+  .pinPhoto {
+    object-position: 80% 30%;
   }
 
-  .principleTitle {
-    margin-top: 0.25rem;
+  .pinWash {
+    background: linear-gradient(0deg, rgba(6, 18, 31, 0.97) 0%, rgba(6, 18, 31, 0.88) 45%, rgba(6, 18, 31, 0.35) 75%, rgba(6, 18, 31, 0.2) 100%);
   }
 
   /* Vertical timeline: the line runs down through the node centres. */
@@ -1006,17 +1119,8 @@
     gap: 1.75rem;
   }
 
-  .principle {
-    grid-template-columns: 4.5rem minmax(0, 1fr);
-    column-gap: 1rem;
-  }
-
   .principleNum {
-    font-size: 3.25rem;
-  }
-
-  .principleTitle {
-    font-size: 1.25rem;
+    font-size: 4.5rem;
   }
 
   .panels {

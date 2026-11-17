@@ -83,16 +83,22 @@ export const ABOUT_PRINCIPLES = {
   points: [
     {
       title: 'Quality over volume',
+      image: '/images/about/principle-quality.webp',
+      imageAlt: 'A recruiter at her desk at dusk, closely reading one candidate profile with three more laid out in front of her',
       description:
         'Every shortlist is checked for role-fit first, your interviews go to candidates worth meeting.',
     },
     {
       title: 'Coordination over chaos',
+      image: '/images/about/principle-coordination.webp',
+      imageAlt: 'A recruitment coordinator on a headset in front of a monitor showing an interview schedule',
       description:
         'End-to-end interview scheduling, communication and documentation support for both sides.',
     },
     {
       title: 'Partnership over placement',
+      image: '/images/about/principle-partnership.webp',
+      imageAlt: 'An HR partner and a client business head talking at a mezzanine railing above an open-plan office',
       description:
         'Workforce planning, HR consulting, onboarding and post-joining support, not just sourcing.',
     },
