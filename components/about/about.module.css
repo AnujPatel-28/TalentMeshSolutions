@@ -73,10 +73,12 @@
 
 .eyebrow::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
+  width: 0.38em;
+  height: 0.38em;
+  margin-left: -0.1em;
+  border-top: 0.13em solid currentColor;
+  border-right: 0.13em solid currentColor;
+  transform: rotate(45deg);
 }
 
 .h2 {
