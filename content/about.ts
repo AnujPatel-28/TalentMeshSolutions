@@ -19,12 +19,12 @@
  *  - ABOUT_SERVICE_IMAGES: landscape, 4:3 (final assets 1600×1200), one per
  *    SERVICE_CATEGORIES title in content/home.ts.
  */
-export const ABOUT_WHO_IMAGE = '/images/about/about-vision.png';
+export const ABOUT_WHO_IMAGE = '/images/about/about-who-we-are.webp';
 
 export const ABOUT_SERVICE_IMAGES = {
-  'Talent Acquisition': '/images/why/quality.webp',
-  'Flexible Workforce': '/images/about/about-coordination.png',
-  'Workforce Support': '/images/why/support.webp',
+  'Talent Acquisition': '/images/about/talent-acquisition.webp',
+  'Flexible Workforce': '/images/about/flexible-workforce.webp',
+  'Workforce Support': '/images/about/workforce-support.webp',
 } as const;
 
 export const ABOUT_HERO = {
@@ -58,7 +58,7 @@ export const ABOUT_WHO = {
   body: 'Every organization can access skilled talent screened for skills, experience and role-fit. Coordinated interviews and onboarding support carry every hire through to their first day.',
   positioning:
     'We help organizations find skilled talent and build high-performing teams.',
-  imageAlt: 'Two colleagues talking through a hiring brief at a window-side table',
+  imageAlt: 'A recruitment consultant walking a hiring manager through candidate data on a laptop at a glass meeting table',
   // The same two proof points as the home page (components/home/TrustStrip.tsx).
   // They are the whole numeric budget: see the header of content/home.ts.
   proof: [
@@ -104,9 +104,9 @@ export const ABOUT_SERVICES = {
   headingAccent: 'do',
   lede: 'End-to-end support across the recruitment lifecycle: sourcing, screening, coordination, verification and onboarding.',
   imageAlts: {
-    'Talent Acquisition': 'A candidate résumé being handed across a desk during an interview',
-    'Flexible Workforce': 'Small team coordinating interviews around a laptop',
-    'Workforce Support': 'A new joiner being handed an ID badge across a desk',
+    'Talent Acquisition': 'An interviewer and a candidate shaking hands across a desk after an interview',
+    'Flexible Workforce': 'A team of four working together around two laptops in an open-plan office',
+    'Workforce Support': 'An HR professional guiding a new joiner through onboarding paperwork',
   } as Record<string, string>,
   // Service-list items (content/home.ts SERVICE_CATEGORIES) that have their
   // own solution page. Items not listed here render as plain text.

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Briefcase, Check, LoaderCircle, Mail, MapPin, MessageCircle, Phone, Plus, UserRound } from 'lucide-react';
 import { CONTACT, STRONG_CTA } from '@/content/home';
@@ -242,6 +243,14 @@ export default function ContactPage() {
                         />
                     </div>
                     <div className={styles.office}>
+                        <div className={styles.officePhoto}>
+                            <Image
+                                src="/images/about/contact-reception.webp"
+                                alt="Reception and waiting area of a bright modern office"
+                                fill
+                                sizes="(max-width: 900px) 100vw, 480px"
+                            />
+                        </div>
                         <p className={styles.eyebrow}>Visit us</p>
                         <h2 id="office-title">Based in Ahmedabad. <span>Hiring across India.</span></h2>
                         <address>{CONTACT.addressLines.map(line => <span key={line}>{line}</span>)}</address>
