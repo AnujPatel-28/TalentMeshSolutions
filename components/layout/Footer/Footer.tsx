@@ -10,8 +10,8 @@ import styles from './Footer.module.css';
 const Footer = () => {
     const pathname = usePathname();
     const isHome = pathname === '/';
-    // The home page and the contact page already end on their own contact section.
-    const showCta = !isHome && pathname !== '/contact';
+    // The home, contact and about pages already end on their own contact section.
+    const showCta = !isHome && pathname !== '/contact' && pathname !== '/about';
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
