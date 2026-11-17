@@ -15,19 +15,32 @@ export default function WhoWeAre() {
         <AnimateOnScroll animation="fadeUp" once>
           <p className={styles.eyebrow}>{ABOUT_WHO.eyebrow}</p>
           <h2 id="about-who" className={`${styles.h2} ${styles.whoStatement}`}>
-            {ABOUT_WHO.headingA} <span className={styles.accent}>{ABOUT_WHO.headingAccent}</span>
+            {ABOUT_WHO.headingA} <span className={`${styles.accent} ${styles.sweep}`}>{ABOUT_WHO.headingAccent}</span>
           </h2>
           <p className={styles.whoIntro}>{ABOUT_WHO.intro}</p>
           <p className={styles.whoBody}>{ABOUT_WHO.body}</p>
         </AnimateOnScroll>
-        <AnimateOnScroll as="figure" className={styles.whoFigure} animation="fadeUp" delay={120} once>
-          <Image
-            src={ABOUT_WHO_IMAGE}
-            alt={ABOUT_WHO.imageAlt}
-            fill
-            sizes="(max-width: 900px) 92vw, 480px"
-            className={styles.coverImage}
-          />
+        {/* Photo reveal: an upward wipe while easing back from a slight zoom.
+            AnimateOnScroll only flags when the figure is in view; the hidden
+            state and timing live in about.module.css (.whoClip). */}
+        <AnimateOnScroll
+          as="figure"
+          className={styles.whoFigure}
+          animation="fadeIn"
+          once
+          style={{ transition: 'none' }}
+        >
+          {/* The clip sits on this inner layer: a fully clipped observer
+              target would never count as on-screen. */}
+          <div className={styles.whoClip}>
+            <Image
+              src={ABOUT_WHO_IMAGE}
+              alt={ABOUT_WHO.imageAlt}
+              fill
+              sizes="(max-width: 900px) 92vw, 480px"
+              className={styles.coverImage}
+            />
+          </div>
         </AnimateOnScroll>
       </div>
 

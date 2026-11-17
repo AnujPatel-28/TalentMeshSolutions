@@ -376,6 +376,70 @@
   background: var(--tm-surface);
 }
 
+/* Photo reveal. Hidden only once scripting is confirmed (html.js-ready) and
+   the figure has not yet scrolled into view, so a failed bundle still shows
+   the photo. The extra .whoGrid keeps the figure above the global .aos fade. */
+:global(html.js-ready) .whoGrid .whoFigure[data-aos-visible='false'] {
+  opacity: 1;
+  transform: none;
+}
+
+.whoClip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s;
+}
+
+.whoClip img {
+  transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s;
+}
+
+:global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip {
+  clip-path: inset(100% 0 0 0);
+}
+
+:global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip img {
+  transform: scale(1.12);
+}
+
+/* Blue sweep on the accent words: a two-tone background clipped to the text.
+   At rest the blue half covers it, so it reads blue with or without motion;
+   before the heading scrolls in, the ink half is shown, then it sweeps across. */
+.sweep {
+  color: transparent;
+  background: linear-gradient(90deg, var(--tm-brand) 0 50%, var(--tm-ink) 50% 100%);
+  background-size: 200% 100%;
+  background-position: 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background-position 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.55s;
+}
+
+:global(html.js-ready) [data-aos-visible='false'] .sweep {
+  background-position: 100% 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whoClip,
+  .whoClip img,
+  .sweep {
+    transition: none;
+  }
+
+  :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip {
+    clip-path: inset(0 0 0 0);
+  }
+
+  :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip img {
+    transform: none;
+  }
+
+  :global(html.js-ready) [data-aos-visible='false'] .sweep {
+    background-position: 0 0;
+  }
+}
+
 /* Proof row: one ruled line of text, not cards. */
 .proofRow {
   display: grid;
