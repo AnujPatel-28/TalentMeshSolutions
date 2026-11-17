@@ -47,6 +47,8 @@ export const ABOUT_HERO = {
   stripRight: 'Ahmedabad, India',
   imageSrc: '/images/about/about-hero-editorial1.png',
   imageAlt: 'Two Talentmesh consultants reviewing candidate profiles across a table at dusk',
+  /** Portrait crop for phones (9:16): people in the upper half, dark desk below for the copy. */
+  mobileImageSrc: '/images/about/about-hero-mobile.webp',
 } as const;
 
 export const ABOUT_WHO = {

@@ -1247,42 +1247,26 @@
     min-height: 52px;
   }
 
-  /* Photo becomes a compact top crop; copy flows below on solid navy. */
+  /* Phones: the portrait photo fills the screen; the copy sits over the
+     dark desk in its lower half, under a wash that only darkens that part. */
   .heroCinematic {
-    display: block;
-  }
-
-  .heroCinematicMedia {
-    position: relative;
-    height: 32svh;
-    min-height: 220px;
-  }
-
-  .heroCinematicMedia::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 88px;
-    background: linear-gradient(to bottom, rgba(11, 31, 51, 0) 0%, rgba(11, 31, 51, 0.55) 45%, var(--tm-ink) 100%);
-    pointer-events: none;
-    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100svh;
   }
 
   .heroCinematicBg {
-    /* Keep the people (left), crop the dusk city (right). */
-    object-position: 18% 30%;
+    object-position: 50% 20%;
   }
 
   .heroCinematicScrim {
-    background: linear-gradient(0deg, rgba(11, 31, 51, 0.9) 0%, rgba(11, 31, 51, 0.4) 40%, transparent 65%);
+    background:
+      linear-gradient(0deg, rgba(8, 12, 18, 0.92) 0%, rgba(8, 12, 18, 0.72) 32%, rgba(8, 12, 18, 0.2) 55%, rgba(8, 12, 18, 0) 70%),
+      linear-gradient(180deg, rgba(8, 12, 18, 0.45) 0%, rgba(8, 12, 18, 0) 14%);
   }
 
   .heroCinematicInner {
-    position: relative;
-    margin-top: -32px;
-    padding: calc(2rem + 32px) 1rem calc(2.5rem + env(safe-area-inset-bottom, 0px));
+    padding: 0 1rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
   }
 
   .heroCinematicCopy {

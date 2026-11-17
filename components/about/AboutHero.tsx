@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { getImageProps } from 'next/image';
 import Link from 'next/link';
 import { Users, Building2, Star } from 'lucide-react';
 import { ABOUT_HERO } from '@/content/about';
@@ -11,17 +11,22 @@ const TRUST_ICONS = {
 } as const;
 
 export default function AboutHero() {
+  // Art direction: phones get a portrait photo composed for a tall screen,
+  // everything wider the landscape one. <picture> means each device
+  // downloads only its own image.
+  const common = { alt: ABOUT_HERO.imageAlt, fill: true, priority: true, sizes: '100vw' };
+  const {
+    props: { srcSet: mobileSrcSet },
+  } = getImageProps({ ...common, src: ABOUT_HERO.mobileImageSrc });
+  const { props: desktopProps } = getImageProps({ ...common, src: ABOUT_HERO.imageSrc });
+
   return (
     <section className={styles.heroCinematic} aria-label="About Talentmesh Solutions">
       <div className={styles.heroCinematicMedia}>
-        <Image
-          src={ABOUT_HERO.imageSrc}
-          alt={ABOUT_HERO.imageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className={styles.heroCinematicBg}
-        />
+        <picture>
+          <source media="(max-width: 640px)" srcSet={mobileSrcSet} />
+          <img {...desktopProps} alt={ABOUT_HERO.imageAlt} className={styles.heroCinematicBg} />
+        </picture>
       </div>
       <div className={styles.heroCinematicScrim} aria-hidden="true" />
       <div className={styles.heroCinematicInner}>
