@@ -1,5 +1,5 @@
 export { default as AboutHero } from './AboutHero';
-export { default as VisionStatement } from './VisionStatement';
+export { default as WhoWeAre } from './WhoWeAre';
 export { default as Principles } from './Principles';
 export { default as AboutServices } from './AboutServices';
 export { default as AboutProcess } from './AboutProcess';

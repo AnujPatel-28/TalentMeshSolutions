@@ -11,12 +11,27 @@
  *    coordination, onboarding & documentation support, HR consulting.
  */
 
+/**
+ * Image slots. Each is a single path so a replacement photo is a one-line
+ * swap; keep the stated crop so nothing else has to change.
+ *
+ *  - ABOUT_WHO_IMAGE: portrait, 4:5 (final asset 1600×2000).
+ *  - ABOUT_SERVICE_IMAGES: landscape, 4:3 (final assets 1600×1200), one per
+ *    SERVICE_CATEGORIES title in content/home.ts.
+ */
+export const ABOUT_WHO_IMAGE = '/images/about/about-vision.png';
+
+export const ABOUT_SERVICE_IMAGES = {
+  'Talent Acquisition': '/images/why/quality.webp',
+  'Flexible Workforce': '/images/about/about-coordination.png',
+  'Workforce Support': '/images/why/support.webp',
+} as const;
+
 export const ABOUT_HERO = {
   eyebrow: 'Talent Meets Opportunity',
-  // Flowing mixed-weight headline: light / bold white / bold brand-gradient.
-  // Wraps via text-wrap: balance — no forced breaks.
-  titleLight: 'Hiring',
-  titleWhite: 'support that delivers',
+  // Headline in the home hero's treatment: grotesk, with the accent words in
+  // the serif italic. Wraps via text-wrap: balance, no forced breaks.
+  title: 'Hiring support that delivers',
   titleAccent: 'interview-ready talent',
   description:
     'A recruitment partner for people and businesses who aim higher.',
@@ -34,40 +49,34 @@ export const ABOUT_HERO = {
   imageAlt: 'Two Talentmesh consultants reviewing candidate profiles across a table at dusk',
 } as const;
 
-export const ABOUT_VISION = {
-  kicker: 'Our vision',
-  quoteA: 'Hiring should feel coordinated,',
-  quoteAccent: 'not chaotic.',
+export const ABOUT_WHO = {
+  eyebrow: 'Who we are',
+  headingA: 'Hiring should feel coordinated,',
+  headingAccent: 'not chaotic.',
+  intro:
+    'Talentmesh Solutions is an Ahmedabad-based recruitment and staffing solutions provider offering end-to-end talent acquisition, staffing, hiring coordination and workforce support across multiple industries.',
   body: 'Every organization can access skilled talent screened for skills, experience and role-fit. Coordinated interviews and onboarding support carry every hire through to their first day.',
   positioning:
     'We help organizations find skilled talent and build high-performing teams.',
-  // Flanking editorial cards, bespoke generated pair per phase. Quote pair
-  // reads with the statement; trust pair crossfades in for the proof lines.
-  sideImages: [
+  imageAlt: 'Two colleagues talking through a hiring brief at a window-side table',
+  // The same two proof points as the home page (components/home/TrustStrip.tsx).
+  // They are the whole numeric budget: see the header of content/home.ts.
+  proof: [
     {
-      side: 'quote-left',
-      src: '/images/about/vision-quote-left.png',
-      alt: 'Consultant reviewing candidate profiles in a bright office',
+      value: '48–72h',
+      label: 'Shortlists',
+      note: 'Screened shortlist in 48–72 hours for most mandates.',
     },
     {
-      side: 'quote-right',
-      src: '/images/about/vision-quote-right.png',
-      alt: 'Consultant explaining a shortlist across a table',
-    },
-    {
-      side: 'trust-left',
-      src: '/images/about/vision-trust-left.png',
-      alt: 'Consultant and client shaking hands over a hiring agreement',
-    },
-    {
-      side: 'trust-right',
-      src: '/images/about/vision-trust-right.png',
-      alt: 'Hiring manager welcoming a new joiner on day one',
+      value: '100%',
+      label: 'Vetted Talent',
+      note: 'Candidates are pre-screened for qualifications, experience, skills and role-fit.',
     },
   ],
 } as const;
 
 export const ABOUT_PRINCIPLES = {
+  eyebrow: 'What we stand for',
   headingA: 'More than a recruiter.',
   headingB: 'A workforce partner.',
   lede: 'Three working principles behind how we source, coordinate and support every hire.',
@@ -76,28 +85,43 @@ export const ABOUT_PRINCIPLES = {
       title: 'Quality over volume',
       description:
         'Every shortlist is checked for role-fit first, your interviews go to candidates worth meeting.',
-      icon: 'target',
     },
     {
       title: 'Coordination over chaos',
       description:
         'End-to-end interview scheduling, communication and documentation support for both sides.',
-      icon: 'lifeBuoy',
     },
     {
       title: 'Partnership over placement',
       description:
         'Workforce planning, HR consulting, onboarding and post-joining support, not just sourcing.',
-      icon: 'layers',
     },
   ],
 } as const;
 
+export const ABOUT_SERVICES = {
+  headingA: 'What we',
+  headingAccent: 'do',
+  lede: 'End-to-end support across the recruitment lifecycle: sourcing, screening, coordination, verification and onboarding.',
+  imageAlts: {
+    'Talent Acquisition': 'A candidate résumé being handed across a desk during an interview',
+    'Flexible Workforce': 'Small team coordinating interviews around a laptop',
+    'Workforce Support': 'A new joiner being handed an ID badge across a desk',
+  } as Record<string, string>,
+  // Service-list items (content/home.ts SERVICE_CATEGORIES) that have their
+  // own solution page. Items not listed here render as plain text.
+  links: {
+    'Executive & Leadership Hiring': '/executive-search',
+    'Temporary & Flexi Staffing': '/contingent-staffing',
+    'Remote Hiring Solutions': '/remote-hiring-solutions',
+    'Recruitment Process Outsourcing': '/recruitment-process-outsourcing',
+  } as Record<string, string>,
+} as const;
+
 export const ABOUT_PROCESS = {
-  heading: 'How we work',
+  headingA: 'How we',
+  headingAccent: 'work',
   lede: 'A calm, end-to-end flow across the recruitment lifecycle.',
-  imageSrc: '/images/about/about-coordination.png',
-  imageAlt: 'Small team coordinating interviews around a laptop',
   steps: [
     {
       num: '01',
@@ -123,29 +147,31 @@ export const ABOUT_PROCESS = {
 } as const;
 
 export const ABOUT_INDUSTRIES = {
-  heading: 'Industries we support',
+  headingA: 'Industries we',
+  headingAccent: 'support',
   lede: 'Recruitment and staffing support across ten industry groups in India.',
   industries: [
-    'Information Technology',
-    'Pharmaceuticals & Healthcare',
-    'Engineering & Manufacturing',
-    'Sales, Marketing & Retail',
-    'Logistics & Supply Chain',
-    'BFSI',
-    'BPO, KPO & Call Centers',
-    'EdTech & Training',
-    'Hospitality & Tourism',
-    'E-commerce & Startups',
+    { name: 'Information Technology', icon: 'monitor' },
+    { name: 'Pharmaceuticals & Healthcare', icon: 'heartPulse' },
+    { name: 'Engineering & Manufacturing', icon: 'factory' },
+    { name: 'Sales, Marketing & Retail', icon: 'shoppingBag' },
+    { name: 'Logistics & Supply Chain', icon: 'truck' },
+    { name: 'BFSI', icon: 'landmark' },
+    { name: 'BPO, KPO & Call Centers', icon: 'headphones' },
+    { name: 'EdTech & Training', icon: 'graduationCap' },
+    { name: 'Hospitality & Tourism', icon: 'hotel' },
+    { name: 'E-commerce & Startups', icon: 'rocket' },
   ],
-  baseTitle: 'Based in Ahmedabad, serving India',
-  baseBody:
-    'Headquartered in Navrangpura, Ahmedabad, recruiting for on-site, hybrid and remote roles across India.',
 } as const;
 
 export const ABOUT_CTA = {
-  heading: 'Let’s build your high-performing workforce.',
+  headingA: 'Let’s build your',
+  headingAccent: 'high-performing workforce.',
   subtext:
     'Tell us what you’re hiring for. We’ll recommend the right recruitment and staffing solution.',
-  buttonLabel: 'Start a Conversation →',
+  buttonLabel: 'Start a Conversation',
   buttonHref: '/contact',
+  baseTitle: 'Based in Ahmedabad, serving India',
+  baseBody:
+    'Headquartered in Navrangpura, Ahmedabad, recruiting for on-site, hybrid and remote roles across India.',
 } as const;

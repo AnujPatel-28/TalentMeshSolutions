@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import GridWrapper from '@/components/ui/GridWrapper';
-import SectionMarker from '@/components/home/SectionMarker';
 import {
   AboutHero,
-  VisionStatement,
+  WhoWeAre,
   Principles,
   AboutServices,
   AboutProcess,
@@ -69,63 +67,40 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
       />
 
-      <AboutHero />
+      <div className={styles.aboutScope}>
+        <AboutHero />
 
-      <GridWrapper>
-        <section className="relative" aria-label="Vision">
-          <SectionMarker label="Our Vision" index={1} />
-          {/* No AnimateOnScroll wrapper: the quote runs its own GSAP word
-              reveal inside VisionStatement; an outer fade would double-animate. */}
-          <VisionStatement />
-        </section>
+        {/* Full-bleed sections, as on the home page: no GridWrapper frame.
+            Each section centres its own copy (`.inner`). Sections that stage
+            their own entrance (heading, then items) are not wrapped again. */}
+        <div className={styles.page}>
+          <section className={styles.section} aria-labelledby="about-who">
+            <WhoWeAre />
+          </section>
 
-        <section className="relative" aria-label="What we stand for">
-          <SectionMarker label="What We Stand For" index={2} />
-          <div className={`${styles.section} ${styles.tint} ${styles.principlesGrain}`}>
-            {/* No outer AnimateOnScroll: Principles staggers its own heading
-                and cards internally — see the same note on VisionStatement
-                above. */}
+          <section className={`${styles.section} ${styles.sectionDark}`} aria-label="What we stand for">
             <Principles />
-          </div>
-        </section>
+          </section>
 
-        <section className="relative" aria-label="What we do">
-          <SectionMarker label="What We Do" index={3} />
-          <div className={styles.section}>
-            <AnimateOnScroll animation="fadeUp" once>
-              <AboutServices />
-            </AnimateOnScroll>
-          </div>
-        </section>
+          <section className={styles.section} aria-label="What we do">
+            <AboutServices />
+          </section>
 
-        <section className="relative" aria-label="How we work">
-          <SectionMarker label="How We Work" index={4} />
-          <div className={styles.section}>
-            {/* No outer AnimateOnScroll: AboutProcess staggers its own heading
-                and steps internally — see the same note on Principles above. */}
+          <section className={`${styles.section} ${styles.sectionTint}`} aria-label="How we work">
             <AboutProcess />
-          </div>
-        </section>
+          </section>
 
-        <section className="relative" aria-label="Industries and location">
-          <SectionMarker label="Industries & Base" index={5} />
-          <div className={styles.section}>
-            {/* No outer AnimateOnScroll: AboutIndustries stages its own
-                heading/lede, then the pill list and base card — see the
-                same note on Principles above. */}
+          <section className={styles.section} aria-label="Industries we support">
             <AboutIndustries />
-          </div>
-        </section>
+          </section>
 
-        <section className="relative" aria-label="Contact">
-          <SectionMarker label="Get Started" index={6} />
-          <div className={styles.section}>
+          <section className={`${styles.section} ${styles.sectionCta}`} aria-label="Contact">
             <AnimateOnScroll animation="fadeUp" once>
               <AboutCTA />
             </AnimateOnScroll>
-          </div>
-        </section>
-      </GridWrapper>
+          </section>
+        </div>
+      </div>
     </>
   );
 }
