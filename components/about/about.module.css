@@ -290,14 +290,14 @@
 }
 
 .heroCinematicTrust strong {
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #ffffff;
   white-space: nowrap;
 }
 
 .heroCinematicTrust small {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.68);
   white-space: nowrap;
 }
@@ -382,7 +382,7 @@
 
   .heroCinematicSub {
     max-width: 32em;
-    font-size: clamp(1rem, min(1.15vw, 2.2vh), 1.4rem);
+    font-size: clamp(1.0625rem, min(1.15vw, 2.2vh), 1.4rem);
   }
 
   .heroCinematicActions {
@@ -1063,7 +1063,7 @@
 }
 
 .ctaLabel {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
