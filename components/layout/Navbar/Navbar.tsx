@@ -23,6 +23,7 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isMenuClosing, setIsMenuClosing] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
+    const [isOverDark, setIsOverDark] = React.useState(false);
     const [activeService, setActiveService] = React.useState(0);
     // Tracks which desktop dropdown currently has keyboard focus inside it, so its
     // trigger can report an accurate aria-expanded. Visibility itself is driven by
@@ -72,15 +73,27 @@ const Navbar = () => {
     // Close mobile menu on route change
     React.useEffect(() => { finishClosingMenu(); }, [pathname, finishClosingMenu]);
 
-    // Track page scroll position for transparent vs glassmorphic header
+    // Track page scroll position for transparent vs glassmorphic header, and
+    // whether the bar sits over a dark section (any element marked
+    // data-nav-theme="dark"), where it turns transparent with a white logo.
     React.useEffect(() => {
+        const NAV_LINE = 30; // px from the top: the middle of the bar
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
+            const dark = Array.from(document.querySelectorAll('[data-nav-theme="dark"]')).some((el) => {
+                const r = el.getBoundingClientRect();
+                return r.top <= NAV_LINE && r.bottom >= NAV_LINE;
+            });
+            setIsOverDark(dark);
         };
         handleScroll(); // Initial check
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleScroll);
+        };
+    }, [pathname]);
 
     // Native modal keeps focus inside the menu and makes the page behind it inert.
     React.useEffect(() => {
@@ -165,7 +178,7 @@ const Navbar = () => {
     const isHome = pathname === '/';
     // /about opens with a full-bleed dark cinematic hero, so it borrows the
     // home transparent-over-dark treatment until the first scroll.
-    const isTransparentNav = (isHome || pathname === '/about') && !isScrolled && !isMenuOpen;
+    const isTransparentNav = (((isHome || pathname === '/about') && !isScrolled) || isOverDark) && !isMenuOpen;
 
     const mobileGroups: { key: NavKey; title: string; active: boolean; links: { href: string; label: string }[] }[] = [
         {
@@ -198,7 +211,7 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
+        <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled && !isTransparentNav ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
 
             <div className={styles.container}>
                 {/* ── Logo ── */}

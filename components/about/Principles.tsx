@@ -12,6 +12,8 @@ const PIN_QUERY = '(min-height: 640px) and (prefers-reduced-motion: no-preferenc
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
+const DIGITS = [...'01234567890123456789'];
+
 const HEAD_WORDS = [
   ABOUT_PRINCIPLES.headingA.split(' '),
   ABOUT_PRINCIPLES.headingB.split(' '),
@@ -47,6 +49,7 @@ export default function Principles() {
       items.forEach((item) => {
         item.style.removeProperty('--pin-y');
         item.style.removeProperty('--pin-show');
+        item.style.removeProperty('--pin-roll');
       });
     };
 
@@ -70,6 +73,8 @@ export default function Principles() {
         item.style.setProperty('--pin-y', `${((i - at) * vh).toFixed(1)}px`);
         // The first photo is the stage's ground; the rest fade in over it.
         item.style.setProperty('--pin-show', i ? clamp01(at - i + 1).toFixed(3) : '1');
+        // The number rolls up to its value as the principle arrives.
+        item.style.setProperty('--pin-roll', clamp01(at - i + 1).toFixed(3));
       });
       const active = Math.max(0, Math.round(at));
       dots.forEach((dot, i) => dot.classList.toggle(styles.isOn, i === active));
@@ -142,7 +147,17 @@ export default function Principles() {
               <Image src={pt.image} alt={pt.imageAlt} fill sizes="100vw" className={styles.pinPhoto} />
               <div className={styles.pinText}>
                 <span className={styles.principleNum} aria-hidden="true">
-                  {String(i + 1).padStart(2, '0')}
+                  {[...String(i + 1).padStart(2, '0')].map((digit, d) => (
+                    // Odometer: each digit is a strip of 0-9 twice over, so it
+                    // rolls one full turn plus its value, driven by --pin-roll.
+                    <span key={d} className={styles.rollDigit} style={{ '--d': Number(digit) } as React.CSSProperties}>
+                      <span className={styles.rollStrip}>
+                        {DIGITS.map((n, k) => (
+                          <span key={k}>{n}</span>
+                        ))}
+                      </span>
+                    </span>
+                  ))}
                 </span>
                 <h3 className={styles.principleTitle}>{pt.title}</h3>
                 <p className={styles.principleDesc}>{pt.description}</p>

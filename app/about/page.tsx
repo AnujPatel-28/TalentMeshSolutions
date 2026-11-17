@@ -78,7 +78,7 @@ export default function AboutPage() {
             <WhoWeAre />
           </section>
 
-          <section className={`${styles.section} ${styles.sectionDark}`} aria-label="What we stand for">
+          <section className={`${styles.section} ${styles.sectionDark}`} aria-label="What we stand for" data-nav-theme="dark">
             <Principles />
           </section>
 

@@ -655,8 +655,29 @@
   }
 }
 
+/* Odometer digits for the principle numbers. Unset, --pin-roll is 1 and each
+   digit rests on its value. */
+.rollDigit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.rollStrip {
+  display: block;
+  transform: translate3d(0, calc(var(--pin-roll, 1) * (10 + var(--d)) * -1em), 0);
+}
+
+.rollStrip > span {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+}
+
 .principleNum {
   display: block;
+  height: 1em;
   font-size: clamp(5rem, 10vw, 8.5rem);
   line-height: 0.9;
   font-weight: 700;
