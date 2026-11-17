@@ -580,29 +580,33 @@
 .mobileNav[data-closing="true"] .menuIconTop { animation: iconTopClose var(--menu-exit-duration, 200ms) ease both; }
 .mobileNav[data-closing="true"] .menuIconMiddle { animation: iconMiddleClose var(--menu-exit-duration, 200ms) ease both; }
 .mobileNav[data-closing="true"] .menuIconBottom { animation: iconBottomClose var(--menu-exit-duration, 200ms) ease both; }
-.mobileScroll {
+.mobileLevels {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
+}
+.mobileScroll {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0 max(24px, env(safe-area-inset-right)) 28px max(24px, env(safe-area-inset-left));
+  padding: 0 max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
   scrollbar-width: thin;
   scrollbar-color: #9eb4c7 #f0f8ff;
 }
-.mobileIntro {
-  margin: 0 -24px 12px;
-  padding: 28px 24px;
-  background: #f0f8ff;
+/* Level 1 and each group's second screen share the same box; the inactive ones
+   wait off-canvas (and are inert + hidden) until they slide in. */
+.mobileLevel {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transition: transform 250ms ease, visibility 0s;
 }
-.mobileIntro h2 {
-  margin: 0;
-  font: inherit;
-  font-size: clamp(25px, 6.5vw, 32px);
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: -0.03em;
+.mobileLevelBehind, .mobileLevelAhead {
+  visibility: hidden;
+  transition: transform 250ms ease, visibility 0s linear 250ms;
 }
-.mobileIntro h2 span { color: #0056b3; }
+.mobileLevelBehind { transform: translateX(-100%); }
+.mobileLevelAhead { transform: translateX(100%); }
 .mobileHome {
   display: flex;
   align-items: center;
@@ -621,8 +625,8 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  min-height: 88px;
-  padding: 18px 0;
+  min-height: 64px;
+  padding: 12px 0;
   border: 0;
   background: transparent;
   color: #0b1f33;
@@ -633,27 +637,44 @@
   letter-spacing: -0.025em;
   cursor: pointer;
 }
-.mobileNavSectionHeader small {
-  display: block;
-  margin-top: 6px;
-  color: #4c6277;
-  font-size: 13px;
-  line-height: 1.5;
-  font-weight: 400;
-  letter-spacing: 0;
-}
 .mobileNavSectionHeader .chevron { opacity: 1; color: #0056b3; flex-shrink: 0; }
-.mobileNavSectionHeader[aria-expanded="true"] {
+.mobileNavSectionActive { color: #0056b3; }
+.mobileSubHeader {
   position: sticky;
   top: 0;
   z-index: 1;
-  color: #0056b3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 56px;
   background: #fff;
   border-bottom: 1px solid #dce6ef;
 }
-.mobileNavSectionHeader[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-.mobileNavSectionBody { padding: 8px 0 18px; }
-.mobileNavSectionBody[hidden] { display: none; }
+.mobileBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px 0 0;
+  border: 0;
+  background: transparent;
+  color: #0056b3;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mobileSubTitle {
+  min-width: 0;
+  margin: 0 0 0 auto;
+  color: #0b1f33;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-align: right;
+}
+.mobileNavSectionBody { padding: 8px 0 0; }
 .mobileNavLink {
   display: flex;
   align-items: center;
@@ -672,34 +693,17 @@
 .mobileNavLink[aria-current="page"] { background: #e2f0fc; text-decoration: underline; text-underline-offset: 4px; }
 .mobileNavLink span { min-width: 0; overflow-wrap: anywhere; }
 .mobileNavLinkActive { color: #0056b3; font-weight: 600; }
-.mobileService { border-bottom: 1px solid #dce6ef; }
-.mobileService:last-child { border-bottom: 0; }
-.mobileServiceTrigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  min-height: 56px;
-  padding: 14px 12px;
-  border: 0;
-  background: transparent;
-  color: #0b1f33;
-  font: inherit;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.45;
-  text-align: left;
-  cursor: pointer;
-}
-.mobileServiceTrigger svg { flex-shrink: 0; color: #0056b3; transition: transform 180ms ease; }
-.mobileServiceTrigger[aria-expanded="true"] { color: #0056b3; }
-.mobileServiceTrigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-.mobileServiceTrigger:hover, .mobileServiceTrigger:active { background: #f0f8ff; }
-.mobileServiceLinks { padding: 4px 0; margin-bottom: 10px; background: #f0f8ff; border-radius: 8px; }
-.mobileServiceLinks[hidden] { display: none; }
-.mobileScroll { overflow-anchor: none; scroll-padding-top: 100px; }
 .mobileNavSectionBody > .mobileNavLink + .mobileNavLink { border-top: 1px solid #e8eef4; }
+@media (min-width: 360px) {
+  .mobileNavGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 8px;
+  }
+  /* "Hire Talent" leads the group on its own row; the 12 solutions pair up below it. */
+  .mobileNavGrid > .mobileNavLink:first-child { grid-column: 1 / -1; }
+  .mobileNavGrid > .mobileNavLink { gap: 8px; min-height: 44px; padding: 8px 8px 8px 12px; font-size: 15px; line-height: 1.35; }
+}
 .mobileAuth {
   flex: 0 0 auto;
   padding: 16px max(24px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
@@ -760,15 +764,12 @@
 @keyframes iconBottomClose { from { transform: var(--icon-bottom-exit, translateY(-6px) rotate(-45deg)); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .mobileNav[open], .mobileNav[open] .menuIcon path { animation: none; }
-  .menuIcon path, .mobileToggle, .mobileNav .chevron, .mobileServiceTrigger svg { transition: none; }
+  .menuIcon path, .mobileToggle, .mobileNav .chevron, .mobileLevel { transition: none; }
 }
 @media (max-height: 500px) {
   .mobileHeader { min-height: 64px; padding-block: 6px; }
-  .mobileIntro { padding-block: 16px; }
   .mobileAuth { padding-top: 10px; }
   .mobileNavSectionHeader { min-height: 52px; padding-block: 12px; font-size: 20px; }
-  .mobileNavSectionHeader small { display: none; }
-  .mobileScroll { scroll-padding-top: 64px; }
 }
 
 /* ─── Responsive Breakpoints ────────────────────────────────────────────────── */
@@ -845,7 +846,3 @@
   font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
 }
 
-
-@media (max-height: 650px) {
-  .mobileIntro { display: none; }
-}
