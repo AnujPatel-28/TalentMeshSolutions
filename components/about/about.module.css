@@ -502,28 +502,6 @@
 
 /* ------------------------------------------------------------ principles -- */
 
-.sectionDark {
-  background: linear-gradient(180deg, var(--tm-ink) 0%, var(--tm-ink) 45%, var(--tm-ink-deep) 100%);
-  color: #ffffff;
-}
-
-.sectionDark .eyebrow {
-  background: rgba(255, 255, 255, 0.08);
-  color: #8cc4ff;
-}
-
-.sectionDark .h2 {
-  color: #ffffff;
-}
-
-.sectionDark .accent {
-  color: #8cc4ff;
-}
-
-.sectionDark .lede {
-  color: rgba(255, 255, 255, 0.72);
-}
-
 .principlesHead {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
@@ -1094,17 +1072,20 @@
     background: linear-gradient(0deg, rgba(6, 18, 31, 0.95) 0%, rgba(6, 18, 31, 0.86) 26%, rgba(6, 18, 31, 0.4) 50%, rgba(6, 18, 31, 0) 72%);
   }
 
-  /* Per photo, so the people are framed in a tall crop. */
+  /* Per photo, so the people sit in the middle of a tall crop. In a
+     portrait frame only about a quarter of each photo's width shows, so
+     these push well past the faces' own position (84%, 77% and the pair at
+     84% across the photo) to centre them. */
   .pinPhoto:nth-child(1) {
-    object-position: 77% 50%;
+    object-position: 95% 50%;
   }
 
   .pinPhoto:nth-child(2) {
-    object-position: 70% 50%;
+    object-position: 86% 50%;
   }
 
   .pinPhoto:nth-child(3) {
-    object-position: 86% 50%;
+    object-position: 96% 50%;
   }
 
   /* Vertical timeline: the line runs down through the node centres. */

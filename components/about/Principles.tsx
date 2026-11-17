@@ -147,7 +147,9 @@ export default function Principles() {
       </div>
 
       <div className={styles.pinTrack}>
-        <div className={styles.pinStage}>
+        {/* data-nav-theme: the navbar turns transparent with the white logo
+            while it sits over this stage. */}
+        <div className={styles.pinStage} data-nav-theme="dark">
           <div className={styles.pinPhotos}>
             {ABOUT_PRINCIPLES.points.map((pt) => (
               <Image key={pt.image} src={pt.image} alt={pt.imageAlt} fill sizes="100vw" className={styles.pinPhoto} />
