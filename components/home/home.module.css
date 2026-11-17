@@ -2106,15 +2106,6 @@ h2.industriesTitle {
     margin: 0;
 }
 
-.scaleAccent {
-    font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.08em;
-    letter-spacing: -0.01em;
-    color: var(--tm-brand);
-}
-
 .scaleChips {
     display: flex;
     flex-wrap: wrap;

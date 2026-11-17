@@ -23,7 +23,7 @@ export default function TrustStrip() {
                 <div className={styles.inner}>
                     <div className={styles.scaleHead}>
                         <h2 className={styles.h2}>
-                            Recruitment Engineered <em className={styles.scaleAccent}>for Scale</em>
+                            Recruitment Engineered <span className={styles.accent}>for Scale</span>
                         </h2>
                         <ul className={styles.scaleChips}>
                             {PROOF_POINTS.map((point) => (
