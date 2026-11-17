@@ -5,11 +5,29 @@
   --footer-link-hover: #8CC8FF;
   --footer-text: #A9B8C8;
   --footer-rule: rgba(255, 255, 255, 0.12);
-  background: var(--footer-ink);
+  --footer-ink-deep: #06121F;
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(60% 55% at 12% 0%, rgba(0, 110, 220, 0.32), transparent 70%),
+    linear-gradient(180deg, var(--footer-ink) 0%, var(--footer-ink-deep) 100%);
   color: var(--footer-text);
   padding: 4rem 0 0;
+  border-radius: clamp(20px, 3vw, 40px) clamp(20px, 3vw, 40px) 0 0;
   font-family: var(--font-inter);
   overflow: hidden;
+}
+
+/* The "mesh": a network of lines and dots that fades in from the top right. */
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/images/footer-mesh.svg') top right / max(100%, 1100px) auto no-repeat;
+  -webkit-mask-image: linear-gradient(200deg, #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
+  mask-image: linear-gradient(200deg, #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
+  pointer-events: none;
 }
 
 .container {
@@ -250,13 +268,21 @@
 .column a {
   color: var(--footer-text);
   text-decoration: none;
-  transition: color 0.2s ease;
+  background: linear-gradient(var(--footer-link-hover), var(--footer-link-hover)) 0 100% / 0 1px no-repeat;
+  transition: color 0.2s ease, background-size 0.25s ease;
   font-size: 0.95rem;
   width: fit-content;
 }
 
 .column a:hover {
   color: var(--footer-link-hover);
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .column a {
+    transition: none;
+  }
 }
 
 .bottom {
@@ -319,24 +345,22 @@
 
 .footerBranding {
   font-family: var(--font-jakarta);
-  font-weight: 900;
-  font-size: 15vw;
-  line-height: 0.7;
-  /* Tightened line height */
-  color: rgba(255, 255, 255, 0.03);
+  font-weight: 800;
+  font-size: 16vw;
+  line-height: 0.78;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(140, 200, 255, 0.55);
+  -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 95%);
+  mask-image: linear-gradient(180deg, #000 20%, transparent 95%);
   text-align: center;
   width: 100%;
   user-select: none;
   pointer-events: none;
-  margin-top: 0;
-  /* Adjusted from -2rem */
-  margin-bottom: -1rem;
-  /* Negative margin to pull up footer edge */
-  padding-bottom: 0;
+  margin: 0.5rem 0 -0.1em;
   display: block;
-  letter-spacing: -0.05em;
   overflow: hidden;
-  /* Prevent overflow issues */
 }
 
 @media (max-width: 1000px) {
@@ -357,6 +381,10 @@
 
   .columnSplit {
     grid-template-columns: 1fr;
+  }
+
+  .footerBranding {
+    -webkit-text-stroke-width: 1px;
   }
 
   .bottom {

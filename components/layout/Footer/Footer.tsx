@@ -172,7 +172,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.footerBranding}>TALENTMESH</div>
+            <div className={styles.footerBranding} aria-hidden="true">Talentmesh</div>
         </footer>
     );
 };
