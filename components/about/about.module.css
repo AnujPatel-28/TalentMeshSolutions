@@ -375,7 +375,6 @@
   aspect-ratio: 4 / 5;
   border-radius: var(--tm-radius);
   overflow: hidden;
-  background: var(--tm-surface);
 }
 
 /* Photo reveal. Hidden only once scripting is confirmed (html.js-ready) and
@@ -389,7 +388,9 @@
 .whoClip {
   position: absolute;
   inset: 0;
-  clip-path: inset(0 0 0 0);
+  /* Loading placeholder; on the clipped layer so the frame reveals with the photo. */
+  background: var(--tm-surface);
+  clip-path: inset(0 0 0 0 round var(--tm-radius));
   transition: clip-path 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s;
 }
 
@@ -398,7 +399,7 @@
 }
 
 :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip {
-  clip-path: inset(100% 0 0 0);
+  clip-path: inset(100% 0 0 0 round var(--tm-radius));
 }
 
 :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip img {
@@ -430,7 +431,7 @@
   }
 
   :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip {
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0 round var(--tm-radius));
   }
 
   :global(html.js-ready) .whoFigure[data-aos-visible='false'] .whoClip img {
