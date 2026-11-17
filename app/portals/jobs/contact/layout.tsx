@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { CONTACT_FAQS } from './faqs';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
 
@@ -16,6 +17,26 @@ export const metadata: Metadata = {
   },
 };
 
+// Describes only this page's four questions; the home page emits its own FAQPage.
+const contactFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': `${SITE_URL}/contact#faq`,
+  mainEntity: CONTACT_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactFaqJsonLd) }}
+      />
+      {children}
+    </>
+  );
 }
