@@ -6,13 +6,12 @@ import { ABOUT_PRINCIPLES } from '@/content/about';
 import { createScrub } from '@/components/home/scrub';
 import styles from './about.module.css';
 
-// Same pinned-sequence rules as the home page's "What Sets Us Apart"
+// Pinned-sequence rules shared with the home page's "What Sets Us Apart"
 // (components/home/WhyUs.tsx). Must match the media query in about.module.css.
 const PIN_QUERY = '(min-height: 640px) and (prefers-reduced-motion: no-preference)';
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
-
-const DIGITS = [...'01234567890123456789'];
+const smooth = (t: number) => t * t * (3 - 2 * t);
 
 const HEAD_WORDS = [
   ABOUT_PRINCIPLES.headingA.split(' '),
@@ -20,14 +19,20 @@ const HEAD_WORDS = [
   ABOUT_PRINCIPLES.lede.split(' '),
 ];
 const WORD_COUNT = HEAD_WORDS.flat().length;
+const COUNT = ABOUT_PRINCIPLES.points.length;
+const num = (i: number) => String(i + 1).padStart(2, '0');
 
 /**
- * Dark band, staged like the home page's photo sequence. Where PIN_QUERY
- * matches, scroll drives three things: the heading's words light up as it
- * comes up the screen, the photo stage opens from an inset frame to full
- * bleed as it pins (and closes again as it leaves), and each principle rides
- * up to its place while its photo fades in over the last. Elsewhere, and
- * without script, the three principles stack as plain photo panels.
+ * Dark band, staged like the home page's photo sequence, with one value
+ * driving everything once the stage pins: `at`, the principle on show
+ * (fractional while two trade places). From it, in step with each other:
+ * the photo cross-fades and settles, the copy hands over in place, the
+ * counter rolls by exactly one, and the progress bar fills. Before that,
+ * the heading's words light up and the stage opens from an inset frame to
+ * full bleed; it closes again as it leaves.
+ *
+ * Without script, or with reduced motion or a short screen, the stage does
+ * not pin: the first photo shows with all three principles listed over it.
  */
 export default function Principles() {
   const bandRef = useRef<HTMLDivElement>(null);
@@ -37,60 +42,61 @@ export default function Principles() {
     if (!band) return;
     const track = band.querySelector(`.${styles.pinTrack}`) as HTMLElement;
     const stage = track.firstElementChild as HTMLElement;
-    const items = Array.from(track.querySelectorAll('article'));
-    const dots = Array.from(track.querySelectorAll(`.${styles.pinDots} i`));
+    const photos = Array.from(stage.querySelectorAll<HTMLElement>(`.${styles.pinPhoto}`));
+    const texts = Array.from(stage.querySelectorAll<HTMLElement>(`.${styles.pinText}`));
+    const bars = Array.from(stage.querySelectorAll<HTMLElement>(`.${styles.pinBars} i`));
     const mq = window.matchMedia(PIN_QUERY);
     let vh = 0;
     let seg = 0; // px of scroll each principle gets
 
+    const all = [band, stage, ...photos, ...texts, ...bars];
     const clear = () => {
       delete band.dataset.pinned;
-      ['--pin-dist', '--pin-fill', '--pin-grow'].forEach((name) => band.style.removeProperty(name));
-      items.forEach((item) => {
-        item.style.removeProperty('--pin-y');
-        item.style.removeProperty('--pin-show');
-        item.style.removeProperty('--pin-roll');
-      });
+      all.forEach((el) =>
+        ['--pin-dist', '--pin-fill', '--pin-grow', '--pin-at', '--pin-show', '--pin-o', '--pin-y', '--pin-bar'].forEach(
+          (name) => el.style.removeProperty(name)
+        )
+      );
     };
 
     // `v` is how far the track's top is above the viewport's: negative while
     // the stage is still on its way up, then 0 to the pin's length.
     const update = (v: number) => {
       if (!seg) return;
-      band.style.setProperty('--pin-fill', clamp01((v + vh + 240) / (vh * 0.45 + 240)).toFixed(3));
-      const leaving = clamp01((v - seg * items.length) / vh);
+      // The heading has fully lit by the time the stage is three-quarters up.
+      band.style.setProperty('--pin-fill', clamp01((v + vh * 1.2) / (vh * 0.45)).toFixed(3));
+      const leaving = clamp01((v - seg * COUNT) / vh);
       const grow = Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
       band.style.setProperty('--pin-grow', grow.toFixed(3));
 
-      // Each principle takes the first 60% of its stretch to arrive and rests
-      // for the remainder. `at` is the one in place, fractional while two are
-      // trading; it starts at -1 with the first one a stage below.
-      const u = clamp01(v / (seg * items.length)) * items.length;
-      const k = Math.min(items.length - 1, Math.floor(u));
-      const q = clamp01((u - k) / 0.6);
-      const at = k - 1 + q * q * (3 - 2 * q);
-      items.forEach((item, i) => {
-        item.style.setProperty('--pin-y', `${((i - at) * vh).toFixed(1)}px`);
-        // The first photo is the stage's ground; the rest fade in over it.
-        item.style.setProperty('--pin-show', i ? clamp01(at - i + 1).toFixed(3) : '1');
-        // The number rolls up to its value as the principle arrives.
-        item.style.setProperty('--pin-roll', clamp01(at - i + 1).toFixed(3));
+      // The first principle is already in place as the stage arrives. Each
+      // stretch holds its principle for 35%, then hands over to the next.
+      const u = clamp01(v / (seg * COUNT)) * COUNT;
+      const k = Math.min(COUNT - 1, Math.floor(u));
+      const at = Math.min(COUNT - 1, k + smooth(clamp01((u - k - 0.35) / 0.65)));
+
+      stage.style.setProperty('--pin-at', at.toFixed(4));
+      photos.forEach((el, i) => el.style.setProperty('--pin-show', i ? clamp01(at - i + 1).toFixed(3) : '1'));
+      texts.forEach((el, i) => {
+        const d = i - at;
+        // Out, then in: the two never overlap, so the hand-over stays clean.
+        el.style.setProperty('--pin-o', clamp01(1 - Math.abs(d) * 2.4).toFixed(3));
+        el.style.setProperty('--pin-y', `${(d * 32).toFixed(1)}px`);
       });
-      const active = Math.max(0, Math.round(at));
-      dots.forEach((dot, i) => dot.classList.toggle(styles.isOn, i === active));
+      bars.forEach((el, i) => el.style.setProperty('--pin-bar', (i ? clamp01(at - i + 1) : 1).toFixed(3)));
     };
     const scrub = createScrub(
-      () => Math.min(seg * items.length + vh, Math.max(-vh - 400, -track.getBoundingClientRect().top)),
+      () => Math.min(seg * COUNT + vh, Math.max(-vh * 1.3, -track.getBoundingClientRect().top)),
       update
     );
     const layout = () => {
       if (mq.matches) {
         band.dataset.pinned = '';
         // The stage's own height, not the window's, so the address bar
-        // sliding away on a phone does not make the text jump.
+        // sliding away on a phone does not make the copy jump.
         vh = stage.offsetHeight;
-        seg = vh * 0.6;
-        band.style.setProperty('--pin-dist', `${seg * items.length}px`);
+        seg = vh * 0.7;
+        band.style.setProperty('--pin-dist', `${seg * COUNT}px`);
         scrub.snap();
       } else {
         seg = 0;
@@ -142,31 +148,41 @@ export default function Principles() {
 
       <div className={styles.pinTrack}>
         <div className={styles.pinStage}>
-          {ABOUT_PRINCIPLES.points.map((pt, i) => (
-            <article key={pt.title} className={styles.pinItem}>
-              <Image src={pt.image} alt={pt.imageAlt} fill sizes="100vw" className={styles.pinPhoto} />
-              <div className={styles.pinText}>
-                <span className={styles.principleNum} aria-hidden="true">
-                  {[...String(i + 1).padStart(2, '0')].map((digit, d) => (
-                    // Odometer: each digit is a strip of 0-9 twice over, so it
-                    // rolls one full turn plus its value, driven by --pin-roll.
-                    <span key={d} className={styles.rollDigit} style={{ '--d': Number(digit) } as React.CSSProperties}>
-                      <span className={styles.rollStrip}>
-                        {DIGITS.map((n, k) => (
-                          <span key={k}>{n}</span>
-                        ))}
-                      </span>
-                    </span>
+          <div className={styles.pinPhotos}>
+            {ABOUT_PRINCIPLES.points.map((pt) => (
+              <Image key={pt.image} src={pt.image} alt={pt.imageAlt} fill sizes="100vw" className={styles.pinPhoto} />
+            ))}
+          </div>
+
+          <div className={styles.pinCopy}>
+            {/* One counter for the whole sequence: the tens digit stays, the
+                units digit rolls 1 → 2 → 3 with the hand-over. */}
+            <span className={`${styles.principleNum} ${styles.pinCounter}`} aria-hidden="true">
+              0
+              <span className={styles.rollWindow}>
+                <span className={styles.rollStrip}>
+                  {ABOUT_PRINCIPLES.points.map((pt, i) => (
+                    <span key={pt.title}>{i + 1}</span>
                   ))}
                 </span>
-                <h3 className={styles.principleTitle}>{pt.title}</h3>
-                <p className={styles.principleDesc}>{pt.description}</p>
-              </div>
-            </article>
-          ))}
-          <div className={styles.pinDots} aria-hidden="true">
-            {ABOUT_PRINCIPLES.points.map((pt, i) => (
-              <i key={pt.title} className={i === 0 ? styles.isOn : ''} />
+              </span>
+            </span>
+            <ol className={styles.pinTexts}>
+              {ABOUT_PRINCIPLES.points.map((pt, i) => (
+                <li key={pt.title} className={styles.pinText}>
+                  <span className={`${styles.principleNum} ${styles.pinItemNum}`} aria-hidden="true">
+                    {num(i)}
+                  </span>
+                  <h3 className={styles.principleTitle}>{pt.title}</h3>
+                  <p className={styles.principleDesc}>{pt.description}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className={styles.pinBars} aria-hidden="true">
+            {ABOUT_PRINCIPLES.points.map((pt) => (
+              <i key={pt.title} />
             ))}
           </div>
         </div>

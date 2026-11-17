@@ -541,69 +541,92 @@
   opacity: clamp(0.22, calc(var(--pin-fill, 1) * var(--pin-words) - var(--i)), 1);
 }
 
-/* Principles photo sequence, staged like the home page's "What Sets Us Apart".
-   The rules here are the plain stack: three full-bleed photo panels one after
-   another. The pinned, scroll-driven version is layered on below only where
-   Principles.tsx has set `data-pinned`, so without script or with reduced
-   motion the stack is what shows. */
+/* Principles photo sequence. Base rules are the unpinned version (no script,
+   reduced motion, short screens): one photo panel with the three principles
+   listed over it. The pinned version is layered on below where Principles.tsx
+   has set `data-pinned`; there one value, --pin-at, drives the photos, copy,
+   counter and progress bar together. */
 .pinTrack {
   position: relative;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
 }
 
-.pinItem {
+.pinStage {
   position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   min-height: 36rem;
-  padding: 4rem max(1.5rem, calc((100vw - 1200px) / 2));
-  overflow: hidden;
+  padding: 5rem max(1.5rem, calc((100vw - 1200px) / 2));
+  background: var(--tm-ink-deep);
+}
+
+.pinPhotos {
+  position: absolute;
+  inset: 0;
+}
+
+/* Darkest on the left where the copy sits; the people stay clear on the right. */
+.pinPhotos::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(6, 18, 31, 0.94) 0%, rgba(6, 18, 31, 0.86) 30%, rgba(6, 18, 31, 0.45) 56%, rgba(6, 18, 31, 0.1) 80%, rgba(6, 18, 31, 0) 100%),
+    linear-gradient(0deg, rgba(6, 18, 31, 0.5) 0%, rgba(6, 18, 31, 0) 28%);
 }
 
 .pinPhoto {
-  z-index: 0;
   object-fit: cover;
   object-position: 72% 50%;
 }
 
-/* Darkest on the left where the text sits; the people stay clear on the right. */
-.pinItem::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(6, 18, 31, 0.96) 0%, rgba(6, 18, 31, 0.9) 32%, rgba(6, 18, 31, 0.55) 58%, rgba(6, 18, 31, 0.2) 82%, rgba(6, 18, 31, 0.15) 100%),
-    linear-gradient(0deg, rgba(6, 18, 31, 0.55) 0%, rgba(6, 18, 31, 0) 30%);
+.pinPhoto:not(:first-child) {
+  opacity: 0;
 }
 
-.pinText {
+.pinCopy {
   position: relative;
-  z-index: 2;
-  max-width: 30rem;
+  z-index: 1;
+  width: min(30rem, 100%);
 }
 
-.pinDots {
+.pinTexts {
+  display: grid;
+  gap: 3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pinCounter,
+.pinBars {
   display: none;
 }
 
-.pinDots i {
-  width: 2.25rem;
-  height: 3px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.18);
-  transition: background-color 0.3s ease;
+.rollWindow {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: top;
 }
 
-.pinDots i.isOn {
-  background: #8cc4ff;
+.rollStrip {
+  display: block;
+  transform: translate3d(0, calc(var(--pin-at, 0) * -1em), 0);
+}
+
+.rollStrip > span {
+  display: block;
+  height: 1em;
+  line-height: 1em;
 }
 
 /* Pinned sequence. Must match PIN_QUERY in Principles.tsx, which also sets
-   --pin-dist (scroll the three principles take), --pin-grow (0 to 1 as the
-   stage arrives) and, per item, --pin-y and --pin-show. */
+   --pin-dist, --pin-fill, --pin-grow and --pin-at, plus --pin-show on each
+   photo, --pin-o and --pin-y on each text and --pin-bar on each bar. */
 @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   [data-pinned] .pinTrack {
     height: calc(100vh + var(--pin-dist, 0px));
@@ -615,64 +638,68 @@
     position: sticky;
     top: 0;
     height: 100vh;
-    overflow: hidden;
-    background: var(--tm-ink-deep);
+    min-height: 0;
+    /* Clears the 60px navbar so the copy centres in the visible area. */
+    padding-top: calc(60px + 2rem);
     clip-path: inset(0 calc((1 - var(--pin-grow, 1)) * 14%) round calc((1 - var(--pin-grow, 1)) * 28px));
   }
 
-  /* Items dissolve so every photo sits in one layer under every text block:
-     a photo fading in must not cover the previous text on its way out. */
-  [data-pinned] .pinItem {
-    display: contents;
-  }
-
-  [data-pinned] .pinItem:not(:first-child)::after {
-    content: none;
-  }
-
+  /* Each photo fades in over the last and settles from a slight zoom. */
   [data-pinned] .pinPhoto {
     opacity: var(--pin-show, 1);
+    transform: scale(calc(1.06 - 0.06 * var(--pin-show, 1)));
+    will-change: opacity, transform;
   }
 
-  /* Centred below the 60px navbar, then moved by --pin-y. */
+  [data-pinned] .pinCounter {
+    display: block;
+    line-height: 1em;
+  }
+
+  [data-pinned] .pinItemNum {
+    display: none;
+  }
+
+  /* The copy hands over in place: the outgoing text lifts and fades as the
+     incoming one rises into the same spot. */
+  [data-pinned] .pinTexts {
+    grid-template-areas: 'text';
+  }
+
   [data-pinned] .pinText {
-    position: absolute;
-    inset: 60px auto 0 max(1.5rem, calc((100vw - 1200px) / 2));
-    width: min(30rem, calc(100% - 3rem));
-    height: fit-content;
-    margin: auto 0;
+    grid-area: text;
+    opacity: var(--pin-o, 1);
     transform: translate3d(0, var(--pin-y, 0px), 0);
-    will-change: transform;
+    will-change: opacity, transform;
   }
 
-  [data-pinned] .pinDots {
+  [data-pinned] .pinBars {
     position: absolute;
-    z-index: 3;
+    z-index: 1;
     left: max(1.5rem, calc((100vw - 1200px) / 2));
     bottom: clamp(1.5rem, 4vh, 2.5rem);
     display: flex;
     gap: 0.5rem;
   }
-}
 
-/* Odometer digits for the principle numbers. Unset, --pin-roll is 1 and each
-   digit rests on its value. */
-.rollDigit {
-  display: inline-block;
-  height: 1em;
-  overflow: hidden;
-  vertical-align: top;
-}
+  .pinBars i {
+    position: relative;
+    width: 2.75rem;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+  }
 
-.rollStrip {
-  display: block;
-  transform: translate3d(0, calc(var(--pin-roll, 1) * (10 + var(--d)) * -1em), 0);
-}
-
-.rollStrip > span {
-  display: block;
-  height: 1em;
-  line-height: 1em;
+  /* Each bar fills as its principle arrives, in step with the photo. */
+  .pinBars i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #8cc4ff;
+    transform: scaleX(var(--pin-bar, 0));
+    transform-origin: left center;
+  }
 }
 
 .principleNum {
@@ -1053,22 +1080,31 @@
     max-width: 520px;
   }
 
-  /* Phones and tablets: text sits low over a wash that darkens towards the bottom. */
-  .pinItem {
+  /* Phones and tablets: the copy sits low, and the photo stays clear above
+     it. The wash only darkens the lower part, where the text is. */
+  .pinStage {
     align-items: flex-end;
   }
 
-  .pinPhoto {
-    object-position: 80% 30%;
+  [data-pinned] .pinStage {
+    padding-bottom: 4.5rem;
   }
 
-  .pinItem::after {
-    background: linear-gradient(0deg, rgba(6, 18, 31, 0.97) 0%, rgba(6, 18, 31, 0.88) 45%, rgba(6, 18, 31, 0.35) 75%, rgba(6, 18, 31, 0.2) 100%);
+  .pinPhotos::after {
+    background: linear-gradient(0deg, rgba(6, 18, 31, 0.95) 0%, rgba(6, 18, 31, 0.86) 26%, rgba(6, 18, 31, 0.4) 50%, rgba(6, 18, 31, 0) 72%);
   }
 
-  [data-pinned] .pinText {
-    inset: auto auto 4.5rem 1.5rem;
-    margin: 0;
+  /* Per photo, so the people are framed in a tall crop. */
+  .pinPhoto:nth-child(1) {
+    object-position: 77% 50%;
+  }
+
+  .pinPhoto:nth-child(2) {
+    object-position: 70% 50%;
+  }
+
+  .pinPhoto:nth-child(3) {
+    object-position: 86% 50%;
   }
 
   /* Vertical timeline: the line runs down through the node centres. */
