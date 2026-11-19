@@ -18,15 +18,20 @@ const HEADLINE_LINES = HERO.headline.reduce<(typeof HERO.headline)[]>(
     [[]]
 );
 
-// Dark to light: the hero opens on the night cut. Once the headline, text
-// and buttons have appeared (after the first-visit intro cover has lifted),
-// it holds a moment, then turns to day over 3 seconds, so a first-time
-// visitor reads the message on a dark city that then lights up. After that
-// it loops day, night, day for as long as the page is open.
+// Dark to light: the hero opens on night. Once the headline, text and
+// buttons have appeared (after the first-visit intro cover has lifted), it
+// holds a moment, then turns to day over 3 seconds, so a first-time visitor
+// reads the message on a dark city that then lights up. After that it loops
+// day, night, day for as long as the page is open.
+//
+// The timeline fades whole layers (still frame + video), not the videos, so
+// it runs the same whether the videos are playing, still loading, or never
+// start (reduced motion): the stills then make the same turn.
 // All times in ms; each pair is [hold, fade into the next].
 const OPEN_NIGHT_HOLD = 600;
+const OPEN_NIGHT_MIN = 2000; // night shows at least this long from first paint
 const OPEN_FADE_TO_DAY = 3000;
-const DAY = [9000, 5000] as const; // hold day, then fade to night
+const DAY = [9000, 8000] as const; // hold day, then fade slowly to night
 const NIGHT = [5000, 5000] as const; // hold night, then fade to day
 
 export default function HomeHero() {
@@ -34,6 +39,7 @@ export default function HomeHero() {
     const heroRef = useRef<HTMLElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const nightRef = useRef<HTMLVideoElement>(null);
+    const nightLayerRef = useRef<HTMLDivElement>(null);
     const innerRef = useRef<HTMLDivElement>(null);
 
     // Scroll exit: as the hero scrolls away the video scales up slightly and
@@ -44,7 +50,7 @@ export default function HomeHero() {
         if (reduceMotion) return;
         const hero = heroRef.current;
         const video = videoRef.current;
-        const night = nightRef.current;
+        const night = nightLayerRef.current;
         const inner = innerRef.current;
         if (!hero || !video || !night || !inner) return;
 
@@ -88,32 +94,25 @@ export default function HomeHero() {
         pill.style.removeProperty('--my');
     };
 
-    // `preload="none"` alone stops the browser autoplaying at all, so playback
-    // is kicked off by hand once the rest of the page has loaded, keeping the
-    // loop off the critical path. Reduced-motion visitors never start it and
-    // keep the poster frame.
-    //
-    // Two cuts of the same shot: night plays in step on top of day, and
-    // fading the night layer in and out moves between them (see
-    // `.heroVideoNight`). The tint over the video lightens at night so the
-    // city lights show (`.hero[data-night]::after`). Both start at night,
-    // matching the night poster, and stay within a frame of each other.
+    // Day and night timeline. Runs for everyone, reduced motion included:
+    // it only fades the night layer and the tint (`.heroNight`,
+    // `.hero[data-night]::after`), nothing moves.
     useEffect(() => {
-        if (reduceMotion) return;
         const hero = heroRef.current;
-        const video = videoRef.current;
-        const night = nightRef.current;
-        if (!hero || !video || !night) return;
+        const layer = nightLayerRef.current;
+        if (!hero || !layer) return;
+        const mounted = performance.now();
         let timer = 0;
+        let live = true;
 
         const show = (toNight: boolean, fadeMs: number) => {
             hero.style.setProperty('--hero-fade', `${fadeMs}ms`);
             if (toNight) {
                 hero.dataset.night = '';
-                night.dataset.on = '';
+                layer.dataset.on = '';
             } else {
                 delete hero.dataset.night;
-                delete night.dataset.on;
+                delete layer.dataset.on;
             }
         };
         // Day holds, fades to night; night holds, fades to day; repeat.
@@ -124,13 +123,35 @@ export default function HomeHero() {
                 timer = window.setTimeout(() => loop(!atNight), fade);
             }, hold);
         };
-        const begin = () => {
-            window.clearTimeout(timer);
+
+        // Turn to day once the copy has finished its entrance (the buttons
+        // come last), so the dark city is seen with the message on it.
+        const actions = hero.querySelector(`.${styles.heroActions}`);
+        Promise.all((actions?.getAnimations() ?? []).map((a) => a.finished.catch(() => {}))).then(() => {
+            if (!live) return;
+            const wait = Math.max(OPEN_NIGHT_HOLD, OPEN_NIGHT_MIN - (performance.now() - mounted));
             timer = window.setTimeout(() => {
                 show(false, OPEN_FADE_TO_DAY);
                 timer = window.setTimeout(() => loop(false), OPEN_FADE_TO_DAY);
-            }, OPEN_NIGHT_HOLD);
+            }, wait);
+        });
+        return () => {
+            live = false;
+            window.clearTimeout(timer);
         };
+    }, []);
+
+    // `preload="none"` alone stops the browser autoplaying at all, so playback
+    // is kicked off by hand once the rest of the page has loaded, keeping the
+    // loops off the critical path. Each video sits over its own still frame,
+    // so until it plays the still stands in and the timeline above carries
+    // on regardless. Reduced-motion visitors never start them. The night cut
+    // is kept within a frame of the day cut.
+    useEffect(() => {
+        if (reduceMotion) return;
+        const video = videoRef.current;
+        const night = nightRef.current;
+        if (!video || !night) return;
 
         const keepInStep = () => {
             if (night.readyState < 2) return;
@@ -138,26 +159,13 @@ export default function HomeHero() {
                 night.currentTime = video.currentTime;
             }
         };
-
         const start = () => {
-            window.clearTimeout(timer);
-            show(true, 0);
             video.load();
             night.load();
             // Reject when the tab is backgrounded or autoplay is blocked;
-            // the night poster stands in either way.
+            // the stills stand in either way.
             video.play().catch(() => {});
             night.play().catch(() => {});
-            // Starts once both are actually playing, so the turn to day is
-            // never spent on a poster, and once the copy has finished its
-            // entrance (the buttons come last), so it is seen.
-            const actions = hero.querySelector(`.${styles.heroActions}`);
-            Promise.all([
-                ...[video, night].map(
-                    (v) => new Promise((done) => v.addEventListener('playing', done, { once: true }))
-                ),
-                ...(actions?.getAnimations() ?? []).map((a) => a.finished.catch(() => {})),
-            ]).then(begin);
         };
         video.addEventListener('timeupdate', keepInStep);
 
@@ -176,7 +184,6 @@ export default function HomeHero() {
             phone.removeEventListener('change', start);
             window.removeEventListener('load', start);
             video.removeEventListener('timeupdate', keepInStep);
-            window.clearTimeout(timer);
         };
     }, [reduceMotion]);
 
@@ -207,22 +214,16 @@ export default function HomeHero() {
             </video>
             {/* The same shot at night (restored from e54ba63), same cuts and
                 length: 512KB / 297KB webm desktop, 606KB / 340KB webm phone.
-                Shown first; see the effect above. */}
-            <video
-                ref={nightRef}
-                className={`${styles.heroVideoBg} ${styles.heroVideoNight}`}
-                data-on=""
-                preload="none"
-                loop
-                muted
-                playsInline
-                aria-hidden="true"
-            >
-                <source media="(max-width: 640px)" src="/images/hero-night-mobile.webm" type="video/webm" />
-                <source media="(max-width: 640px)" src="/images/hero-night-mobile.mp4" type="video/mp4" />
-                <source src="/images/hero-night.webm" type="video/webm" />
-                <source src="/images/hero-night.mp4" type="video/mp4" />
-            </video>
+                Its layer carries the night still as a background, so fading
+                the layer moves between day and night with or without video. */}
+            <div ref={nightLayerRef} className={styles.heroNight} data-on="" aria-hidden="true">
+                <video ref={nightRef} className={styles.heroVideoBg} preload="none" loop muted playsInline>
+                    <source media="(max-width: 640px)" src="/images/hero-night-mobile.webm" type="video/webm" />
+                    <source media="(max-width: 640px)" src="/images/hero-night-mobile.mp4" type="video/mp4" />
+                    <source src="/images/hero-night.webm" type="video/webm" />
+                    <source src="/images/hero-night.mp4" type="video/mp4" />
+                </video>
+            </div>
 
             <div ref={innerRef} className={styles.heroInner}>
 

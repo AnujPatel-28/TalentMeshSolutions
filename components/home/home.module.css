@@ -253,9 +253,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Poster frame for the videos above it; see HomeHero.tsx. The hero opens
-       at night, so the night frame; reduced motion keeps the day frame. */
-    background: var(--tm-ink) url('/images/hero-night-poster.webp') center / cover no-repeat;
+    /* Day still under the day video; the night still is on `.heroNight`.
+       See HomeHero.tsx. */
+    background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
     /* One size drives the hero's type, up to 84px. It follows the video's
        on-screen width (the video covers the hero, so it is the larger of
@@ -282,15 +282,21 @@
     opacity: 1;
 }
 
-/* Night loop over the day loop, shown while HomeHero.tsx sets data-on. The
-   fade time is set per change (--hero-fade): 3s for the opening turn to
-   day, 5s in the loop. */
-.heroVideoNight {
+/* Night layer over the day: the night still with the night video on it,
+   shown while HomeHero.tsx sets data-on. The fade time is set per change
+   (--hero-fade): 3s for the opening turn to day, 8s day to night and 5s
+   night to day in the loop. Opacity only, so reduced motion keeps it. */
+.heroNight {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--tm-ink) url('/images/hero-night-poster.webp') center / cover no-repeat;
     opacity: 0;
     transition: opacity var(--hero-fade, 0s) ease-in-out;
 }
 
-.heroVideoNight[data-on] {
+.heroNight[data-on] {
     opacity: 1;
 }
 
@@ -2838,11 +2844,15 @@ h2.industriesTitle {
         min-height: 100dvh;
         min-height: 100svh;
         padding: calc(72px + 1.5rem) 1rem 2.5rem;
-        background-image: url('/images/hero-night-mobile-poster.webp');
+        background-image: url('/images/hero-day-mobile-poster.webp');
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
+    }
+
+    .heroNight {
+        background-image: url('/images/hero-night-mobile-poster.webp');
     }
 
     /* The top gradient stays dark through the description (62% at 45%) before
@@ -3017,20 +3027,12 @@ h2.industriesTitle {
     }
 }
 
-/* Reduced motion: no video plays, so keep the still day frame and its full
-   scrim instead of the night opening. */
+/* Reduced motion: app/globals.css cuts every transition to near zero. The
+   day and night fades are opacity only, nothing moves, so they keep their
+   slow pace and reduced-motion visitors get the same dark-to-light turn. */
 @media (prefers-reduced-motion: reduce) {
-    .hero {
-        background-image: url('/images/hero-day-poster.webp');
-    }
-
-    .hero[data-night]::after {
-        opacity: 1;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) and (max-width: 640px) {
-    .hero {
-        background-image: url('/images/hero-day-mobile-poster.webp');
+    .heroNight,
+    .hero::after {
+        transition-duration: var(--hero-fade, 0s) !important;
     }
 }
