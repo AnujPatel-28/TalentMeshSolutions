@@ -1145,6 +1145,19 @@
   padding-top: 0;
 }
 
+/* Straight after "How we work", the CTA card sits across the seam: the
+   light blue band carries on behind the card's top 14rem, then the page
+   turns white. Only when the two sections are neighbours, so the page
+   falls back to plain spacing if another section returns between them. */
+.sectionTint:has(+ .sectionCta) {
+  padding-bottom: 0;
+}
+
+.sectionTint + .sectionCta {
+  padding-top: 3rem;
+  background: linear-gradient(180deg, var(--tm-surface) 0, var(--tm-surface) 14rem, var(--tm-canvas) 14rem);
+}
+
 /* Dressed like the site footer (components/layout/Footer): the same blue
    light in the top-left corner over the same navy, and the footer's city
    skyline along the bottom. */
@@ -1492,6 +1505,10 @@
 
   .sectionCta {
     padding-top: 0;
+  }
+
+  .sectionTint + .sectionCta {
+    padding-top: 2rem;
   }
 
   .head {
