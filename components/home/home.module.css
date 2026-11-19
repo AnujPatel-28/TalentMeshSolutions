@@ -256,6 +256,15 @@
     /* Poster frame for the video above it; see HomeHero.tsx. */
     background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
+    /* One size drives the hero's type: the headline is 84px on a 1440px
+       screen and scales with the width (5.833vw), capped by the height on
+       short laptops (10.5svh) so the copy keeps its proportions and always
+       fits. Everything else steps down from it by the golden ratio
+       (phi = 1.618): description h/phi^3, gaps h/phi^2 and h/phi. Same
+       maths on Windows and macOS, whatever the display scaling. */
+    --hero-h: clamp(2.75rem, min(5.833vw, 10.5svh), 5.25rem);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .heroVideoBg {
@@ -286,7 +295,8 @@
 .heroInner {
     position: relative;
     z-index: 1;
-    max-width: 900px;
+    /* Wide enough for "Connecting Businesses" on one line at any size. */
+    max-width: max(900px, calc(var(--hero-h) * 12));
     margin: 0 auto;
     text-align: center;
 }
@@ -294,10 +304,11 @@
 .heroTitle {
     margin: 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: clamp(2.5rem, 5.6vw, 4.5rem);
-    line-height: 1.1;
-    font-weight: 600;
-    letter-spacing: -0.025em;
+    font-size: var(--hero-h);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    font-kerning: normal;
     color: #ffffff;
 }
 
@@ -312,21 +323,18 @@
     display: none;
 }
 
+/* "Right Talent": same font, set apart by a softer white. */
 .heroWord.accent {
-    font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.08em;
-    color: #ffffff;
-    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.62);
 }
 
+/* h/phi^3 (about 20px at 84px), never under 16px; phi line height. */
 .heroDesc {
-    max-width: 34rem;
-    margin: 1.5rem auto 0;
+    max-width: 28em;
+    margin: calc(var(--hero-h) * 0.382) auto 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: 1.125rem;
-    line-height: 1.55;
+    font-size: max(1rem, calc(var(--hero-h) * 0.236));
+    line-height: 1.618;
     color: rgba(255, 255, 255, 0.78);
     text-wrap: balance;
 }
@@ -337,7 +345,8 @@
     justify-content: center;
     align-items: center;
     gap: 1rem 2rem;
-    margin-top: 2.5rem;
+    /* h/phi: about 52px at 84px. */
+    margin-top: calc(var(--hero-h) * 0.618);
 }
 
 /* Hero entrance. This lives in CSS rather than framer-motion on purpose:
@@ -2831,17 +2840,20 @@ h2.industriesTitle {
         text-align: left;
     }
 
-    /* Four stacked lines; fluid between 40px and 48px so each fits a 320px screen. */
+    /* Four stacked lines; fluid between about 42px and 52px so each fits a
+       320px screen. The description and gap follow from it as on desktop. */
+    .hero {
+        --hero-h: clamp(2.6rem, 13vw, 3.25rem);
+    }
+
     .heroTitle {
-        font-size: clamp(2.5rem, 12.3vw, 3rem);
-        line-height: 1.05;
+        line-height: 1.04;
     }
 
     .heroDesc {
         max-width: 20rem;
-        margin: 1.25rem 0 0;
-        font-size: 1rem;
-        line-height: 1.5;
+        margin: calc(var(--hero-h) * 0.382) 0 0;
+        line-height: 1.55;
         color: rgba(255, 255, 255, 0.92);
         text-shadow: 0 1px 12px rgba(5, 11, 26, 0.6);
         text-wrap: wrap;
