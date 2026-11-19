@@ -1038,6 +1038,12 @@
     height: auto;
     max-height: 38rem;
   }
+
+  /* Widths follow the scroll (--w, set by script), so no width transition. */
+  [data-pinned] .door {
+    flex-grow: calc(1 + 2.4 * var(--w, 0));
+    transition: none;
+  }
 }
 
 /* ----------------------------------------------------------- industries -- */
@@ -1325,12 +1331,7 @@
 
   [data-pinned] .door {
     height: auto;
-    flex: 0 0 4.5rem;
-    transition: flex-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  [data-pinned] .door[data-open] {
-    flex-grow: 1;
+    flex: var(--w, 0) 0 4.5rem;
   }
 }
 
