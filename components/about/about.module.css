@@ -1145,15 +1145,73 @@
   padding-top: 0;
 }
 
+/* Dressed like the site footer (components/layout/Footer): the same blue
+   light in the top-left corner over the same navy, and the footer's city
+   skyline along the bottom. */
 .ctaCard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: clamp(2.5rem, 5vw, 5rem);
   align-items: center;
   padding: clamp(2rem, 5vw, 4.5rem);
+  /* Room for the skyline under the content. */
+  padding-bottom: calc(clamp(2rem, 5vw, 4.5rem) + 9rem);
   border-radius: 32px;
-  background: linear-gradient(180deg, var(--tm-ink) 0%, var(--tm-ink-deep) 100%);
+  background:
+    radial-gradient(60% 55% at 12% 0%, rgba(0, 110, 220, 0.32), transparent 70%),
+    linear-gradient(180deg, var(--tm-ink) 0%, var(--tm-ink-deep) 100%);
   color: #ffffff;
+}
+
+/* City glow on the horizon, behind the buildings. */
+.ctaCard::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14rem;
+  background: radial-gradient(55% 75% at 50% 100%, rgba(26, 140, 255, 0.24), transparent 70%);
+  pointer-events: none;
+}
+
+/* The skyline: at least 1100px wide, as in the footer, so its lines keep
+   the same weight on phones (which see its centre). It rises out of the
+   card from above and fades out toward the side edges, like a horizon. */
+.ctaCard::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  bottom: 0;
+  width: max(1100px, 100%);
+  aspect-ratio: 2400 / 380;
+  transform: translateX(-50%);
+  background: url('/images/footer-skyline.svg') center bottom / 100% auto no-repeat;
+  opacity: 0.75;
+  -webkit-mask-image:
+    linear-gradient(180deg, transparent 0%, #000 55%),
+    linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 55%),
+    linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* White pill, as the footer's primary button. */
+.ctaCard .btnPrimary {
+  background: #ffffff;
+  color: var(--tm-ink);
+}
+
+.ctaCard .btnPrimary:hover {
+  background: #dcebfa;
 }
 
 .ctaHeading {
@@ -1476,7 +1534,7 @@
 
   .ctaCard {
     border-radius: var(--tm-radius);
-    padding: 2.25rem 1.5rem;
+    padding: 2.25rem 1.5rem calc(2.25rem + 8rem);
   }
 
   .ctaCard .btnPrimary {
