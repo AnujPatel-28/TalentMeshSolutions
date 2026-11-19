@@ -17,9 +17,11 @@ const POINT_PHOTOS = {
 };
 
 // Must match the pinned-sequence media query in home.module.css.
-// Any width, phones included; the height floor is what the tallest card needs
-// under the navbar, which rules out a phone held sideways.
-const PIN_QUERY = '(min-height: 640px) and (prefers-reduced-motion: no-preference)';
+// Any width, phones included. The height floor is what the tallest card
+// (about 415px) needs under the 64px navbar. It must stay below the ~600px
+// a phone browser leaves with its toolbars showing (Brave keeps one at the
+// bottom too), but still rules out a phone held sideways.
+const PIN_QUERY = '(min-height: 520px) and (prefers-reduced-motion: no-preference)';
 
 const LABEL = 'What Sets Us Apart';
 const HEADING_LINES = ['More Than Recruitment.', 'A Hiring Partner.'];

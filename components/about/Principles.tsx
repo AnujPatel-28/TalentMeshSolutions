@@ -8,7 +8,7 @@ import styles from './about.module.css';
 
 // Pinned-sequence rules shared with the home page's "What Sets Us Apart"
 // (components/home/WhyUs.tsx). Must match the media query in about.module.css.
-const PIN_QUERY = '(min-height: 640px) and (prefers-reduced-motion: no-preference)';
+const PIN_QUERY = '(min-height: 520px) and (prefers-reduced-motion: no-preference)';
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const smooth = (t: number) => t * t * (3 - 2 * t);

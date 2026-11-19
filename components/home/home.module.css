@@ -1217,7 +1217,7 @@ p.whyStatement {
    also sets the custom properties: --why-dist (scroll the four cards take),
    --why-grow (0 to 1 as the stage arrives), and per item --why-y and
    --why-show. */
-@media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+@media (min-height: 520px) and (prefers-reduced-motion: no-preference) {
     [data-pinned] > .whyTrack {
         height: calc(100vh + var(--why-dist, 0px));
     }
