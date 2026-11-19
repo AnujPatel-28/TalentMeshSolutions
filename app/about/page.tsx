@@ -6,7 +6,7 @@ import {
   Principles,
   AboutServices,
   AboutProcess,
-  AboutIndustries,
+  // AboutIndustries, // hidden for now; see the Industries section below
   AboutCTA,
 } from '@/components/about';
 import styles from '@/components/about/about.module.css';
@@ -90,9 +90,13 @@ export default function AboutPage() {
             <AboutProcess />
           </section>
 
+          {/* Industries is hidden for now: the home page already covers it.
+              The team will decide whether to keep it. To bring it back,
+              uncomment this section and the AboutIndustries import above.
           <section className={styles.section} aria-label="Industries we support">
             <AboutIndustries />
           </section>
+          */}
 
           <section className={`${styles.section} ${styles.sectionCta}`} aria-label="Contact">
             <AnimateOnScroll animation="fadeUp" once>
