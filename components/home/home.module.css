@@ -2113,7 +2113,7 @@ h2.industriesTitle {
     }
 }
 
-/* ------------------------------------------- Recruitment engineered for scale -- */
+/* ---------------------------------------------------- Recruitment that scales -- */
 
 /* Five steps as a photo gallery (TrustStrip.tsx): the heading sits over the
    large photo, its caption to the right; the previous and next steps wait as
@@ -2177,10 +2177,15 @@ h2.industriesTitle {
     color: var(--tm-ink);
 }
 
-/* Second line in grey, as in the reference. */
+/* Second line in the brand blue, set in the serif italic. */
 .galleryHeading span {
     display: block;
-    color: rgba(11, 31, 51, 0.36);
+    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+    font-size: 1.12em;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--tm-brand);
 }
 
 .galleryStage {

@@ -49,7 +49,7 @@ export const HERO = {
 } as const;
 
 /**
- * "Recruitment Engineered for Scale" (components/home/TrustStrip.tsx): five
+ * "Recruitment that scales" (components/home/TrustStrip.tsx): five
  * steps shown one at a time as a photo gallery. `lead` and `emphasis` read as
  * one sentence; `emphasis` is set in the darker ink.
  *
@@ -57,9 +57,9 @@ export const HERO = {
  * replace one, use a new file name so no image cache keeps serving the old.
  */
 export const SCALE_GALLERY = {
-  sectionTitle: 'Recruitment engineered for scale',
-  headingA: 'Recruitment Engineered',
-  headingAccent: 'for Scale',
+  sectionTitle: 'Recruitment that scales',
+  headingA: 'Recruitment that scales',
+  headingAccent: 'from one hire to bulk hiring',
   proofPoints: ['48–72h Shortlists', '100% Vetted Talent'],
   steps: [
     {
