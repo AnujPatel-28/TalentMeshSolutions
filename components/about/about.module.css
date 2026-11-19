@@ -1010,6 +1010,36 @@
   font-weight: 600;
 }
 
+/* Pinned: the track grows by --pin-dist and the stage (heading + panels)
+   sticks for that long, filling the screen below the 60px navbar. The
+   panels take whatever height is left. */
+@media (min-height: 600px) {
+  [data-pinned].processTrack {
+    height: calc(100vh + var(--pin-dist, 0px));
+  }
+
+  [data-pinned] .processStage {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100svh;
+    padding-block: calc(60px + 1.5rem) 1.5rem;
+  }
+
+  [data-pinned] .processStage .head {
+    margin-bottom: 2rem;
+  }
+
+  [data-pinned] .doors {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    max-height: 38rem;
+  }
+}
+
 /* ----------------------------------------------------------- industries -- */
 
 /* Ruled grid: hairlines, no card surfaces. */
@@ -1291,6 +1321,43 @@
     left: 1.25rem;
     right: 1.25rem;
     bottom: 1.25rem;
+  }
+
+  [data-pinned] .door {
+    height: auto;
+    flex: 0 0 4.5rem;
+    transition: flex-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  [data-pinned] .door[data-open] {
+    flex-grow: 1;
+  }
+}
+
+/* Pinned on a phone the stage is one screen, so give the open panel the room:
+   slimmer closed bars, and the lede line and tags set aside while pinned. */
+@media (max-width: 640px) {
+  [data-pinned] .processStage .head {
+    margin-bottom: 1.25rem;
+  }
+
+  [data-pinned] .processStage .lede,
+  [data-pinned] .doorTags {
+    display: none;
+  }
+
+  [data-pinned] .door {
+    flex-basis: 3.75rem;
+  }
+
+  [data-pinned] .doorNum {
+    left: 1.1rem;
+    font-size: 2rem;
+  }
+
+  [data-pinned] .doorTitle {
+    left: 4.25rem;
+    font-size: 1.15rem;
   }
 }
 
