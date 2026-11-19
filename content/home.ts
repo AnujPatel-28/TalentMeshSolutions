@@ -48,38 +48,56 @@ export const HERO = {
   secondaryCta: { label: 'Looking for a Job?', href: '/job-seekers' },
 } as const;
 
-export const POSITIONING = {
-  sectionTitle: 'Why Talentmesh',
-  badge: 'POSITIONING',
-  columns: [
+/**
+ * "Hiring built for you" (components/home/TrustStrip.tsx): five
+ * steps shown one at a time as a photo gallery. `lead` and `emphasis` read as
+ * one sentence; `emphasis` is set in the darker ink.
+ *
+ * Photos: public/images/home/scale-*.webp, 4:5 portrait, 1100px wide. To
+ * replace one, use a new file name so no image cache keeps serving the old.
+ */
+export const SCALE_GALLERY = {
+  sectionTitle: 'Hiring built for you',
+  headingA: 'Hiring',
+  headingAccent: 'built for you',
+  proofPoints: ['48–72h Shortlists', '100% Vetted Talent'],
+  steps: [
     {
-      title: 'Find the Right Talent',
-      description: 'Skilled candidates matched to your requirements.',
-      icon: 'zap',
-      rightHeading: 'Uncover Top Talent, Instantly.',
-      rightIntro: 'Our recruiters screen every profile against your brief on skills, experience and cultural fit, so the shortlist you see is already worth interviewing.',
-      rightImage: '/cop1.png',
-      rightBackground: '/building bg.webp'
+      label: 'Find the right talent',
+      lead: 'Every profile is screened against your brief on skills, experience and fit,',
+      emphasis: 'so the shortlist is already worth interviewing.',
+      image: '/images/home/scale-find-talent.webp',
+      alt: 'A recruiter listening as a hiring manager explains the role across a table, her notebook of role notes open beside a glass of chai',
     },
     {
-      title: 'Scale With Flexibility',
-      description: 'Permanent, contractual, temporary, bulk and remote hiring.',
-      icon: 'trendingUp',
-      rightHeading: 'Elastic Teams for Dynamic Growth.',
-      rightIntro: 'Whether you need a single remote developer or a full bulk hiring drive, we provide permanent, temporary, and contractual staffing to match your exact momentum.',
-      rightImage: '/personWithLaptop3.png',
-      rightBackground: '/building bg.webp'
+      label: 'Shortlist in 48–72 hours',
+      lead: 'Pre-screened candidates reach you within two to three working days,',
+      emphasis: 'not weeks.',
+      image: '/images/home/scale-shortlist.webp',
+      alt: 'A recruiter ticking a shortlisted candidate profile among printed CVs under a desk lamp',
     },
     {
-      title: 'Simplify Recruitment',
-      description: 'End-to-end RPO and seamless compliance.',
-      icon: 'shieldCheck',
-      rightHeading: 'Recruitment on Autopilot.',
-      rightIntro: 'From sourcing and screening to onboarding and compliance, our RPO solutions handle the heavy lifting so you can focus on building your business.',
-      rightImage: '/withClient.png',
-      rightBackground: '/building bg.webp'
-    }
-  ]
+      label: 'Scale with flexibility',
+      lead: 'Permanent, contractual, temporary, bulk or remote hiring,',
+      emphasis: 'matched to how fast you grow.',
+      image: '/images/home/scale-flexibility.webp',
+      alt: 'A team lead showing two new hires to their desks as laptops are unpacked in an open-plan office',
+    },
+    {
+      label: 'Simplify recruitment',
+      lead: 'End-to-end RPO, from sourcing and screening to interviews,',
+      emphasis: 'so your team stays on the business.',
+      image: '/images/home/scale-simplify.webp',
+      alt: 'A coordinator with an interview schedule on a tablet watching a candidate meet a panel through a glass wall',
+    },
+    {
+      label: 'Vetted and ready on day one',
+      lead: 'Background checks, documentation and onboarding handled',
+      emphasis: 'before your new hire walks in.',
+      image: '/images/home/scale-day-one.webp',
+      alt: 'An HR coordinator handing a new employee a welcome folder at his desk on his first day',
+    },
+  ],
 } as const;
 
 export interface ServiceCategory {

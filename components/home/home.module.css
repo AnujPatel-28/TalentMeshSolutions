@@ -2113,228 +2113,303 @@ h2.industriesTitle {
     }
 }
 
-/* ------------------------------------------- Recruitment engineered for scale -- */
+/* ------------------------------------------------------- Hiring built for you -- */
 
-/* Three photo panels (TrustStrip.tsx). The open one takes most of the row and
-   shows its headline and copy; the other two fold to a strip with a vertical
-   title. Below 860px they stack and open downwards instead. */
-.scaleHead {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-    margin-bottom: 2.5rem;
+/* Five steps as a photo gallery (TrustStrip.tsx): the heading sits over the
+   large photo, its caption to the right; the previous and next steps wait as
+   small photos at its top-left and bottom-right corners, and a big counter
+   sits at the bottom left. Where the screen is tall enough the section pins
+   and scrolling moves through the steps. Below 860px the caption drops
+   under the photo. */
+
+/* Pinned: the track grows by --pin-dist and the stage sticks for that long,
+   filling the screen below the 60px navbar. */
+.galleryTrack {
+    position: relative;
 }
 
-.scaleHead .h2 {
-    margin: 0;
+@media (min-height: 600px) {
+    [data-pinned].galleryTrack {
+        height: calc(100vh + var(--pin-dist, 0px));
+    }
+
+    [data-pinned] .galleryPin {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+        padding-block: calc(60px + 1.5rem) 1.5rem;
+    }
+
+    [data-pinned] .gallery {
+        width: 100%;
+    }
 }
 
-.scaleChips {
+.gallery {
+    position: relative;
+}
+
+/* The column holding the heading and the large photo. Everything around the
+   photo is placed from its width (--w), so the set scales together; the
+   width also shrinks on short screens so the pinned stage always fits.
+   --s: small photo size as a share of the large one. */
+.galleryCol {
+    --w: clamp(240px, min(27vw, calc((100svh - 22rem) * 0.75)), 400px);
+    --s: 0.24;
+    --gap: 16px;
+    --ease: cubic-bezier(0.65, 0, 0.35, 1);
+    width: var(--w);
+    margin-left: max(calc(var(--w) * var(--s) + 2.5rem), 34%);
+}
+
+/* Two short lines in the same size and regular weight, the second in grey,
+   like an editorial title. */
+.galleryHeading {
+    width: max-content;
+    max-width: min(40rem, 60vw);
+    margin: 0 0 2rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(2.3rem, 4.2vw, 3.9rem);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    color: var(--tm-ink);
+}
+
+.galleryHeading span {
+    display: block;
+    color: rgba(11, 31, 51, 0.38);
+}
+
+.galleryStage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+}
+
+/* Every photo is a large-photo-sized box moved and scaled from its top-left
+   corner; switching roles animates only transform and opacity. */
+.galleryPhoto {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #DFEAF8;
+    cursor: pointer;
+    transform-origin: 0 0;
+    transition:
+        transform 0.9s var(--ease),
+        opacity 0.6s ease,
+        border-radius 0.9s var(--ease),
+        filter 0.3s ease;
+}
+
+.galleryPhoto img {
+    object-fit: cover;
+}
+
+.galleryPhoto:focus-visible {
+    outline: 3px solid var(--tm-brand);
+    outline-offset: 4px;
+}
+
+.galleryPhoto[data-role='main'] {
+    z-index: 2;
+    transform: none;
+}
+
+/* Small photos: a larger radius, so after scaling it reads like ~8px. */
+.galleryPhoto[data-role='prev'],
+.galleryPhoto[data-role='next'],
+.galleryPhoto[data-role='incoming'],
+.galleryPhoto[data-role='outgoing'] {
+    z-index: 1;
+    border-radius: 34px;
+}
+
+.galleryPhoto[data-role='prev'] {
+    transform: translate(calc(-100% * var(--s) - var(--gap)), 0) scale(var(--s));
+}
+
+/* Bottom-aligned with the large photo, just to its right. */
+.galleryPhoto[data-role='next'] {
+    transform: translate(calc(100% + var(--gap)), calc((1 - var(--s)) * 100%)) scale(var(--s));
+}
+
+.galleryPhoto[data-role='prev']:hover,
+.galleryPhoto[data-role='next']:hover {
+    filter: brightness(1.08);
+}
+
+/* Waiting off to the sides, so they slide in and out rather than appear. */
+.galleryPhoto[data-role='incoming'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(100% + var(--gap) + 3rem), calc((1 - var(--s) * 0.6) * 100%)) scale(calc(var(--s) * 0.6));
+}
+
+.galleryPhoto[data-role='outgoing'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(-100% * var(--s) * 0.6 - var(--gap) - 3rem), 0) scale(calc(var(--s) * 0.6));
+}
+
+.galleryCaptions {
+    position: absolute;
+    top: 0;
+    left: calc(100% + var(--gap) * 1.75);
+    width: 16rem;
+    display: grid;
+}
+
+/* All captions share one cell; the one on show fades up once the photos
+   have mostly moved, the others leave straight away. */
+.galleryCaption {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.galleryCaption[data-on] {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease 0.35s, transform 0.6s var(--ease) 0.35s;
+}
+
+.galleryCaption h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+}
+
+.galleryCaption p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(11, 31, 51, 0.5);
+}
+
+.galleryCaption strong {
+    font-weight: 500;
+    color: var(--tm-ink);
+}
+
+.galleryChips {
+    grid-row: 2;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0;
+    gap: 0.4rem;
+    margin: 1.5rem 0 0;
     padding: 0;
     list-style: none;
 }
 
-.scaleChips li {
-    padding: 0.45rem 0.9rem;
+.galleryChips li {
+    padding: 0.35rem 0.75rem;
     border-radius: 9999px;
     border: 1px solid #CFE0F3;
     background: var(--tm-surface);
     color: var(--tm-brand);
-    font-size: 0.82rem;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
-.scaleRow {
-    display: flex;
-    gap: 0.75rem;
-    height: clamp(400px, 38vw, 520px);
-}
-
-.scalePanel {
-    position: relative;
-    flex: 1 1 0;
-    min-width: 0;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #DFEAF8 url('/building%20bg.webp') center bottom / cover no-repeat;
-    transition: flex-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scalePanelOpen {
-    flex-grow: 3.4;
-}
-
-/* Wash behind the copy so it reads over the skyline. */
-.scalePanel::after {
-    content: '';
+/* Big serif counter at the bottom left; the units digit rolls. */
+.galleryCount {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(240, 248, 255, 0.96) 0%, rgba(240, 248, 255, 0.6) 34%, rgba(240, 248, 255, 0) 60%);
-    pointer-events: none;
-}
-
-.scaleTab {
-    position: static;
-    padding: 0;
-    border: 0;
-    background: none;
-    font: inherit;
-    color: var(--tm-ink);
-    text-align: left;
-    cursor: pointer;
-}
-
-.scaleTab::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    border-radius: inherit;
-}
-
-.scalePanelOpen .scaleTab {
-    cursor: default;
-}
-
-.scaleTab:focus-visible::after {
-    outline: 2px solid var(--tm-brand);
-    outline-offset: -2px;
-    border-radius: 20px;
-}
-
-.scaleNum {
-    position: absolute;
-    z-index: 2;
-    left: 1.4rem;
-    top: 1.25rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--tm-brand);
-}
-
-.scaleTitle {
-    position: absolute;
-    z-index: 2;
-    left: 1.4rem;
-    bottom: 1.4rem;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    transition: opacity 0.3s ease;
-}
-
-.scalePanelOpen .scaleTitle {
-    opacity: 0;
-}
-
-.scaleBody {
-    position: absolute;
-    z-index: 2;
-    left: 1.4rem;
-    top: 3.25rem;
-    width: min(21rem, calc(100% - 2.8rem));
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(12px);
-    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.3s;
-}
-
-.scalePanelOpen .scaleBody {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    transition-delay: 0.22s;
-}
-
-.scaleBody h3 {
-    margin: 0;
-    font-size: clamp(1.35rem, 2.2vw, 2.1rem);
-    line-height: 1.12;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--tm-brand);
-    text-wrap: balance;
-}
-
-.scaleBody p {
-    margin: 0.8rem 0 0;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--tm-body);
-}
-
-.scaleImg {
-    position: absolute;
-    right: 0;
+    left: 0;
     bottom: 0;
-    width: auto;
-    height: 64%;
-    max-width: none;
-    /* Shown only in the open panel: cropped to a closed strip, a person
-       reads as a stray slice of a face. */
-    opacity: 0;
-    transform: translateX(8%);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    display: flex;
+    align-items: baseline;
+    margin: 0;
+    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 1;
+    color: var(--tm-ink);
+    font-variant-numeric: tabular-nums;
 }
 
-.scalePanelOpen .scaleImg {
-    opacity: 1;
-    transform: none;
+.galleryRoll {
+    display: inline-block;
+    height: 1em;
+    overflow: hidden;
 }
 
+.galleryRoll > span {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.galleryRoll > span > span {
+    height: 1em;
+}
+
+.galleryCount small {
+    margin-left: 0.75rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(11, 31, 51, 0.4);
+}
+
+/* Stacked: the heading spans the width, the photo is centred under it, the
+   caption drops under the photo and the counter sits under the caption.
+   The photo shrinks on short phones so the pinned stage still fits. */
 @media (max-width: 860px) {
-    .scaleRow {
-        flex-direction: column;
-        height: auto;
+    .gallery {
+        padding-bottom: 12.5rem;
     }
 
-    .scalePanel {
-        flex: none;
-        height: 76px;
-        transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    .galleryCol {
+        --w: clamp(180px, min(56vw, calc((100svh - 25rem) * 0.75)), 340px);
+        --s: 0.26;
+        --gap: 10px;
+        width: auto;
+        margin: 0;
     }
 
-    .scalePanelOpen {
-        height: 470px;
+    .galleryHeading {
+        width: auto;
+        max-width: none;
+        margin-bottom: 1.25rem;
+        font-size: clamp(2.2rem, 10vw, 2.75rem);
     }
 
-    .scaleTitle {
-        writing-mode: horizontal-tb;
-        transform: none;
-        left: 3.9rem;
-        top: 1.5rem;
-        bottom: auto;
-        font-size: 1.02rem;
+    .galleryStage {
+        width: var(--w);
+        margin-inline: auto;
     }
 
-    .scaleNum {
-        top: 1.7rem;
+    .galleryCaptions {
+        top: calc(100% + 1.25rem);
+        left: 50%;
+        width: min(calc(100vw - 2rem), 30rem);
+        transform: translateX(-50%);
     }
 
-    .scaleBody {
-        top: 3.6rem;
+    .galleryChips {
+        display: none;
     }
 
-    .scaleImg {
-        height: 40%;
+    .galleryCount {
+        font-size: 3rem;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .scalePanel,
-    .scaleBody,
-    .scaleImg,
-    .scaleTitle {
+    .galleryPhoto,
+    .galleryCaption,
+    .galleryCaption[data-on],
+    .galleryRoll > span {
         transition: none;
     }
 }
