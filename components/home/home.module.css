@@ -1217,7 +1217,7 @@ p.whyStatement {
    also sets the custom properties: --why-dist (scroll the four cards take),
    --why-grow (0 to 1 as the stage arrives), and per item --why-y and
    --why-show. */
-@media (min-height: 520px) and (prefers-reduced-motion: no-preference) {
+@media (min-height: 520px) {
     [data-pinned] > .whyTrack {
         height: calc(100vh + var(--why-dist, 0px));
     }
@@ -1251,6 +1251,31 @@ p.whyStatement {
 
     [data-pinned] .whyPhoto {
         opacity: var(--why-show, 1);
+    }
+
+    /* Short phones (iPhone SE): a compact card, so the tallest one still
+       fits between the navbar and the bottom of the screen. */
+    @media (max-height: 600px) {
+        [data-pinned] .whyCard {
+            padding: 1.1rem 1.25rem 1.25rem;
+        }
+
+        [data-pinned] .whyTitle {
+            margin-top: 0.6rem;
+            font-size: 1.4rem;
+        }
+
+        [data-pinned] .whyVisual {
+            min-height: 0;
+            margin: 0.9rem 0 0.8rem;
+            padding: 0.9rem;
+        }
+    }
+
+    /* Calm version (reduced motion): cards and captions fade in place. */
+    [data-calm] .whyCard,
+    [data-calm] .whyCaption {
+        opacity: var(--why-o, 1);
     }
 
     /* Centred in the stage below the 60px navbar, then moved by --why-y. */

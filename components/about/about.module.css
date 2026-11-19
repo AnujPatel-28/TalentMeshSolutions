@@ -678,7 +678,7 @@
 /* Pinned sequence. Must match PIN_QUERY in Principles.tsx, which also sets
    --pin-dist, --pin-fill, --pin-grow and --pin-at, plus --pin-show on each
    photo, --pin-o and --pin-y on each text and --pin-bar on each bar. */
-@media (min-height: 520px) and (prefers-reduced-motion: no-preference) {
+@media (min-height: 520px) {
   [data-pinned] .pinTrack {
     height: calc(100vh + var(--pin-dist, 0px));
   }
@@ -700,6 +700,11 @@
     opacity: var(--pin-show, 1);
     transform: scale(calc(1.06 - 0.06 * var(--pin-show, 1)));
     will-change: opacity, transform;
+  }
+
+  /* Calm version (reduced motion): photos cross-fade without the zoom. */
+  [data-calm] .pinPhoto {
+    transform: none;
   }
 
   [data-pinned] .pinCounter {

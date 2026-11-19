@@ -21,7 +21,11 @@ const POINT_PHOTOS = {
 // (about 415px) needs under the 64px navbar. It must stay below the ~600px
 // a phone browser leaves with its toolbars showing (Brave keeps one at the
 // bottom too), but still rules out a phone held sideways.
-const PIN_QUERY = '(min-height: 520px) and (prefers-reduced-motion: no-preference)';
+const PIN_QUERY = '(min-height: 520px)';
+// With reduced motion (an accessibility setting, but also switched on by many
+// phones' battery savers) the sequence still runs, as a calm version: nothing
+// slides, zooms or reframes; each card and photo cross-fades in place.
+const CALM_QUERY = '(prefers-reduced-motion: reduce)';
 
 const LABEL = 'What Sets Us Apart';
 const HEADING_LINES = ['More Than Recruitment.', 'A Hiring Partner.'];
@@ -81,15 +85,19 @@ export default function WhyUs() {
         const stage = track.firstElementChild as HTMLElement;
         const items = Array.from(track.querySelectorAll('article'));
         const mq = window.matchMedia(PIN_QUERY);
+        const calmMq = window.matchMedia(CALM_QUERY);
+        let calm = false;
         let vh = 0;
         let seg = 0; // px of scroll each card gets
 
         const clear = () => {
             delete pin.dataset.pinned;
+            delete pin.dataset.calm;
             ['--why-dist', '--why-fill', '--why-grow'].forEach((name) => pin.style.removeProperty(name));
             items.forEach((item) => {
                 item.style.removeProperty('--why-y');
                 item.style.removeProperty('--why-show');
+                item.style.removeProperty('--why-o');
             });
         };
 
@@ -101,7 +109,7 @@ export default function WhyUs() {
             // The frame opens as the stage arrives and closes again as it
             // leaves, once the last card's stretch is over.
             const leaving = clamp01((v - seg * items.length) / vh);
-            const grow = Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
+            const grow = calm ? 1 : Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
             pin.style.setProperty('--why-grow', grow.toFixed(3));
 
             // Each card takes the first 60% of its stretch to arrive and
@@ -113,7 +121,13 @@ export default function WhyUs() {
             const q = clamp01((u - k) / 0.6);
             const at = k - 1 + q * q * (3 - 2 * q);
             items.forEach((item, i) => {
-                item.style.setProperty('--why-y', `${((i - at) * vh).toFixed(1)}px`);
+                if (calm) {
+                    // In place: the first card is already up as the stage pins.
+                    item.style.setProperty('--why-y', '0px');
+                    item.style.setProperty('--why-o', clamp01(1 - Math.abs(i - Math.max(0, at)) * 2).toFixed(3));
+                } else {
+                    item.style.setProperty('--why-y', `${((i - at) * vh).toFixed(1)}px`);
+                }
                 // The first photo is the stage's ground; the rest fade in over it.
                 item.style.setProperty('--why-show', i ? clamp01(at - i + 1).toFixed(3) : '1');
             });
@@ -125,6 +139,9 @@ export default function WhyUs() {
         const layout = () => {
             if (mq.matches) {
                 pin.dataset.pinned = '';
+                calm = calmMq.matches;
+                if (calm) pin.dataset.calm = '';
+                else delete pin.dataset.calm;
                 // The stage's own height, not the window's: on a phone the
                 // window changes height as the address bar slides away, and
                 // the cards must not jump when it does.
@@ -143,10 +160,12 @@ export default function WhyUs() {
 
         layout();
         mq.addEventListener('change', layout);
+        calmMq.addEventListener('change', layout);
         window.addEventListener('resize', layout);
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => {
             mq.removeEventListener('change', layout);
+            calmMq.removeEventListener('change', layout);
             window.removeEventListener('resize', layout);
             window.removeEventListener('scroll', onScroll);
             scrub.stop();

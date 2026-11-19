@@ -8,7 +8,11 @@ import styles from './about.module.css';
 
 // Pinned-sequence rules shared with the home page's "What Sets Us Apart"
 // (components/home/WhyUs.tsx). Must match the media query in about.module.css.
-const PIN_QUERY = '(min-height: 520px) and (prefers-reduced-motion: no-preference)';
+const PIN_QUERY = '(min-height: 520px)';
+// With reduced motion (an accessibility setting, but also switched on by many
+// phones' battery savers) the sequence still runs, as a calm version: nothing
+// slides, zooms, rolls or reframes; text and photos cross-fade in place.
+const CALM_QUERY = '(prefers-reduced-motion: reduce)';
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const smooth = (t: number) => t * t * (3 - 2 * t);
@@ -46,12 +50,15 @@ export default function Principles() {
     const texts = Array.from(stage.querySelectorAll<HTMLElement>(`.${styles.pinText}`));
     const bars = Array.from(stage.querySelectorAll<HTMLElement>(`.${styles.pinBars} i`));
     const mq = window.matchMedia(PIN_QUERY);
+    const calmMq = window.matchMedia(CALM_QUERY);
+    let calm = false;
     let vh = 0;
     let seg = 0; // px of scroll each principle gets
 
     const all = [band, stage, ...photos, ...texts, ...bars];
     const clear = () => {
       delete band.dataset.pinned;
+      delete band.dataset.calm;
       all.forEach((el) =>
         ['--pin-dist', '--pin-fill', '--pin-grow', '--pin-at', '--pin-show', '--pin-o', '--pin-y', '--pin-bar'].forEach(
           (name) => el.style.removeProperty(name)
@@ -66,7 +73,7 @@ export default function Principles() {
       // The heading has fully lit by the time the stage is three-quarters up.
       band.style.setProperty('--pin-fill', clamp01((v + vh * 1.2) / (vh * 0.45)).toFixed(3));
       const leaving = clamp01((v - seg * COUNT) / vh);
-      const grow = Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
+      const grow = calm ? 1 : Math.min(clamp01(1 + v / vh), clamp01(1 - leaving * 1.4));
       band.style.setProperty('--pin-grow', grow.toFixed(3));
 
       // The first principle is already in place as the stage arrives. Each
@@ -75,13 +82,14 @@ export default function Principles() {
       const k = Math.min(COUNT - 1, Math.floor(u));
       const at = Math.min(COUNT - 1, k + smooth(clamp01((u - k - 0.35) / 0.65)));
 
-      stage.style.setProperty('--pin-at', at.toFixed(4));
+      // Calm: the counter changes digit with the hand-over instead of rolling.
+      stage.style.setProperty('--pin-at', (calm ? Math.round(at) : at).toFixed(4));
       photos.forEach((el, i) => el.style.setProperty('--pin-show', i ? clamp01(at - i + 1).toFixed(3) : '1'));
       texts.forEach((el, i) => {
         const d = i - at;
         // Out, then in: the two never overlap, so the hand-over stays clean.
         el.style.setProperty('--pin-o', clamp01(1 - Math.abs(d) * 2.4).toFixed(3));
-        el.style.setProperty('--pin-y', `${(d * 32).toFixed(1)}px`);
+        el.style.setProperty('--pin-y', calm ? '0px' : `${(d * 32).toFixed(1)}px`);
       });
       bars.forEach((el, i) => el.style.setProperty('--pin-bar', (i ? clamp01(at - i + 1) : 1).toFixed(3)));
     };
@@ -92,6 +100,9 @@ export default function Principles() {
     const layout = () => {
       if (mq.matches) {
         band.dataset.pinned = '';
+        calm = calmMq.matches;
+        if (calm) band.dataset.calm = '';
+        else delete band.dataset.calm;
         // The stage's own height, not the window's, so the address bar
         // sliding away on a phone does not make the copy jump.
         vh = stage.offsetHeight;
@@ -109,10 +120,12 @@ export default function Principles() {
 
     layout();
     mq.addEventListener('change', layout);
+    calmMq.addEventListener('change', layout);
     window.addEventListener('resize', layout);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       mq.removeEventListener('change', layout);
+      calmMq.removeEventListener('change', layout);
       window.removeEventListener('resize', layout);
       window.removeEventListener('scroll', onScroll);
       scrub.stop();
