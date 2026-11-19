@@ -1044,6 +1044,50 @@
     flex-grow: calc(1 + 2.4 * var(--w, 0));
     transition: none;
   }
+
+  /* The copy follows the same --w as the width, instead of switching at the
+     halfway point. The vertical title fades as the panel starts to open;
+     the heading, text and tags fade and rise in a short stagger once it is
+     mostly open, and leave in reverse as it closes. Halfway between two
+     steps neither panel shows copy, so the two never overlap. */
+  [data-pinned] .door .doorPhoto {
+    transform: scale(calc(1 + 0.04 * var(--w, 0)));
+    transition: none;
+  }
+
+  [data-pinned] .door .doorTitle {
+    opacity: clamp(0, 1 - var(--w, 0) / 0.35, 1);
+    transition: none;
+  }
+
+  [data-pinned] .door .doorBody {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+    /* A fixed measure, so lines never rewrap while the panel widens; the
+       panel's edge reveals the copy instead. */
+    width: 26rem;
+    right: auto;
+  }
+
+  [data-pinned] .doorBody > * {
+    --t: clamp(0, (var(--w, 0) - var(--from)) / 0.3, 1);
+    opacity: var(--t);
+    transform: translateY(calc((1 - var(--t)) * 18px));
+  }
+
+  [data-pinned] .doorBody > :nth-child(1) {
+    --from: 0.55;
+  }
+
+  [data-pinned] .doorBody > :nth-child(2) {
+    --from: 0.62;
+  }
+
+  [data-pinned] .doorBody > :nth-child(3) {
+    --from: 0.69;
+  }
 }
 
 /* ----------------------------------------------------------- industries -- */
@@ -1333,6 +1377,24 @@
     height: auto;
     flex: var(--w, 0) 0 4.5rem;
   }
+
+  /* Stacked, the panel grows taller, not wider: the copy can use the full
+     width, and the number and title stay put on the bar instead of moving
+     when the panel opens. */
+  [data-pinned] .door .doorBody {
+    width: auto;
+    right: 1.25rem;
+  }
+
+  [data-pinned] .door .doorNum,
+  [data-pinned] .door[data-open] .doorNum {
+    top: 0.85rem;
+    transform: none;
+  }
+
+  [data-pinned] .doorTitle {
+    top: 2.25rem;
+  }
 }
 
 /* Pinned on a phone the stage is one screen, so give the open panel the room:
@@ -1351,12 +1413,15 @@
     flex-basis: 3.75rem;
   }
 
-  [data-pinned] .doorNum {
+  [data-pinned] .door .doorNum,
+  [data-pinned] .door[data-open] .doorNum {
+    top: 0.75rem;
     left: 1.1rem;
     font-size: 2rem;
   }
 
   [data-pinned] .doorTitle {
+    top: 1.875rem;
     left: 4.25rem;
     font-size: 1.15rem;
   }
@@ -1493,7 +1558,12 @@
     transition: none;
   }
 
-  .door[data-open] .doorPhoto {
+  .door[data-open] .doorPhoto,
+  [data-pinned] .door .doorPhoto {
+    transform: none;
+  }
+
+  [data-pinned] .doorBody > * {
     transform: none;
   }
 
