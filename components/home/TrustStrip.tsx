@@ -31,7 +31,7 @@ const roleOf = (i: number, at: number): Role => {
 };
 
 /**
- * "Recruitment that scales": five steps as a photo gallery. One
+ * "Hiring built for you": five steps as a photo gallery. One
  * photo is large with its caption beside it; the previous and next steps wait
  * as small photos at its corners.
  *

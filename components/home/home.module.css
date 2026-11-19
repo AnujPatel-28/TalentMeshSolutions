@@ -2113,7 +2113,7 @@ h2.industriesTitle {
     }
 }
 
-/* ---------------------------------------------------- Recruitment that scales -- */
+/* ------------------------------------------------------- Hiring built for you -- */
 
 /* Five steps as a photo gallery (TrustStrip.tsx): the heading sits over the
    large photo, its caption to the right; the previous and next steps wait as
@@ -2165,27 +2165,23 @@ h2.industriesTitle {
     margin-left: max(calc(var(--w) * var(--s) + 2.5rem), 34%);
 }
 
+/* Two short lines in the same size and regular weight, the second in grey,
+   like an editorial title. */
 .galleryHeading {
     width: max-content;
     max-width: min(40rem, 60vw);
     margin: 0 0 2rem;
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: clamp(2rem, 3.6vw, 3.25rem);
-    line-height: 1.04;
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-size: clamp(2.3rem, 4.2vw, 3.9rem);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.04em;
     color: var(--tm-ink);
 }
 
-/* Second line in the brand blue, set in the serif italic. */
 .galleryHeading span {
     display: block;
-    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
-    font-size: 1.12em;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: var(--tm-brand);
+    color: rgba(11, 31, 51, 0.38);
 }
 
 .galleryStage {
@@ -2385,7 +2381,7 @@ h2.industriesTitle {
         width: auto;
         max-width: none;
         margin-bottom: 1.25rem;
-        font-size: clamp(1.6rem, 7.4vw, 2.25rem);
+        font-size: clamp(2.2rem, 10vw, 2.75rem);
     }
 
     .galleryStage {
