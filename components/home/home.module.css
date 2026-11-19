@@ -256,13 +256,16 @@
     /* Poster frame for the video above it; see HomeHero.tsx. */
     background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
-    /* One size drives the hero's type: the headline is 84px on a 1440px
-       screen and scales with the width (5.833vw), capped by the height on
-       short laptops (10.5svh) so the copy keeps its proportions and always
+    /* One size drives the hero's type, up to 84px. It follows the video's
+       on-screen width (the video covers the hero, so it is the larger of
+       100vw and 16/9 of the height): the headline is 10.05x its size wide
+       and the towers' inner edges sit at 19.8% and 77.5% of the frame, so
+       4.9% keeps about 2.5% of clear sky beside the right tower. It is also
+       capped by the height on short laptops (10.5svh) so the copy always
        fits. Everything else steps down from it by the golden ratio
        (phi = 1.618): description h/phi^3, gaps h/phi^2 and h/phi. Same
        maths on Windows and macOS, whatever the display scaling. */
-    --hero-h: clamp(2.75rem, min(5.833vw, 10.5svh), 5.25rem);
+    --hero-h: clamp(2.75rem, min(4.9 * max(1vw, 1.778svh), 10.5svh), 5.25rem);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
@@ -275,6 +278,17 @@
     object-fit: cover;
     pointer-events: none;
     z-index: 0;
+    opacity: 1;
+}
+
+/* Night loop over the day loop: hidden until HomeHero.tsx sets data-on,
+   then fades in over 14 seconds, so the city slowly turns to night. */
+.heroVideoNight {
+    opacity: 0;
+    transition: opacity 14s ease-in-out;
+}
+
+.heroVideoNight[data-on] {
     opacity: 1;
 }
 
@@ -323,9 +337,9 @@
     display: none;
 }
 
-/* "Right Talent": same font, set apart by a softer white. */
+/* "Right Talent": same font and colour as the rest of the headline. */
 .heroWord.accent {
-    color: rgba(255, 255, 255, 0.62);
+    color: #ffffff;
 }
 
 /* h/phi^3 (about 20px at 84px), never under 16px; phi line height. */

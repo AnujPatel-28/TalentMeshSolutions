@@ -18,10 +18,14 @@ const HEADLINE_LINES = HERO.headline.reduce<(typeof HERO.headline)[]>(
     [[]]
 );
 
+// Day shows on its own this long before night starts to fade in.
+const NIGHT_DELAY_MS = 4000;
+
 export default function HomeHero() {
     const reduceMotion = useReducedMotion();
     const heroRef = useRef<HTMLElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const nightRef = useRef<HTMLVideoElement>(null);
     const innerRef = useRef<HTMLDivElement>(null);
 
     // Scroll exit: as the hero scrolls away the video scales up slightly and
@@ -32,15 +36,16 @@ export default function HomeHero() {
         if (reduceMotion) return;
         const hero = heroRef.current;
         const video = videoRef.current;
+        const night = nightRef.current;
         const inner = innerRef.current;
-        if (!hero || !video || !inner) return;
+        if (!hero || !video || !night || !inner) return;
 
         // Smoothed, so a hard flick of the wheel glides rather than jumps.
         const scrub = createScrub(
             () => Math.min(hero.offsetHeight, Math.max(0, window.scrollY)),
             (y) => {
                 const p = y / hero.offsetHeight;
-                video.style.transform = `scale(${1 + 0.08 * p})`;
+                video.style.transform = night.style.transform = `scale(${1 + 0.08 * p})`;
                 inner.style.transform = `translate3d(0, ${-90 * p}px, 0)`;
                 inner.style.opacity = String(Math.max(0, 1 - 1.5 * p));
             }
@@ -51,7 +56,7 @@ export default function HomeHero() {
         return () => {
             window.removeEventListener('scroll', scrub.kick);
             scrub.stop();
-            video.style.transform = '';
+            video.style.transform = night.style.transform = '';
             inner.style.transform = '';
             inner.style.opacity = '';
         };
@@ -79,17 +84,43 @@ export default function HomeHero() {
     // is kicked off by hand once the rest of the page has loaded, keeping the
     // loop off the critical path. Reduced-motion visitors never start it and
     // keep the poster frame.
+    //
+    // Day to night: the same shot filmed at night plays in step on top of the
+    // day loop, invisible, and fades in slowly once the day loop is running
+    // (see `.heroVideoNight`). It loads only after the day loop has started,
+    // so it never competes with it, and is kept within a frame of it.
     useEffect(() => {
         if (reduceMotion) return;
         const video = videoRef.current;
-        if (!video) return;
+        const night = nightRef.current;
+        if (!video || !night) return;
+        let fadeTimer = 0;
+
+        const startNight = () => {
+            night.load();
+            night.currentTime = video.currentTime;
+            night.play().catch(() => {});
+            window.clearTimeout(fadeTimer);
+            fadeTimer = window.setTimeout(() => {
+                night.dataset.on = '';
+            }, NIGHT_DELAY_MS);
+        };
+        const keepInStep = () => {
+            if (night.readyState < 2) return;
+            if (Math.abs(night.currentTime - video.currentTime) > 0.08) {
+                night.currentTime = video.currentTime;
+            }
+        };
 
         const start = () => {
+            delete night.dataset.on;
             video.load();
             // Rejects when the tab is backgrounded or autoplay is blocked;
             // the poster stands in either way.
             video.play().catch(() => {});
+            video.addEventListener('playing', startNight, { once: true });
         };
+        video.addEventListener('timeupdate', keepInStep);
 
         // The browser picks a <source> once, at load(). Pick again whenever the
         // viewport crosses the phone breakpoint (rotation, resize), or a page
@@ -105,6 +136,9 @@ export default function HomeHero() {
         return () => {
             phone.removeEventListener('change', start);
             window.removeEventListener('load', start);
+            video.removeEventListener('playing', startNight);
+            video.removeEventListener('timeupdate', keepInStep);
+            window.clearTimeout(fadeTimer);
         };
     }, [reduceMotion]);
 
@@ -132,6 +166,22 @@ export default function HomeHero() {
                 <source media="(max-width: 640px)" src="/images/hero-day-mobile.mp4" type="video/mp4" />
                 <source src="/images/hero-day.webm" type="video/webm" />
                 <source src="/images/hero-day.mp4" type="video/mp4" />
+            </video>
+            {/* The same shot at night (restored from e54ba63), same cuts and
+                length: 512KB / 297KB webm desktop, 606KB / 340KB webm phone. */}
+            <video
+                ref={nightRef}
+                className={`${styles.heroVideoBg} ${styles.heroVideoNight}`}
+                preload="none"
+                loop
+                muted
+                playsInline
+                aria-hidden="true"
+            >
+                <source media="(max-width: 640px)" src="/images/hero-night-mobile.webm" type="video/webm" />
+                <source media="(max-width: 640px)" src="/images/hero-night-mobile.mp4" type="video/mp4" />
+                <source src="/images/hero-night.webm" type="video/webm" />
+                <source src="/images/hero-night.mp4" type="video/mp4" />
             </video>
 
             <div ref={innerRef} className={styles.heroInner}>
