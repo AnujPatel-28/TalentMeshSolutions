@@ -43,32 +43,38 @@ const MARQUEE_ROWS = [INDUSTRY_NAMES.slice(0, half), INDUSTRY_NAMES.slice(half)]
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// The card pictures rest in their finished state in CSS; these only play the
-// way in, once, as each card comes into view.
-const ringVariants = {
+// These play the card pictures' way in, once, as each card comes into view.
+// The variants (and so the `hidden` styles in the server HTML) are the same
+// for everyone; only the timing differs, and timing is not rendered, so the
+// page hydrates cleanly whatever the reduced-motion setting. With reduced
+// motion each picture jumps straight to its finished state.
+const INSTANT = { duration: 0 };
+
+const ringVariants = (instant: boolean) => ({
     hidden: { strokeDashoffset: 92.5 },
-    visible: { strokeDashoffset: 0, transition: { duration: 1.2, delay: 0.2, ease: EASE } },
-};
+    visible: { strokeDashoffset: 0, transition: instant ? INSTANT : { duration: 1.2, delay: 0.2, ease: EASE } },
+});
 
-const lineVariants = {
+const lineVariants = (instant: boolean) => ({
     hidden: { scaleX: 0 },
-    visible: { scaleX: 1, transition: { duration: 1.2, delay: 0.2, ease: EASE } },
-};
+    visible: { scaleX: 1, transition: instant ? INSTANT : { duration: 1.2, delay: 0.2, ease: EASE } },
+});
 
-const chipVariants = {
+const chipVariants = (instant: boolean) => ({
     hidden: { backgroundColor: '#FFFFFF', color: '#5A6B7C', borderColor: '#D9E2EC' },
     visible: (i: number) => ({
         backgroundColor: '#E0F0FF',
         color: '#0056B3',
         borderColor: '#9CC7F0',
-        transition: { duration: 0.3, delay: 0.2 + i * 0.18 },
+        transition: instant ? INSTANT : { duration: 0.3, delay: 0.2 + i * 0.18 },
     }),
-};
+});
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 export default function WhyUs() {
     const reduceMotion = useReducedMotion();
+    const instant = Boolean(reduceMotion);
     const pinRef = useRef<HTMLElement>(null);
 
     // Pinned photo sequence. Where PIN_QUERY matches, the stage of photos
@@ -184,7 +190,7 @@ export default function WhyUs() {
                             cx="20"
                             cy="20"
                             r="16"
-                            variants={reduceMotion ? undefined : ringVariants}
+                            variants={ringVariants(instant)}
                         />
                     </svg>
                     <span className={styles.whyRingValue}>
@@ -212,7 +218,7 @@ export default function WhyUs() {
                         key={label}
                         className={styles.whyChip}
                         custom={i}
-                        variants={reduceMotion ? undefined : chipVariants}
+                        variants={chipVariants(instant)}
                     >
                         {label}
                     </motion.span>
@@ -224,7 +230,7 @@ export default function WhyUs() {
                 <span className={styles.whyStepsTrack} />
                 <motion.span
                     className={styles.whyStepsLine}
-                    variants={reduceMotion ? undefined : lineVariants}
+                    variants={lineVariants(instant)}
                 />
                 {SUPPORT_STEPS.map((label) => (
                     <span key={label} className={styles.whyStep}>
