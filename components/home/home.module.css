@@ -2115,9 +2115,11 @@ h2.industriesTitle {
 
 /* ------------------------------------------- Recruitment engineered for scale -- */
 
-/* Three photo panels (TrustStrip.tsx). The open one takes most of the row and
-   shows its headline and copy; the other two fold to a strip with a vertical
-   title. Below 860px they stack and open downwards instead. */
+/* Five steps as a photo gallery (TrustStrip.tsx): the step on show is a
+   large photo with its caption to the right; the previous and next steps wait
+   as small photos at its top-left and bottom-right corners. Moving on, the
+   next photo grows into the middle while the current one shrinks into the
+   corner. Below 860px the caption drops under the photo. */
 .scaleHead {
     display: flex;
     flex-wrap: wrap;
@@ -2150,191 +2152,204 @@ h2.industriesTitle {
     font-weight: 600;
 }
 
-.scaleRow {
-    display: flex;
-    gap: 0.75rem;
-    height: clamp(400px, 38vw, 520px);
-}
-
-.scalePanel {
+.gallery {
     position: relative;
-    flex: 1 1 0;
-    min-width: 0;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #DFEAF8 url('/building%20bg.webp') center bottom / cover no-repeat;
-    transition: flex-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    display: grid;
+    justify-items: center;
+    padding-block: 1rem;
 }
 
-.scalePanelOpen {
-    flex-grow: 3.4;
+/* The stage is the large photo's box; the small photos and the caption are
+   placed around it from its own size, so the whole set scales together.
+   --s: small photo size as a share of the large one. */
+.galleryStage {
+    --w: clamp(240px, 26vw, 360px);
+    --s: 0.3;
+    --gap: 16px;
+    --ease: cubic-bezier(0.65, 0, 0.35, 1);
+    position: relative;
+    width: var(--w);
+    aspect-ratio: 4 / 5;
 }
 
-/* Wash behind the copy so it reads over the skyline. */
-.scalePanel::after {
-    content: '';
+/* Every photo is a large-photo-sized box moved and scaled from its top-left
+   corner; switching roles animates only transform and opacity. */
+.galleryPhoto {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(240, 248, 255, 0.96) 0%, rgba(240, 248, 255, 0.6) 34%, rgba(240, 248, 255, 0) 60%);
-    pointer-events: none;
-}
-
-.scaleTab {
-    position: static;
     padding: 0;
     border: 0;
-    background: none;
-    font: inherit;
-    color: var(--tm-ink);
-    text-align: left;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #DFEAF8;
     cursor: pointer;
+    transform-origin: 0 0;
+    transition:
+        transform 0.9s var(--ease),
+        opacity 0.6s ease,
+        border-radius 0.9s var(--ease),
+        filter 0.3s ease;
 }
 
-.scaleTab::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    border-radius: inherit;
+.galleryPhoto img {
+    object-fit: cover;
 }
 
-.scalePanelOpen .scaleTab {
-    cursor: default;
+.galleryPhoto:focus-visible {
+    outline: 3px solid var(--tm-brand);
+    outline-offset: 4px;
 }
 
-.scaleTab:focus-visible::after {
-    outline: 2px solid var(--tm-brand);
-    outline-offset: -2px;
-    border-radius: 20px;
-}
-
-.scaleNum {
-    position: absolute;
+.galleryPhoto[data-role='main'] {
     z-index: 2;
-    left: 1.4rem;
-    top: 1.25rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--tm-brand);
+    transform: none;
 }
 
-.scaleTitle {
+/* Small photos: a larger radius, so after scaling it reads like ~10px. */
+.galleryPhoto[data-role='prev'],
+.galleryPhoto[data-role='next'],
+.galleryPhoto[data-role='incoming'],
+.galleryPhoto[data-role='outgoing'] {
+    z-index: 1;
+    border-radius: 34px;
+}
+
+.galleryPhoto[data-role='prev'] {
+    transform: translate(calc(-100% * var(--s) - var(--gap)), 0) scale(var(--s));
+}
+
+/* Bottom-aligned with the large photo, just to its right. */
+.galleryPhoto[data-role='next'] {
+    transform: translate(calc(100% + var(--gap)), calc((1 - var(--s)) * 100%)) scale(var(--s));
+}
+
+.galleryPhoto[data-role='prev']:hover,
+.galleryPhoto[data-role='next']:hover {
+    filter: brightness(1.08);
+}
+
+/* Waiting off to the sides, so they slide in and out rather than appear. */
+.galleryPhoto[data-role='incoming'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(100% + var(--gap) + 3rem), calc((1 - var(--s) * 0.6) * 100%)) scale(calc(var(--s) * 0.6));
+}
+
+.galleryPhoto[data-role='outgoing'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(-100% * var(--s) * 0.6 - var(--gap) - 3rem), 0) scale(calc(var(--s) * 0.6));
+}
+
+.galleryCaptions {
     position: absolute;
-    z-index: 2;
-    left: 1.4rem;
-    bottom: 1.4rem;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 1.15rem;
+    top: 0;
+    left: calc(100% + var(--gap) * 1.5);
+    width: 16rem;
+    display: grid;
+}
+
+/* All captions share one cell; the one on show fades up once the photos
+   have mostly moved, the others leave straight away. */
+.galleryCaption {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.galleryCaption[data-on] {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease 0.35s, transform 0.6s var(--ease) 0.35s;
+}
+
+.galleryCaption h3 {
+    margin: 0;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    white-space: nowrap;
-    transition: opacity 0.3s ease;
+    color: var(--tm-ink);
 }
 
-.scalePanelOpen .scaleTitle {
-    opacity: 0;
+.galleryCaption p {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(11, 31, 51, 0.55);
 }
 
-.scaleBody {
+.galleryCaption strong {
+    font-weight: 500;
+    color: var(--tm-ink);
+}
+
+/* Big serif counter at the bottom left; the units digit rolls. */
+.galleryCount {
     position: absolute;
-    z-index: 2;
-    left: 1.4rem;
-    top: 3.25rem;
-    width: min(21rem, calc(100% - 2.8rem));
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(12px);
-    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.3s;
-}
-
-.scalePanelOpen .scaleBody {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    transition-delay: 0.22s;
-}
-
-.scaleBody h3 {
-    margin: 0;
-    font-size: clamp(1.35rem, 2.2vw, 2.1rem);
-    line-height: 1.12;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--tm-brand);
-    text-wrap: balance;
-}
-
-.scaleBody p {
-    margin: 0.8rem 0 0;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--tm-body);
-}
-
-.scaleImg {
-    position: absolute;
-    right: 0;
+    left: 0;
     bottom: 0;
-    width: auto;
-    height: 64%;
-    max-width: none;
-    /* Shown only in the open panel: cropped to a closed strip, a person
-       reads as a stray slice of a face. */
-    opacity: 0;
-    transform: translateX(8%);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    display: flex;
+    align-items: baseline;
+    margin: 0;
+    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 1;
+    color: var(--tm-ink);
+    font-variant-numeric: tabular-nums;
 }
 
-.scalePanelOpen .scaleImg {
-    opacity: 1;
-    transform: none;
+.galleryRoll {
+    display: inline-block;
+    height: 1em;
+    overflow: hidden;
+}
+
+.galleryRoll > span {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.9s var(--ease, cubic-bezier(0.65, 0, 0.35, 1));
+}
+
+.galleryRoll > span > span {
+    height: 1em;
+}
+
+.galleryCount small {
+    margin-left: 0.5rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(11, 31, 51, 0.4);
 }
 
 @media (max-width: 860px) {
-    .scaleRow {
-        flex-direction: column;
-        height: auto;
+    .gallery {
+        padding-bottom: 12rem;
     }
 
-    .scalePanel {
-        flex: none;
-        height: 76px;
-        transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    .galleryStage {
+        --w: 58vw;
+        --s: 0.26;
+        --gap: 10px;
     }
 
-    .scalePanelOpen {
-        height: 470px;
+    .galleryCaptions {
+        top: calc(100% + 1.5rem);
+        left: calc(-100% * var(--s) - var(--gap));
+        width: calc(100% * (1 + 2 * var(--s)) + 2 * var(--gap));
     }
 
-    .scaleTitle {
-        writing-mode: horizontal-tb;
-        transform: none;
-        left: 3.9rem;
-        top: 1.5rem;
-        bottom: auto;
-        font-size: 1.02rem;
-    }
-
-    .scaleNum {
-        top: 1.7rem;
-    }
-
-    .scaleBody {
-        top: 3.6rem;
-    }
-
-    .scaleImg {
-        height: 40%;
+    .galleryCount {
+        font-size: 3.5rem;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .scalePanel,
-    .scaleBody,
-    .scaleImg,
-    .scaleTitle {
+    .galleryPhoto,
+    .galleryCaption,
+    .galleryCaption[data-on],
+    .galleryRoll > span {
         transition: none;
     }
 }
