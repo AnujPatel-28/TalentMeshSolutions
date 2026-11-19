@@ -2115,61 +2115,78 @@ h2.industriesTitle {
 
 /* ------------------------------------------- Recruitment engineered for scale -- */
 
-/* Five steps as a photo gallery (TrustStrip.tsx): the step on show is a
-   large photo with its caption to the right; the previous and next steps wait
-   as small photos at its top-left and bottom-right corners. Moving on, the
-   next photo grows into the middle while the current one shrinks into the
-   corner. Below 860px the caption drops under the photo. */
-.scaleHead {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-    margin-bottom: 2.5rem;
+/* Five steps as a photo gallery (TrustStrip.tsx): the heading sits over the
+   large photo, its caption to the right; the previous and next steps wait as
+   small photos at its top-left and bottom-right corners, and a big counter
+   sits at the bottom left. Where the screen is tall enough the section pins
+   and scrolling moves through the steps. Below 860px the caption drops
+   under the photo. */
+
+/* Pinned: the track grows by --pin-dist and the stage sticks for that long,
+   filling the screen below the 60px navbar. */
+.galleryTrack {
+    position: relative;
 }
 
-.scaleHead .h2 {
-    margin: 0;
-}
+@media (min-height: 600px) {
+    [data-pinned].galleryTrack {
+        height: calc(100vh + var(--pin-dist, 0px));
+    }
 
-.scaleChips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
+    [data-pinned] .galleryPin {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+        padding-block: calc(60px + 1.5rem) 1.5rem;
+    }
 
-.scaleChips li {
-    padding: 0.45rem 0.9rem;
-    border-radius: 9999px;
-    border: 1px solid #CFE0F3;
-    background: var(--tm-surface);
-    color: var(--tm-brand);
-    font-size: 0.82rem;
-    font-weight: 600;
+    [data-pinned] .gallery {
+        width: 100%;
+    }
 }
 
 .gallery {
     position: relative;
-    display: grid;
-    justify-items: center;
-    padding-block: 1rem;
 }
 
-/* The stage is the large photo's box; the small photos and the caption are
-   placed around it from its own size, so the whole set scales together.
+/* The column holding the heading and the large photo. Everything around the
+   photo is placed from its width (--w), so the set scales together; the
+   width also shrinks on short screens so the pinned stage always fits.
    --s: small photo size as a share of the large one. */
-.galleryStage {
-    --w: clamp(240px, 26vw, 360px);
-    --s: 0.3;
+.galleryCol {
+    --w: clamp(240px, min(27vw, calc((100svh - 22rem) * 0.75)), 400px);
+    --s: 0.24;
     --gap: 16px;
     --ease: cubic-bezier(0.65, 0, 0.35, 1);
-    position: relative;
     width: var(--w);
-    aspect-ratio: 4 / 5;
+    margin-left: max(calc(var(--w) * var(--s) + 2.5rem), 34%);
+}
+
+.galleryHeading {
+    width: max-content;
+    max-width: min(40rem, 60vw);
+    margin: 0 0 2rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(2rem, 3.6vw, 3.25rem);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--tm-ink);
+}
+
+/* Second line in grey, as in the reference. */
+.galleryHeading span {
+    display: block;
+    color: rgba(11, 31, 51, 0.36);
+}
+
+.galleryStage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
 }
 
 /* Every photo is a large-photo-sized box moved and scaled from its top-left
@@ -2205,7 +2222,7 @@ h2.industriesTitle {
     transform: none;
 }
 
-/* Small photos: a larger radius, so after scaling it reads like ~10px. */
+/* Small photos: a larger radius, so after scaling it reads like ~8px. */
 .galleryPhoto[data-role='prev'],
 .galleryPhoto[data-role='next'],
 .galleryPhoto[data-role='incoming'],
@@ -2244,7 +2261,7 @@ h2.industriesTitle {
 .galleryCaptions {
     position: absolute;
     top: 0;
-    left: calc(100% + var(--gap) * 1.5);
+    left: calc(100% + var(--gap) * 1.75);
     width: 16rem;
     display: grid;
 }
@@ -2266,22 +2283,42 @@ h2.industriesTitle {
 
 .galleryCaption h3 {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--tm-ink);
 }
 
 .galleryCaption p {
-    margin: 0.4rem 0 0;
+    margin: 0.5rem 0 0;
     font-size: 0.9rem;
     line-height: 1.55;
-    color: rgba(11, 31, 51, 0.55);
+    color: rgba(11, 31, 51, 0.5);
 }
 
 .galleryCaption strong {
     font-weight: 500;
     color: var(--tm-ink);
+}
+
+.galleryChips {
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.galleryChips li {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid #CFE0F3;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    font-size: 0.75rem;
+    font-weight: 600;
 }
 
 /* Big serif counter at the bottom left; the units digit rolls. */
@@ -2308,7 +2345,7 @@ h2.industriesTitle {
 .galleryRoll > span {
     display: flex;
     flex-direction: column;
-    transition: transform 0.9s var(--ease, cubic-bezier(0.65, 0, 0.35, 1));
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .galleryRoll > span > span {
@@ -2316,32 +2353,54 @@ h2.industriesTitle {
 }
 
 .galleryCount small {
-    margin-left: 0.5rem;
+    margin-left: 0.75rem;
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 500;
     color: rgba(11, 31, 51, 0.4);
 }
 
+/* Stacked: the heading spans the width, the photo is centred under it, the
+   caption drops under the photo and the counter sits under the caption.
+   The photo shrinks on short phones so the pinned stage still fits. */
 @media (max-width: 860px) {
     .gallery {
-        padding-bottom: 12rem;
+        padding-bottom: 12.5rem;
+    }
+
+    .galleryCol {
+        --w: clamp(180px, min(56vw, calc((100svh - 25rem) * 0.75)), 340px);
+        --s: 0.26;
+        --gap: 10px;
+        width: auto;
+        margin: 0;
+    }
+
+    .galleryHeading {
+        width: auto;
+        max-width: none;
+        margin-bottom: 1.25rem;
+        font-size: clamp(1.6rem, 7.4vw, 2.25rem);
     }
 
     .galleryStage {
-        --w: 58vw;
-        --s: 0.26;
-        --gap: 10px;
+        width: var(--w);
+        margin-inline: auto;
     }
 
     .galleryCaptions {
-        top: calc(100% + 1.5rem);
-        left: calc(-100% * var(--s) - var(--gap));
-        width: calc(100% * (1 + 2 * var(--s)) + 2 * var(--gap));
+        top: calc(100% + 1.25rem);
+        left: 50%;
+        width: min(calc(100vw - 2rem), 30rem);
+        transform: translateX(-50%);
+    }
+
+    .galleryChips {
+        display: none;
     }
 
     .galleryCount {
-        font-size: 3.5rem;
+        font-size: 3rem;
     }
 }
 

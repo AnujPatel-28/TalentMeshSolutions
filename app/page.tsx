@@ -102,9 +102,8 @@ export default function Home() {
               reads as groundwork there rather than as a repeat after it. */}
           <IndustriesGrid />
 
-          <AnimateOnScroll animation="fadeUp" once>
-            <TrustStrip />
-          </AnimateOnScroll>
+          {/* Not wrapped: TrustStrip pins itself and steps through on scroll. */}
+          <TrustStrip />
 
           {/* Not wrapped: WhyUs drives its own scroll sequence. */}
           <WhyUs />
