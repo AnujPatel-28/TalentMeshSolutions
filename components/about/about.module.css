@@ -46,6 +46,12 @@
   background: var(--tm-surface);
 }
 
+/* After a white section, the light blue fades in from white instead of
+   starting at a hard edge (the CTA below fades it back out). */
+.section + .sectionTint {
+  background: linear-gradient(180deg, var(--tm-canvas) 0, var(--tm-surface) 22rem);
+}
+
 .inner {
   max-width: 1200px;
   margin: 0 auto;
