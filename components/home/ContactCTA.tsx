@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { CONTACT, STRONG_CTA } from '@/content/home';
-import SectionMarker from './SectionMarker';
 import SplitText from '@/components/reactbits/SplitText';
 import styles from './home.module.css';
 
 export default function ContactCTA() {
     return (
         <section className="relative" id="contact">
-            <SectionMarker label="Get Started" index={6} />
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div className={styles.contactCard}>

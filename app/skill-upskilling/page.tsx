@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Skill Upskilling',
     description: "Help employees and emerging talent develop relevant capabilities through structured upskilling and training support.",
     alternates: { canonical: '/skill-upskilling' },
     openGraph: {
-        title: 'Skill Upskilling | TalentMesh Solutions',
+        title: 'Skill Upskilling | Talentmesh Solutions',
         description: "Help employees and emerging talent develop relevant capabilities through structured upskilling and training support.",
         url: `${SITE_URL}/skill-upskilling`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/skill-upskilling.webp`, alt: "Colleagues gathered at a whiteboard while one sketches a diagram" }],
     },

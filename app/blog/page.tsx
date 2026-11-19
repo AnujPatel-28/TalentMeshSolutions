@@ -13,12 +13,12 @@ export default async function BlogPage() {
     <main className={styles.journal} id="blog-main">
       <div className={styles.container}>
         <header className={styles.intro}>
-          <p className={styles.publication}>TalentMesh Journal</p>
+          <p className={styles.publication}>Talentmesh Journal</p>
           <h1>Ideas for a changing<br className={styles.desktopBreak} /> world of work.</h1>
           <p className={styles.introDescription}>Practical perspectives on hiring, skills, technology, and better ways to work.</p>
         </header>
         {featured ? <PostPreview post={featured} featured /> : (
-          <section className={styles.empty}><h2>Our next chapter is on its way.</h2><p>New perspectives and practical guides will appear here as they’re published.</p><Link href="/">Explore TalentMesh</Link></section>
+          <section className={styles.empty}><h2>Our next chapter is on its way.</h2><p>New perspectives and practical guides will appear here as they’re published.</p><Link href="/">Explore Talentmesh</Link></section>
         )}
         {others.length > 0 && (
           <section className={styles.archive} aria-labelledby="more-stories">

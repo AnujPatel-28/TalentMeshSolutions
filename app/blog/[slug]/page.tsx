@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.title, description: post.excerpt,
     alternates: { canonical: '/blog/' + slug },
-    openGraph: { title: post.title, description: post.excerpt, url: SITE_URL + '/blog/' + slug, siteName: 'TalentMesh Solutions', type: 'article', publishedTime: displayDate(post.publishedAt) ? post.publishedAt : undefined, authors: [post.authorName || 'TalentMesh Editorial'], images: image ? [{ url: image, width: 1200, height: 630 }] : undefined },
+    openGraph: { title: post.title, description: post.excerpt, url: SITE_URL + '/blog/' + slug, siteName: 'Talentmesh Solutions', type: 'article', publishedTime: displayDate(post.publishedAt) ? post.publishedAt : undefined, authors: [post.authorName || 'Talentmesh Editorial'], images: image ? [{ url: image, width: 1200, height: 630 }] : undefined },
     twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt, images: image ? [image] : undefined },
   };
 }
@@ -86,8 +86,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     description: post.excerpt, mainEntityOfPage: SITE_URL + '/blog/' + slug,
     image: image ? [image] : undefined,
     datePublished: displayDate(post.publishedAt) ? post.publishedAt : undefined,
-    author: { '@type': post.authorName && !/talentmesh|editorial/i.test(post.authorName) ? 'Person' : 'Organization', name: post.authorName || 'TalentMesh Editorial' },
-    publisher: { '@type': 'Organization', name: 'TalentMesh Solutions', url: SITE_URL },
+    author: { '@type': post.authorName && !/talentmesh|editorial/i.test(post.authorName) ? 'Person' : 'Organization', name: post.authorName || 'Talentmesh Editorial' },
+    publisher: { '@type': 'Organization', name: 'Talentmesh Solutions', url: SITE_URL },
   };
   return (
     <main className={styles.journal} id="blog-main">

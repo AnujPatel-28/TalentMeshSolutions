@@ -6,7 +6,7 @@ const HowItWorks = () => {
             <div className={styles.container}>
                 <div className={styles.sectionHeader}>
                     {/* <div className={styles.badge}>Simple Process</div> */}
-                    <h2 className={styles.sectionTitle}>How TalentMesh Works</h2>
+                    <h2 className={styles.sectionTitle}>How Talentmesh Works</h2>
                     <p className={styles.sectionDesc}>
                         Get hired 3x faster with our automated pipeline.
                     </p>

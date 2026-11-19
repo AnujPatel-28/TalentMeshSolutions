@@ -2,13 +2,13 @@ import styles from './sections.module.css';
 
 const testimonials = [
     {
-        quote: "TalentMesh cut our hiring time in half. The quality of candidates we received was unmatched by any other platform we've used.",
+        quote: "Talentmesh cut our hiring time in half. The quality of candidates we received was unmatched by any other platform we've used.",
         author: "Ananya Sharma",
         role: "Head of People, TechFlow",
         initials: "AS"
     },
     {
-        quote: "I stopped applying to black holes. On TalentMesh, companies reached out to me, and I had 3 offers in a week. Incredible experience.",
+        quote: "I stopped applying to black holes. On Talentmesh, companies reached out to me, and I had 3 offers in a week. Incredible experience.",
         author: "Rohan Gupta",
         role: "Senior Product Designer",
         initials: "RG"
@@ -26,7 +26,7 @@ const testimonials = [
         initials: "VS"
     },
     {
-        quote: "We scaled our engineering team from 5 to 50 in three months using TalentMesh. It's the only tool that could keep up with our pace.",
+        quote: "We scaled our engineering team from 5 to 50 in three months using Talentmesh. It's the only tool that could keep up with our pace.",
         author: "Ishani Deshmukh",
         role: "VP Engineering, ScaleUp",
         initials: "ID"

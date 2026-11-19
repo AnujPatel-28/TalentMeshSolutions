@@ -1,5 +1,5 @@
 /**
- * Copy and data for the `/` landing page (TalentMesh Solutions corporate site).
+ * Copy and data for the `/` landing page (Talentmesh Solutions corporate site).
  *
  * Sourced from the company business proposal and LinkedIn overview. Two rules
  * apply when editing this file:
@@ -12,7 +12,7 @@
 
 export const CONTACT = {
   legalName: 'Talentmesh Solution Pvt. Ltd.',
-  brandName: 'TalentMesh Solutions',
+  brandName: 'Talentmesh Solutions',
   addressLines: [
     '7-B, Amrut Bag Colony, Opp. Stadium,',
     'Nr. Hindu Colony, Navrangpura,',
@@ -24,6 +24,9 @@ export const CONTACT = {
   postalCode: '380009',
   phoneDisplay: '9898161106',
   phoneHref: 'tel:9898161106',
+  /** wa.me wants the number with country code and no symbols; `text` pre-fills the first message. */
+  whatsappHref:
+    'https://wa.me/919898161106?text=Hi%20Talentmesh%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services.',
   email: 'info@talentmeshsolutions.com',
 } as const;
 
@@ -42,41 +45,59 @@ export const HERO = {
   description:
     'End-to-end recruitment and staffing that helps you hire skilled people and scale teams faster.',
   primaryCta: { label: 'Get Hiring Support', href: '/contact' },
-  secondaryCta: { label: 'Talk to Our Team', href: '/contact' },
+  secondaryCta: { label: 'Looking for a Job?', href: '/job-seekers' },
 } as const;
 
-export const POSITIONING = {
-  sectionTitle: 'Why TalentMesh',
-  badge: 'POSITIONING',
-  columns: [
+/**
+ * "Hiring built for you" (components/home/TrustStrip.tsx): five
+ * steps shown one at a time as a photo gallery. `lead` and `emphasis` read as
+ * one sentence; `emphasis` is set in the darker ink.
+ *
+ * Photos: public/images/home/scale-*.webp, 4:5 portrait, 1100px wide. To
+ * replace one, use a new file name so no image cache keeps serving the old.
+ */
+export const SCALE_GALLERY = {
+  sectionTitle: 'Hiring built for you',
+  headingA: 'Hiring',
+  headingAccent: 'built for you',
+  proofPoints: ['48–72h Shortlists', '100% Vetted Talent'],
+  steps: [
     {
-      title: 'Find the Right Talent',
-      description: 'Skilled candidates matched to your requirements.',
-      icon: 'zap',
-      rightHeading: 'Uncover Top Talent, Instantly.',
-      rightIntro: 'Our recruiters screen every profile against your brief — skills, experience and cultural fit — so the shortlist you see is already worth interviewing.',
-      rightImage: '/cop2.webp',
-      rightBackground: '/building bg.webp'
+      label: 'Find the right talent',
+      lead: 'Every profile is screened against your brief on skills, experience and fit,',
+      emphasis: 'so the shortlist is already worth interviewing.',
+      image: '/images/home/scale-find-talent.webp',
+      alt: 'A recruiter listening as a hiring manager explains the role across a table, her notebook of role notes open beside a glass of chai',
     },
     {
-      title: 'Scale With Flexibility',
-      description: 'Permanent, contractual, temporary, bulk and remote hiring.',
-      icon: 'trendingUp',
-      rightHeading: 'Elastic Teams for Dynamic Growth.',
-      rightIntro: 'Whether you need a single remote developer or a full bulk hiring drive, we provide permanent, temporary, and contractual staffing to match your exact momentum.',
-      rightImage: '/personWithLaptop3.png',
-      rightBackground: '/building bg.webp'
+      label: 'Shortlist in 48–72 hours',
+      lead: 'Pre-screened candidates reach you within two to three working days,',
+      emphasis: 'not weeks.',
+      image: '/images/home/scale-shortlist.webp',
+      alt: 'A recruiter ticking a shortlisted candidate profile among printed CVs under a desk lamp',
     },
     {
-      title: 'Simplify Recruitment',
-      description: 'End-to-end RPO and seamless compliance.',
-      icon: 'shieldCheck',
-      rightHeading: 'Recruitment on Autopilot.',
-      rightIntro: 'From sourcing and screening to onboarding and compliance, our RPO solutions handle the heavy lifting so you can focus on building your business.',
-      rightImage: '/withClient.png',
-      rightBackground: '/building bg.webp'
-    }
-  ]
+      label: 'Scale with flexibility',
+      lead: 'Permanent, contractual, temporary, bulk or remote hiring,',
+      emphasis: 'matched to how fast you grow.',
+      image: '/images/home/scale-flexibility.webp',
+      alt: 'A team lead showing two new hires to their desks as laptops are unpacked in an open-plan office',
+    },
+    {
+      label: 'Simplify recruitment',
+      lead: 'End-to-end RPO, from sourcing and screening to interviews,',
+      emphasis: 'so your team stays on the business.',
+      image: '/images/home/scale-simplify.webp',
+      alt: 'A coordinator with an interview schedule on a tablet watching a candidate meet a panel through a glass wall',
+    },
+    {
+      label: 'Vetted and ready on day one',
+      lead: 'Background checks, documentation and onboarding handled',
+      emphasis: 'before your new hire walks in.',
+      image: '/images/home/scale-day-one.webp',
+      alt: 'An HR coordinator handing a new employee a welcome folder at his desk on his first day',
+    },
+  ],
 } as const;
 
 export interface ServiceCategory {
@@ -121,7 +142,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
 export const SERVICES = SERVICE_CATEGORIES.flatMap((cat) =>
   cat.items.map((item) => ({
     title: item,
-    description: `${item} solutions provided by TalentMesh Solutions.`,
+    description: `${item} solutions provided by Talentmesh Solutions.`,
   }))
 );
 
@@ -198,21 +219,29 @@ export const WHY_TALENTMESH = {
       title: 'Quality-Focused Hiring',
       description: "Focus on finding candidates aligned with the organization's requirements.",
       icon: 'target',
+      caption: 'Candidates screened against the role and the requirements your organization sets.',
+      tagline: 'The right fit, not just a résumé.',
     },
     {
       title: 'Flexible Staffing Models',
       description: 'Permanent, contractual, temporary, remote and volume hiring options.',
       icon: 'layers',
+      caption: 'One partner for permanent, contractual, temporary, remote and volume hiring.',
+      tagline: 'Hire the way you need.',
     },
     {
       title: 'End-to-End Support',
       description: 'Support across recruitment coordination, verification and onboarding.',
       icon: 'lifeBuoy',
+      caption: 'With you from recruitment coordination through verification to onboarding.',
+      tagline: 'From first call to first day.',
     },
     {
       title: 'Industry-Aware Recruitment',
       description: 'Recruitment support across technology, healthcare, manufacturing, BFSI and other sectors.',
       icon: 'briefcase',
+      caption: 'Recruiters who understand technology, healthcare, manufacturing, BFSI and other sectors.',
+      tagline: 'Every sector, its own talent.',
     },
   ],
 } as const;
@@ -288,7 +317,7 @@ export const FAQS = [
   {
     question: 'How quickly can you share a shortlist?',
     answer:
-      'For most mandates we deliver a screened shortlist within 48 to 72 hours of requirement sign-off. Niche, senior and confidential searches take longer because the candidate universe is smaller and engagement is one-to-one — we will tell you the realistic timeline at intake rather than after.',
+      'For most mandates we deliver a screened shortlist within 48 to 72 hours of requirement sign-off. Niche, senior and confidential searches take longer because the candidate universe is smaller and engagement is one-to-one. We will tell you the realistic timeline at intake rather than after.',
   },
   {
     question: 'Which industries do you recruit for?',

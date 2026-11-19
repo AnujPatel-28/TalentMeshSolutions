@@ -5,7 +5,7 @@ title: "Bulk Hiring in India: A Step-by-Step Playbook for High-Volume Recruitmen
 slug: "bulk-hiring-in-india-a-step-by-step-playbook"
 excerpt: "Hiring fifty or five hundred people at once is a logistics problem, not a sourcing problem. A practical playbook for planning, running and closing volume hiring drives."
 category: "Hiring Strategy"
-authorName: "TalentMesh Editorial"
+authorName: "Talentmesh Editorial"
 publishedAt: "2026-07-28T09:00:00.000Z"
 status: "published"
 coverImage: "Upload in Studio — see 'Cover image brief' below. Required: the blog listing hero does not render without it."
@@ -154,6 +154,6 @@ Review these weekly during an active drive. Monthly reporting on a six-week driv
 
 ## Getting help with a volume drive
 
-The hardest part of a drive to outsource is not sourcing — it is the coordination underneath: panel scheduling, same-day scoring, offer paperwork, and the weeks between offer and joining when candidates quietly disappear. That is the work TalentMesh Solutions takes on in bulk, volume and campus hiring programmes, across sectors including IT, pharmaceuticals and healthcare, engineering and manufacturing, BPO and call centres, logistics, retail and e-commerce.
+The hardest part of a drive to outsource is not sourcing — it is the coordination underneath: panel scheduling, same-day scoring, offer paperwork, and the weeks between offer and joining when candidates quietly disappear. That is the work Talentmesh Solutions takes on in bulk, volume and campus hiring programmes, across sectors including IT, pharmaceuticals and healthcare, engineering and manufacturing, BPO and call centres, logistics, retail and e-commerce.
 
 If you have a drive coming up, [tell us the headcount and the deadline](/portals/jobs/contact) and we will build the funnel maths backwards with you before anyone starts sourcing. For drives that recur every quarter rather than once, [recruitment process outsourcing](/recruitment-process-outsourcing) usually costs less than rebuilding the machinery each time.

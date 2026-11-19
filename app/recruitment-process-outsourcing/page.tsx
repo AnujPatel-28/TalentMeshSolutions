@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Recruitment Process Outsourcing',
     description: "Talentmesh provides structured recruitment support to help organizations manage hiring requirements with greater consistency, coordination and speed.",
     alternates: { canonical: '/recruitment-process-outsourcing' },
     openGraph: {
-        title: 'Recruitment Process Outsourcing | TalentMesh Solutions',
+        title: 'Recruitment Process Outsourcing | Talentmesh Solutions',
         description: "Talentmesh provides structured recruitment support to help organizations manage hiring requirements with greater consistency, coordination and speed.",
         url: `${SITE_URL}/recruitment-process-outsourcing`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/recruitment-process-outsourcing.webp`, alt: "A recruitment delivery floor with colleagues collaborating over a candidate shortlist" }],
     },
@@ -69,7 +69,7 @@ export default function RecruitmentProcessOutsourcingPage() {
                 <p>When hiring volumes increase, recruitment can quickly become a bottleneck.</p>
             }
             approachBody={
-                <p>Our RPO support extends your hiring capability with dedicated recruitment expertise—from candidate sourcing and screening to interview coordination.</p>
+                <p>Our RPO support extends your hiring capability with dedicated recruitment expertise, from candidate sourcing and screening to interview coordination.</p>
             }
             approachSteps={APPROACH_STEPS}
             formTitleDark={<>Scaling <br />your</>}

@@ -5,7 +5,7 @@ title: "How to Choose a Recruitment Agency in Ahmedabad: A Checklist for Employe
 slug: "how-to-choose-a-recruitment-agency-in-ahmedabad"
 excerpt: "A practical checklist for Ahmedabad employers evaluating recruitment agencies — what to ask about sourcing, screening, replacement terms and fees before you sign."
 category: "Hiring Strategy"
-authorName: "TalentMesh Editorial"
+authorName: "Talentmesh Editorial"
 publishedAt: "2026-08-11T09:00:00.000Z"
 status: "published"
 coverImage: "Upload in Studio — see 'Cover image brief' below. Required: the blog listing hero does not render without it."
@@ -131,7 +131,7 @@ The last part matters most. Agencies that only call when they have a CV to push 
 
 That last point is the one employers skip most often, and it causes more failed searches than any other single factor. An agency briefed in a ten-minute phone call will deliver ten-minute-quality candidates.
 
-## Working with TalentMesh Solutions
+## Working with Talentmesh Solutions
 
 We are based in Ahmedabad, which is the reason this checklist is written the way it is — we are asked these questions constantly, and the employers who ask them get better outcomes than the ones who compare percentages.
 

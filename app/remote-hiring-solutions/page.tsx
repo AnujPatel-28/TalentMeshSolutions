@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Remote Hiring Solutions',
     description: "Connect with skilled professionals through remote hiring solutions designed for organizations building distributed and flexible teams.",
     alternates: { canonical: '/remote-hiring-solutions' },
     openGraph: {
-        title: 'Remote Hiring Solutions | TalentMesh Solutions',
+        title: 'Remote Hiring Solutions | Talentmesh Solutions',
         description: "Connect with skilled professionals through remote hiring solutions designed for organizations building distributed and flexible teams.",
         url: `${SITE_URL}/remote-hiring-solutions`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/remote-hiring-solutions.webp`, alt: "A professional working from a well-lit home study with a laptop and notebook" }],
     },
@@ -75,7 +75,7 @@ export default function RemoteHiringSolutionsPage() {
             formTitleDark={<>Build <br />beyond</>}
             formTitleAccent="geographic boundaries."
             formSubtitle={
-                <p>Find the talent your team needs—wherever they are.</p>
+                <p>Find the talent your team needs, wherever they are.</p>
             }
             contactPhoneDisplay={STRONG_CTA.phoneDisplay}
             contactPhoneHref={STRONG_CTA.phoneHref}

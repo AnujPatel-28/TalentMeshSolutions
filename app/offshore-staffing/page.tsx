@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Offshore Staffing',
     description: "Access skilled talent through flexible offshore staffing solutions designed to help organizations expand capacity while staying focused on their core business.",
     alternates: { canonical: '/offshore-staffing' },
     openGraph: {
-        title: 'Offshore Staffing | TalentMesh Solutions',
+        title: 'Offshore Staffing | Talentmesh Solutions',
         description: "Access skilled talent through flexible offshore staffing solutions designed to help organizations expand capacity while staying focused on their core business.",
         url: `${SITE_URL}/offshore-staffing`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/offshore-staffing.webp`, alt: "A team in a meeting room on a video call with remote colleagues on a wall display" }],
     },

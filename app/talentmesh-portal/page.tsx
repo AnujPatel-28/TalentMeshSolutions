@@ -5,15 +5,15 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
-    title: 'TalentMesh Portal',
-    description: 'Explore job listings, employer tools, and everything you need to hire or get hired on the TalentMesh platform.',
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
+    title: 'Talentmesh Portal',
+    description: 'Explore job listings, employer tools, and everything you need to hire or get hired on the Talentmesh platform.',
     alternates: { canonical: '/talentmesh-portal' },
     openGraph: {
-        title: 'TalentMesh Portal | TalentMesh Solutions',
-        description: 'Explore job listings, employer tools, and everything you need to hire or get hired on the TalentMesh platform.',
+        title: 'Talentmesh Portal | Talentmesh Solutions',
+        description: 'Explore job listings, employer tools, and everything you need to hire or get hired on the Talentmesh platform.',
         url: `${SITE_URL}/talentmesh-portal`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
     },
 };

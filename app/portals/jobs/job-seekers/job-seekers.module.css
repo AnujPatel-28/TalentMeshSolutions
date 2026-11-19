@@ -1,5 +1,5 @@
 /* ==========================================================================
-   FOR CANDIDATES PAGE — TalentMesh Redesign (Stripe / Ashby / Linear Inspired)
+   FOR CANDIDATES PAGE — Talentmesh Redesign (Stripe / Ashby / Linear Inspired)
    Aesthetic · Minimal · Premium · Motion Enabled
    ========================================================================== */
 
@@ -429,7 +429,7 @@
     }
 }
 
-/* ─── SECTION 2: Why Candidates Choose TalentMesh ────────────────────────────── */
+/* ─── SECTION 2: Why Candidates Choose Talentmesh ────────────────────────────── */
 .gridChoose {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -1330,7 +1330,7 @@
 }
 
 
-/* ─── SECTION 6: Comparison (Why TalentMesh?) ────────────────────────────────── */
+/* ─── SECTION 6: Comparison (Why Talentmesh?) ────────────────────────────────── */
 .comparisonWrapper {
     max-width: 920px;
     margin: 0 auto;
