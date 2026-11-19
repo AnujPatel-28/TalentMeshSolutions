@@ -857,72 +857,157 @@
 
 /* ---------------------------------------------------------- how we work -- */
 
-/* The connecting line runs through the centres of the numbered nodes. */
-.timeline {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 2rem;
+/* Four photo panels in a row. The open one takes most of the width; the
+   others stay as slim columns with a vertical title. Stacks on tablets and
+   phones, where the open panel grows taller instead of wider. */
+.doors {
+  display: flex;
+  gap: 0.75rem;
+  height: clamp(30rem, 62vh, 36rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.timeline::before {
+.door {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--tm-radius);
+  background: var(--tm-ink-deep);
+  color: #ffffff;
+  transition: flex-grow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.door[data-open] {
+  flex-grow: 3.4;
+}
+
+.doorPhoto {
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.door[data-open] .doorPhoto {
+  transform: scale(1.04);
+}
+
+/* Darkens the lower half so the copy reads on any photo; a little heavier on
+   closed panels so their titles stay legible on bright frames. */
+.door::after {
   content: '';
   position: absolute;
-  top: 1.75rem;
-  left: 1.75rem;
-  /* Stop at the last node's centre: one column (of four, 3 gaps of 2rem)
-     minus half a node. */
-  right: calc((100% - 6rem) / 4 - 1.75rem);
-  height: 2px;
-  background: linear-gradient(90deg, var(--tm-brand) 0%, rgba(0, 86, 179, 0.25) 100%);
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 18, 31, 0.15) 0%, rgba(6, 18, 31, 0.35) 40%, rgba(6, 18, 31, 0.88) 100%);
+  pointer-events: none;
 }
 
-.timelineStep {
-  position: relative;
-  display: grid;
-  gap: 1.5rem;
-  align-content: start;
-}
-
-.timelineNode {
-  position: relative;
+/* Covers the whole panel, so a closed panel is one big target. */
+.doorToggle {
+  position: absolute;
+  inset: 0;
   z-index: 1;
-  display: inline-grid;
-  place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 50%;
-  background: var(--tm-canvas);
-  border: 2px solid var(--tm-brand);
-  color: var(--tm-brand);
-  font-size: 0.95rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  box-shadow: 0 0 0 8px var(--tm-surface);
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
-.timelineStep:first-child .timelineNode {
-  background: var(--tm-brand);
+.door[data-open] .doorToggle {
+  cursor: default;
+}
+
+.doorToggle:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -6px;
+}
+
+.doorNum {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.4rem;
+  z-index: 2;
+  font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+  font-size: 3.25rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.doorTitle {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.door[data-open] .doorTitle {
+  opacity: 0;
+}
+
+.doorBody {
+  position: absolute;
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  z-index: 2;
+  display: grid;
+  gap: 0.65rem;
+  max-width: 26rem;
+  opacity: 0;
+  transform: translateY(14px);
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.door[data-open] .doorBody {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition: opacity 0.4s ease 0.25s, transform 0.5s ease 0.25s, visibility 0s;
+}
+
+.doorBody h3 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: #ffffff;
 }
 
-.timelineTitle {
+.doorBody p {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  color: var(--tm-ink);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
 }
 
-.timelineDesc {
-  margin: 0.5rem 0 0;
-  max-width: 17rem;
-  font-size: 0.96rem;
-  line-height: 1.65;
-  color: var(--tm-body);
+.doorTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doorTags li {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 /* ----------------------------------------------------------- industries -- */
@@ -1166,41 +1251,46 @@
     object-position: 96% 50%;
   }
 
-  /* Vertical timeline: the line runs down through the node centres. */
-  .timeline {
-    grid-template-columns: 1fr;
-    gap: 2.25rem;
+  /* Stacked: closed panels are short bars with a horizontal title; the open
+     one grows taller. */
+  .doors {
+    flex-direction: column;
+    height: auto;
   }
 
-  /* Vertical: one segment per step, from its node down to the next node, so
-     the line ends exactly at the last node however tall that step is. */
-  .timeline::before {
-    display: none;
+  .door {
+    flex: none;
+    height: 5.25rem;
+    transition: height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  .timelineStep:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    top: 1.75rem;
-    bottom: -2.25rem;
-    left: calc(1.75rem - 1px);
-    width: 2px;
-    background: var(--tm-brand);
-    opacity: 0.55;
+  .door[data-open] {
+    height: min(30rem, 78vh);
   }
 
-  .timelineStep {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 1.5rem;
-    align-items: start;
+  .doorNum {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.4rem;
   }
 
-  .timelineTitle {
-    margin-top: 0.85rem;
+  .door[data-open] .doorNum {
+    top: 1.25rem;
+    transform: none;
   }
 
-  .timelineDesc {
-    max-width: 32rem;
+  .doorTitle {
+    left: 5.25rem;
+    top: 50%;
+    bottom: auto;
+    writing-mode: horizontal-tb;
+    transform: translateY(-50%);
+  }
+
+  .doorBody {
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 1.25rem;
   }
 }
 
@@ -1326,8 +1416,17 @@
   .btnPrimary,
   .btnText::after,
   .panelList a svg,
-  .industry {
+  .industry,
+  .door,
+  .doorPhoto,
+  .doorTitle,
+  .doorBody,
+  .door[data-open] .doorBody {
     transition: none;
+  }
+
+  .door[data-open] .doorPhoto {
+    transform: none;
   }
 
   .btnPrimary:hover,
