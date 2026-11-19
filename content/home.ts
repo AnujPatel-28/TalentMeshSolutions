@@ -53,8 +53,8 @@ export const HERO = {
  * steps shown one at a time as a photo gallery. `lead` and `emphasis` read as
  * one sentence; `emphasis` is set in the darker ink.
  *
- * Photos: replace public/images/home/scale-01.webp … scale-05.webp with the
- * generated set (4:5 portrait). Until then they are copies of About photos.
+ * Photos: public/images/home/scale-*.webp, 4:5 portrait, 1100px wide. To
+ * replace one, use a new file name so no image cache keeps serving the old.
  */
 export const SCALE_GALLERY = {
   sectionTitle: 'Recruitment engineered for scale',
@@ -66,36 +66,36 @@ export const SCALE_GALLERY = {
       label: 'Find the right talent',
       lead: 'Every profile is screened against your brief on skills, experience and fit,',
       emphasis: 'so the shortlist is already worth interviewing.',
-      image: '/images/home/scale-01.webp',
-      alt: 'A Talentmesh recruiter taking notes while a hiring manager explains the role',
+      image: '/images/home/scale-find-talent.webp',
+      alt: 'A recruiter listening as a hiring manager explains the role across a table, her notebook of role notes open beside a glass of chai',
     },
     {
       label: 'Shortlist in 48–72 hours',
       lead: 'Pre-screened candidates reach you within two to three working days,',
       emphasis: 'not weeks.',
-      image: '/images/home/scale-02.webp',
-      alt: 'A recruiter marking a shortlisted CV at a desk lit by a lamp',
+      image: '/images/home/scale-shortlist.webp',
+      alt: 'A recruiter ticking a shortlisted candidate profile among printed CVs under a desk lamp',
     },
     {
       label: 'Scale with flexibility',
       lead: 'Permanent, contractual, temporary, bulk or remote hiring,',
       emphasis: 'matched to how fast you grow.',
-      image: '/images/home/scale-03.webp',
-      alt: 'A growing team gathered around a table planning new hires',
+      image: '/images/home/scale-flexibility.webp',
+      alt: 'A team lead showing two new hires to their desks as laptops are unpacked in an open-plan office',
     },
     {
       label: 'Simplify recruitment',
       lead: 'End-to-end RPO, from sourcing and screening to interviews,',
       emphasis: 'so your team stays on the business.',
-      image: '/images/home/scale-04.webp',
-      alt: 'A coordinator holding an interview schedule outside a glass room where a candidate meets a panel',
+      image: '/images/home/scale-simplify.webp',
+      alt: 'A coordinator with an interview schedule on a tablet watching a candidate meet a panel through a glass wall',
     },
     {
       label: 'Vetted and ready on day one',
       lead: 'Background checks, documentation and onboarding handled',
       emphasis: 'before your new hire walks in.',
-      image: '/images/home/scale-05.webp',
-      alt: 'An HR coordinator welcoming a new employee at his desk with a welcome folder',
+      image: '/images/home/scale-day-one.webp',
+      alt: 'An HR coordinator handing a new employee a welcome folder at his desk on his first day',
     },
   ],
 } as const;
