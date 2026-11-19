@@ -253,8 +253,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Poster frame for the video above it; see HomeHero.tsx. */
-    background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
+    /* Poster frame for the videos above it; see HomeHero.tsx. The hero opens
+       at night, so the night frame; reduced motion keeps the day frame. */
+    background: var(--tm-ink) url('/images/hero-night-poster.webp') center / cover no-repeat;
     overflow: hidden;
     /* One size drives the hero's type, up to 84px. It follows the video's
        on-screen width (the video covers the hero, so it is the larger of
@@ -281,21 +282,29 @@
     opacity: 1;
 }
 
-/* Night loop over the day loop: hidden until HomeHero.tsx sets data-on,
-   then fades in over 14 seconds, so the city slowly turns to night. */
+/* Night loop over the day loop, shown while HomeHero.tsx sets data-on. The
+   fade time is set per change (--hero-fade): 3s for the opening turn to
+   day, 5s in the loop. */
 .heroVideoNight {
     opacity: 0;
-    transition: opacity 14s ease-in-out;
+    transition: opacity var(--hero-fade, 0s) ease-in-out;
 }
 
 .heroVideoNight[data-on] {
     opacity: 1;
 }
 
-/* Scrim over the video, under the copy. The video is a daytime shot, so the
-   navy wash is heavy enough (42%) for white text to read against bright sky,
-   with a darker band at the top for the transparent navbar. */
+/* Scrim over the video, under the copy. Over the day shot the navy wash is
+   heavy enough (42%) for white text to read against bright sky, with a
+   darker band at the top for the transparent navbar. At night the sky is
+   dark already, so the scrim eases to 45% of that and the city lights
+   show; it fades with the video. */
+.hero[data-night]::after {
+    opacity: 0.45;
+}
+
 .hero::after {
+    transition: opacity var(--hero-fade, 0s) ease-in-out;
     content: '';
     position: absolute;
     inset: 0;
@@ -2829,7 +2838,7 @@ h2.industriesTitle {
         min-height: 100dvh;
         min-height: 100svh;
         padding: calc(72px + 1.5rem) 1rem 2.5rem;
-        background-image: url('/images/hero-day-mobile-poster.webp');
+        background-image: url('/images/hero-night-mobile-poster.webp');
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -3005,5 +3014,23 @@ h2.industriesTitle {
 
     .faqRightCol button {
         padding: 18px 20px !important;
+    }
+}
+
+/* Reduced motion: no video plays, so keep the still day frame and its full
+   scrim instead of the night opening. */
+@media (prefers-reduced-motion: reduce) {
+    .hero {
+        background-image: url('/images/hero-day-poster.webp');
+    }
+
+    .hero[data-night]::after {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 640px) {
+    .hero {
+        background-image: url('/images/hero-day-mobile-poster.webp');
     }
 }

@@ -18,8 +18,16 @@ const HEADLINE_LINES = HERO.headline.reduce<(typeof HERO.headline)[]>(
     [[]]
 );
 
-// Day shows on its own this long before night starts to fade in.
-const NIGHT_DELAY_MS = 4000;
+// Dark to light: the hero opens on the night cut. Once the headline, text
+// and buttons have appeared (after the first-visit intro cover has lifted),
+// it holds a moment, then turns to day over 3 seconds, so a first-time
+// visitor reads the message on a dark city that then lights up. After that
+// it loops day, night, day for as long as the page is open.
+// All times in ms; each pair is [hold, fade into the next].
+const OPEN_NIGHT_HOLD = 600;
+const OPEN_FADE_TO_DAY = 3000;
+const DAY = [9000, 5000] as const; // hold day, then fade to night
+const NIGHT = [5000, 5000] as const; // hold night, then fade to day
 
 export default function HomeHero() {
     const reduceMotion = useReducedMotion();
@@ -85,26 +93,45 @@ export default function HomeHero() {
     // loop off the critical path. Reduced-motion visitors never start it and
     // keep the poster frame.
     //
-    // Day to night: the same shot filmed at night plays in step on top of the
-    // day loop, invisible, and fades in slowly once the day loop is running
-    // (see `.heroVideoNight`). It loads only after the day loop has started,
-    // so it never competes with it, and is kept within a frame of it.
+    // Two cuts of the same shot: night plays in step on top of day, and
+    // fading the night layer in and out moves between them (see
+    // `.heroVideoNight`). The tint over the video lightens at night so the
+    // city lights show (`.hero[data-night]::after`). Both start at night,
+    // matching the night poster, and stay within a frame of each other.
     useEffect(() => {
         if (reduceMotion) return;
+        const hero = heroRef.current;
         const video = videoRef.current;
         const night = nightRef.current;
-        if (!video || !night) return;
-        let fadeTimer = 0;
+        if (!hero || !video || !night) return;
+        let timer = 0;
 
-        const startNight = () => {
-            night.load();
-            night.currentTime = video.currentTime;
-            night.play().catch(() => {});
-            window.clearTimeout(fadeTimer);
-            fadeTimer = window.setTimeout(() => {
+        const show = (toNight: boolean, fadeMs: number) => {
+            hero.style.setProperty('--hero-fade', `${fadeMs}ms`);
+            if (toNight) {
+                hero.dataset.night = '';
                 night.dataset.on = '';
-            }, NIGHT_DELAY_MS);
+            } else {
+                delete hero.dataset.night;
+                delete night.dataset.on;
+            }
         };
+        // Day holds, fades to night; night holds, fades to day; repeat.
+        const loop = (atNight: boolean) => {
+            const [hold, fade] = atNight ? NIGHT : DAY;
+            timer = window.setTimeout(() => {
+                show(!atNight, fade);
+                timer = window.setTimeout(() => loop(!atNight), fade);
+            }, hold);
+        };
+        const begin = () => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => {
+                show(false, OPEN_FADE_TO_DAY);
+                timer = window.setTimeout(() => loop(false), OPEN_FADE_TO_DAY);
+            }, OPEN_NIGHT_HOLD);
+        };
+
         const keepInStep = () => {
             if (night.readyState < 2) return;
             if (Math.abs(night.currentTime - video.currentTime) > 0.08) {
@@ -113,12 +140,24 @@ export default function HomeHero() {
         };
 
         const start = () => {
-            delete night.dataset.on;
+            window.clearTimeout(timer);
+            show(true, 0);
             video.load();
-            // Rejects when the tab is backgrounded or autoplay is blocked;
-            // the poster stands in either way.
+            night.load();
+            // Reject when the tab is backgrounded or autoplay is blocked;
+            // the night poster stands in either way.
             video.play().catch(() => {});
-            video.addEventListener('playing', startNight, { once: true });
+            night.play().catch(() => {});
+            // Starts once both are actually playing, so the turn to day is
+            // never spent on a poster, and once the copy has finished its
+            // entrance (the buttons come last), so it is seen.
+            const actions = hero.querySelector(`.${styles.heroActions}`);
+            Promise.all([
+                ...[video, night].map(
+                    (v) => new Promise((done) => v.addEventListener('playing', done, { once: true }))
+                ),
+                ...(actions?.getAnimations() ?? []).map((a) => a.finished.catch(() => {})),
+            ]).then(begin);
         };
         video.addEventListener('timeupdate', keepInStep);
 
@@ -136,14 +175,13 @@ export default function HomeHero() {
         return () => {
             phone.removeEventListener('change', start);
             window.removeEventListener('load', start);
-            video.removeEventListener('playing', startNight);
             video.removeEventListener('timeupdate', keepInStep);
-            window.clearTimeout(fadeTimer);
+            window.clearTimeout(timer);
         };
     }, [reduceMotion]);
 
     return (
-        <section ref={heroRef} className={styles.hero}>
+        <section ref={heroRef} className={styles.hero} data-night="">
             {/* Two static-camera loops, audio stripped; the last 1.5s of each
                 dissolve into the first for a seamless 8.5s loop. Phones get a
                 720x1280 portrait cut (242KB webm / 399KB mp4), everything else
@@ -168,10 +206,12 @@ export default function HomeHero() {
                 <source src="/images/hero-day.mp4" type="video/mp4" />
             </video>
             {/* The same shot at night (restored from e54ba63), same cuts and
-                length: 512KB / 297KB webm desktop, 606KB / 340KB webm phone. */}
+                length: 512KB / 297KB webm desktop, 606KB / 340KB webm phone.
+                Shown first; see the effect above. */}
             <video
                 ref={nightRef}
                 className={`${styles.heroVideoBg} ${styles.heroVideoNight}`}
+                data-on=""
                 preload="none"
                 loop
                 muted
