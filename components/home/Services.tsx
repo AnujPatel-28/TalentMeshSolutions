@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useReducedMotion } from 'framer-motion';
@@ -57,48 +57,55 @@ export default function Services() {
         };
     }, [measure]);
 
-    // Pinned side-scroll. Where PIN_QUERY matches, home.module.css pins the
-    // section for one viewport and this maps vertical scroll onto it in two
-    // phases. Intro: the title and lede start in the middle of the stage with
-    // no cards, then settle into their place while the cards come in from the
-    // right edge. Travel: the rail moves from the first card's left edge on
-    // the viewport's centre line to the last card's right edge on it; the card
-    // on the centre line is full size and the others step back. The section
-    // is made taller by the scroll both phases take. Elsewhere the rail stays
-    // the swipeable carousel above.
+    // Index buttons call into the pinned effect, which owns the measurements.
+    const jumpRef = useRef<(chapter: number) => void>(() => {});
+
+    // Pinned chapters. Where PIN_QUERY matches, home.module.css pins the
+    // section for one viewport and this maps vertical scroll onto a run of
+    // chapters, one per service and a closing one. The heading opens centred
+    // over the people backdrop; each chapter's photo then wipes in from the
+    // right edge and pushes the previous one off to the left, its title comes
+    // in on the left under a rolling number, and its card slides in from the
+    // right. After a short dwell the next chapter takes over. Elsewhere the
+    // rail stays the swipeable carousel above.
     useEffect(() => {
         const pin = pinRef.current;
         const rail = railRef.current;
         if (!pin || !rail) return;
 
         const mq = window.matchMedia(PIN_QUERY);
-        let travel = 0; // px the rail moves sideways
-        let dist = 0; // px of scroll that takes
-        let startX = 0;
-        let intro = 0; // px of scroll for the intro
-        let hold = 0; // px at its start during which nothing moves
-        let enterX = 0; // how far right of its start the rail waits
-        let centre = 0; // viewport centre line
-        let cardW = 0;
-        let pitch = 0;
-        const title = pin.querySelector('h2') as HTMLElement;
-        const words = Array.from(title.nextElementSibling!.children) as HTMLElement[];
-        let wordX: number[] = []; // per word: its line's offset to centred
-        const meter = pin.querySelector(`.${styles.svcMeter}`) as HTMLElement;
-        const counter = meter.firstElementChild as HTMLElement;
+        const all = (cls: string) => Array.from(pin.querySelectorAll<HTMLElement>(`.${cls}`));
+        const stage = pin.firstElementChild as HTMLElement;
+        const head = pin.querySelector(`.${styles.svcHeadText}`) as HTMLElement;
+        const backdrop = pin.querySelector(`.${styles.svcBackdrop}`) as HTMLElement;
+        const scenes = all(styles.svcScene); // services, then the closing one
+        const sceneImgs = scenes.map((scene) => scene.firstElementChild as HTMLElement);
+        const edge = pin.querySelector(`.${styles.svcWipeEdge}`) as HTMLElement;
+        const captions = pin.querySelector(`.${styles.svcCaptions}`) as HTMLElement;
+        const strip = pin.querySelector(`.${styles.svcNumberStrip}`) as HTMLElement;
+        const titles = all(styles.svcCaptionTitle);
+        const index = pin.querySelector(`.${styles.svcIndex}`) as HTMLElement;
+        const indexItems = Array.from(index.querySelectorAll('li'));
         const cards = Array.from(rail.querySelectorAll('article'));
-        let cardX: number[] = []; // each card's centre with the rail at rest
-        // Offsets from the heading's place to its centred intro spot.
-        const head = { tx: 0, ty: 0, ly: 0 };
+        const outro = rail.querySelector(`.${styles.svcOutro}`) as HTMLElement;
+        const n = cards.length;
+
+        let hold = 0; // px at the start during which nothing moves
+        let T = 0; // px of scroll a chapter change takes
+        let L = 0; // px per chapter: its change plus a dwell
+        let dist = 0; // total px of pinned scroll
+        let vw = 0;
+
+        const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+        const ease = (v: number) => v * v * (3 - 2 * v);
+        const animated = [head, backdrop, edge, captions, strip, index, outro, ...scenes, ...sceneImgs, ...titles, ...cards];
 
         const clearPinned = () => {
-            rail.style.transform = '';
-            title.style.transform = '';
-            words.forEach((word) => { word.style.transform = ''; });
-            meter.style.opacity = '';
-            cards.forEach((card) => {
-                card.style.removeProperty('--svc-scale');
-                card.style.removeProperty('--svc-dim');
+            animated.forEach((el) => {
+                el.style.transform = '';
+                el.style.opacity = '';
+                el.style.clipPath = '';
+                el.style.pointerEvents = '';
             });
         };
 
@@ -106,95 +113,88 @@ export default function Services() {
         // smoothed by the scrub below.
         const update = (scrolled: number) => {
             if (!dist) return;
-            // The heading rests in the centre for `hold`, then takes the rest
-            // of the intro to settle.
-            const q = Math.min(1, Math.max(0, (scrolled - hold) / (intro - hold)));
-            const rest = 1 - q * q * (3 - 2 * q);
-            const p = Math.min(1, Math.max(0, (scrolled - intro) / dist));
-            const x = startX + enterX * rest - p * travel;
+            const s = scrolled - hold;
+            // t[k]: chapter k's way in (1..n services, n+1 the closing one).
+            const t = [1];
+            for (let k = 1; k <= n + 1; k++) t[k] = ease(clamp01((s - (k - 1) * L) / T));
+            t[n + 2] = 0;
+            const pos = t.slice(1, n + 2).reduce((a, b) => a + b, 0);
 
-            title.style.transform = `translate3d(${(head.tx * rest).toFixed(1)}px, ${(head.ty * rest).toFixed(1)}px, 0) scale(${(1 + 0.3 * rest).toFixed(3)})`;
-            // Each lede line is centred at first and slides to the left edge.
-            words.forEach((word, i) => {
-                word.style.transform = `translate3d(${(wordX[i] * rest).toFixed(1)}px, ${(head.ly * rest).toFixed(1)}px, 0)`;
+            // Heading lifts away as the first photo comes in.
+            const h = clamp01(t[1] * 1.8);
+            head.style.opacity = (1 - h).toFixed(3);
+            head.style.transform = `translate3d(0, ${(-48 * h).toFixed(1)}px, 0)`;
+            backdrop.style.transform = `translate3d(${(-12 * t[1]).toFixed(2)}%, 0, 0)`;
+
+            // Each photo is revealed from the right edge, then pushed left by
+            // the next while it drifts slowly the whole time it is on screen.
+            let wipe = -1;
+            scenes.forEach((scene, i) => {
+                const k = i + 1;
+                const inP = t[k];
+                const outP = t[k + 1];
+                scene.style.clipPath = `inset(0 0 0 ${((1 - inP) * 100).toFixed(2)}%)`;
+                scene.style.transform = `translate3d(${(-12 * outP).toFixed(2)}%, 0, 0)`;
+                const drift = Math.min(2, Math.max(0, pos - (k - 1)));
+                sceneImgs[i].style.transform = `translate3d(${((1 - drift) * 2.5).toFixed(2)}%, 0, 0) scale(1.08)`;
+                if (inP > 0 && inP < 1) wipe = inP;
             });
-            // The counter and progress bar wait until the heading has landed.
-            meter.style.opacity = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
-            rail.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
-            pin.style.setProperty('--svc-progress', p.toFixed(3));
-            // The intro backdrop fades out as the heading settles.
-            pin.style.setProperty('--svc-intro', rest.toFixed(3));
+            edge.style.opacity = wipe < 0 ? '0' : Math.sin(Math.PI * wipe).toFixed(3);
+            edge.style.transform = `translate3d(${((1 - Math.max(0, wipe)) * vw).toFixed(1)}px, 0, 0)`;
 
-            // A card is full size while the centre line is on it, and steps
-            // back the further its nearest edge is from that line.
-            let current = 0;
-            let nearest = Infinity;
+            // Number, titles and index are there from the first service to the last.
+            const shown = Math.min(clamp01((t[1] - 0.4) / 0.6), 1 - t[n + 1]);
+            captions.style.opacity = shown.toFixed(3);
+            index.style.opacity = shown.toFixed(3);
+            index.style.pointerEvents = shown > 0.5 ? 'auto' : 'none';
+            // Rolls like a mechanical counter while the photos change.
+            strip.style.transform = `translate3d(0, ${(-(Math.min(n, Math.max(1, pos)) - 1) / n * 100).toFixed(3)}%, 0)`;
+
+            titles.forEach((title, i) => {
+                const cin = ease(clamp01((t[i + 1] - 0.4) / 0.6));
+                const cout = t[i + 2];
+                title.style.opacity = Math.min(cin, 1 - cout).toFixed(3);
+                title.style.transform = `translate3d(${((1 - cin) * 90 - cout * 90).toFixed(1)}px, 0, 0)`;
+            });
+
             cards.forEach((card, i) => {
-                const off = Math.abs(cardX[i] + x - centre);
-                if (off < nearest) {
-                    nearest = off;
-                    current = i;
-                }
-                const away = Math.min(1, Math.max(0, (off - cardW / 2) / (pitch * 0.6)));
-                card.style.setProperty('--svc-scale', (1 - 0.05 * away).toFixed(3));
-                card.style.setProperty('--svc-dim', (1 - 0.22 * away).toFixed(3));
+                const cin = ease(clamp01((t[i + 1] - 0.45) / 0.55));
+                const cout = t[i + 2];
+                const op = Math.min(cin, clamp01(1 - cout * 1.6));
+                card.style.opacity = op.toFixed(3);
+                card.style.transform = `translate3d(${((1 - cin) * vw * 0.55 - cout * 120).toFixed(1)}px, -50%, 0)`;
+                card.style.pointerEvents = op > 0.5 ? 'auto' : 'none';
             });
-            const label = `${String(current + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
-            if (counter.textContent !== label) counter.textContent = label;
+
+            const oin = ease(clamp01((t[n + 1] - 0.45) / 0.55));
+            outro.style.opacity = oin.toFixed(3);
+            outro.style.transform = `translate3d(-50%, calc(-50% + ${((1 - oin) * 40).toFixed(1)}px), 0)`;
+            outro.style.pointerEvents = oin > 0.5 ? 'auto' : 'none';
+
+            const active = Math.min(n - 1, Math.max(0, Math.round(pos) - 1));
+            indexItems.forEach((item, i) => {
+                item.style.setProperty('--svc-fill', clamp01((s - i * L) / L).toFixed(3));
+                if (i === active) item.setAttribute('data-active', '');
+                else item.removeAttribute('data-active');
+            });
         };
         const scrub = createScrub(
-            () => Math.min(intro + dist, Math.max(0, -pin.getBoundingClientRect().top)),
+            () => Math.min(dist, Math.max(0, -pin.getBoundingClientRect().top)),
             update
         );
         const layout = () => {
             dist = 0;
-            travel = 0;
-            if (mq.matches && cards.length) {
-                // Measure in the pinned layout, which is what will be shown.
+            if (mq.matches && n) {
                 pin.dataset.pinned = '';
-                rail.scrollLeft = 0;
-                clearPinned();
-                centre = document.documentElement.clientWidth / 2;
-                const rects = cards.map((card) => card.getBoundingClientRect());
-                cardX = rects.map((r) => r.left + r.width / 2);
-                cardW = rects[0].width;
-                pitch = rects.length > 1 ? rects[1].left - rects[0].left : cardW;
-
-                // Heading: the title and every lede line are centred on the
-                // centre line, and the group is centred in the stage below
-                // the navbar. The title also grows by 30%, so the lede drops
-                // by the extra height.
-                const range = document.createRange();
-                range.selectNodeContents(title);
-                const t = range.getBoundingClientRect();
-                const w = words.map((word) => word.getBoundingClientRect());
-                const lines = new Map<number, { left: number; right: number }>();
-                w.forEach((r) => {
-                    const line = lines.get(Math.round(r.top));
-                    if (line) line.right = r.right;
-                    else lines.set(Math.round(r.top), { left: r.left, right: r.right });
-                });
-                wordX = w.map((r) => {
-                    const line = lines.get(Math.round(r.top))!;
-                    return centre - (line.left + line.right) / 2;
-                });
-                const stage = pin.firstElementChild!.getBoundingClientRect();
-                const dy = stage.top + 30 + stage.height / 2 - (t.top + w[w.length - 1].bottom) / 2;
-                title.style.transformOrigin = `${(t.width / 2).toFixed(1)}px 50%`;
-                head.tx = centre - (t.left + t.width / 2);
-                head.ty = dy - t.height * 0.15;
-                head.ly = dy + t.height * 0.15;
-
-                intro = window.innerHeight * 1.05;
-                hold = window.innerHeight * 0.15;
-                enterX = centre + 40;
-                startX = centre - rects[0].left;
-                travel = Math.max(0, startX - (centre - rects[rects.length - 1].right));
-                // Slightly geared up, so the intro does not lengthen the pin.
-                dist = travel * 0.8;
+                vw = document.documentElement.clientWidth;
+                const H = window.innerHeight;
+                hold = H * 0.15;
+                T = H * 0.75;
+                L = T + H * 0.45;
+                dist = hold + (n + 1) * L;
             }
             if (dist) {
-                pin.style.setProperty('--svc-dist', `${dist + intro}px`);
+                pin.style.setProperty('--svc-dist', `${dist}px`);
                 scrub.snap();
             } else {
                 delete pin.dataset.pinned;
@@ -202,21 +202,28 @@ export default function Services() {
                 clearPinned();
             }
         };
+        // Page scroll position at which chapter `c` (0-based) is settled.
+        const chapterTop = (c: number) =>
+            window.scrollY + pin.getBoundingClientRect().top + hold + c * L + T + (L - T) * 0.3;
+        jumpRef.current = (c) => {
+            if (dist) window.scrollTo({ top: chapterTop(c), behavior: 'smooth' });
+        };
         const onScroll = () => {
             if (dist) scrub.kick();
         };
-        // Keyboard: a focused link in a card that is still off to the side
-        // would otherwise stay out of view, so scroll the page to bring it in.
+        // Keyboard: a focused link in a card that is not the current chapter
+        // would be invisible, so scroll the page to that card's chapter.
         const onFocusIn = (e: FocusEvent) => {
-            const card = (e.target as HTMLElement).closest(`article, .${styles.svcOutro}`);
-            const first = rail.firstElementChild;
-            if (!dist || !card || !first) return;
-            const r = card.getBoundingClientRect();
-            if (r.left >= 0 && r.right <= window.innerWidth) return;
-            // Scroll to the point where this card sits on the centre line.
-            const offset = r.left + r.width / 2 - first.getBoundingClientRect().left;
-            const at = intro + (Math.min(travel, offset) / travel) * dist;
-            window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + at });
+            if (!dist) return;
+            const card = (e.target as HTMLElement).closest('article');
+            const c = card ? cards.indexOf(card) : (e.target as HTMLElement).closest(`.${styles.svcOutro}`) ? n : -1;
+            if (c >= 0) window.scrollTo({ top: chapterTop(c) });
+        };
+        // Light cursor: the photo's tint lifts around the pointer.
+        const onMove = (e: PointerEvent) => {
+            if (!dist || e.pointerType !== 'mouse') return;
+            stage.style.setProperty('--svc-mx', `${e.clientX}px`);
+            stage.style.setProperty('--svc-my', `${e.clientY}px`);
         };
 
         layout();
@@ -224,11 +231,13 @@ export default function Services() {
         window.addEventListener('resize', layout);
         window.addEventListener('scroll', onScroll, { passive: true });
         rail.addEventListener('focusin', onFocusIn);
+        stage.addEventListener('pointermove', onMove);
         return () => {
             mq.removeEventListener('change', layout);
             window.removeEventListener('resize', layout);
             window.removeEventListener('scroll', onScroll);
             rail.removeEventListener('focusin', onFocusIn);
+            stage.removeEventListener('pointermove', onMove);
             scrub.stop();
             clearPinned();
         };
@@ -258,8 +267,23 @@ export default function Services() {
     return (
         <section ref={pinRef} className={`relative ${styles.svcPin}`} id="services">
             <div className={styles.svcStage}>
-            {/* Pinned side-scroll only: behind the centred intro heading. */}
-            <div className={styles.svcBackdrop} aria-hidden="true" />
+            {/* Pinned chapters only: the people backdrop behind the opening
+                heading, then one full-screen photo per service and the
+                backdrop again for the closing chapter. */}
+            <div className={styles.svcScenes} aria-hidden="true">
+                <div className={styles.svcBackdrop} />
+                {TALENTMESH_SERVICES.map((service) => (
+                    <div key={service.title} className={`${styles.svcScene} ${styles.svcScenePhoto}`}>
+                        <div className={styles.svcSceneImg}>
+                            <Image src={service.image} alt="" fill sizes="100vw" className={styles.svcCardImg} />
+                        </div>
+                    </div>
+                ))}
+                <div className={styles.svcScene}>
+                    <div className={`${styles.svcSceneImg} ${styles.svcBackdrop}`} />
+                </div>
+                <i className={styles.svcWipeEdge} />
+            </div>
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div
@@ -271,25 +295,7 @@ export default function Services() {
                         <div className={styles.svcTop}>
                             <div className={styles.svcHeadText}>
                                 <h2 className={styles.h2}>Customized Solutions</h2>
-                                {/* One span per word, so the pinned intro can
-                                    centre each line and then slide it back to
-                                    the left edge (text-align cannot animate). */}
-                                <p className={styles.lede}>
-                                    {LEDE.split(' ').map((word, i) => (
-                                        <Fragment key={i}>
-                                            <span className={styles.svcLedeWord}>{word}</span>{' '}
-                                        </Fragment>
-                                    ))}
-                                </p>
-                            </div>
-
-                            {/* Pinned side-scroll only: which card is on the
-                                centre line, and how far along the rail is. */}
-                            <div className={styles.svcMeter} aria-hidden="true">
-                                <span className={styles.svcCounter}>01 / 06</span>
-                                <div className={styles.svcProgress}>
-                                    <i />
-                                </div>
+                                <p className={styles.lede}>{LEDE}</p>
                             </div>
 
                             <div className={styles.svcControls}>
@@ -373,9 +379,8 @@ export default function Services() {
                                 </article>
                             ))}
 
-                            {/* Pinned side-scroll only (hidden otherwise): it
-                                rides in behind the last card and ends in the
-                                right half of the screen. */}
+                            {/* Pinned chapters only (hidden otherwise): the
+                                closing chapter, centred over the backdrop. */}
                             <div className={styles.svcOutro}>
                                 <h3>Not sure which model fits?</h3>
                                 <p>Tell us the role and we will recommend the right way to hire for it.</p>
@@ -387,6 +392,36 @@ export default function Services() {
                     </div>
                 </div>
             </div>
+
+            {/* Pinned chapters only. The cards carry the content; these repeat
+                each service's name as a large title for the chapter. */}
+            <div className={styles.svcCaptions} aria-hidden="true">
+                <div className={styles.svcNumber}>
+                    <span className={styles.svcNumberStrip}>
+                        {TALENTMESH_SERVICES.map((_, i) => (
+                            <span key={i}>{String(i + 1).padStart(2, '0')}</span>
+                        ))}
+                    </span>
+                </div>
+                <div className={styles.svcCaptionTitles}>
+                    {TALENTMESH_SERVICES.map((service) => (
+                        <p key={service.title} className={styles.svcCaptionTitle}>{service.title}</p>
+                    ))}
+                </div>
+            </div>
+            <nav className={styles.svcIndex} aria-label="Services">
+                <span className={styles.svcIndexLabel}>Customized Solutions</span>
+                <ol>
+                    {TALENTMESH_SERVICES.map((service, i) => (
+                        <li key={service.title}>
+                            <button type="button" onClick={() => jumpRef.current(i)}>
+                                <span>{service.title}</span>
+                                <i />
+                            </button>
+                        </li>
+                    ))}
+                </ol>
+            </nav>
             </div>
         </section>
     );
