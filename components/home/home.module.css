@@ -2687,6 +2687,10 @@ h2.industriesTitle {
     display: none;
 }
 
+.svcBackdrop {
+    display: none;
+}
+
 .svcProgress i {
     display: block;
     height: 100%;
@@ -2737,6 +2741,24 @@ h2.industriesTitle {
 
     .svcPin[data-pinned] .svcControls {
         display: none;
+    }
+
+    /* --svc-intro goes 1 -> 0 over the intro (Services.tsx), so the backdrop
+       is gone by the time the cards have arrived. */
+    .svcPin[data-pinned] .svcBackdrop {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background: url('/images/services/intro-bg.webp') center / cover no-repeat;
+        opacity: var(--svc-intro, 1);
+        transform: scale(calc(1.06 - 0.06 * var(--svc-intro, 1)));
+        will-change: opacity, transform;
+    }
+
+    .svcPin[data-pinned] .svcStage > .section {
+        z-index: 1;
     }
 
     .svcPin[data-pinned] .svcMeter {
