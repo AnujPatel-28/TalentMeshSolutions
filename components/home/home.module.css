@@ -2751,7 +2751,7 @@ h2.industriesTitle {
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background: url('/images/services/intro-bg.webp') center / cover no-repeat;
+        background: url('/images/services/intro-ribbons.webp') center / cover no-repeat;
         opacity: var(--svc-intro, 1);
         transform: scale(calc(1.06 - 0.06 * var(--svc-intro, 1)));
         will-change: opacity, transform;
