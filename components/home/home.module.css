@@ -2647,27 +2647,61 @@ h2.industriesTitle {
     width: 24px;
 }
 
-/* Pinned chapters (Services.tsx). On a wide, tall enough screen the section
-   pins for one viewport: the heading opens centred over the people backdrop,
-   then each service gets a full-screen chapter whose photo wipes in from the
-   right, with a large title on the left and its card on the right, and a
-   closing chapter ends it. The section's extra height, --svc-dist, is the
-   scroll that takes and is written by Services.tsx together with
-   `data-pinned`; until then, and on phones, short screens and for reduced
-   motion, the rail stays the swipeable carousel above, and none of the
-   pinned-only parts below are shown. */
-.svcScenes,
-.svcCaptions,
-.svcIndex,
+/* Pinned side-scroll (Services.tsx). On a wide, tall enough screen the section
+   pins for one viewport: the title opens centred and settles into place as
+   the cards come in, then vertical scroll moves the rail sideways, from the
+   first card starting at the centre line to the last card ending on it. The
+   section's extra height, --svc-dist, is the scroll that takes and is written
+   by Services.tsx together with `data-pinned`; until then, and on phones, short
+   screens and for reduced motion, the rail stays the swipeable carousel above. */
+/* Transforms need a box; see the lede in Services.tsx. */
+.svcLedeWord {
+    display: inline-block;
+}
+
+.svcMeter {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    margin-bottom: 0.75rem;
+}
+
+.svcCounter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--tm-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.svcProgress {
+    width: 220px;
+    height: 3px;
+    border-radius: 3px;
+    background: #DBE7F4;
+    overflow: hidden;
+}
+
 .svcOutro {
     display: none;
+}
+
+.svcBackdrop {
+    display: none;
+}
+
+.svcProgress i {
+    display: block;
+    height: 100%;
+    background: var(--tm-brand);
+    transform-origin: left;
+    transform: scaleX(var(--svc-progress, 0));
 }
 
 @media (min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
     .svcPin {
         height: calc(100vh + var(--svc-dist, 0px));
-        /* Left edge of the 1200px column, which the title and index share. */
-        --svc-edge: max(3rem, calc((100vw - 1200px) / 2));
     }
 
     /* 60px clears the fixed navbar. */
@@ -2679,144 +2713,71 @@ h2.industriesTitle {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        overflow: hidden;
     }
 
-    /* The stage, not these, is what the scenes, cards and closing chapter
-       are placed against. */
-    .svcPin[data-pinned] .svcStage > .section,
-    .svcPin[data-pinned] .inner,
-    .svcPin[data-pinned] .svcWrapper {
-        position: static;
+    /* Cards run to the viewport edge rather than stopping at the 1200px
+       column; the page wrapper clips them there. */
+    .svcStage > .section {
         padding-block: 0;
         overflow: visible;
     }
 
-    .svcPin[data-pinned] .svcScenes {
-        display: block;
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-    }
-
-    .svcPin[data-pinned] .svcBackdrop,
-    .svcPin[data-pinned] .svcScene,
-    .svcPin[data-pinned] .svcSceneImg {
-        position: absolute;
-        inset: 0;
-    }
-
-    .svcPin[data-pinned] .svcBackdrop {
-        background: url('/images/services/intro-bg.webp') center / cover no-repeat;
-    }
-
-    .svcPin[data-pinned] .svcScene {
-        clip-path: inset(0 0 0 100%);
-        will-change: clip-path, transform;
-    }
-
-    .svcPin[data-pinned] .svcSceneImg {
+    .svcPin[data-pinned] .svcHeadText .h2,
+    .svcPin[data-pinned] .svcLedeWord {
         will-change: transform;
     }
 
-    /* Tint over each service photo: darker on the left behind the title, and
-       lifted in a pool of light around the mouse pointer. */
-    .svcPin[data-pinned] .svcScenePhoto::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-            linear-gradient(90deg, rgba(6, 18, 36, 0.55) 0%, rgba(6, 18, 36, 0) 60%),
-            radial-gradient(circle at var(--svc-mx, 72%) var(--svc-my, 45%),
-                rgba(6, 18, 36, 0) 0, rgba(6, 18, 36, 0) 120px, rgba(6, 18, 36, 0.5) 460px);
+    /* --svc-scale / --svc-dim are written per card by Services.tsx. */
+    .svcPin[data-pinned] .svcCard {
+        transform: scale(var(--svc-scale, 1));
+        opacity: var(--svc-dim, 1);
     }
 
-    /* Bright line on the front of each wipe. */
-    .svcPin[data-pinned] .svcWipeEdge {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: -1px;
-        width: 2px;
-        background: linear-gradient(180deg, transparent, #7FD3FF 30%, #FFFFFF 50%, #7FD3FF 70%, transparent);
-        box-shadow: 0 0 24px 4px rgba(0, 180, 255, 0.55);
-        opacity: 0;
-    }
-
-    .svcPin[data-pinned] .svcTop {
-        justify-content: center;
-        margin-bottom: 0;
-        text-align: center;
-    }
-
-    .svcPin[data-pinned] .svcHeadText {
-        max-width: 44rem;
-        will-change: transform, opacity;
-    }
-
-    .svcPin[data-pinned] .svcHeadText .h2 {
-        font-size: clamp(3rem, 5.2vw, 4.5rem);
+    .svcPin[data-pinned] .svcRail {
+        overflow: visible;
+        scroll-snap-type: none;
+        will-change: transform;
     }
 
     .svcPin[data-pinned] .svcControls {
         display: none;
     }
 
-    .svcPin[data-pinned] .svcRail {
-        overflow: visible;
-        scroll-snap-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .svcPin[data-pinned] .svcCard {
-        position: absolute;
-        z-index: 2;
-        top: calc(50% + 30px);
-        right: var(--svc-edge);
-        width: min(24rem, 30vw);
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: 18px;
-        box-shadow: 0 24px 60px rgba(4, 14, 30, 0.35);
-        opacity: 0;
-        will-change: transform, opacity;
-    }
-
-    .svcPin[data-pinned] .svcImageWrapper {
-        display: none;
-    }
-
-    .svcPin[data-pinned] .svcCardBody {
-        padding: 1.75rem 1.75rem 2rem;
-    }
-
-    /* The chapter's large title already names the service on screen; the
-       card keeps its heading for screen readers only. */
-    .svcPin[data-pinned] .svcCardTitle {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
-
-    .svcPin[data-pinned] .svcOutro {
+    /* --svc-intro goes 1 -> 0 over the intro (Services.tsx), so the backdrop
+       is gone by the time the cards have arrived. */
+    .svcPin[data-pinned] .svcBackdrop {
         display: block;
         position: absolute;
-        z-index: 2;
-        top: calc(50% + 30px);
-        left: 50%;
-        width: min(36rem, 80vw);
-        text-align: center;
-        opacity: 0;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background: url('/images/services/intro-bg.webp') center / cover no-repeat;
+        opacity: var(--svc-intro, 1);
+        transform: scale(calc(1.06 - 0.06 * var(--svc-intro, 1)));
+        will-change: opacity, transform;
+    }
+
+    .svcPin[data-pinned] .svcStage > .section {
+        z-index: 1;
+    }
+
+    .svcPin[data-pinned] .svcMeter {
+        display: flex;
+    }
+
+    /* Follows the last card in the rail, so it can never overlap one. The
+       rail stops with that card's right edge on the centre line, which leaves
+       this block in the right half. */
+    .svcPin[data-pinned] .svcOutro {
+        display: block;
+        flex: 0 0 min(28rem, 40vw);
+        align-self: center;
+        margin-left: 2.5rem;
     }
 
     .svcOutro h3 {
         margin: 0;
-        font-size: clamp(2rem, 3.4vw, 3rem);
+        font-size: clamp(1.6rem, 2.6vw, 2.4rem);
         line-height: 1.12;
         font-weight: 700;
         letter-spacing: -0.02em;
@@ -2825,145 +2786,11 @@ h2.industriesTitle {
     }
 
     .svcOutro p {
-        margin: 0.9rem auto 1.75rem;
+        margin: 0.9rem 0 1.75rem;
         max-width: 26rem;
         font-size: 1.05rem;
         line-height: 1.6;
         color: var(--tm-body);
-    }
-
-    /* Rolling number and the current chapter's title, on the left. */
-    .svcPin[data-pinned] .svcCaptions {
-        display: block;
-        position: absolute;
-        z-index: 2;
-        left: var(--svc-edge);
-        top: calc(50% + 30px);
-        width: min(36rem, 42vw);
-        transform: translateY(-55%);
-        color: #FFFFFF;
-        pointer-events: none;
-        opacity: 0;
-    }
-
-    .svcNumber {
-        height: 1em;
-        overflow: hidden;
-        font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-        font-size: clamp(6rem, 11vw, 10rem);
-        font-weight: 700;
-        line-height: 1;
-        letter-spacing: -0.04em;
-        color: transparent;
-        -webkit-text-stroke: 2px rgba(255, 255, 255, 0.85);
-        font-variant-numeric: tabular-nums;
-    }
-
-    .svcNumberStrip {
-        display: block;
-        will-change: transform;
-    }
-
-    .svcNumberStrip > span {
-        display: block;
-        height: 1em;
-    }
-
-    .svcCaptionTitles {
-        position: relative;
-        height: 2.3em;
-        margin-top: 1rem;
-        font-size: clamp(2rem, 3.4vw, 3.2rem);
-    }
-
-    .svcCaptionTitle {
-        position: absolute;
-        inset: 0 0 auto 0;
-        margin: 0;
-        font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-        font-size: inherit;
-        font-weight: 700;
-        line-height: 1.12;
-        letter-spacing: -0.02em;
-        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
-        opacity: 0;
-        will-change: transform, opacity;
-    }
-
-    /* Chapter index along the bottom: one segment per service, filling as
-       its chapter plays; each jumps to its chapter. */
-    .svcPin[data-pinned] .svcIndex {
-        display: block;
-        position: absolute;
-        z-index: 2;
-        left: var(--svc-edge);
-        right: var(--svc-edge);
-        bottom: 2rem;
-        opacity: 0;
-    }
-
-    .svcIndexLabel {
-        display: block;
-        margin-bottom: 0.9rem;
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .svcIndex ol {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 1.25rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .svcIndex button {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        gap: 0.6rem;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        background: none;
-        border: 0;
-        text-align: left;
-        cursor: pointer;
-        font-size: 0.8rem;
-        line-height: 1.3;
-        color: rgba(255, 255, 255, 0.6);
-        transition: color 0.3s;
-    }
-
-    .svcIndex button:hover,
-    .svcIndex li[data-active] button {
-        color: #FFFFFF;
-    }
-
-    .svcIndex button:focus-visible {
-        outline: 2px solid #FFFFFF;
-        outline-offset: 4px;
-        border-radius: 2px;
-    }
-
-    .svcIndex i {
-        display: block;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.25);
-        overflow: hidden;
-    }
-
-    .svcIndex i::after {
-        content: '';
-        display: block;
-        height: 100%;
-        background: #FFFFFF;
-        transform-origin: left;
-        transform: scaleX(var(--svc-fill, 0));
     }
 }
 
