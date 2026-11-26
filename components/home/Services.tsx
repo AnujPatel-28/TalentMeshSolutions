@@ -122,8 +122,6 @@ export default function Services() {
             meter.style.opacity = Math.min(1, Math.max(0, (q - 0.8) / 0.2)).toFixed(3);
             rail.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
             pin.style.setProperty('--svc-progress', p.toFixed(3));
-            // The intro backdrop fades out as the heading settles.
-            pin.style.setProperty('--svc-intro', rest.toFixed(3));
 
             // A card is full size while the centre line is on it, and steps
             // back the further its nearest edge is from that line.
@@ -258,8 +256,6 @@ export default function Services() {
     return (
         <section ref={pinRef} className={`relative ${styles.svcPin}`} id="services">
             <div className={styles.svcStage}>
-            {/* Pinned side-scroll only: behind the centred intro heading. */}
-            <div className={styles.svcBackdrop} aria-hidden="true" />
             <div className={styles.section}>
                 <div className={styles.inner}>
                     <div
