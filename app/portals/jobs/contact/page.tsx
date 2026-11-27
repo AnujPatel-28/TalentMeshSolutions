@@ -27,8 +27,8 @@ const COUNTRY_CODES = [
 ];
 const EMPTY_FORM = { firstName: '', lastName: '', email: '', countryCode: '+91', phone: '', organization: '', message: '', services: [] as string[] };
 
-const MAPS_QUERY = `${CONTACT.streetAddress}, ${CONTACT.locality} ${CONTACT.postalCode}, ${CONTACT.region}, India`;
-const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(MAPS_QUERY)}&output=embed`;
+// Pin the embed to the office's coordinates; a text search can land on the wrong building.
+const MAP_EMBED_SRC = `https://www.google.com/maps?q=${CONTACT.geo.latitude},${CONTACT.geo.longitude}&z=17&output=embed`;
 const PHONE_ERROR = 'Enter a valid number for the selected country. Indian mobile numbers have 10 digits and start with 6–9.';
 
 /** The number as sent: empty, or the country code plus the national number without its leading zeros. */
@@ -234,8 +234,8 @@ export default function ContactPage() {
                     </section>
                     <section>
                         <h2>Visit us</h2>
-                        <p>Meet us in person at our office in Navrangpura.</p>
-                        <a className={`${styles.route} ${styles.routeAddress}`} href="https://www.google.com/maps/search/?api=1&query=7-B%20Amrut%20Bag%20Colony%20Navrangpura%20Ahmedabad%20380009" target="_blank" rel="noopener noreferrer"><MapPin size={18} aria-hidden="true" /><span>7-B, Amrut Bag Colony, Navrangpura, Ahmedabad – 380009</span></a>
+                        <p>Meet us in person at our office in Gota.</p>
+                        <a className={`${styles.route} ${styles.routeAddress}`} href={CONTACT.mapsHref} target="_blank" rel="noopener noreferrer"><MapPin size={18} aria-hidden="true" /><span>1203, Ganesh Glory, Gota, Ahmedabad – 382470</span></a>
                     </section>
                 </aside>
             </div>
@@ -245,7 +245,7 @@ export default function ContactPage() {
                     <div className={styles.mapFrame}>
                         <iframe
                             src={MAP_EMBED_SRC}
-                            title="Map showing the Talentmesh Solutions office in Navrangpura, Ahmedabad"
+                            title="Map showing the Talentmesh Solutions office at Ganesh Glory, Gota, Ahmedabad"
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                             allowFullScreen
@@ -263,7 +263,7 @@ export default function ContactPage() {
                         <p className={styles.eyebrow}>Visit us</p>
                         <h2 id="office-title">Based in Ahmedabad. <span>Hiring across India.</span></h2>
                         <address>{CONTACT.addressLines.map(line => <span key={line}>{line}</span>)}</address>
-                        <a href="https://www.google.com/maps/search/?api=1&query=7-B%20Amrut%20Bag%20Colony%20Navrangpura%20Ahmedabad%20380009" target="_blank" rel="noopener noreferrer">View on Google Maps <ArrowUpRight size={16} aria-hidden="true" /></a>
+                        <a href={CONTACT.mapsHref} target="_blank" rel="noopener noreferrer">View on Google Maps <ArrowUpRight size={16} aria-hidden="true" /></a>
                     </div>
                 </div>
             </section>

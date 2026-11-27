@@ -14,14 +14,18 @@ export const CONTACT = {
   legalName: 'Talentmesh Solution Pvt. Ltd.',
   brandName: 'Talentmesh Solutions',
   addressLines: [
-    '7-B, Amrut Bag Colony, Opp. Stadium,',
-    'Nr. Hindu Colony, Navrangpura,',
-    'Ahmedabad – 380009, Gujarat, India',
+    '1203, Ganesh Glory,',
+    'Gota, Ahmedabad – 382470,',
+    'Gujarat, India',
   ],
-  streetAddress: '7-B, Amrut Bag Colony, Opp. Stadium, Nr. Hindu Colony, Navrangpura',
+  streetAddress: '1203, Ganesh Glory, Gota',
   locality: 'Ahmedabad',
   region: 'Gujarat',
-  postalCode: '380009',
+  postalCode: '382470',
+  /** The Ganesh Glory pin on Google Maps (from the office's shared Maps link). */
+  geo: { latitude: 23.1138905, longitude: 72.5412751 },
+  mapsHref: 'https://maps.app.goo.gl/6Mc8FydihB5Dt1NW8',
+  directionsHref: 'https://www.google.com/maps/dir/?api=1&destination=23.1138905,72.5412751',
   phoneDisplay: '9898161106',
   phoneHref: 'tel:9898161106',
   /** wa.me wants the number with country code and no symbols; `text` pre-fills the first message. */
