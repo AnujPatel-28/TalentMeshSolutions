@@ -261,7 +261,7 @@
 
 /* ─── Shared morphing background (Talent Solutions, Talent Portal, Company) ─
    One card sits behind whichever of the three menus is open. Navbar.tsx sets
-   its size and position from that menu's card; moving between menus it glides
+   (and animates) its size and position from that menu's card; moving between menus it glides
    and resizes while the content cross-fades, so the three read as one surface.
    The menus themselves drop their own card paint. */
 .morph {
@@ -285,12 +285,6 @@
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s ease-out, visibility 0s;
-}
-
-.morph[data-state='open'][data-geometry='glide'] {
-  transition: opacity 0.2s ease-out, visibility 0s,
-    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
-    height 0.38s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .links .dropdown,

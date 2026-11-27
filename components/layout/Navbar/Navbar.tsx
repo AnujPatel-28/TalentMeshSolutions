@@ -129,30 +129,64 @@ const Navbar = () => {
         const panel = document.getElementById(MORPH_PANEL[next]);
         const prevPanel = prev && prev !== next ? document.getElementById(MORPH_PANEL[prev]) : null;
         if (!panel) return;
+        const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        // Where the background is right now (mid-glide after a quick switch),
+        // read before any running animation is cancelled.
+        const snapshot = () => {
+            const cs = getComputedStyle(morph);
+            return { width: cs.width, height: cs.height, transform: cs.transform, borderRadius: cs.borderRadius };
+        };
+        const fromFrame = snapshot();
+        const from = morph.getBoundingClientRect();
         // Measure without any slide still running from a quick back-and-forth.
         for (const el of [panel, prevPanel, morph]) el?.getAnimations().forEach((a) => a.cancel());
         const card = (next === 'solutions' ? panel.firstElementChild : panel) as HTMLElement;
 
-        const place = (glide: boolean) => {
+        // The glide is a Web Animation, not a CSS transition, so it starts on
+        // the same frame as the content's slide and clip below; with this
+        // fast-starting ease, one frame apart is tens of pixels.
+        let glide: Animation | null = null;
+        let target = '';
+        const place = (animate: boolean, start = snapshot()) => {
             const r = card.getBoundingClientRect();
             const n = (morph.parentElement as HTMLElement).getBoundingClientRect();
             // Measure where the card rests, not where a running slide has it.
             const [sx = 0, sy = 0] = getComputedStyle(panel).translate.split(' ').map((v) => parseFloat(v) || 0);
-            r.x -= sx;
-            r.y -= sy;
-            morph.dataset.geometry = glide && !reduce ? 'glide' : 'instant';
-            morph.style.width = `${r.width}px`;
-            morph.style.height = `${r.height}px`;
-            morph.style.transform = `translate3d(${r.left - n.left}px, ${r.top - n.top}px, 0)`;
-            morph.style.borderRadius = getComputedStyle(card).borderRadius;
+            const end = {
+                width: `${r.width}px`,
+                height: `${r.height}px`,
+                transform: `translate3d(${r.left - sx - n.left}px, ${r.top - sy - n.top}px, 0)`,
+                borderRadius: getComputedStyle(card).borderRadius,
+            };
+            // Already headed there (e.g. the observer's first report): leave the glide running.
+            const key = JSON.stringify(end);
+            if (key === target) return;
+            target = key;
+            glide?.cancel();
+            Object.assign(morph.style, end);
+            const moved = start.width !== end.width || start.height !== end.height || start.transform !== getComputedStyle(morph).transform;
+            if (animate && moved && !reduce) glide = morph.animate([start, end], { duration: 380, easing: ease });
         };
-        place(prev !== null);
+        place(prev !== null, fromFrame);
         morph.dataset.state = 'open';
 
         if (!reduce) {
-            const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
             if (prevPanel && prev) {
                 const dir = MORPH_ORDER.indexOf(next) > MORPH_ORDER.indexOf(prev) ? 1 : -1;
+                // Growing into a bigger menu: clip its content to the background
+                // as it grows, so nothing shows on the page before the card
+                // reaches it. Same timing as the glide; the clip starts 28px
+                // against the slide so on screen it tracks the background exactly.
+                const to = card.getBoundingClientRect();
+                if (to.width > from.width + 1 || to.height > from.height + 1) {
+                    const p = panel.getBoundingClientRect();
+                    const inset = (r: DOMRect, shift: number, radius: string) =>
+                        `inset(${r.top - p.top}px ${p.right - r.right + shift}px ${p.bottom - r.bottom}px ${r.left - p.left - shift}px round ${radius})`;
+                    panel.animate(
+                        [{ clipPath: inset(from, dir * 28, fromFrame.borderRadius) }, { clipPath: inset(to, 0, getComputedStyle(card).borderRadius) }],
+                        { duration: 380, easing: ease },
+                    );
+                }
                 panel.animate([{ translate: `${dir * 28}px 0` }, { translate: '0 0' }], { duration: 380, easing: ease });
                 prevPanel.animate([{ translate: '0 0' }, { translate: `${-dir * 28}px 0` }], { duration: 200, easing: 'ease-in' });
             } else if (!prev) {
