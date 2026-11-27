@@ -133,10 +133,16 @@
     border-radius: 9999px; background: #fff; color: var(--contact-brand); font-size: .875rem; font-weight: 600; text-decoration: none;
     box-shadow: 0 6px 18px -8px rgba(11, 31, 51, .4);
 }
-.faq { display: grid; grid-template-columns: 1fr 1.35fr; gap: clamp(2.5rem, 5vw, 4.5rem); align-items: flex-start; }
-.section .faqHeading { margin: 0; font-size: clamp(2.35rem, 3.8vw, 3.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; color: var(--contact-ink); }
+.faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.75fr); gap: clamp(2.5rem, 5vw, 4.5rem); align-items: flex-start; }
+.section .faqHeading { margin: 0; font-size: clamp(2rem, 3vw, 2.75rem); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; color: var(--contact-ink); }
 .faqSubtext { margin: 1.35rem 0 0; font-size: 1.05rem; line-height: 1.7; color: var(--contact-muted); max-width: 390px; }
 .faqRightCol { min-width: 0; }
+/* The shared accordion opens on a grey that clashes with this page's ice blue; open items
+   here turn white with the page's border instead. */
+.faqItem { border: 1px solid transparent; }
+.faqItem:hover { background: rgba(255, 255, 255, .6) !important; }
+.faqItem:has(> button[aria-expanded='true']) { background: #fff !important; border-color: var(--contact-line); box-shadow: 0 16px 36px -28px rgba(5, 66, 140, .45); }
+.faqItem:has(> button[aria-expanded='true']) button > :last-child { color: var(--contact-brand); }
 .faqBr { display: block; }
 
 @media (max-width: 1100px) {
@@ -161,8 +167,8 @@
     .faqBr { display: none; }
     .faqSubtext { text-align: center; margin: .85rem auto 0; max-width: 540px; font-size: 1rem; }
     .faqRightCol { width: 100%; max-width: 768px; margin: 0 auto; }
-    /* As on the home page FAQ: on phones each accordion item becomes a soft grey card. */
-    .faqRightCol > div > div > div { background: #f4f4f5 !important; border: 1px solid rgba(228, 228, 231, .8) !important; border-radius: 20px !important; overflow: hidden; margin-bottom: 6px; }
+    /* As on the home page FAQ, each item becomes a card on phones; white to suit this page. */
+    .faqRightCol .faqItem { background: #fff !important; border-color: var(--contact-line); border-radius: 20px !important; margin-bottom: 6px; }
     .faqRightCol button { padding: 18px 20px !important; }
     .success { min-height: 390px; }
 }

@@ -302,14 +302,15 @@ export default function ContactPage() {
             <section className={`${styles.section} ${styles.faq}`} aria-labelledby="faq-title">
                 <div className={styles.faqLeftCol}>
                     <h2 id="faq-title" className={styles.faqHeading}>
-                        Frequently asked <br className={styles.faqBr} />questions.
+                        Recruitment &amp; <br className={styles.faqBr} />hiring FAQs
                     </h2>
-                    <p className={styles.faqSubtext}>Straight answers on who we hire for, how we work and what happens after you get in touch.</p>
+                    <p className={styles.faqSubtext}>Quick answers for employers and job seekers across India.</p>
                 </div>
                 <div className={styles.faqRightCol}>
                     <MotionAccordion
                         variant="modern"
                         defaultOpenIndex={0}
+                        itemClassName={styles.faqItem}
                         items={CONTACT_FAQS.map(faq => ({ question: faq.question, answer: faq.answer }))}
                     />
                 </div>
