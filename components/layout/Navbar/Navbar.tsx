@@ -11,6 +11,17 @@ type NavKey = 'solutions' | 'portal' | 'company' | 'login';
 
 const MENU_EXIT_MS = 200;
 
+// The three desktop menus share one morphing background. Order sets which way
+// content slides when moving between them.
+const MORPH_ORDER = ['solutions', 'portal', 'company'] as const;
+type MorphKey = (typeof MORPH_ORDER)[number];
+const MORPH_PANEL: Record<MorphKey, string> = {
+    solutions: 'mega-panel-solutions',
+    portal: 'dropdown-portal',
+    company: 'dropdown-company',
+};
+const isMorphKey = (key: NavKey | null): key is MorphKey => key !== null && key !== 'login';
+
 const MenuIcon = ({ expanded }: { expanded: boolean }) => (
     <svg className={`${styles.menuIcon} ${expanded ? styles.menuIconExpanded : ''}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
         <path className={styles.menuIconTop} data-menu-line="top" d="M4 6h16" />
@@ -25,10 +36,16 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = React.useState(false);
     const [isOverDark, setIsOverDark] = React.useState(false);
     const [activeService, setActiveService] = React.useState(0);
-    // Tracks which desktop dropdown currently has keyboard focus inside it, so its
-    // trigger can report an accurate aria-expanded. Visibility itself is driven by
-    // CSS (:hover / :focus-within) — this state never toggles the panel directly.
+    // Which desktop dropdown has focus inside it. The Login dropdown opens from
+    // CSS (:hover / :focus-within); the other three open from navMenu below.
     const [openNav, setOpenNav] = React.useState<NavKey | null>(null);
+    // Which of the three morphing menus the pointer is over. Leaving waits
+    // briefly so a pointer that slips off for a moment doesn't close it.
+    const [hoverNav, setHoverNav] = React.useState<MorphKey | null>(null);
+    const hoverTimer = React.useRef<number | undefined>(undefined);
+    const morphRef = React.useRef<HTMLDivElement>(null);
+    const shownMenu = React.useRef<MorphKey | null>(null);
+    const navMenu: MorphKey | null = hoverNav ?? (isMorphKey(openNav) ? openNav : null);
     // Which mobile group's second screen is showing — null means level 1.
     const [mobileSub, setMobileSub] = React.useState<NavKey | null>(null);
     const pathname = usePathname();
@@ -95,6 +112,102 @@ const Navbar = () => {
         };
     }, [pathname]);
 
+    // Moves and resizes the shared background onto the open menu's card. On the
+    // first open it drops in; between menus it glides and resizes while the
+    // content slides in the direction of travel; on close it fades.
+    React.useLayoutEffect(() => {
+        const morph = morphRef.current;
+        if (!morph) return;
+        const prev = shownMenu.current;
+        const next = navMenu;
+        shownMenu.current = next;
+        if (!next) {
+            morph.dataset.state = 'closed';
+            return;
+        }
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const panel = document.getElementById(MORPH_PANEL[next]);
+        const prevPanel = prev && prev !== next ? document.getElementById(MORPH_PANEL[prev]) : null;
+        if (!panel) return;
+        const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        // Where the background is right now (mid-glide after a quick switch),
+        // read before any running animation is cancelled.
+        const snapshot = () => {
+            const cs = getComputedStyle(morph);
+            return { width: cs.width, height: cs.height, transform: cs.transform, borderRadius: cs.borderRadius };
+        };
+        const fromFrame = snapshot();
+        const from = morph.getBoundingClientRect();
+        // Measure without any slide still running from a quick back-and-forth.
+        for (const el of [panel, prevPanel, morph]) el?.getAnimations().forEach((a) => a.cancel());
+        const card = (next === 'solutions' ? panel.firstElementChild : panel) as HTMLElement;
+
+        // The glide is a Web Animation, not a CSS transition, so it starts on
+        // the same frame as the content's slide and clip below; with this
+        // fast-starting ease, one frame apart is tens of pixels.
+        let glide: Animation | null = null;
+        let target = '';
+        const place = (animate: boolean, start = snapshot()) => {
+            const r = card.getBoundingClientRect();
+            const n = (morph.parentElement as HTMLElement).getBoundingClientRect();
+            // Measure where the card rests, not where a running slide has it.
+            const [sx = 0, sy = 0] = getComputedStyle(panel).translate.split(' ').map((v) => parseFloat(v) || 0);
+            const end = {
+                width: `${r.width}px`,
+                height: `${r.height}px`,
+                transform: `translate3d(${r.left - sx - n.left}px, ${r.top - sy - n.top}px, 0)`,
+                borderRadius: getComputedStyle(card).borderRadius,
+            };
+            // Already headed there (e.g. the observer's first report): leave the glide running.
+            const key = JSON.stringify(end);
+            if (key === target) return;
+            target = key;
+            glide?.cancel();
+            Object.assign(morph.style, end);
+            const moved = start.width !== end.width || start.height !== end.height || start.transform !== getComputedStyle(morph).transform;
+            if (animate && moved && !reduce) glide = morph.animate([start, end], { duration: 380, easing: ease });
+        };
+        place(prev !== null, fromFrame);
+        morph.dataset.state = 'open';
+
+        if (!reduce) {
+            if (prevPanel && prev) {
+                const dir = MORPH_ORDER.indexOf(next) > MORPH_ORDER.indexOf(prev) ? 1 : -1;
+                // Growing into a bigger menu: clip its content to the background
+                // as it grows, so nothing shows on the page before the card
+                // reaches it. Same timing as the glide; the clip starts 28px
+                // against the slide so on screen it tracks the background exactly.
+                const to = card.getBoundingClientRect();
+                if (to.width > from.width + 1 || to.height > from.height + 1) {
+                    const p = panel.getBoundingClientRect();
+                    const inset = (r: DOMRect, shift: number, radius: string) =>
+                        `inset(${r.top - p.top}px ${p.right - r.right + shift}px ${p.bottom - r.bottom}px ${r.left - p.left - shift}px round ${radius})`;
+                    panel.animate(
+                        [{ clipPath: inset(from, dir * 28, fromFrame.borderRadius) }, { clipPath: inset(to, 0, getComputedStyle(card).borderRadius) }],
+                        { duration: 380, easing: ease },
+                    );
+                }
+                panel.animate([{ translate: `${dir * 28}px 0` }, { translate: '0 0' }], { duration: 380, easing: ease });
+                prevPanel.animate([{ translate: '0 0' }, { translate: `${-dir * 28}px 0` }], { duration: 200, easing: 'ease-in' });
+            } else if (!prev) {
+                for (const el of [panel, morph]) el.animate([{ translate: '0 -6px' }, { translate: '0 0' }], { duration: 340, easing: ease });
+            }
+        }
+
+        // The card can change size while open (a Talent Solutions category
+        // opening its pills, a narrower window), so the background follows it.
+        const resize = new ResizeObserver(() => place(true));
+        resize.observe(card);
+        const onWindowResize = () => place(false);
+        window.addEventListener('resize', onWindowResize);
+        return () => {
+            resize.disconnect();
+            window.removeEventListener('resize', onWindowResize);
+        };
+    }, [navMenu]);
+
+    React.useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
+
     // Native modal keeps focus inside the menu and makes the page behind it inert.
     React.useEffect(() => {
         const dialog = mobileDialog.current;
@@ -125,6 +238,17 @@ const Navbar = () => {
 
     // ── Hide the Navbar entirely inside the dashboard (it has its own layout) ──
     if (pathname.startsWith('/dashboard')) return null;
+
+    const hoverProps = (key: MorphKey) => ({
+        onMouseEnter: () => {
+            window.clearTimeout(hoverTimer.current);
+            setHoverNav(key);
+        },
+        onMouseLeave: () => {
+            window.clearTimeout(hoverTimer.current);
+            hoverTimer.current = window.setTimeout(() => setHoverNav(null), 100);
+        },
+    });
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -213,6 +337,7 @@ const Navbar = () => {
     return (
         <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled && !isTransparentNav ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
 
+            <div ref={morphRef} className={styles.morph} data-state="closed" aria-hidden="true" />
             <div className={styles.container}>
                 {/* ── Logo ── */}
                 <Link
@@ -238,6 +363,8 @@ const Navbar = () => {
                     {/* Talent Solutions */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'solutions'}
+                        {...hoverProps('solutions')}
                         onFocus={() => setOpenNav('solutions')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -245,7 +372,7 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isSolutionsActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'solutions'}
+                            aria-expanded={navMenu === 'solutions'}
                             aria-controls="mega-panel-solutions"
                         >
                             Talent Solutions <span className={styles.chevron} aria-hidden="true">▼</span>
@@ -322,6 +449,8 @@ const Navbar = () => {
                     {/* Talent Portal */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'portal'}
+                        {...hoverProps('portal')}
                         onFocus={() => setOpenNav('portal')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -329,7 +458,7 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isPortalActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'portal'}
+                            aria-expanded={navMenu === 'portal'}
                             aria-controls="dropdown-portal"
                         >
                             Talent Portal <span className={styles.chevron} aria-hidden="true">▼</span>
@@ -344,6 +473,8 @@ const Navbar = () => {
                     {/* Company */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'company'}
+                        {...hoverProps('company')}
                         onFocus={() => setOpenNav('company')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -351,7 +482,7 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isCompanyActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'company'}
+                            aria-expanded={navMenu === 'company'}
                             aria-controls="dropdown-company"
                         >
                             Company <span className={styles.chevron} aria-hidden="true">▼</span>

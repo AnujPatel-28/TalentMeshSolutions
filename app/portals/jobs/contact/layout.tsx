@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
+import { Michroma } from 'next/font/google';
 import { CONTACT_FAQS } from './faqs';
 
 const SITE_URL = 'https://talentmeshsolutions.com';
+
+// Wide, squared lettering close to the Talentmesh wordmark; used only for this page's heading.
+const michroma = Michroma({ weight: '400', subsets: ['latin'], variable: '--font-michroma', display: 'swap' });
 
 export const metadata: Metadata = {
   // Bare title: root layout's title.template appends " | Talentmesh Solutions".
@@ -36,7 +40,7 @@ export default function ContactLayout({ children }: { children: React.ReactNode 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactFaqJsonLd) }}
       />
-      {children}
+      <div className={michroma.variable} style={{ display: 'contents' }}>{children}</div>
     </>
   );
 }
