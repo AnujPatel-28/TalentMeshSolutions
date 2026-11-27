@@ -1,10 +1,26 @@
 # SEO Audit: `ui-changes` branch
 
 - **Date:** 2026-11-27
-- **Commit audited:** `8225907` (ui-changes)
+- **Commit audited:** `4754452` (ui-changes). This is a re-run; the first pass was on `8225907`. See "Changes since the first audit" below.
 - **Method:** I followed the `seo-audit` skill from [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills), the most-installed SEO skill for AI agents on the skills.sh registry. The priority order is crawlability, then technical, then on-page, then content, then authority.
 - **How the evidence was collected:** I ran a production build (`next build`), started the server with `next start`, and crawled 23 URLs twice with headless Chromium: once with JavaScript off (what a non-rendering crawler sees) and once with it on. I measured page weight, LCP and CLS at desktop size and at mobile size on a throttled connection (1.6 Mbps, 150 ms latency). I also read the source code.
 - **Not verifiable from the repo:** Search Console data, field Core Web Vitals, rankings, backlinks, and the blog posts. Blog content comes from Sanity, and no `NEXT_PUBLIC_SANITY_PROJECT_ID` was set locally. The live sitemap lists 2 posts, but I did not audit them. I also could not measure `/about` performance: the local image optimizer stalled encoding its 1920px hero to WebP. That is probably a limit of this container, so check it on a Vercel preview.
+
+---
+
+## Changes since the first audit (`8225907` → `4754452`)
+
+I re-ran the build, the crawl and the performance measurements on the 28 new commits (nav rework, logo-zoom home intro, contact page redesign, office move).
+
+| Area | Result |
+|------|--------|
+| Metadata (titles, descriptions, canonicals, robots, `og:image`) | **Unchanged** on all 23 URLs. |
+| Home H1 merged words (4.1) | **Still present.** The crawler still extracts "ConnectingBusinesses WiththeRightTalent". |
+| Nav headings before the H1 (4.5) | **Still present.** The nav was rebuilt but still emits `H3, H2, H2, H2` first. |
+| Home page weight (2.1, 2.2) | **Unchanged:** 20.5 MB on desktop, and still 97 s to `load` on throttled mobile. |
+| `/job-seekers` (2.3), `/talentmesh-portal` (2.4) | **Unchanged:** mobile LCP 34.1 s on `/job-seekers`; CLS 0.125 on `/talentmesh-portal`. |
+| Soft 404 on `/blog/foo` (1.1), `/privacy` and `/terms` redirects (3.1) | **Unchanged.** |
+| `/contact` | **Improved.** Content grew from 204 to 377 words, the page weighs 1.4 MB, LCP is a 20 KB WebP, and the address now has `geo` and `hasMap` in the schema. Two new minor items: 2.5 and 4.8. |
 
 ---
 
@@ -16,7 +32,7 @@ The technical basics are solid: robots.txt and the sitemap are valid, every inde
 
 | # | Issue | Impact |
 |---|-------|--------|
-| 1 | The home page downloads **20.4 MB**, including a single **13 MB PNG** background. On the throttled mobile profile the page took **97 s** to fire `load`. | High |
+| 1 | The home page downloads **20.5 MB**, including a single **13 MB PNG** background. On the throttled mobile profile the page took **97 s** to fire `load`. | High |
 | 2 | `/job-seekers` has a mobile LCP of **34.1 s** because its LCP element is a 1.45 MB CSS background PNG. `/talentmesh-portal` is 7 MB with a mobile CLS of **0.125**, which fails the 0.1 threshold. | High |
 | 3 | All 12 service pages are thin, with **135–184 words** in `<main>`. These pages target "contract staffing", "RPO services India", "executive search India" and similar queries. | High |
 | 4 | **There is no Privacy Policy or Terms page.** `/privacy` and `/terms` redirect (308) to the home page, yet the site collects personal data through its forms. This hurts trust signals (E-E-A-T) and is a DPDP Act 2023 exposure. | High |
@@ -64,8 +80,8 @@ These are lab measurements from the local production server. Field data from Sea
 
 | Page | Viewport | Total transfer | LCP | CLS | `load` |
 |------|----------|---------------:|----:|----:|-------:|
-| `/` | desktop | **20.40 MB** | 0.2 s* | 0 | 0.4 s |
-| `/` | mobile (throttled) | **19.97 MB** | 1.7 s* | 0 | **97.5 s** |
+| `/` | desktop | **20.53 MB** | 0.2 s* | 0 | 0.4 s |
+| `/` | mobile (throttled) | **19.98 MB** | 1.7 s* | 0 | **97.5 s** |
 | `/job-seekers` | mobile (throttled) | 6.80 MB | **34.1 s** | 0.063 | 34.4 s |
 | `/talentmesh-portal` | mobile (throttled) | 6.74 MB | 1.4 s | **0.125** | 34.0 s |
 | `/contingent-staffing` | mobile (throttled) | **0.58 MB** | 1.5 s | 0.002 | 2.5 s |
@@ -75,7 +91,7 @@ These are lab measurements from the local production server. Field data from Sea
 The service pages are a good benchmark: under 0.6 MB, with images served through `next/image`. The other pages should match them.
 
 ### 2.1 A 13 MB PNG background on the home page
-- **Evidence:** `components/home/home.module.css:1356` (and `:1584`) set `url('/images/about/ascii-magic-2.png')`, which transfers **13.00 MB**. CSS backgrounds bypass `next/image`, so this file is never resized or converted to WebP or AVIF.
+- **Evidence:** `components/home/home.module.css:1373` (and `:1601`) set `url('/images/about/ascii-magic-2.png')`, which transfers **13.00 MB**. CSS backgrounds bypass `next/image`, so this file is never resized or converted to WebP or AVIF.
 - **Impact:** High. It costs mobile users data (a real concern for Indian mobile visitors), drags down Lighthouse scores, and makes the home page slow to finish loading. It may also delay LCP, depending on the viewport.
 - **Fix:** Export the image as AVIF/WebP at 1920px wide (it should come out under 300 KB) and provide a smaller variant for mobile through `image-set()` or a media query. Better still, render it with `<Image fill sizes="100vw">`. Also delete `public/images/about/ascii-magic-1.png` (14 MB), which nothing in `app/`, `components/` or `content/` references.
 
@@ -93,7 +109,12 @@ The service pages are a good benchmark: under 0.6 MB, with images served through
 - **Evidence:** `components/sections/sections.module.css:94` loads `Background.png` (1.5 MB). The page also includes the industry PNGs from `components/sections/Industries.tsx:22`. Mobile CLS measured **0.125**, which fails the 0.1 threshold.
 - **Fix:** Optimise the images as in 2.2. For CLS, reserve space (`aspect-ratio` or fixed height) for the sections that render late. Run the Chrome DevTools Performance panel's "Layout shifts" track to find the element that moves.
 
-### 2.5 `public/` is 121 MB
+### 2.5 `/contact` loads the Google Maps script on page load (new)
+- **Evidence:** About 330 KB of Maps JavaScript (`places.js`, `main.js`, `init_embed.js`, `util.js`) loads before any interaction. It accounts for most of the page's 1.4 MB, and `load` on desktop is 1.7 s compared with about 0.3 s on other pages.
+- **Impact:** Low. LCP is unaffected (0.2 s on desktop, 1.7 s on throttled mobile), but it adds main-thread work that affects INP.
+- **Fix:** Add `loading="lazy"` to the map `<iframe>`, or show a static map image (the address card already links to Google Maps) and load the embed on click.
+
+### 2.6 `public/` is 121 MB
 - **Evidence:** `du -sh public` returns 121 MB. More than 20 PNGs are over 1.5 MB, and the folder contains files such as `ChatGPT Image Jun 17, 2026, 08_03_00 PM (1).png`, `logo-circle-review.png` and `graintest.png`.
 - **Impact:** Low for SEO. It increases deploy size and the risk of shipping heavy assets by accident.
 - **Fix:** Audit references with `grep`, delete unused assets, and convert the rest.
@@ -108,7 +129,7 @@ The service pages are a good benchmark: under 0.6 MB, with images served through
 - **Fix:** Publish `/privacy` and `/terms` as static pages, remove them from `REMOVED_PORTAL_PREFIXES`, link them from the footer, add them to the sitemap, and link the privacy notice next to every form submit button.
 
 ### 3.2 Positive signals already present
-Organization/EmploymentAgency JSON-LD includes the legal name, a full Ahmedabad postal address, phone, email and `sameAs` profiles. The `/contact` page carries the same NAP (name, address, phone). Keep these consistent with the Google Business Profile.
+Organization/EmploymentAgency JSON-LD includes the legal name, the full postal address (1203, Ganesh Glory, Gota, Ahmedabad 382470), `geo` coordinates, `hasMap`, phone, email and `sameAs` profiles. The `/contact` page shows the same NAP (name, address, phone) and a map. The JSON-LD, `content/home.ts` and the contact page all agree. Keep these consistent with the Google Business Profile.
 
 ---
 
@@ -152,7 +173,7 @@ Also, the root fallback description in `app/layout.tsx:51` is 191 characters, an
 - **Fix:** Add `images: ['/opengraph-image']` (or a page-specific image) to each of those `openGraph` objects, or add an `opengraph-image.tsx` in each segment.
 
 ### 4.5 Heading hierarchy starts in the nav
-- **Evidence:** On every page the outline begins `H3(empty), H2 "Talent Solutions", H2 "Talent Portal", H2 "Company"`, and only then the H1. The source is `components/layout/Navbar/Navbar.tsx:258` (mega-menu `<h3>`) and `:497` (mobile menu `<h2>`). The footer adds H3/H4 (`Footer.tsx:63-146`).
+- **Evidence:** On every page the outline begins `H3(empty), H2 "Talent Solutions", H2 "Talent Portal", H2 "Company"`, and only then the H1. The source is `components/layout/Navbar/Navbar.tsx:385` (mega-menu `<h3>`) and `:628` (mobile menu `<h2>`). The footer adds H3/H4 (`Footer.tsx:63-146`).
 - **Impact:** Low–Medium. It muddies the document outline for crawlers, AI answer engines and screen readers.
 - **Fix:** Change the nav and footer headings to `<p>` or `<span>` with the same classes, or use `role="presentation"`-free `<div>`s. Keep real headings inside `<main>` only.
 
@@ -160,6 +181,11 @@ Also, the root fallback description in `app/layout.tsx:51` is 191 characters, an
 - **Evidence:** `/`, `/about`, `/talentmesh-portal` and `/login` render no `<main>` element. All other pages have one.
 - **Impact:** Low. It helps content extraction and accessibility.
 - **Fix:** Wrap the page body in `<main id="main">` in `app/page.tsx`, `app/about/page.tsx` and `app/talentmesh-portal/page.tsx`.
+
+### 4.8 The `/contact` H1 is generic (new)
+- **Evidence:** The redesign changed the H1 from "Let's talk about your next hire." to **"Contact our Team"**.
+- **Impact:** Low. Contact pages rarely rank on their H1, but the title and H1 are the place to say "recruitment agency in Ahmedabad", which is the query for this page's local intent.
+- **Fix (optional):** Keep the visual heading and add a keyword-bearing line, for example a visible eyebrow above it or a subheading "Talentmesh Solutions, recruitment and staffing agency in Gota, Ahmedabad". The `<title>` "Contact Us | Talentmesh Solutions" can carry the same phrase.
 
 ### 4.7 Images
 - ✅ Every `<img>` has an `alt` attribute.
@@ -197,7 +223,7 @@ Also, the root fallback description in `app/layout.tsx:51` is 191 characters, an
 - Note: since 2023 Google shows FAQ rich results only for authoritative government and health sites. FAQPage markup still helps AI answer engines.
 
 ### 5.4 Locale signals are inconsistent (relevant for international expansion)
-- **Evidence:** `<html lang="en">` (`app/layout.tsx:151`), `og:locale = en_US` (`app/layout.tsx:63`), `WebSite.inLanguage = en-IN` (`app/page.tsx`), and `areaServed: India` only (`app/layout.tsx:109`). Meanwhile, the GCC setup, offshore staffing and remote hiring pages are aimed at clients outside India.
+- **Evidence:** `<html lang="en">` (`app/layout.tsx:153`), `og:locale = en_US` (`app/layout.tsx:63`), `WebSite.inLanguage = en-IN` (`app/page.tsx`), and `areaServed: India` only (`app/layout.tsx:109`). Meanwhile, the GCC setup, offshore staffing and remote hiring pages are aimed at clients outside India.
 - **Fix:** Set `og:locale` to `en_IN` and extend `areaServed` to include the target countries (e.g. US, UK, AE, SG). Keep `lang="en"`. Only add hreflang if you later publish region-specific versions of pages. A single English site needs none.
 
 ---
@@ -242,6 +268,7 @@ Also, the root fallback description in `app/layout.tsx:51` is 191 characters, an
 
 **4. Longer term**
 - 4.5 Remove headings from the nav and footer.
+- 2.5 Lazy-load the Maps embed on `/contact`, and 4.8 add local keywords to the contact heading.
 - 5.4 Set `og:locale` to `en_IN` and widen `areaServed` for international clients.
 - 1.2 Add `lastModified` to the sitemap.
 - Build topical blog clusters, e.g. "Hiring in India" and "GCC setup", that link to the service pages.
