@@ -7,6 +7,7 @@ import { CONTACT, STRONG_CTA } from '@/content/home';
 import { CONTACT_FAQS } from './faqs';
 import styles from './contact.module.css';
 
+const LOGO_T_PATH = 'M3,178 L0,185 L0,208 L109,158 L110,270 L114,280 L119,286 L131,292 L188,292 L188,263 L140,262 L140,110 L22,164 L9,171 Z M259,1 L258,0 L141,54 L140,7 L131,8 L120,13 L113,21 L110,29 L110,100 L245,40 L254,32 L259,18 Z';
 const SERVICES = [
     'Hiring for my team',
     'Looking for a job',
@@ -128,7 +129,18 @@ export default function ContactPage() {
             <div className={styles.sky} aria-hidden="true" />
             {/* data-nav-theme: the navbar turns transparent with the white logo while it sits over the blue sky. */}
             <header className={styles.intro} data-nav-theme="dark">
-                <h1>Contact our <span>Team</span></h1>
+                {/* The inline logo glyph splits the computed name into "T eam", so name the heading outright. */}
+                <h1 aria-label="Contact our Team">
+                    Contact our{' '}
+                    <span className={styles.team}>
+                        <span className={styles.hiddenLetter}>T</span>
+                        {/* The "t" from the Talentmesh logo, traced from talentmesh-solutions-logo-transparent.png. */}
+                        <svg className={styles.logoT} viewBox="0 0 260 293" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d={LOGO_T_PATH} />
+                        </svg>
+                        eam
+                    </span>
+                </h1>
                 <p>Hiring for your team or looking for your next role? Tell us what you have in mind and our team in Ahmedabad will take it from there.</p>
             </header>
 
