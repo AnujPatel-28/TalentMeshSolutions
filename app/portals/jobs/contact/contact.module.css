@@ -17,8 +17,8 @@
 .page a { text-underline-offset: 4px; }
 .page :is(a, button, input, textarea, select, summary):focus-visible { outline: 3px solid var(--contact-brand); outline-offset: 4px; }
 
-/* -------------------------------------------------------- halftone sky -- */
-/* Generated halftone-dot clouds (public/images/contact). The mask fades the
+/* ------------------------------------------------------------------ sky -- */
+/* Generated soft clouds (scripts/make-contact-sky.py). The mask fades the
    sky into the page colour before the form card, so the card reads on ice blue. */
 .sky {
     position: absolute; z-index: -1; top: 0; left: 0; right: 0; height: 860px;

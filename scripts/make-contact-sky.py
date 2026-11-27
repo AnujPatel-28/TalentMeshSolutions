@@ -1,14 +1,14 @@
-"""Render the halftone-dot cloud sky behind the contact page header.
+"""Render the soft cloud sky behind the contact page header.
 
 Usage: python3 scripts/make-contact-sky.py public/images/contact
 
 Clouds are built from overlapping soft puffs (domed tops, flatter bases), broken up with
-fractal noise, then drawn as a grid of dots whose size follows the cloud density. Dots on
-the underside of a cloud are shaded a little greyer, like the reference.
+fractal noise, then drawn as soft white shapes over the sky gradient. The underside of each
+cloud is shaded a little greyer.
 """
 import sys
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageFilter
 
 
 def smooth_noise(w, h, cells_x, cells_y, rng):
@@ -84,24 +84,22 @@ def render(out, W, H, pitch, seed, clouds, clear):
     below = np.roll(cloud, -3, axis=0)
     inner = np.clip(cloud - below, 0, 1) * 0 + np.clip(below - np.roll(cloud, 4, axis=0), 0, 1)
 
-    S = 2
-    top, bot = np.array([5, 84, 176]), np.array([78, 152, 218])
-    grad = np.linspace(0, 1, H * S)[:, None] * (bot - top) + top
-    img = Image.fromarray(np.repeat(grad[:, None, :], W * S, axis=1).astype(np.uint8), 'RGB')
-    d = ImageDraw.Draw(img, 'RGBA')
-    rmax = pitch * 0.6
-    for j in range(gh):
-        for i in range(gw):
-            val = dens[j, i]
-            if val < 0.05:
-                continue
-            r = rmax * np.sqrt(val) * S
-            x, y = (i - 0.5) * pitch * S, (j - 0.5) * pitch * S
-            g = min(1.0, shade[j, i] * 0.8 + inner[j, i] * 0.6)
-            col = (int(255 - 52 * g), int(255 - 38 * g), int(255 - 18 * g))
-            alpha = int(255 * (0.45 + 0.55 * min(1.0, val * 1.3)))
-            d.ellipse([x - r, y - r, x + r, y + r], fill=col + (alpha,))
-    img = img.resize((W, H), Image.LANCZOS)
+    # Soft clouds: upsample the density and shading fields to full size, blur them,
+    # and lay white (greyer underneath) over the sky gradient.
+    def up(a, blur):
+        im = Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8), 'L')
+        im = im.resize((gw * pitch, gh * pitch), Image.BICUBIC).crop((pitch // 2, pitch // 2, pitch // 2 + W, pitch // 2 + H))
+        return np.asarray(im.filter(ImageFilter.GaussianBlur(blur)), dtype=np.float32) / 255
+
+    nav = smoothstep(0.07, 0.15, v)
+    alpha = up(np.clip(cloud * 1.15 + halo * 0.35, 0, 1) * nav, pitch * 0.35)
+    grey = up(np.clip(shade * 0.8 + inner * 0.6, 0, 1), pitch * 0.8)
+    top, bot = np.array([5, 84, 176], np.float32), np.array([78, 152, 218], np.float32)
+    sky = np.linspace(0, 1, H, dtype=np.float32)[:, None, None] * (bot - top) + top
+    sky = np.repeat(sky, W, axis=1)
+    white = np.stack([255 - 52 * grey, 255 - 38 * grey, 255 - 18 * grey], axis=-1)
+    a = alpha[..., None]
+    img = Image.fromarray((sky * (1 - a) + white * a).astype(np.uint8), 'RGB')
     img.save(out, 'WEBP', quality=78, method=6)
 
 
@@ -114,6 +112,6 @@ if __name__ == '__main__':
         (0.02, 0.92, 0.14, 0.14),
     ], (0.28, 0.0, 0.72, 0.5))
     render(f'{outdir}/contact-sky-mobile.webp', 900, 1200, 22, 9, [
-        (1.0, 0.27, 0.36, 0.08), (0.10, 0.64, 0.50, 0.14), (0.88, 0.72, 0.45, 0.13),
+        (0.10, 0.64, 0.50, 0.14), (0.88, 0.72, 0.45, 0.13),
         (0.45, 0.97, 0.80, 0.14),
     ], (0.0, 0.0, 0.85, 0.56))
