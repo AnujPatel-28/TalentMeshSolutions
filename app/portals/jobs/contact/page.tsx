@@ -128,7 +128,7 @@ export default function ContactPage() {
             <div className={styles.sky} aria-hidden="true" />
             {/* data-nav-theme: the navbar turns transparent with the white logo while it sits over the blue sky. */}
             <header className={styles.intro} data-nav-theme="dark">
-                <h1>Contact our team</h1>
+                <h1>Contact our <span>Team</span></h1>
                 <p>Hiring for your team or looking for your next role? Tell us what you have in mind and our team in Ahmedabad will take it from there.</p>
             </header>
 
