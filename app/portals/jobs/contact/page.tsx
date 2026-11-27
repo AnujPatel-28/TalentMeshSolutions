@@ -1,8 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, Check, LoaderCircle, Mail, MapPin, MessageCircle, Phone, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Copy, LoaderCircle, Mail, MapPin, MessageCircle, Navigation, Phone, Plus } from 'lucide-react';
 import { CONTACT, STRONG_CTA } from '@/content/home';
 import { CONTACT_FAQS } from './faqs';
 import styles from './contact.module.css';
@@ -28,7 +27,11 @@ const COUNTRY_CODES = [
 const EMPTY_FORM = { firstName: '', lastName: '', email: '', countryCode: '+91', phone: '', organization: '', message: '', services: [] as string[] };
 
 // Pin the embed to the office's coordinates; a text search can land on the wrong building.
-const MAP_EMBED_SRC = `https://www.google.com/maps?q=${CONTACT.geo.latitude},${CONTACT.geo.longitude}&z=17&output=embed`;
+const MAP_PIN = `${CONTACT.geo.latitude},${CONTACT.geo.longitude}`;
+const MAP_EMBED_SRC = `https://www.google.com/maps?q=${MAP_PIN}&z=17&output=embed`;
+// On wide screens the office card covers the map's left side, so centre the map west of
+// the pin (ll) to put the pin in the open part on the right.
+const MAP_EMBED_SRC_WIDE = `https://www.google.com/maps?q=${MAP_PIN}&ll=${CONTACT.geo.latitude},${(CONTACT.geo.longitude - 0.0032).toFixed(7)}&z=17&output=embed`;
 const PHONE_ERROR = 'Enter a valid number for the selected country. Indian mobile numbers have 10 digits and start with 6–9.';
 
 /** The number as sent: empty, or the country code plus the national number without its leading zeros. */
@@ -55,6 +58,7 @@ export default function ContactPage() {
     const [error, setError] = useState('');
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [phoneError, setPhoneError] = useState('');
+    const [addressCopied, setAddressCopied] = useState(false);
     const submitting = useRef(false);
     const resultRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
@@ -65,6 +69,17 @@ export default function ContactPage() {
             restoreFormFocus.current = false;
         }
     }, [sent]);
+
+    const copyAddress = async () => {
+        try {
+            await navigator.clipboard.writeText(CONTACT.addressLines.join(' '));
+            setAddressCopied(true);
+            window.setTimeout(() => setAddressCopied(false), 2500);
+        } catch {
+            // Clipboard blocked (e.g. insecure context): open the map, which shows the address.
+            window.open(CONTACT.mapsHref, '_blank', 'noopener,noreferrer');
+        }
+    };
 
     const phoneIsValid = (countryCode: string, phone: string) => isValidPhone(fullPhone(countryCode, phone));
 
@@ -242,8 +257,18 @@ export default function ContactPage() {
 
             <section className={styles.section} aria-labelledby="office-title">
                 <div className={styles.mapCard}>
+                    {/* CSS shows one of the two; a lazy iframe that is display:none never loads. */}
                     <div className={styles.mapFrame}>
                         <iframe
+                            className={styles.mapWide}
+                            src={MAP_EMBED_SRC_WIDE}
+                            title="Map showing the Talentmesh Solutions office at Ganesh Glory, Gota, Ahmedabad"
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            allowFullScreen
+                        />
+                        <iframe
+                            className={styles.mapNarrow}
                             src={MAP_EMBED_SRC}
                             title="Map showing the Talentmesh Solutions office at Ganesh Glory, Gota, Ahmedabad"
                             loading="lazy"
@@ -251,20 +276,24 @@ export default function ContactPage() {
                             allowFullScreen
                         />
                     </div>
-                    <div className={styles.office}>
-                        <div className={styles.officePhoto}>
-                            <Image
-                                src="/images/about/contact-reception.webp"
-                                alt="Reception and waiting area of a bright modern office"
-                                fill
-                                sizes="(max-width: 900px) 100vw, 480px"
-                            />
-                        </div>
-                        <p className={styles.eyebrow}>Visit us</p>
+                    <div className={styles.officeCard}>
+                        <p className={styles.officeLabel}>Visit us</p>
                         <h2 id="office-title">Based in Ahmedabad. <span>Hiring across India.</span></h2>
-                        <address>{CONTACT.addressLines.map(line => <span key={line}>{line}</span>)}</address>
-                        <a href={CONTACT.mapsHref} target="_blank" rel="noopener noreferrer">View on Google Maps <ArrowUpRight size={16} aria-hidden="true" /></a>
+                        <div className={styles.officeAddress}>
+                            <MapPin size={20} aria-hidden="true" />
+                            <address>{CONTACT.addressLines.map(line => <span key={line}>{line}</span>)}</address>
+                        </div>
+                        <p className={styles.officeHint}>On Jagatpur Road, just off S.G. Highway.</p>
+                        <div className={styles.officeActions}>
+                            <a className={styles.directions} href={CONTACT.directionsHref} target="_blank" rel="noopener noreferrer">Get directions <Navigation size={16} aria-hidden="true" /></a>
+                            <button type="button" className={styles.copyAddress} onClick={copyAddress}>
+                                {addressCopied ? 'Address copied' : 'Copy address'}
+                                {addressCopied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+                            </button>
+                        </div>
+                        <span className={styles.status} role="status">{addressCopied ? 'Address copied to the clipboard.' : ''}</span>
                     </div>
+                    <a className={styles.openMaps} href={CONTACT.mapsHref} target="_blank" rel="noopener noreferrer">Open in Google Maps <ArrowUpRight size={14} aria-hidden="true" /></a>
                 </div>
             </section>
 
