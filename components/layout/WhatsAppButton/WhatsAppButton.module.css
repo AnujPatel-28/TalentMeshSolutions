@@ -1,0 +1,46 @@
+/* Sits under the navbar and its mobile menu (z-index 1000-1100), so an open
+   menu covers it. The green is a darker cut of WhatsApp's #25D366: the white
+   glyph measures 3.1:1 against it, where the brand green gives only 2.0:1. */
+.button {
+    position: fixed;
+    right: calc(1.5rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    z-index: 900;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1DA851;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(7, 26, 43, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(7, 26, 43, 0.34);
+}
+
+.button:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 7px #071A2B;
+}
+
+@media (max-width: 640px) {
+    .button {
+        right: calc(1rem + env(safe-area-inset-right, 0px));
+        bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button {
+        transition: none;
+    }
+
+    .button:hover {
+        transform: none;
+    }
+}

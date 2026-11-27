@@ -142,9 +142,9 @@ export default function PodcastPage() {
                     <div className={styles.heroInner}>
                         <SectionHeader
                             centered
-                            tag="TalentMesh Podcasts"
+                            tag="Talentmesh Podcasts"
                             title={<>Discover Stories That Inspire <span className={styles.highlightText}>Your Mind.</span></>}
-                            description="Listen to world-class podcasts from creators, entrepreneurs, and storytellers — anytime, anywhere."
+                            description="Listen to world-class podcasts from creators, entrepreneurs, and storytellers, anytime, anywhere."
                         />
                         <div className={styles.heroBtnGroup}>
                             <button className={styles.primaryBtn} onClick={() => togglePlay("Main Hero Episode")}>
@@ -164,7 +164,7 @@ export default function PodcastPage() {
                             <div className={styles.landscapeImageWrapper}>
                                 <Image
                                     src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=1200&h=600&q=80"
-                                    alt="TalentMesh Studio"
+                                    alt="Talentmesh Studio"
                                     fill
                                     className={styles.landscapeImg}
                                     unoptimized

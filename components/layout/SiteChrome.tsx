@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import NavbarWrapper from "./NavbarWrapper";
+import WhatsAppButton from "./WhatsAppButton/WhatsAppButton";
 import layoutStyles from "@/app/layout.module.css";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
@@ -24,6 +25,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       </div>
       <NavbarWrapper showFooter>
         <Footer />
+        <WhatsAppButton />
       </NavbarWrapper>
     </div>
   );

@@ -1,271 +1,215 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
-import { Pause, Play } from 'lucide-react';
-import { POSITIONING } from '@/content/home';
-import SectionMarker from './SectionMarker';
+import { SCALE_GALLERY } from '@/content/home';
 import styles from './home.module.css';
 
-// The right-hand intros run 27-32 words, which is roughly 7-9 seconds of
-// reading. The previous 4800ms gave about half that, so the panel changed
-// mid-sentence.
-const CYCLE_DURATION = 8000; // Time in ms per card before switching to next
+const STEPS = SCALE_GALLERY.steps;
+const COUNT = STEPS.length;
+const pad = (n: number) => String(n).padStart(2, '0');
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.15,
-        },
-    },
+// Pins only where the stage fits; must match the media query in home.module.css.
+const PIN_QUERY = '(min-height: 600px)';
+// Scroll per step, as a share of the stage height.
+const SEG = 0.6;
+// Least time between two steps, so a fast scroll plays each move in turn
+// instead of jumping (a little shorter than the move itself).
+const STEP_MS = 520;
+
+// Where each photo sits relative to the step on show: the current one large,
+// the previous one small at its top left, the next one small at its bottom
+// right, and the rest waiting just past the small ones. No wrap: 01 has no
+// previous photo and 05 has no next one.
+type Role = 'main' | 'prev' | 'next' | 'outgoing' | 'incoming';
+const roleOf = (i: number, at: number): Role => {
+    const d = i - at;
+    if (d === 0) return 'main';
+    if (d === -1) return 'prev';
+    if (d === 1) return 'next';
+    return d < 0 ? 'outgoing' : 'incoming';
 };
 
-const cardVariants = {
-    hidden: { opacity: 0, y: 28 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-    },
-};
-
-
+/**
+ * "Hiring built for you": five steps as a photo gallery. One
+ * photo is large with its caption beside it; the previous and next steps wait
+ * as small photos at its corners.
+ *
+ * Where the screen is tall enough, the section pins and scrolling moves
+ * through the steps: the next photo grows into the middle while the current
+ * one shrinks into the corner, and the counter rolls. Scrolling back runs it
+ * in reverse. A fast scroll still plays the moves one at a time. Clicking a
+ * photo (or the arrow keys) scrolls the page to that step. Without script or
+ * on short screens it does not pin; the photos then move on click.
+ */
 export default function TrustStrip() {
-    const reduceMotion = useReducedMotion();
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    // Hover/focus pausing does not exist on touch, so any deliberate choice of a
-    // card stops the rotation for good. This is what actually satisfies WCAG
-    // 2.2.2 — a phone fires neither mouseenter nor focus.
-    const [userStopped, setUserStopped] = useState(false);
-    const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const totalCards = POSITIONING.columns.length;
-
-    const nextCard = useCallback(() => {
-        setActiveIndex((prev) => (prev + 1) % totalCards);
-    }, [totalCards]);
+    const [at, setAt] = useState(0);
+    const trackRef = useRef<HTMLDivElement>(null);
+    const segRef = useRef(0); // px of scroll per step; 0 when not pinned
+    const atRef = useRef(0);
 
     useEffect(() => {
-        if (reduceMotion || isPaused || userStopped) return;
+        const track = trackRef.current;
+        if (!track) return;
+        const stage = track.firstElementChild as HTMLElement;
+        const mq = window.matchMedia(PIN_QUERY);
+        let target = 0;
+        let last = 0;
+        let timer = 0;
 
-        const interval = setInterval(() => {
-            nextCard();
-        }, CYCLE_DURATION);
+        // Walk one step at a time toward the scroll's step.
+        const walk = () => {
+            timer = 0;
+            const cur = atRef.current;
+            if (cur === target) return;
+            const wait = STEP_MS - (performance.now() - last);
+            if (wait > 0) {
+                timer = window.setTimeout(walk, wait);
+                return;
+            }
+            const next = cur + Math.sign(target - cur);
+            atRef.current = next;
+            last = performance.now();
+            setAt(next);
+            if (next !== target) timer = window.setTimeout(walk, STEP_MS);
+        };
+        const sync = () => {
+            const seg = segRef.current;
+            if (!seg) return;
+            const v = -track.getBoundingClientRect().top;
+            target = Math.min(COUNT - 1, Math.max(0, Math.floor(v / seg)));
+            if (!timer) walk();
+        };
+        const layout = () => {
+            if (mq.matches) {
+                track.dataset.pinned = '';
+                // The stage's own height, not the window's, so the address
+                // bar sliding away on a phone does not shift the steps.
+                segRef.current = stage.offsetHeight * SEG;
+                track.style.setProperty('--pin-dist', `${segRef.current * COUNT}px`);
+                sync();
+            } else {
+                segRef.current = 0;
+                delete track.dataset.pinned;
+                track.style.removeProperty('--pin-dist');
+            }
+        };
 
-        return () => clearInterval(interval);
-    }, [isPaused, userStopped, nextCard, reduceMotion, activeIndex]);
-
-    const selectCard = useCallback((index: number) => {
-        setActiveIndex(index);
-        setUserStopped(true);
+        layout();
+        mq.addEventListener('change', layout);
+        window.addEventListener('resize', layout);
+        window.addEventListener('scroll', sync, { passive: true });
+        return () => {
+            mq.removeEventListener('change', layout);
+            window.removeEventListener('resize', layout);
+            window.removeEventListener('scroll', sync);
+            window.clearTimeout(timer);
+        };
     }, []);
 
-    const moveFocus = useCallback((index: number) => {
-        setActiveIndex(index);
-        tabRefs.current[index]?.focus();
-    }, []);
+    const go = (i: number) => {
+        const step = Math.min(COUNT - 1, Math.max(0, i));
+        const seg = segRef.current;
+        const track = trackRef.current;
+        if (!seg || !track) {
+            atRef.current = step;
+            setAt(step);
+            return;
+        }
+        // Middle of that step's stretch of scroll; the steps follow the page.
+        const top = window.scrollY + track.getBoundingClientRect().top + seg * (step + 0.5);
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+    };
 
     return (
-        <section className={`${styles.trustSection} relative`} aria-label="Why TalentMesh">
-            <SectionMarker label="Why TalentMesh" index={2} />
-
-            <div className={styles.trustContainer}>
-                <div className={styles.trustLayout}>
-                    {/* Left Side: Cards with Auto-Cycle */}
+        <section className="relative" aria-label={SCALE_GALLERY.sectionTitle}>
+            <div ref={trackRef} className={styles.galleryTrack}>
+                <div className={`${styles.section} ${styles.galleryPin}`}>
                     <div
-                        className={styles.trustCardsCol}
-                        onMouseEnter={() => setIsPaused(true)}
-                        onMouseLeave={() => setIsPaused(false)}
-                        onFocus={() => setIsPaused(true)}
-                        onBlur={() => setIsPaused(false)}
+                        className={`${styles.inner} ${styles.gallery}`}
+                        role="group"
+                        aria-roledescription="carousel"
+                        aria-label="Five steps"
+                        onKeyDown={(e) => {
+                            if (e.key === 'ArrowRight') go(at + 1);
+                            if (e.key === 'ArrowLeft') go(at - 1);
+                        }}
                     >
-                        {/* Header Intro */}
-                        <div>
-                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-schibsted">
-                                Recruitment Engineered for Scale
+                        <div className={styles.galleryCol}>
+                            <h2 className={styles.galleryHeading}>
+                                {SCALE_GALLERY.headingA}
+                                <span>{SCALE_GALLERY.headingAccent}</span>
                             </h2>
-                            <p className="text-sm text-slate-500 mt-1 font-normal">
-                                Select a capability to explore how our delivery models work.
-                            </p>
-                        </div>
 
-                        {/* Interactive Feature Cards */}
-                        <motion.div
-                            className={styles.positioningStack}
-                            variants={reduceMotion ? undefined : containerVariants}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.25 }}
-                            role="tablist"
-                            aria-label="TalentMesh strategic recruitment advantages"
-                        >
-                            {POSITIONING.columns.map((col, index) => {
-                                const isActive = activeIndex === index;
-
-                                return (
-                                    <motion.div
-                                        key={col.title}
-                                        ref={(el: HTMLDivElement | null) => {
-                                            tabRefs.current[index] = el;
-                                        }}
-                                        role="tab"
-                                        aria-selected={isActive}
-                                        aria-controls={`positioning-panel-${index}`}
-                                        id={`positioning-tab-${index}`}
-                                        // Roving tabindex: the tablist is one tab
-                                        // stop and arrows move between tabs.
-                                        tabIndex={isActive ? 0 : -1}
-                                        className={`${styles.positioningCard} ${
-                                            isActive
-                                                ? styles.positioningCardActive
-                                                : styles.positioningCardInactive
-                                        }`}
-                                        variants={reduceMotion ? undefined : cardVariants}
-                                        onClick={() => selectCard(index)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' || e.key === ' ') {
-                                                e.preventDefault();
-                                                selectCard(index);
-                                            } else if (e.key === 'ArrowDown') {
-                                                e.preventDefault();
-                                                moveFocus((index + 1) % totalCards);
-                                            } else if (e.key === 'ArrowUp') {
-                                                e.preventDefault();
-                                                moveFocus((index - 1 + totalCards) % totalCards);
+                            <div className={styles.galleryStage}>
+                                {STEPS.map((step, i) => {
+                                    const role = roleOf(i, at);
+                                    const live = role === 'main' || role === 'next' || role === 'prev';
+                                    return (
+                                        <button
+                                            key={step.image}
+                                            type="button"
+                                            className={styles.galleryPhoto}
+                                            data-role={role}
+                                            tabIndex={live ? 0 : -1}
+                                            aria-hidden={!live}
+                                            aria-label={
+                                                role === 'prev'
+                                                    ? `Previous: ${step.label}`
+                                                    : role === 'main'
+                                                      ? at < COUNT - 1
+                                                          ? `${step.label}. Show the next step`
+                                                          : step.label
+                                                      : `Next: ${step.label}`
                                             }
-                                        }}
-                                        whileTap={reduceMotion ? undefined : { scale: 0.995 }}
-                                    >
-                                        <span className={styles.positioningNum} aria-hidden="true">
-                                            {String(index + 1).padStart(2, '0')}
-                                        </span>
+                                            onClick={() => go(role === 'prev' ? at - 1 : at + 1)}
+                                        >
+                                            <Image
+                                                src={step.image}
+                                                alt={step.alt}
+                                                fill
+                                                sizes="(max-width: 860px) 60vw, 400px"
+                                            />
+                                        </button>
+                                    );
+                                })}
 
-                                        <div>
-                                            <h3 className={styles.positioningTitle}>{col.title}</h3>
-                                            <p className={styles.positioningDesc}>{col.description}</p>
+                                <div className={styles.galleryCaptions} aria-live="polite">
+                                    {STEPS.map((step, i) => (
+                                        <div
+                                            key={step.label}
+                                            className={styles.galleryCaption}
+                                            data-on={i === at || undefined}
+                                            aria-hidden={i !== at}
+                                        >
+                                            <h3>{step.label}</h3>
+                                            <p>
+                                                {step.lead} <strong>{step.emphasis}</strong>
+                                            </p>
                                         </div>
-
-                                        <span className={styles.positioningMark} aria-hidden="true" />
-
-                                        {isActive && !userStopped && (
-                                            <span className={styles.positioningProgress} aria-hidden="true">
-                                                <motion.span
-                                                    key={`progress-${activeIndex}-${isPaused}`}
-                                                    className={styles.positioningProgressFill}
-                                                    initial={{ scaleX: 0 }}
-                                                    animate={{ scaleX: 1 }}
-                                                    transition={{
-                                                        duration: isPaused ? 0 : CYCLE_DURATION / 1000,
-                                                        ease: 'linear',
-                                                    }}
-                                                />
-                                            </span>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
-                        </motion.div>
-
-                        {/* Bottom Metric Anchors */}
-                        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-500">
-                            <span className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
-                                48–72h Shortlists
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
-                                100% Vetted Talent
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
-                                Elastic Scaling
-                            </span>
-
-                            {!reduceMotion && (
-                                <button
-                                    type="button"
-                                    onClick={() => setUserStopped((s) => !s)}
-                                    className="ml-auto flex items-center gap-1.5 rounded-full border border-slate-200 px-2.5 py-1 text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
-                                >
-                                    {userStopped ? <Play size={12} /> : <Pause size={12} />}
-                                    {userStopped ? 'Resume' : 'Pause'}
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Right Side: Text + Illustration */}
-                    <div
-                        className={styles.trustTextCol}
-                        id={`positioning-panel-${activeIndex}`}
-                        role="tabpanel"
-                        aria-labelledby={`positioning-tab-${activeIndex}`}
-                    >
-                        <AnimatePresence mode="wait">
-                            {'rightBackground' in POSITIONING.columns[activeIndex] && (
-                                <motion.div
-                                    key={`bg-${activeIndex}`}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    style={{
-                                        position: 'absolute',
-                                        inset: 0,
-                                        zIndex: 0,
-                                        pointerEvents: 'none',
-                                    }}
-                                >
-                                    <Image
-                                        src={(POSITIONING.columns[activeIndex] as any).rightBackground}
-                                        alt=""
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                    />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                        {/* Text Container with fixed height to prevent layout shift */}
-                        <div className={styles.trustHeadWrap}>
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={`content-${activeIndex}`}
-                                    className={styles.trustHead}
-                                    initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-                                >
-                                    <h2 className={styles.trustH2}>
-                                        {POSITIONING.columns[activeIndex].rightHeading}
-                                    </h2>
-                                    <p className={styles.trustLede}>{POSITIONING.columns[activeIndex].rightIntro}</p>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={`image-${activeIndex}`}
-                                className={styles.trustImageWrap}
-                                initial={reduceMotion ? false : { opacity: 0, filter: 'blur(4px)', scale: 0.98 }}
-                                animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-                                exit={{ opacity: 0, filter: 'blur(4px)', scale: 0.98 }}
-                                transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-                            >
-                                <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                                    <Image
-                                        src={(POSITIONING.columns[activeIndex] as any).rightImage}
-                                        alt={`Illustration for ${POSITIONING.columns[activeIndex].title}`}
-                                        width={1900}
-                                        height={1425}
-                                        className={styles.whyImage}
-                                    />
+                                    ))}
+                                    <ul className={styles.galleryChips}>
+                                        {SCALE_GALLERY.proofPoints.map((point) => (
+                                            <li key={point}>{point}</li>
+                                        ))}
+                                    </ul>
                                 </div>
-                            </motion.div>
-                        </AnimatePresence>
+                            </div>
+                        </div>
+
+                        {/* Counter: the tens digit stays, the units digit rolls. */}
+                        <p className={styles.galleryCount} aria-hidden="true">
+                            0
+                            <span className={styles.galleryRoll}>
+                                <span style={{ transform: `translateY(${-at}em)` }}>
+                                    {STEPS.map((_, i) => (
+                                        <span key={i}>{i + 1}</span>
+                                    ))}
+                                </span>
+                            </span>
+                            <small>/ {pad(COUNT)}</small>
+                        </p>
                     </div>
                 </div>
             </div>

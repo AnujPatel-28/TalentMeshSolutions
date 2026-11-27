@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    default: 'TalentMesh for Employers',
-    template: '%s | TalentMesh for Employers'
+    default: 'Talentmesh for Employers',
+    template: '%s | Talentmesh for Employers'
   },
   description: 'Enterprise Recruiting Platform & Smart Matching'
 }

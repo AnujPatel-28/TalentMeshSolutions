@@ -282,7 +282,7 @@ export default function CareerAdvicePage() {
                     situation: form.situation,
                     helpNeeds: helpNeeds.join(', '),
                     subject: `New Career Advice Form Submission from ${form.fullName}`,
-                    from_name: 'TalentMesh Career Advice Form',
+                    from_name: 'Talentmesh Career Advice Form',
                 }),
             });
 

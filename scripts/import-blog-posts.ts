@@ -232,7 +232,7 @@ function readDraft(filePath: string): Draft {
     slug: front.slug,
     excerpt: front.excerpt,
     category: front.category,
-    authorName: front.authorName || 'TalentMesh Editorial',
+    authorName: front.authorName || 'Talentmesh Editorial',
     publishedAt: front.publishedAt,
     status: front.status || 'draft',
     body,

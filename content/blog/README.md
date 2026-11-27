@@ -54,7 +54,7 @@ The frontmatter block in each file maps 1:1 to the fields the site actually quer
 | `slug` | Slug | Becomes `/blog/<slug>` — do not change after publishing |
 | `excerpt` | Excerpt | Shown on cards and the hero; kept near 150 chars |
 | `category` | Category | Exact string match — watch capitalisation and the `&` |
-| `authorName` | Author name | Falls back to "TalentMesh Editorial" if left empty |
+| `authorName` | Author name | Falls back to "Talentmesh Editorial" if left empty |
 | `publishedAt` | Published at | Controls ordering and the hero slot |
 | `status` | Status | Must be `published` — everything else is filtered out by the queries |
 | `coverImage` | Cover image | **Required in practice, see below** |
@@ -147,7 +147,7 @@ explicit "confirm with your own advisor" line — keep it.
 ## Claims policy applied to these drafts
 
 Following the rule stated at the top of `content/home.ts`, these posts contain **no invented
-TalentMesh metrics** — no client counts, placement counts, years in business or case studies —
+Talentmesh metrics** — no client counts, placement counts, years in business or case studies —
 and no unattributed third-party statistics. Company claims are limited to what is already
 stated on the site: Ahmedabad HQ recruiting across India, the service and engagement models,
 the five-stage process, the industries served, background verification and reference checks

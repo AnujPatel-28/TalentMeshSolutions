@@ -4,15 +4,15 @@ import { InfoLayout } from '@/components/ui';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Security',
     description: 'How we ensure the safety and integrity of your data and our platform.',
     alternates: { canonical: '/security' },
     openGraph: {
-        title: 'Security | TalentMesh Solutions',
+        title: 'Security | Talentmesh Solutions',
         description: 'How we ensure the safety and integrity of your data and our platform.',
         url: `${SITE_URL}/security`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
     },
 };

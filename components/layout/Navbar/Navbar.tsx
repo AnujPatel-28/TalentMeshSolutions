@@ -3,13 +3,24 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ChevronRight } from 'lucide-react';
 import { TALENTMESH_SERVICES } from '@/content/home';
 import styles from './Navbar.module.css';
 
 type NavKey = 'solutions' | 'portal' | 'company' | 'login';
 
 const MENU_EXIT_MS = 200;
+
+// The three desktop menus share one morphing background. Order sets which way
+// content slides when moving between them.
+const MORPH_ORDER = ['solutions', 'portal', 'company'] as const;
+type MorphKey = (typeof MORPH_ORDER)[number];
+const MORPH_PANEL: Record<MorphKey, string> = {
+    solutions: 'mega-panel-solutions',
+    portal: 'dropdown-portal',
+    company: 'dropdown-company',
+};
+const isMorphKey = (key: NavKey | null): key is MorphKey => key !== null && key !== 'login';
 
 const MenuIcon = ({ expanded }: { expanded: boolean }) => (
     <svg className={`${styles.menuIcon} ${expanded ? styles.menuIconExpanded : ''}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
@@ -23,21 +34,29 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isMenuClosing, setIsMenuClosing] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
+    const [isOverDark, setIsOverDark] = React.useState(false);
     const [activeService, setActiveService] = React.useState(0);
-    // Tracks which desktop dropdown currently has keyboard focus inside it, so its
-    // trigger can report an accurate aria-expanded. Visibility itself is driven by
-    // CSS (:hover / :focus-within) — this state never toggles the panel directly.
+    // Which desktop dropdown has focus inside it. The Login dropdown opens from
+    // CSS (:hover / :focus-within); the other three open from navMenu below.
     const [openNav, setOpenNav] = React.useState<NavKey | null>(null);
-    // Which top-level mobile drawer section is expanded — collapsed (null) by default.
-    const [expandedMobileSection, setExpandedMobileSection] = React.useState<NavKey | null>(null);
-    const [expandedMobileService, setExpandedMobileService] = React.useState<number | null>(null);
+    // Which of the three morphing menus the pointer is over. Leaving waits
+    // briefly so a pointer that slips off for a moment doesn't close it.
+    const [hoverNav, setHoverNav] = React.useState<MorphKey | null>(null);
+    const hoverTimer = React.useRef<number | undefined>(undefined);
+    const morphRef = React.useRef<HTMLDivElement>(null);
+    const shownMenu = React.useRef<MorphKey | null>(null);
+    const navMenu: MorphKey | null = hoverNav ?? (isMorphKey(openNav) ? openNav : null);
+    // Which mobile group's second screen is showing — null means level 1.
+    const [mobileSub, setMobileSub] = React.useState<NavKey | null>(null);
     const pathname = usePathname();
     const mobileDialog = React.useRef<HTMLDialogElement>(null);
-    const mobileScroll = React.useRef<HTMLDivElement>(null);
+    // Group row to refocus once its second screen has been left via Back/Escape.
+    const mobileReturnFocus = React.useRef<NavKey | null>(null);
 
     const finishClosingMenu = React.useCallback(() => {
         setIsMenuOpen(false);
         setIsMenuClosing(false);
+        setMobileSub(null);
     }, []);
 
     const closeMenu = () => {
@@ -71,15 +90,123 @@ const Navbar = () => {
     // Close mobile menu on route change
     React.useEffect(() => { finishClosingMenu(); }, [pathname, finishClosingMenu]);
 
-    // Track page scroll position for transparent vs glassmorphic header
+    // Track page scroll position for transparent vs glassmorphic header, and
+    // whether the bar sits over a dark section (any element marked
+    // data-nav-theme="dark"), where it turns transparent with a white logo.
     React.useEffect(() => {
+        const NAV_LINE = 30; // px from the top: the middle of the bar
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
+            const dark = Array.from(document.querySelectorAll('[data-nav-theme="dark"]')).some((el) => {
+                const r = el.getBoundingClientRect();
+                return r.top <= NAV_LINE && r.bottom >= NAV_LINE;
+            });
+            setIsOverDark(dark);
         };
         handleScroll(); // Initial check
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleScroll);
+        };
+    }, [pathname]);
+
+    // Moves and resizes the shared background onto the open menu's card. On the
+    // first open it drops in; between menus it glides and resizes while the
+    // content slides in the direction of travel; on close it fades.
+    React.useLayoutEffect(() => {
+        const morph = morphRef.current;
+        if (!morph) return;
+        const prev = shownMenu.current;
+        const next = navMenu;
+        shownMenu.current = next;
+        if (!next) {
+            morph.dataset.state = 'closed';
+            return;
+        }
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const panel = document.getElementById(MORPH_PANEL[next]);
+        const prevPanel = prev && prev !== next ? document.getElementById(MORPH_PANEL[prev]) : null;
+        if (!panel) return;
+        const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        // Where the background is right now (mid-glide after a quick switch),
+        // read before any running animation is cancelled.
+        const snapshot = () => {
+            const cs = getComputedStyle(morph);
+            return { width: cs.width, height: cs.height, transform: cs.transform, borderRadius: cs.borderRadius };
+        };
+        const fromFrame = snapshot();
+        const from = morph.getBoundingClientRect();
+        // Measure without any slide still running from a quick back-and-forth.
+        for (const el of [panel, prevPanel, morph]) el?.getAnimations().forEach((a) => a.cancel());
+        const card = (next === 'solutions' ? panel.firstElementChild : panel) as HTMLElement;
+
+        // The glide is a Web Animation, not a CSS transition, so it starts on
+        // the same frame as the content's slide and clip below; with this
+        // fast-starting ease, one frame apart is tens of pixels.
+        let glide: Animation | null = null;
+        let target = '';
+        const place = (animate: boolean, start = snapshot()) => {
+            const r = card.getBoundingClientRect();
+            const n = (morph.parentElement as HTMLElement).getBoundingClientRect();
+            // Measure where the card rests, not where a running slide has it.
+            const [sx = 0, sy = 0] = getComputedStyle(panel).translate.split(' ').map((v) => parseFloat(v) || 0);
+            const end = {
+                width: `${r.width}px`,
+                height: `${r.height}px`,
+                transform: `translate3d(${r.left - sx - n.left}px, ${r.top - sy - n.top}px, 0)`,
+                borderRadius: getComputedStyle(card).borderRadius,
+            };
+            // Already headed there (e.g. the observer's first report): leave the glide running.
+            const key = JSON.stringify(end);
+            if (key === target) return;
+            target = key;
+            glide?.cancel();
+            Object.assign(morph.style, end);
+            const moved = start.width !== end.width || start.height !== end.height || start.transform !== getComputedStyle(morph).transform;
+            if (animate && moved && !reduce) glide = morph.animate([start, end], { duration: 380, easing: ease });
+        };
+        place(prev !== null, fromFrame);
+        morph.dataset.state = 'open';
+
+        if (!reduce) {
+            if (prevPanel && prev) {
+                const dir = MORPH_ORDER.indexOf(next) > MORPH_ORDER.indexOf(prev) ? 1 : -1;
+                // Growing into a bigger menu: clip its content to the background
+                // as it grows, so nothing shows on the page before the card
+                // reaches it. Same timing as the glide; the clip starts 28px
+                // against the slide so on screen it tracks the background exactly.
+                const to = card.getBoundingClientRect();
+                if (to.width > from.width + 1 || to.height > from.height + 1) {
+                    const p = panel.getBoundingClientRect();
+                    const inset = (r: DOMRect, shift: number, radius: string) =>
+                        `inset(${r.top - p.top}px ${p.right - r.right + shift}px ${p.bottom - r.bottom}px ${r.left - p.left - shift}px round ${radius})`;
+                    panel.animate(
+                        [{ clipPath: inset(from, dir * 28, fromFrame.borderRadius) }, { clipPath: inset(to, 0, getComputedStyle(card).borderRadius) }],
+                        { duration: 380, easing: ease },
+                    );
+                }
+                panel.animate([{ translate: `${dir * 28}px 0` }, { translate: '0 0' }], { duration: 380, easing: ease });
+                prevPanel.animate([{ translate: '0 0' }, { translate: `${-dir * 28}px 0` }], { duration: 200, easing: 'ease-in' });
+            } else if (!prev) {
+                for (const el of [panel, morph]) el.animate([{ translate: '0 -6px' }, { translate: '0 0' }], { duration: 340, easing: ease });
+            }
+        }
+
+        // The card can change size while open (a Talent Solutions category
+        // opening its pills, a narrower window), so the background follows it.
+        const resize = new ResizeObserver(() => place(true));
+        resize.observe(card);
+        const onWindowResize = () => place(false);
+        window.addEventListener('resize', onWindowResize);
+        return () => {
+            resize.disconnect();
+            window.removeEventListener('resize', onWindowResize);
+        };
+    }, [navMenu]);
+
+    React.useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
 
     // Native modal keeps focus inside the menu and makes the page behind it inert.
     React.useEffect(() => {
@@ -98,27 +225,30 @@ const Navbar = () => {
         };
     }, [isMenuOpen, finishClosingMenu]);
 
-    // Run after showModal and the accordion layout settle, including reopening
-    // on a service page. Only the menu's own scroll container is repositioned.
+    // Runs after the commit that swaps which level is inert, so the target is focusable.
+    // preventScroll: the incoming level is still mid-slide and must not be scrolled into view.
     React.useEffect(() => {
-        if (!isMenuOpen || !expandedMobileSection) return;
-        const frame = requestAnimationFrame(() => {
-            const scroller = mobileScroll.current;
-            const heading = document.getElementById(`mobile-trigger-${expandedMobileSection}`);
-            if (!scroller || !heading) return;
-            scroller.scrollTop += heading.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
-            if (expandedMobileSection === 'solutions' && expandedMobileService !== null) {
-                const service = document.getElementById(`mobile-service-trigger-${expandedMobileService}`);
-                if (service) {
-                    scroller.scrollTop += service.getBoundingClientRect().top - scroller.getBoundingClientRect().top - heading.offsetHeight;
-                }
-            }
-        });
-        return () => cancelAnimationFrame(frame);
-    }, [isMenuOpen, expandedMobileSection, expandedMobileService]);
+        if (mobileSub) {
+            document.getElementById(`mobile-back-${mobileSub}`)?.focus({ preventScroll: true });
+        } else if (mobileReturnFocus.current) {
+            document.getElementById(`mobile-trigger-${mobileReturnFocus.current}`)?.focus({ preventScroll: true });
+            mobileReturnFocus.current = null;
+        }
+    }, [mobileSub]);
 
     // ── Hide the Navbar entirely inside the dashboard (it has its own layout) ──
     if (pathname.startsWith('/dashboard')) return null;
+
+    const hoverProps = (key: MorphKey) => ({
+        onMouseEnter: () => {
+            window.clearTimeout(hoverTimer.current);
+            setHoverNav(key);
+        },
+        onMouseLeave: () => {
+            window.clearTimeout(hoverTimer.current);
+            hoverTimer.current = window.setTimeout(() => setHoverNav(null), 100);
+        },
+    });
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -127,14 +257,19 @@ const Navbar = () => {
 
     const toggleMenu = () => {
         setIsMenuClosing(false);
-        const serviceIndex = TALENTMESH_SERVICES.findIndex(service => service.actionPills.some(pill => pill.href === pathname));
-        setExpandedMobileService(serviceIndex < 0 ? null : serviceIndex);
-        setExpandedMobileSection(serviceIndex >= 0 ? 'solutions' : isPortalActive ? 'portal' : isCompanyActive ? 'company' : null);
+        setMobileSub(null);
         setIsMenuOpen(prev => !prev);
     };
 
-    const toggleMobileSection = (section: NavKey) => {
-        setExpandedMobileSection(prev => prev === section ? null : section);
+    const closeMobileSub = () => {
+        mobileReturnFocus.current = mobileSub;
+        setMobileSub(null);
+    };
+
+    // Escape (or any other close request) steps back one level before closing.
+    const dismissMobileLevel = () => {
+        if (mobileSub) closeMobileSub();
+        else closeMenu();
     };
 
     const mobileLink = (href: string, label: string) => (
@@ -167,11 +302,42 @@ const Navbar = () => {
     const isHome = pathname === '/';
     // /about opens with a full-bleed dark cinematic hero, so it borrows the
     // home transparent-over-dark treatment until the first scroll.
-    const isTransparentNav = (isHome || pathname === '/about') && !isScrolled && !isMenuOpen;
+    const isTransparentNav = (((isHome || pathname === '/about') && !isScrolled) || isOverDark) && !isMenuOpen;
+
+    const mobileGroups: { key: NavKey; title: string; active: boolean; links: { href: string; label: string }[] }[] = [
+        {
+            key: 'solutions',
+            title: 'Talent Solutions',
+            active: isSolutionsActive,
+            links: [{ href: '/contact', label: 'Hire Talent' }, ...TALENTMESH_SERVICES.flatMap(service => service.actionPills)],
+        },
+        {
+            key: 'portal',
+            title: 'Talent Portal',
+            active: isPortalActive,
+            links: [
+                { href: '/talentmesh-portal', label: 'Talentmesh Portal' },
+                { href: '/job-seekers', label: 'Candidate Benefits' },
+                { href: '/employers/post-job', label: 'Post a Job' },
+            ],
+        },
+        {
+            key: 'company',
+            title: 'Company',
+            active: isCompanyActive,
+            links: [
+                { href: '/about', label: 'About' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/blog', label: 'Blog' },
+                { href: '/career-advice', label: 'Career Advice' },
+            ],
+        },
+    ];
 
     return (
-        <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
+        <nav className={`${styles.navbar} ${isHome ? styles.homeNav : ''} ${isScrolled && !isTransparentNav ? styles.scrolled : ''} ${isTransparentNav ? styles.transparentNav : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
 
+            <div ref={morphRef} className={styles.morph} data-state="closed" aria-hidden="true" />
             <div className={styles.container}>
                 {/* ── Logo ── */}
                 <Link
@@ -182,7 +348,7 @@ const Navbar = () => {
                 >
                     <Image
                         src="/talentmesh-solutions-logo-transparent.png"
-                        alt="TalentMesh Solutions"
+                        alt="Talentmesh Solutions"
                         width={2172}
                         height={724}
                         sizes="(max-width: 1024px) 162px, 180px"
@@ -197,6 +363,8 @@ const Navbar = () => {
                     {/* Talent Solutions */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'solutions'}
+                        {...hoverProps('solutions')}
                         onFocus={() => setOpenNav('solutions')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -204,7 +372,7 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isSolutionsActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'solutions'}
+                            aria-expanded={navMenu === 'solutions'}
                             aria-controls="mega-panel-solutions"
                         >
                             Talent Solutions <span className={styles.chevron} aria-hidden="true">▼</span>
@@ -281,6 +449,8 @@ const Navbar = () => {
                     {/* Talent Portal */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'portal'}
+                        {...hoverProps('portal')}
                         onFocus={() => setOpenNav('portal')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -288,13 +458,13 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isPortalActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'portal'}
+                            aria-expanded={navMenu === 'portal'}
                             aria-controls="dropdown-portal"
                         >
                             Talent Portal <span className={styles.chevron} aria-hidden="true">▼</span>
                         </button>
                         <div id="dropdown-portal" className={styles.dropdown}>
-                            <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>TalentMesh Portal</Link>
+                            <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>Talentmesh Portal</Link>
                             <Link href="/job-seekers" className={`${styles.dropdownLink} ${pathname === '/job-seekers' ? styles.dropdownLinkActive : ''}`}>Candidate Benefits</Link>
                             <Link href="/employers/post-job" className={`${styles.dropdownLink} ${pathname === '/employers/post-job' ? styles.dropdownLinkActive : ''}`}>Post a Job</Link>
                         </div>
@@ -303,6 +473,8 @@ const Navbar = () => {
                     {/* Company */}
                     <div
                         className={styles.navItem}
+                        data-open={navMenu === 'company'}
+                        {...hoverProps('company')}
                         onFocus={() => setOpenNav('company')}
                         onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenNav(null); }}
                     >
@@ -310,7 +482,7 @@ const Navbar = () => {
                             type="button"
                             className={`${styles.link} ${isCompanyActive ? styles.linkActive : ''}`}
                             aria-haspopup="true"
-                            aria-expanded={openNav === 'company'}
+                            aria-expanded={navMenu === 'company'}
                             aria-controls="dropdown-company"
                         >
                             Company <span className={styles.chevron} aria-hidden="true">▼</span>
@@ -391,7 +563,12 @@ const Navbar = () => {
                 aria-label="Main navigation"
                 data-closing={isMenuClosing}
                 style={{ '--menu-exit-duration': `${MENU_EXIT_MS}ms` } as React.CSSProperties}
-                onCancel={(event) => { event.preventDefault(); closeMenu(); }}
+                onCancel={(event) => { event.preventDefault(); dismissMobileLevel(); }}
+                onKeyDown={(event) => {
+                    // Handled here as well as onCancel: browsers let a second
+                    // consecutive Escape close a modal without a cancelable event.
+                    if (event.key === 'Escape') { event.preventDefault(); dismissMobileLevel(); }
+                }}
                 onAnimationEnd={(event) => {
                     if (event.target === event.currentTarget && isMenuClosing) finishClosingMenu();
                 }}
@@ -400,92 +577,61 @@ const Navbar = () => {
                 }}
             >
                 <div className={styles.mobileHeader}>
-                    <Link href="/" className={styles.logo} aria-label="TalentMesh Solutions home">
-                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="TalentMesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
+                    <Link href="/" className={styles.logo} aria-label="Talentmesh Solutions home">
+                        <Image src="/talentmesh-solutions-logo-transparent.png" alt="Talentmesh Solutions" width={2172} height={724} sizes="162px" className={styles.logoImg} />
                     </Link>
                     <button type="button" className={styles.mobileClose} onClick={closeMenu} aria-label="Close navigation menu" autoFocus>
                         <MenuIcon expanded={isMenuOpen && !isMenuClosing} />
                     </button>
                 </div>
-                <div ref={mobileScroll} className={styles.mobileScroll}>
-                    <div className={styles.mobileIntro}>
-                        <h2>People. Possibilities.<br /><span>The right connection.</span></h2>
-                    </div>
-                    <Link href="/" className={`${styles.mobileHome} ${isHome ? styles.mobileNavLinkActive : ''}`} aria-current={isHome ? 'page' : undefined}>Home<ArrowUpRight size={19} aria-hidden="true" /></Link>
+                <div className={styles.mobileLevels}>
+                    <div className={`${styles.mobileScroll} ${styles.mobileLevel} ${mobileSub ? styles.mobileLevelBehind : ''}`} inert={mobileSub !== null}>
+                        <Link href="/" className={`${styles.mobileHome} ${isHome ? styles.mobileNavLinkActive : ''}`} aria-current={isHome ? 'page' : undefined}>Home<ArrowUpRight size={19} aria-hidden="true" /></Link>
 
-                    <div className={styles.mobileNavItem}>
-                        <button
-                            id="mobile-trigger-solutions"
-                            type="button"
-                            className={styles.mobileNavSectionHeader}
-                            onClick={() => toggleMobileSection('solutions')}
-                            aria-expanded={expandedMobileSection === 'solutions'}
-                            aria-controls="mobile-section-solutions"
-                        >
-                            <span>Talent Solutions<small>Build and grow your team</small></span>
-                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
-                        </button>
-                        <div id="mobile-section-solutions" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-solutions" hidden={expandedMobileSection !== 'solutions'}>
-                            {mobileLink('/contact', 'Hire Talent')}
-                            {TALENTMESH_SERVICES.map((service, index) => (
-                                <div key={service.title} className={styles.mobileService}>
-                                    <button
-                                        id={`mobile-service-trigger-${index}`}
-                                        type="button"
-                                        className={styles.mobileServiceTrigger}
-                                        onClick={() => setExpandedMobileService(prev => prev === index ? null : index)}
-                                        aria-expanded={expandedMobileService === index}
-                                        aria-controls={`mobile-service-${index}`}
-                                    >
-                                        <span>{service.title}</span>
-                                        <ChevronDown size={18} aria-hidden="true" />
-                                    </button>
-                                    <div id={`mobile-service-${index}`} className={styles.mobileServiceLinks} hidden={expandedMobileService !== index}>
-                                        {service.actionPills.map(pill => mobileLink(pill.href, pill.label))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        {mobileGroups.map(group => (
+                            <div key={group.key} className={styles.mobileNavItem}>
+                                <button
+                                    id={`mobile-trigger-${group.key}`}
+                                    type="button"
+                                    className={`${styles.mobileNavSectionHeader} ${group.active ? styles.mobileNavSectionActive : ''}`}
+                                    onClick={() => setMobileSub(group.key)}
+                                    aria-haspopup="true"
+                                    aria-expanded={mobileSub === group.key}
+                                    aria-controls={`mobile-section-${group.key}`}
+                                >
+                                    <span>{group.title}</span>
+                                    <ChevronRight size={21} className={styles.chevron} aria-hidden="true" />
+                                </button>
+                            </div>
+                        ))}
                     </div>
 
-                    <div className={styles.mobileNavItem}>
-                        <button
-                            id="mobile-trigger-portal"
-                            type="button"
-                            className={styles.mobileNavSectionHeader}
-                            onClick={() => toggleMobileSection('portal')}
-                            aria-expanded={expandedMobileSection === 'portal'}
-                            aria-controls="mobile-section-portal"
+                    {mobileGroups.map(group => (
+                        <div
+                            key={group.key}
+                            id={`mobile-section-${group.key}`}
+                            className={`${styles.mobileScroll} ${styles.mobileLevel} ${mobileSub === group.key ? '' : styles.mobileLevelAhead}`}
+                            role="group"
+                            aria-labelledby={`mobile-section-title-${group.key}`}
+                            inert={mobileSub !== group.key}
                         >
-                            <span>Talent Portal<small>Find opportunities. Connect with talent.</small></span>
-                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
-                        </button>
-                        <div id="mobile-section-portal" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-portal" hidden={expandedMobileSection !== 'portal'}>
-                            {mobileLink('/talentmesh-portal', 'TalentMesh Portal')}
-                            {mobileLink('/job-seekers', 'Candidate Benefits')}
-                            {mobileLink('/employers/post-job', 'Post a Job')}
+                            <div className={styles.mobileSubHeader}>
+                                <button
+                                    id={`mobile-back-${group.key}`}
+                                    type="button"
+                                    className={styles.mobileBack}
+                                    onClick={closeMobileSub}
+                                    aria-label="Back to main menu"
+                                >
+                                    <ArrowLeft size={19} aria-hidden="true" />Back
+                                </button>
+                                <h2 id={`mobile-section-title-${group.key}`} className={styles.mobileSubTitle}>{group.title}</h2>
+                            </div>
+                            <div className={`${styles.mobileNavSectionBody} ${group.key === 'solutions' ? styles.mobileNavGrid : ''}`}>
+                                {group.links.map(link => mobileLink(link.href, link.label))}
+                            </div>
                         </div>
-                    </div>
-
-                    <div className={styles.mobileNavItem}>
-                        <button
-                            id="mobile-trigger-company"
-                            type="button"
-                            className={styles.mobileNavSectionHeader}
-                            onClick={() => toggleMobileSection('company')}
-                            aria-expanded={expandedMobileSection === 'company'}
-                            aria-controls="mobile-section-company"
-                        >
-                            <span>Company<small>Meet TalentMesh and explore our insights</small></span>
-                            <ChevronDown size={21} className={styles.chevron} aria-hidden="true" />
-                        </button>
-                        <div id="mobile-section-company" className={styles.mobileNavSectionBody} role="region" aria-labelledby="mobile-trigger-company" hidden={expandedMobileSection !== 'company'}>
-                            {mobileLink('/about', 'About')}
-                            {mobileLink('/contact', 'Contact')}
-                            {mobileLink('/blog', 'Blog')}
-                            {mobileLink('/career-advice', 'Career Advice')}
-                        </div>
-                    </div>
+                    ))}
                 </div>
                 <div className={styles.mobileAuth}>
                     <Link href="/contact" className={styles.mobilePrimary}>

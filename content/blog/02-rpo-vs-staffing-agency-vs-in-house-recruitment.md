@@ -5,7 +5,7 @@ title: "RPO vs Staffing Agency vs In-House Recruiting: Which Hiring Model Fits Y
 slug: "rpo-vs-staffing-agency-vs-in-house-recruitment"
 excerpt: "Three ways to run hiring, three very different cost and control profiles. A decision framework for choosing between RPO, a staffing agency and an in-house team."
 category: "Hiring Strategy"
-authorName: "TalentMesh Editorial"
+authorName: "Talentmesh Editorial"
 publishedAt: "2026-08-04T09:00:00.000Z"
 status: "published"
 coverImage: "Upload in Studio — see 'Cover image brief' below. Required: the blog listing hero does not render without it."
@@ -134,7 +134,7 @@ In practice the answer is rarely one model:
 
 The important thing is that the choice is deliberate. Most companies drift into a model by accident and then blame the model.
 
-## Where TalentMesh Solutions fits
+## Where Talentmesh Solutions fits
 
 We work across all three arrangements — permanent and contractual placement, executive and leadership hiring, campus and bulk drives, flexi staffing, and [recruitment process outsourcing](/recruitment-process-outsourcing) where we run your hiring function as an extension of your team. We will recommend the model that fits the mandate rather than defaulting to one, and we will say so if your volume does not justify the heavier option.
 

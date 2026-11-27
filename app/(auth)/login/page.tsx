@@ -35,7 +35,7 @@ const itemVariants = {
 export default function LoginPage() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            document.title = "Early Access | TalentMesh";
+            document.title = "Early Access | Talentmesh";
         }
     }, []);
 
@@ -69,7 +69,7 @@ export default function LoginPage() {
                     email,
                     interested_as: role,
                     subject: `New Early Access Signup from ${name}`,
-                    from_name: 'TalentMesh Early Access',
+                    from_name: 'Talentmesh Early Access',
                 }),
             });
 
@@ -98,7 +98,7 @@ export default function LoginPage() {
                             <span className={styles.heroBrandingHighlight}>Begins With One Step</span>
                         </h2>
                         <p className={styles.heroBrandingSub}>
-                            Be the first to know when TalentMesh launches. Join the early access list for candidates and employers.
+                            Be the first to know when Talentmesh launches. Join the early access list for candidates and employers.
                         </p>
                         <div className={styles.statsGrid}>
                             <div className={styles.statCard}>
@@ -137,7 +137,7 @@ export default function LoginPage() {
                             <Link href="/" className={styles.logoWrap}>
                                 <Image
                                     src="/TalentMesh_page-0002-removebg-preview.png"
-                                    alt="TalentMesh"
+                                    alt="Talentmesh"
                                     width={180}
                                     height={50}
                                     unoptimized
@@ -160,7 +160,7 @@ export default function LoginPage() {
                             <>
                                 <motion.div variants={itemVariants} className={styles.header}>
                                     <h1 className={styles.title}>Get early access</h1>
-                                    <p className={styles.subtitle}>Sign up to be notified when TalentMesh launches.</p>
+                                    <p className={styles.subtitle}>Sign up to be notified when Talentmesh launches.</p>
                                 </motion.div>
 
                                 {error && (

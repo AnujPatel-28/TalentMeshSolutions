@@ -88,7 +88,7 @@ const BROWSE_JOBS = JOBS.map(toBrowseJob);
 export default function BrowseJobsPage() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            document.title = "Explore Jobs & Opportunities | TalentMesh";
+            document.title = "Explore Jobs & Opportunities | Talentmesh";
         }
     }, []);
 
@@ -307,7 +307,7 @@ export default function BrowseJobsPage() {
         e.stopPropagation();
         const url = `${window.location.origin}/browse-jobs/${job.id}`;
         const company = job.company_profiles || job.companies || {};
-        const companyName = company.company_name || company.name || 'TalentMesh Employer';
+        const companyName = company.company_name || company.name || 'Talentmesh Employer';
 
         if (navigator.share) {
             try {
@@ -630,7 +630,7 @@ export default function BrowseJobsPage() {
                                     {paginated.map(job => {
                                         const saved = isSaved(job.id);
                                         const company = job.company_profiles || job.companies || {};
-                                        const companyName = company.company_name || company.name || 'TalentMesh Employer';
+                                        const companyName = company.company_name || company.name || 'Talentmesh Employer';
                                         const companyColor = company.color || '#4F46E5';
                                         const companyInitials = company.initials || companyName?.[0] || 'TM';
                                         const isSelected = selectedJob?.id === job.id;
@@ -703,7 +703,7 @@ export default function BrowseJobsPage() {
                                 <div className={styles.detailInspectorPane}>
                                     {selectedJob ? (() => {
                                         const company = selectedJob.company_profiles || selectedJob.companies || {};
-                                        const companyName = company.company_name || company.name || 'TalentMesh Employer';
+                                        const companyName = company.company_name || company.name || 'Talentmesh Employer';
                                         const companyColor = company.color || '#4F46E5';
                                         const companyInitials = company.initials || companyName?.[0] || 'TM';
                                         const saved = isSaved(selectedJob.id);
@@ -941,7 +941,7 @@ export default function BrowseJobsPage() {
                         <div className={styles.testimonialCard}>
                             <div className={styles.starRating}>⭐⭐⭐⭐⭐</div>
                             <p className={styles.quoteText}>
-                                "TalentMesh changed how I search for software jobs. The split-pane preview and transparent salary tags saved me hours."
+                                "Talentmesh changed how I search for software jobs. The split-pane preview and transparent salary tags saved me hours."
                             </p>
                             <div className={styles.authorGroup}>
                                 <div className={styles.authorAvatar}>AS</div>
@@ -993,7 +993,7 @@ export default function BrowseJobsPage() {
 
                     <div className={styles.faqListContainer}>
                         {[
-                            { q: "Can I search and browse jobs without creating an account?", a: "Yes! TalentMesh allows complete zero-friction job discovery. You can search, filter, and inspect full job specs and salary ranges without signing in." },
+                            { q: "Can I search and browse jobs without creating an account?", a: "Yes! Talentmesh allows complete zero-friction job discovery. You can search, filter, and inspect full job specs and salary ranges without signing in." },
                             { q: "How does the AI match score work?", a: "Our AI evaluates skill alignment between job requirements and your professional profile to highlight roles where you have the highest fit." },
                             { q: "How do saved jobs work for guest users?", a: "When you bookmark a job as a guest, it is saved locally to your browser. Once you log in or sign up, your saved jobs automatically sync with your account." },
                             { q: "How do I apply for a job listing?", a: "Click on any job card to inspect its details, then click 'Apply Now' to submit your application directly to the recruiter or hiring team." }

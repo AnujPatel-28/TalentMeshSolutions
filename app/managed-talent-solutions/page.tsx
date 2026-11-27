@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Managed Talent Solutions',
     description: "From recruitment coordination to workforce support, Talentmesh brings the people and processes together to help organizations build and maintain high-performing teams.",
     alternates: { canonical: '/managed-talent-solutions' },
     openGraph: {
-        title: 'Managed Talent Solutions | TalentMesh Solutions',
+        title: 'Managed Talent Solutions | Talentmesh Solutions',
         description: "From recruitment coordination to workforce support, Talentmesh brings the people and processes together to help organizations build and maintain high-performing teams.",
         url: `${SITE_URL}/managed-talent-solutions`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/managed-talent-solutions.webp`, alt: "Two operations colleagues reviewing workforce data together on a large monitor" }],
     },

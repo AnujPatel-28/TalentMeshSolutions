@@ -163,7 +163,7 @@ export default function CareersPage() {
                 <div className="premium-container">
                     <div className={styles.heroInner}>
                         <h1 className={styles.heroTitle}>
-                            Join TalentMesh and<br />
+                            Join Talentmesh and<br />
                             help create<br />
                             <span className={styles.highlight}>recruitment</span>
                         </h1>
@@ -183,7 +183,7 @@ export default function CareersPage() {
                     <div className={styles.heroImageWrapper}>
                         <Image
                             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&h=500&q=80"
-                            alt="TalentMesh Team Group"
+                            alt="Talentmesh Team Group"
                             fill
                             className={styles.teamImg}
                             priority
@@ -198,10 +198,10 @@ export default function CareersPage() {
                     <div className="premium-container">
                         <div className={styles.sectionHeader}>
                             <h2 className={styles.sectionTitle}>
-                                The Team Behind <span className={styles.highlight}>TalentMesh</span>
+                                The Team Behind <span className={styles.highlight}>Talentmesh</span>
                             </h2>
                             <p className={styles.sectionSubtitle}>
-                                The people shaping TalentMesh through thoughtful design and solid engineering.
+                                The people shaping Talentmesh through thoughtful design and solid engineering.
                             </p>
                         </div>
 

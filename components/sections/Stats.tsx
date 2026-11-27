@@ -23,7 +23,7 @@ const Stats = () => {
                             <div className={styles.marqueeLogoWrapper}>
                                 <Image
                                     src="/TalentMesh White Logo.png"
-                                    alt="TalentMesh"
+                                    alt="Talentmesh"
                                     width={72}
                                     height={72}
                                     className={styles.marqueeLogo}

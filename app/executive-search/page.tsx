@@ -6,15 +6,15 @@ import { STRONG_CTA } from '@/content/home';
 const SITE_URL = 'https://talentmeshsolutions.com';
 
 export const metadata: Metadata = {
-    // Bare title: root layout's title.template appends " | TalentMesh Solutions".
+    // Bare title: root layout's title.template appends " | Talentmesh Solutions".
     title: 'Executive Search',
     description: "The right leader can shape teams, influence strategy and define what comes next. Talentmesh helps organizations identify and connect with senior professionals aligned with their leadership requirements.",
     alternates: { canonical: '/executive-search' },
     openGraph: {
-        title: 'Executive Search | TalentMesh Solutions',
+        title: 'Executive Search | Talentmesh Solutions',
         description: "The right leader can shape teams, influence strategy and define what comes next. Talentmesh helps organizations identify and connect with senior professionals aligned with their leadership requirements.",
         url: `${SITE_URL}/executive-search`,
-        siteName: 'TalentMesh Solutions',
+        siteName: 'Talentmesh Solutions',
         type: 'website',
         images: [{ url: `${SITE_URL}/images/services/executive-search.webp`, alt: "Two colleagues reviewing leadership candidate profiles together" }],
     },

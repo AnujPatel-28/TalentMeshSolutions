@@ -234,7 +234,7 @@ const Hero = () => {
                             <div className={styles.dashboardBarDot} style={{ background: '#ef4444' }} />
                             <div className={styles.dashboardBarDot} style={{ background: '#f59e0b' }} />
                             <div className={styles.dashboardBarDot} style={{ background: '#22c55e' }} />
-                            <span className={styles.dashboardBarTitle}>TalentMesh — Active Pipeline</span>
+                            <span className={styles.dashboardBarTitle}>Talentmesh | Active Pipeline</span>
                         </div>
                         <div className={styles.dashboardContent}>
                             {[

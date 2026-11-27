@@ -127,8 +127,8 @@ export default function JobDetailPage() {
                     resume_link: joinFields.resumeLink,
                     interested_role: job?.title,
                     interested_company: job?.company_profiles?.company_name,
-                    subject: `New Talent Pool signup — ${job?.title} @ ${job?.company_profiles?.company_name}`,
-                    from_name: 'TalentMesh Talent Pool',
+                    subject: `New Talent Pool signup: ${job?.title} @ ${job?.company_profiles?.company_name}`,
+                    from_name: 'Talentmesh Talent Pool',
                 }),
             });
             if (response.ok) {
@@ -175,7 +175,7 @@ export default function JobDetailPage() {
 
     const handleShare = async () => {
         const url = window.location.href;
-        const companyName = job?.company_profiles?.company_name || 'TalentMesh Company';
+        const companyName = job?.company_profiles?.company_name || 'Talentmesh Company';
         const shareData = { 
             title: job?.title || 'Job Opportunity', 
             text: `Check out this ${job?.title} position at ${companyName}`, 
@@ -327,7 +327,7 @@ export default function JobDetailPage() {
                         {showJoinForm && !joinSubmitted && (
                             <div style={{ marginTop: '1.5rem', maxWidth: 480, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)', borderRadius: 16, padding: '1.5rem' }}>
                                 <p style={{ color: 'white', fontWeight: 700, marginBottom: '1rem' }}>
-                                    Join our talent pool for {job.title} and similar roles — we&apos;ll reach out if there&apos;s a match.
+                                    Join our talent pool for {job.title} and similar roles. We&apos;ll reach out if there&apos;s a match.
                                 </p>
                                 <form onSubmit={handleJoinSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                     <input

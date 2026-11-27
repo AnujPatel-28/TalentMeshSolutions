@@ -102,8 +102,8 @@ export default function PostJobPage() {
                     experience_level: form.exp,
                     skills: skills.join(', '),
                     description: form.description,
-                    subject: `New Job Post Draft — ${form.title || 'Untitled role'} @ ${form.company || 'Unknown company'}`,
-                    from_name: 'TalentMesh Post-a-Job Preview',
+                    subject: `New Job Post Draft: ${form.title || 'Untitled role'} @ ${form.company || 'Unknown company'}`,
+                    from_name: 'Talentmesh Post-a-Job Preview',
                 }),
             });
         } catch (err) {
@@ -138,7 +138,7 @@ export default function PostJobPage() {
                             Post Jobs and<br />
                             <span className={styles.highlight}>Hire Top Talent Faster</span>
                         </h1>
-                        <p className={styles.heroSub}>Create job listings, attract qualified candidates, manage applications, and streamline your hiring process with TalentMesh.</p>
+                        <p className={styles.heroSub}>Create job listings, attract qualified candidates, manage applications, and streamline your hiring process with Talentmesh.</p>
                     </div>
                 </div>
             </section>
@@ -260,7 +260,7 @@ export default function PostJobPage() {
                                         <textarea className={`${styles.textarea} ${aiGenerated ? styles.textareaAi : ''}`}
                                             rows={14} placeholder="Or write your job description here..."
                                             value={form.description} onChange={e => set('description', e.target.value)} />
-                                        {aiGenerated && <div className={styles.aiNote}><SparkleIco /> AI-generated — review and edit before posting</div>}
+                                        {aiGenerated && <div className={styles.aiNote}><SparkleIco /> AI-generated. Review and edit before posting</div>}
                                         <div className={styles.stepBtns}>
                                             <button className={styles.backBtn} onClick={() => setStep(0)}>← Back</button>
                                             <button className={styles.nextBtn} onClick={() => setStep(2)}>Preview Job →</button>
@@ -306,9 +306,9 @@ export default function PostJobPage() {
                 <div className="premium-container">
                     <div className={styles.valueSectionHeader}>
                         <span className={styles.valueBadge}>Benefits</span>
-                        <h2 className={styles.valueSectionTitle}>Why Employers Choose <span className={styles.highlight}>TalentMesh</span></h2>
+                        <h2 className={styles.valueSectionTitle}>Why Employers Choose <span className={styles.highlight}>Talentmesh</span></h2>
                         <p className={styles.valueSectionSub}>
-                            Post jobs online, attract qualified candidates, manage applications, and streamline your hiring process with TalentMesh.
+                            Post jobs online, attract qualified candidates, manage applications, and streamline your hiring process with Talentmesh.
                         </p>
                     </div>
                     <div className={styles.valueGrid}>

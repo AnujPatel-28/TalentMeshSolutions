@@ -9,7 +9,7 @@ const cspHeader = `
     img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io;
     font-src 'self' https://fonts.gstatic.com;
     connect-src 'self' https://api.web3forms.com https://*.api.sanity.io https://*.apicdn.sanity.io;
-    frame-src 'self' blob:;
+    frame-src 'self' blob: https://www.google.com;
     frame-ancestors 'none';
 `;
 

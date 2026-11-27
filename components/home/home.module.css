@@ -75,38 +75,6 @@
     color: var(--tm-body);
 }
 
-/* WhyUs-only mirrored grain: keeps the existing top-right
-   `background-image` untouched and adds a 180°-rotated copy at the
-   bottom-left via a pseudo-element (backgrounds can't be rotated
-   individually). Scoped to .whyTint so Process.tsx, which reuses
-   .sectionTint, is unaffected. Same file = no extra image request. */
-.whyTint::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: min(580px, 45vw);
-    aspect-ratio: 810 / 700;
-    background-image: url('/graintest.png');
-    background-size: contain;
-    background-position: bottom left;
-    background-repeat: no-repeat;
-    transform: rotate(180deg);
-    pointer-events: none;
-    z-index: 0;
-}
-
-.whyTint .inner {
-    position: relative;
-    z-index: 1;
-}
-
-@media (max-width: 1024px) {
-    .whyTint::after {
-        width: min(420px, 70vw);
-    }
-}
-
 /* Narrower than .head's 760px so the lede lands inside the 60-75 character
    measure; balance stops the h2 breaking to a one-word second line. */
 .head.whyHead {
@@ -115,18 +83,6 @@
 
 .whyHead .h2 {
     text-wrap: balance;
-}
-
-.whyTopRow {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 2.5rem;
-    margin-bottom: 3.5rem;
-}
-
-.whyTopRow .head {
-    margin: 0;
 }
 
 .whyImageWrap {
@@ -141,22 +97,7 @@
     z-index: 20;
 }
 
-.whyImage {
-    width: 100%;
-    max-width: 1720px;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 30px 75px rgba(0, 86, 179, 0.22));
-}
-
 @media (max-width: 1024px) {
-    .whyTopRow {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2.5rem;
-        margin-bottom: 2.5rem;
-    }
-
     .whyHead {
         max-width: 100%;
     }
@@ -275,7 +216,6 @@
     box-shadow: 0 6px 24px rgba(0, 123, 255, 0.5);
 }
 
-
 .btnSecondary {
     background: #fff;
     color: var(--ink-black);
@@ -303,17 +243,33 @@
 
 .hero {
     position: relative;
-    min-height: calc(100vh - 90px);
-    min-height: 88vh;
-    padding: 13rem 1.5rem 10rem;
+    /* Exactly one screen tall on any laptop, so the next section never peeks
+       in under the video. `svh` excludes mobile browser bars; `vh` is the
+       fallback. The padding only has to clear the fixed navbar: the copy is
+       centred, and on a short screen (650px) it must still fit. */
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 8rem 1.5rem 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Poster frame for the video above it; see HomeHero.tsx. */
-    background: var(--tm-ink) url('/images/hero-towers-poster.webp') center / cover no-repeat;
+    /* Day still under the day video; the night still is on `.heroNight`.
+       See HomeHero.tsx. */
+    background: var(--tm-ink) url('/images/hero-day-poster.webp') center / cover no-repeat;
     overflow: hidden;
+    /* One size drives the hero's type, up to 84px. It follows the video's
+       on-screen width (the video covers the hero, so it is the larger of
+       100vw and 16/9 of the height): the headline is 10.05x its size wide
+       and the towers' inner edges sit at 19.8% and 77.5% of the frame, so
+       4.9% keeps about 2.5% of clear sky beside the right tower. It is also
+       capped by the height on short laptops (10.5svh) so the copy always
+       fits. Everything else steps down from it by the golden ratio
+       (phi = 1.618): description h/phi^3, gaps h/phi^2 and h/phi. Same
+       maths on Windows and macOS, whatever the display scaling. */
+    --hero-h: clamp(2.75rem, min(4.9 * max(1vw, 1.778svh), 10.5svh), 5.25rem);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
-
 
 .heroVideoBg {
     position: absolute;
@@ -326,24 +282,50 @@
     opacity: 1;
 }
 
-/* Scrim over the video, under the copy: a light navy wash for the headline
-   plus a darker band at the top so the transparent navbar stays readable
-   when the lit tower windows drift behind it. */
+/* Night layer over the day: the night still with the night video on it,
+   shown while HomeHero.tsx sets data-on. The fade time is set per change
+   (--hero-fade): 3s for the opening turn to day, 8s day to night and 5s
+   night to day in the loop. Opacity only, so reduced motion keeps it. */
+.heroNight {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--tm-ink) url('/images/hero-night-poster.webp') center / cover no-repeat;
+    opacity: 0;
+    transition: opacity var(--hero-fade, 0s) ease-in-out;
+}
+
+.heroNight[data-on] {
+    opacity: 1;
+}
+
+/* Scrim over the video, under the copy. Over the day shot the navy wash is
+   heavy enough (42%) for white text to read against bright sky, with a
+   darker band at the top for the transparent navbar. At night the sky is
+   dark already, so the scrim eases to 45% of that and the city lights
+   show; it fades with the video. */
+.hero[data-night]::after {
+    opacity: 0.45;
+}
+
 .hero::after {
+    transition: opacity var(--hero-fade, 0s) ease-in-out;
     content: '';
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     background:
-        linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
-        rgba(5, 11, 26, 0.3);
+        linear-gradient(180deg, rgba(5, 11, 26, 0.55) 0%, rgba(5, 11, 26, 0) 30%),
+        rgba(5, 11, 26, 0.42);
 }
 
 .heroInner {
     position: relative;
     z-index: 1;
-    max-width: 900px;
+    /* Wide enough for "Connecting Businesses" on one line at any size. */
+    max-width: max(900px, calc(var(--hero-h) * 12));
     margin: 0 auto;
     text-align: center;
 }
@@ -351,13 +333,13 @@
 .heroTitle {
     margin: 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: clamp(2.5rem, 5.6vw, 4.5rem);
-    line-height: 1.1;
-    font-weight: 600;
-    letter-spacing: -0.025em;
+    font-size: var(--hero-h);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    font-kerning: normal;
     color: #ffffff;
 }
-
 
 .heroWord {
     display: inline-block;
@@ -365,25 +347,25 @@
     color: #ffffff;
 }
 
-.heroWord.accent {
-    font-family: var(--font-instrument), "Instrument Serif", Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.08em;
-    color: #ffffff;
-    letter-spacing: -0.01em;
+/* Shown on phones only, to put the serif accent on its own line. */
+.mobileBreak {
+    display: none;
 }
 
+/* "Right Talent": same font and colour as the rest of the headline. */
+.heroWord.accent {
+    color: #ffffff;
+}
 
+/* h/phi^3 (about 20px at 84px), never under 16px; phi line height. */
 .heroDesc {
-    max-width: 34rem;
-    margin: 1.5rem auto 0;
+    max-width: 28em;
+    margin: calc(var(--hero-h) * 0.382) auto 0;
     font-family: var(--font-schibsted), "Schibsted Grotesk", sans-serif;
-    font-size: 1.125rem;
-    line-height: 1.55;
+    font-size: max(1rem, calc(var(--hero-h) * 0.236));
+    line-height: 1.618;
     color: rgba(255, 255, 255, 0.78);
     text-wrap: balance;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 550ms both;
 }
 
 .heroActions {
@@ -392,20 +374,55 @@
     justify-content: center;
     align-items: center;
     gap: 1rem 2rem;
-    margin-top: 2.5rem;
-    animation: heroRiseIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) 680ms both;
+    /* h/phi: about 52px at 84px. */
+    margin-top: calc(var(--hero-h) * 0.618);
 }
 
-/* Hero entrance. This lives in CSS rather than framer-motion on purpose: the
-   hero is the LCP element, and motion `initial` props serialise to inline
-   `opacity:0` in the server HTML, which left the headline, lede and both CTAs
-   invisible until React hydrated. As keyframes the markup ships opaque and the
-   animation starts on first paint, so a slow or failed bundle costs the
-   entrance, not the content. Delays mirror the previous stagger.
+/* Hero entrance. This lives in CSS rather than framer-motion on purpose:
+   motion `initial` props serialise to inline `opacity:0` in the server HTML,
+   which left the headline, lede and both CTAs invisible until React hydrated.
+   As keyframes the animation starts on first paint, so a slow or failed bundle
+   costs the entrance, not the content.
+
+   Each headline line rises from behind the lower edge of its mask. On a first
+   visit the white intro cover (below) is still up at first paint, so the start
+   waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
-@keyframes heroWordIn {
-    from { opacity: 0; transform: translateY(22px) scale(0.96); filter: blur(8px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
+.hero {
+    --hero-start: 1.9s;
+}
+
+:global(.tm-intro-seen) .hero {
+    --hero-start: 0.15s;
+}
+
+/* The padding/negative-margin pair gives descenders (the italic "g") room
+   inside the clip without moving the lines apart. */
+.heroLineMask {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+}
+
+/* `--l` is the line index, set in HomeHero.tsx. */
+.heroLine {
+    display: inline-block;
+    animation: heroLineUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--hero-start) + var(--l, 0) * 130ms);
+}
+
+.heroDesc {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 610ms) both;
+}
+
+.heroActions {
+    animation: heroRiseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--hero-start) + 730ms) both;
+}
+
+@keyframes heroLineUp {
+    from { transform: translateY(112%); }
 }
 
 @keyframes heroRiseIn {
@@ -413,10 +430,61 @@
     to { opacity: 1; transform: none; }
 }
 
-/* `--i` is set per word in HomeHero.tsx to preserve the 65ms cadence. */
-.heroWord {
-    animation: heroWordIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
-    animation-delay: calc(120ms + var(--i, 0) * 65ms);
+/* Scroll exit, desktop and phone: the hero pins while the page below slides
+   up over it, and HomeHero.tsx scales the video and lifts the copy with the
+   scroll. Pinned only when motion is welcome and the screen is tall enough
+   that a pinned hero cannot hide its own lower edge. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 560px) {
+    .hero {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.heroVideoBg,
+.heroInner {
+    will-change: transform;
+}
+
+/* Magnetic primary CTA. The wrapper is the pointer catch area: 14px of padding
+   cancelled by the same negative margin, so layout is unchanged. HomeHero.tsx
+   writes --mx/--my while a mouse is over it and adds `.magnetTracking`. */
+.heroMagnet {
+    display: inline-flex;
+    padding: 14px;
+    margin: -14px;
+}
+
+.heroActions .btnPrimary,
+.heroActions .btnPrimary:hover {
+    position: relative;
+    overflow: hidden;
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.heroActions .btnPrimary.magnetTracking {
+    transition: transform 0.18s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* Light sweep across the pill on hover. */
+.heroActions .btnPrimary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .heroActions .btnPrimary:hover::after {
+        transform: translateX(340%) skewX(-18deg);
+        transition: transform 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+    }
 }
 
 .heroActions .btnPrimary {
@@ -433,6 +501,20 @@
 
 .heroActions .btnSecondary::after {
     content: '\2192';
+    transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+    /* A small nudge every few seconds, so the arrow also moves on touch
+       screens, where there is no hover. Off in the reduced-motion block. */
+    animation: heroArrowNudge 2.8s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite;
+}
+
+.heroActions .btnSecondary:hover::after {
+    animation: none;
+    transform: translateX(6px);
+}
+
+@keyframes heroArrowNudge {
+    0%, 60%, 100% { transform: none; }
+    30% { transform: translateX(5px); }
 }
 
 .heroActions .btnSecondary:hover {
@@ -442,6 +524,74 @@
     text-underline-offset: 0.3em;
 }
 
+/* ----------------------------------------------------------------- intro -- */
+
+/* One-off cover over the whole page, markup in HomeIntro.tsx. Sits above the
+   navbar (z-index 1100). `tm-intro-seen` is set on <html> once it has played
+   in this tab. Hidden in the reduced-motion block below.
+
+   Two layers. `.introGround` is white with the logo: on first paint the ink
+   fades in (0.05-0.5s) and holds, then at 0.8s the ground fades out. Over it,
+   `.introCanvas` carries the zoom, 0.8-2.0s, drawn by a worker
+   (public/intro-dive-worker.js) from the same timeline; it starts drawing the
+   same logo just before 0.8s, so the hand-over does not show. The ground's
+   fade is an opacity animation, so it runs on the compositor even while the
+   page is busy hydrating. Times here must match the worker's constants.
+   `--hero-start` (1.9s) starts the headline rising as the last white leaves. */
+.intro {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    pointer-events: none;
+    animation: introDone 0s linear 2s forwards;
+}
+
+:global(.tm-intro-seen) .intro {
+    display: none;
+}
+
+.introGround {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    animation: introGroundOut 0.2s linear 0.8s forwards;
+}
+
+.introCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* The worker lays the logo out the same way (72vw under 560px). */
+.introLogo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(300px, 50vw);
+    height: auto;
+    transform: translate(-50%, -50%);
+    animation: introInkIn 0.45s ease-out 0.05s both;
+}
+
+@media (max-width: 559px) {
+    .introLogo {
+        width: 72vw;
+    }
+}
+
+@keyframes introGroundOut {
+    to { opacity: 0; }
+}
+
+@keyframes introDone {
+    to { visibility: hidden; }
+}
+
+@keyframes introInkIn {
+    from { opacity: 0; transform: translate(-50%, -42%); }
+}
 
 /* ------------------------------------------------------------ trust strip -- */
 
@@ -697,111 +847,502 @@
 /* Four differentiators across one dark band. No card surfaces — the only
    borders here are hairline dividers, which carry structure rather than
    faking elevation. Nothing in the row is interactive, so there is no hover. */
-/* Cursor-reactive lift.
-   A soft light follows the pointer across the row and the column under it
-   raises slightly. Nothing is ever hidden — the four differentiators are the
-   section's argument, so the interaction adds attention rather than gating
-   content. Coordinates arrive as CSS custom properties set straight on the
-   node (see WhyUs.tsx), so pointer movement never triggers a React render. */
-.pillarRow {
+/* Why-us photo sequence.
+   A plain statement whose words fill in, then four full-bleed photos, each
+   with a centred poster card and a caption either side. The rules here are
+   the plain stack: four photo panels one after another, every word at full
+   strength. The pinned, scroll-driven version is layered on at the end of
+   this block and only where WhyUs.tsx has set `data-pinned`, so without
+   script (or with reduced motion, or on a small screen) the stack is what
+   shows. */
+.whyIntro {
+    padding-block: 6rem 3.5rem;
+    background: var(--tm-canvas);
+}
+
+.whyIntroGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    position: relative;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    gap: 2rem;
+    align-items: start;
 }
 
-.pillarRow::before {
-    content: '';
+/* Sits on the statement's first baseline rather than its cap line. */
+.whyLabel {
+    margin: 0;
+    padding-top: 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tm-ink);
+}
+
+/* Heading and description are one block of type at one size. */
+.whyStatement {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.9vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    color: var(--tm-ink);
+    text-wrap: pretty;
+}
+
+h2.whyStatement {
+    color: var(--tm-brand);
+}
+
+p.whyStatement {
+    margin-top: 1.1em;
+}
+
+.whyLine {
+    display: block;
+}
+
+/* Words light up in order as --why-fill runs 0 to 1; unset, all are lit. */
+.whyWord {
+    opacity: clamp(0.22, calc(var(--why-fill, 1) * var(--why-words) - var(--i)), 1);
+}
+
+.whyItem {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 40rem;
+    padding: 4rem 1.25rem;
+    overflow: hidden;
+}
+
+.whyPhoto {
+    object-fit: cover;
+}
+
+/* Side captions need the width; narrower, the card speaks alone. */
+.whyCaption {
+    display: none;
+}
+
+.whyCard {
+    position: relative;
+    z-index: 2;
+    width: min(23rem, 100%);
+    padding: 2rem 2rem 2.25rem;
+    background: #F7F9FC;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(7, 26, 43, 0.22);
+    text-align: center;
+}
+
+.whyCount {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--tm-ink);
+}
+
+.whyCount i {
+    font-style: normal;
+    opacity: 0.35;
+}
+
+.whyTitle {
+    margin: 1.1rem 0 0;
+    font-size: 1.9rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--tm-ink);
+}
+
+.whyTitle strong {
+    display: block;
+    font-weight: 700;
+    color: var(--tm-brand);
+}
+
+/* The card's picture: every visual sits centred in the same tinted panel. */
+.whyVisual {
+    display: grid;
+    align-items: center;
+    min-height: 9.5rem;
+    margin: 1.5rem 0 1.4rem;
+    padding: 1.25rem;
+    background: #E8F2FC;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.whyDesc {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--tm-body);
+    text-wrap: balance;
+}
+
+/* Quality: one match panel */
+.whyMatch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+}
+
+.whyRing {
+    position: relative;
+    flex: none;
+    width: 96px;
+    height: 96px;
+}
+
+.whyRing svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.whyRing circle {
+    fill: none;
+    stroke-width: 4;
+}
+
+.whyRingTrack {
+    stroke: #fff;
+}
+
+/* r = 16, so the circumference is 100.53; 92.5 of it is the 92% arc. */
+.whyRingArc {
+    stroke: var(--tm-brand);
+    stroke-linecap: round;
+    stroke-dasharray: 92.5 100.53;
+}
+
+.whyRingValue {
     position: absolute;
-    inset: -2.5rem -1.5rem;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-        360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-        rgba(255, 255, 255, 0.85),
-        rgba(255, 255, 255, 0.35) 38%,
-        transparent 68%
-    );
-    opacity: 0;
-    transition: opacity 0.35s ease;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--tm-ink);
 }
 
-.pillarRow:hover::before {
-    opacity: 1;
+.whyRingValue small {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--tm-body);
 }
 
-.pillar {
-    padding: 0 2rem;
+.whyMatchBody {
+    min-width: 0;
+}
+
+.whyMatchRole {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--tm-ink);
+}
+
+.whyChecks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.whyChecks li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: var(--tm-body);
+}
+
+.whyChecks svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: #157A45;
+}
+
+/* Support: three stops on one line */
+.whySteps {
     position: relative;
-    z-index: 1;
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
-/* Pointer devices only — there is no hover on touch, and a lift that never
-   resolves reads as a stuck state. */
-@media (hover: hover) {
-    .pillar:hover .pillarIcon {
-        color: var(--tm-brand);
+.whyStepsTrack,
+.whyStepsLine {
+    position: absolute;
+    top: 9px;
+    left: calc(100% / 6);
+    width: calc(100% * 2 / 3);
+    height: 2px;
+}
+
+.whyStepsTrack {
+    background: #fff;
+}
+
+.whyStepsLine {
+    background: var(--tm-brand);
+    transform-origin: left;
+}
+
+.whyStep {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--tm-ink);
+    text-align: center;
+}
+
+.whyStep::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 5px solid var(--tm-brand);
+}
+
+/* Flexible: the five staffing models */
+.whyChips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.whyChip {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+    border: 1px solid #9CC7F0;
+    border-radius: 9999px;
+    background: #fff;
+    color: #0056B3;
+}
+
+/* Industry: sector names drifting past, faded at both edges */
+.whyMarquee {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+
+.whyMarqueeRow {
+    display: flex;
+    gap: 0.5rem;
+    width: max-content;
+    animation: whyMarquee 32s linear infinite;
+}
+
+.whyMarqueeRow:nth-child(2) {
+    animation-direction: reverse;
+}
+
+.whyMarqueeRow span {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--tm-ink);
+}
+
+/* Each row holds its list twice; half its width plus half a gap is one list. */
+@keyframes whyMarquee {
+    to {
+        transform: translateX(calc(-50% - 0.25rem));
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .pillarRow::before {
-        display: none;
-    }
-
-    .pillar {
-        transition: none;
+    .whyMarqueeRow {
+        animation: none;
     }
 }
 
-@media (hover: none) {
-    .pillarRow::before {
-        display: none;
+@media (max-width: 1024px) {
+    .whyIntro {
+        padding-block: 4rem 2.5rem;
+    }
+
+    .whyIntroGrid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .whyLabel {
+        padding-top: 0;
     }
 }
 
-.pillar:not(:first-child) {
-    border-left: 1px solid #E2E8F0;
+@media (max-width: 640px) {
+    .whyItem {
+        min-height: 34rem;
+        padding: 3rem 1rem;
+    }
+
+    .whyCard {
+        padding: 1.5rem 1.5rem 1.75rem;
+    }
+
+    .whyTitle {
+        font-size: 1.6rem;
+    }
 }
 
-.pillar:first-child {
-    padding-left: 0;
+/* One flat, neutral tint over each whole photo, so white captions read on
+   it and the card stands out, without shifting the photo's colours or
+   darkening only part of the frame. */
+.whyItem::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: rgba(8, 12, 18, 0.3);
 }
 
-.pillar:last-child {
-    padding-right: 0;
+/* Wide screens: a caption either side of the card, level with its middle.
+   The captions ride with the card when the sequence is pinned. */
+@media (min-width: 1025px) {
+    .whyCaption {
+        display: block;
+        position: absolute;
+        top: var(--why-mid, 50%);
+        z-index: 2;
+        max-width: 15rem;
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 700;
+        line-height: 1.4;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #fff;
+        text-shadow: 0 1px 14px rgba(8, 12, 18, 0.55);
+        transform: translate3d(0, calc(-50% + var(--why-y, 0px)), 0);
+    }
+
+    .whyCaptionLeft {
+        left: 2.5rem;
+    }
+
+    .whyCaptionRight {
+        right: 2.5rem;
+        text-align: right;
+    }
 }
 
-.pillarIcon {
-    display: flex;
-    color: var(--tm-brand);
-    margin-bottom: 1.1rem;
+@media (max-width: 380px) {
+    .whyMatch {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
-.pillarIcon svg {
-    width: 28px;
-    height: 28px;
-}
+/* Pinned sequence, at every width. Must match PIN_QUERY in WhyUs.tsx, which
+   also sets the custom properties: --why-dist (scroll the four cards take),
+   --why-grow (0 to 1 as the stage arrives), and per item --why-y and
+   --why-show. */
+@media (min-height: 520px) {
+    [data-pinned] > .whyTrack {
+        height: calc(100vh + var(--why-dist, 0px));
+    }
 
-.pillarTitle {
-    margin: 0 0 0.55rem;
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-    color: var(--tm-ink);
-}
+    /* Comes up the screen as an inset, rounded frame, opens to full bleed
+       by the time it pins, and closes again as it leaves. */
+    [data-pinned] .whyStage {
+        /* Middle of the stage below the 60px navbar. */
+        --why-mid: calc(50% + 30px);
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: var(--tm-ink);
+        clip-path: inset(
+            0 calc((1 - var(--why-grow, 1)) * 14%) round calc((1 - var(--why-grow, 1)) * 28px)
+        );
+    }
 
-.pillarDesc {
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--tm-body);
-}
+    /* The items dissolve so every photo sits in one layer under every card:
+       a photo fading in must not cover the previous card on its way out. */
+    [data-pinned] .whyItem {
+        display: contents;
+    }
 
-.pillarContent {
-    display: flex;
-    flex-direction: column;
+    /* A dissolved item's tint still draws, as a child of the stage, so
+       four would stack over the photos. Keep the first one only. */
+    [data-pinned] .whyItem:not(:first-child)::after {
+        content: none;
+    }
+
+    [data-pinned] .whyPhoto {
+        opacity: var(--why-show, 1);
+    }
+
+    /* Short phones (iPhone SE): a compact card, so the tallest one still
+       fits between the navbar and the bottom of the screen. */
+    @media (max-height: 600px) {
+        [data-pinned] .whyCard {
+            padding: 1.1rem 1.25rem 1.25rem;
+        }
+
+        [data-pinned] .whyTitle {
+            margin-top: 0.6rem;
+            font-size: 1.4rem;
+        }
+
+        [data-pinned] .whyVisual {
+            min-height: 0;
+            margin: 0.9rem 0 0.8rem;
+            padding: 0.9rem;
+        }
+    }
+
+    /* Calm version (reduced motion): cards and captions fade in place. */
+    [data-calm] .whyCard,
+    [data-calm] .whyCaption {
+        opacity: var(--why-o, 1);
+    }
+
+    /* Centred in the stage below the 60px navbar, then moved by --why-y. */
+    [data-pinned] .whyCard {
+        position: absolute;
+        inset: 60px 0 0;
+        width: min(23rem, calc(100% - 2rem));
+        margin: auto;
+        height: fit-content;
+        transform: translate3d(0, var(--why-y, 0px), 0);
+        will-change: transform;
+    }
 }
 
 /* ------------------------------------------------------------------ faq -- */
@@ -954,15 +1495,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .trustLayout {
-        grid-template-columns: 1fr;
-    }
-
-    .trustCardsCol,
-    .trustTextCol {
-        padding: 3rem 2rem;
-    }
-
     .visualGrid {
         grid-template-columns: 1fr;
     }
@@ -1086,91 +1618,17 @@
         max-width: 100%;
     }
 
-    /* Horizontal Feature Card Stack on tablet & mobile */
-    .pillarRow {
-        display: flex;
-        flex-direction: column;
-        gap: 0.85rem;
-        margin-top: 2rem;
-        width: 100%;
-    }
-
-    .pillar,
-    .pillar:first-child,
-    .pillar:last-child {
-        display: grid;
-        grid-template-columns: 44px minmax(0, 1fr);
-        gap: 1rem;
-        align-items: flex-start;
-        text-align: left;
-        padding: 1.2rem 1.15rem;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(7, 26, 43, 0.04);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .pillar:nth-child(odd) {
-        padding-left: 1.15rem;
-    }
-
-    .pillar:nth-child(-n + 2) {
-        padding-top: 1.2rem;
-    }
-
-    .pillar:nth-child(n + 3) {
-        border-top: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
-    .pillarIcon {
-        width: 44px;
-        height: 44px;
-        border-radius: 11px;
-        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-        color: #0284c7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .pillarIcon svg {
-        width: 22px;
-        height: 22px;
-    }
-
-    .pillarContent {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pillarTitle {
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin: 0 0 0.25rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
-    }
-
-    .pillarDesc {
-        font-size: 0.88rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-        margin: 0;
-    }
-
     /* Modern Frosted Pill Cloud for Industries on tablet & mobile */
     .industriesContainer {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 0.65rem 0.55rem;
         width: 100%;
         max-width: 480px;
-        margin: 2rem auto 0;
+        margin: 2rem 0 0;
     }
 
     .industryRow {
@@ -1188,8 +1646,6 @@
         box-shadow: 0 2px 6px rgba(7, 26, 43, 0.04);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        filter: none;
-        opacity: 1;
         cursor: default;
         transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
     }
@@ -1357,97 +1813,6 @@
     font-weight: 600;
 }
 
-/* Positioning Section (Split Left & Right Layout) */
-.trustSection {
-    position: relative;
-    padding: 0;
-    width: 100%;
-    /* clip, not hidden — this section contains its own sticky marker, and
-       `hidden` would make it a scroll container and disable the stick. */
-    overflow-x: clip;
-    background: var(--tm-canvas);
-    /* Configurable color variables */
-    --trust-cards-bg: var(--tm-canvas);        /* Left side (Cards) background */
-    --trust-text-bg: var(--tm-surface);         /* Right side (Matches below section #F0F8FF) */
-    --trust-text-color: var(--tm-brand);      /* Old blue heading: Uncover Top Talent etc. */
-    --trust-text-lede: var(--tm-body);       /* Matching sectionTint lede */
-    --trust-card-bg: var(--tm-canvas);         /* Card background */
-    --trust-card-border: #E2E8F0;     /* Card dividers border */
-    --trust-card-hover: var(--tm-surface);
-}
-
-.trustContainer {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-}
-
-.trustLayout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    min-height: 750px;
-    border-radius: 0px;
-    overflow: hidden;
-    border: none;
-    box-shadow: none;
-    position: relative;
-}
-
-/* Left Side: Cards */
-.trustCardsCol {
-    background: var(--trust-cards-bg);
-    padding: 3.5rem 3rem 3.5rem max(3.5rem, calc((100vw - 1440px) / 2));
-    display: flex;
-    flex-direction: column;
-    /* `space-between` against .trustLayout's 750px min-height was flinging the
-       heading, the rail and the metric row to the extremes and opening ~120px
-       of dead air under the heading. Centre the group instead and let the gaps
-       be deliberate. */
-    justify-content: center;
-    gap: 2rem;
-    height: 100%;
-    width: 100%;
-    border-right: 1px solid var(--trust-card-border);
-}
-
-.trustCardsCol .positioningStack {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    border: none;
-    box-shadow: none;
-}
-
-/* Right Side: Text */
-.trustTextCol {
-    background: var(--trust-text-bg);
-    padding: 3.25rem max(3.5rem, calc((100vw - 1440px) / 2)) 5rem 4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    position: relative;
-}
-
-.trustHeadWrap {
-    position: relative;
-    min-height: 190px;
-    width: 100%;
-}
-
-.trustHead {
-    width: 100%;
-    max-width: 620px;
-    text-align: left;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
 .trustEyebrow {
     display: inline-flex;
     align-items: center;
@@ -1470,156 +1835,6 @@
     height: 6px;
     border-radius: 50%;
     background: currentColor;
-}
-
-.trustH2 {
-    margin: 0 0 1.5rem;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: clamp(2rem, 3.1vw, 2.9rem);
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--trust-text-color);
-}
-
-.trustLede {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.75;
-    color: var(--trust-text-lede);
-}
-
-.trustImageWrap {
-    width: 100%;
-    max-width: 1720px;
-    margin-top: 2rem;
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 20;
-    pointer-events: none;
-    transform: translateX(-105px);
-}
-
-.whyHeadFull {
-    max-width: 48rem;
-    margin-bottom: 2.5rem;
-}
-
-/* Full Left Column Cards (Zero outside gap, full edge-to-edge left block) */
-.positioningStack {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: none;
-    border-radius: 0px;
-    overflow: hidden;
-}
-
-/* Capability rail — deliberately not cards.
-   Three stacked rounded boxes made this column read as a form, and the
-   inactive two washed out to 0.85 opacity, which reads as "disabled" rather
-   than "available". A numbered index rail with hairline rules matches the
-   section-marker motif already on the page, drops three nested containers
-   worth of chrome, and lets the active row carry real emphasis instead of
-   just a blue outline. */
-.positioningCard {
-    display: grid;
-    grid-template-columns: 2.25rem 1fr auto;
-    align-items: start;
-    column-gap: 1.1rem;
-    padding: 1.15rem 0.35rem;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #E6EDF5;
-    border-radius: 0;
-    text-align: left;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    user-select: none;
-    outline: none;
-}
-
-.positioningCard:first-child {
-    border-top: 1px solid #E6EDF5;
-}
-
-.positioningCard:hover {
-    background: var(--tm-surface);
-}
-
-.positioningCard:focus-visible {
-    outline: 2px solid var(--tm-brand);
-    outline-offset: -2px;
-}
-
-.positioningNum {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    color: #94A3B8;
-    padding-top: 0.3rem;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.2s ease;
-}
-
-.positioningTitle {
-    margin: 0;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--tm-ink);
-    transition: color 0.2s ease;
-}
-
-.positioningDesc {
-    margin: 0.3rem 0 0;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    color: var(--tm-body);
-}
-
-.positioningMark {
-    width: 7px;
-    height: 7px;
-    border-radius: 2px;
-    background: #CBD5E1;
-    margin-top: 0.55rem;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.positioningCardActive .positioningNum,
-.positioningCardActive .positioningTitle {
-    color: var(--tm-brand);
-}
-
-.positioningCardActive .positioningMark {
-    background: var(--tm-brand);
-    transform: scale(1.15);
-}
-
-/* The cycle timer runs along the row's own bottom rule rather than floating
-   inside the card as a loose bar that read as a loading indicator. */
-.positioningProgress {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 2px;
-    overflow: hidden;
-}
-
-.positioningProgressFill {
-    display: block;
-    height: 100%;
-    background: var(--tm-brand);
-    transform-origin: left;
 }
 
 .positioningCardInner {
@@ -1686,30 +1901,8 @@
     text-align: left;
 }
 
-.positioningTitle {
-    margin: 0 0 0.5rem;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--tm-ink);
-    transition: color 0.3s ease;
-}
-
 .positioningTitleActive {
     color: var(--tm-brand);
-}
-
-.positioningDesc {
-    margin: 0;
-    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.65;
-    color: var(--tm-body);
-    transition: color 0.3s ease;
-    min-height: 3.3em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
 .positioningDescActive {
@@ -1844,42 +2037,47 @@
 
 /* The title is long; let it span the container so it stays on one line
    instead of wrapping inside .head's 760px cap. */
-.industriesHead {
-    max-width: none;
+/* The heading borrows WhyUs's label-and-statement layout (.whyIntroGrid,
+   .whyLabel, .whyStatement), in ink rather than brand blue. */
+h2.industriesTitle {
+    color: var(--tm-ink);
+}
+
+.industriesLede {
+    margin: 1.1rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--tm-body);
 }
 
 .industriesContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.75rem;
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 }
 
 .industryRow {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 1rem 3rem;
     width: 100%;
 }
 
-/* Dimmed and desaturated until hovered, so the hovered industry reads as
-   the focus and the row stays quiet at rest. */
+/* Full strength at rest: ink names with brand-blue icons. Hover lifts the
+   tag and turns its icon to the industry's own colour. */
 .industryTag {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
-    filter: grayscale(1);
-    opacity: 0.55;
     transition: all 0.3s ease;
 }
 
 .industryTag:hover {
-    filter: grayscale(0);
-    opacity: 1;
     transform: translateY(-2px);
 }
 
@@ -1887,8 +2085,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--hover-color, var(--tm-brand));
+    color: var(--tm-brand);
     transition: all 0.3s ease;
+}
+
+.industryTag:hover .tagIcon {
+    color: var(--hover-color, var(--tm-brand));
+}
+
+/* The small-screen pill cloud is declared earlier in this file, so the
+   rules above would win over it: restate the wrapping row and dissolve the
+   rows here so the pills flow as one even, left-aligned cloud. */
+@media (max-width: 1024px) {
+    .industriesContainer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem 0.55rem;
+    }
+
+    .industryRow {
+        display: contents;
+    }
 }
 
 .tagName {
@@ -1931,7 +2149,6 @@
     .btnPrimary:hover,
     .btnSecondary:hover,
     .categoryCard:hover,
-    .positioningCard:hover,
     .visualCard:hover,
     .industryTag:hover {
         transform: none;
@@ -1939,10 +2156,316 @@
 
     /* The hero entrance is CSS, so it opts out here rather than through
        framer-motion's useReducedMotion like the rest of the page. */
-    .heroWord,
+    .heroLine,
     .heroDesc,
-    .heroActions {
+    .heroActions,
+    .heroActions .btnSecondary::after {
         animation: none;
+    }
+
+    .intro {
+        display: none;
+    }
+}
+
+/* ------------------------------------------------------- Hiring built for you -- */
+
+/* Five steps as a photo gallery (TrustStrip.tsx): the heading sits over the
+   large photo, its caption to the right; the previous and next steps wait as
+   small photos at its top-left and bottom-right corners, and a big counter
+   sits at the bottom left. Where the screen is tall enough the section pins
+   and scrolling moves through the steps. Below 860px the caption drops
+   under the photo. */
+
+/* Pinned: the track grows by --pin-dist and the stage sticks for that long,
+   filling the screen below the 60px navbar. */
+.galleryTrack {
+    position: relative;
+}
+
+@media (min-height: 600px) {
+    [data-pinned].galleryTrack {
+        height: calc(100vh + var(--pin-dist, 0px));
+    }
+
+    [data-pinned] .galleryPin {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+        padding-block: calc(60px + 1.5rem) 1.5rem;
+    }
+
+    [data-pinned] .gallery {
+        width: 100%;
+    }
+}
+
+.gallery {
+    position: relative;
+}
+
+/* The column holding the heading and the large photo. Everything around the
+   photo is placed from its width (--w), so the set scales together; the
+   width also shrinks on short screens so the pinned stage always fits.
+   --s: small photo size as a share of the large one. */
+.galleryCol {
+    --w: clamp(240px, min(27vw, calc((100svh - 22rem) * 0.75)), 400px);
+    --s: 0.24;
+    --gap: 16px;
+    --ease: cubic-bezier(0.65, 0, 0.35, 1);
+    width: var(--w);
+    margin-left: max(calc(var(--w) * var(--s) + 2.5rem), 34%);
+}
+
+/* Two short lines in the same size and regular weight, the second in grey,
+   like an editorial title. */
+.galleryHeading {
+    width: max-content;
+    max-width: min(40rem, 60vw);
+    margin: 0 0 2rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: clamp(2.3rem, 4.2vw, 3.9rem);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    color: var(--tm-ink);
+}
+
+.galleryHeading span {
+    display: block;
+    color: rgba(11, 31, 51, 0.38);
+}
+
+.galleryStage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+}
+
+/* Every photo is a large-photo-sized box moved and scaled from its top-left
+   corner; switching roles animates only transform and opacity. */
+.galleryPhoto {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #DFEAF8;
+    cursor: pointer;
+    transform-origin: 0 0;
+    transition:
+        transform 0.9s var(--ease),
+        opacity 0.6s ease,
+        border-radius 0.9s var(--ease),
+        filter 0.3s ease;
+}
+
+.galleryPhoto img {
+    object-fit: cover;
+}
+
+.galleryPhoto:focus-visible {
+    outline: 3px solid var(--tm-brand);
+    outline-offset: 4px;
+}
+
+.galleryPhoto[data-role='main'] {
+    z-index: 2;
+    transform: none;
+}
+
+/* Small photos: a larger radius, so after scaling it reads like ~8px. */
+.galleryPhoto[data-role='prev'],
+.galleryPhoto[data-role='next'],
+.galleryPhoto[data-role='incoming'],
+.galleryPhoto[data-role='outgoing'] {
+    z-index: 1;
+    border-radius: 34px;
+}
+
+.galleryPhoto[data-role='prev'] {
+    transform: translate(calc(-100% * var(--s) - var(--gap)), 0) scale(var(--s));
+}
+
+/* Bottom-aligned with the large photo, just to its right. */
+.galleryPhoto[data-role='next'] {
+    transform: translate(calc(100% + var(--gap)), calc((1 - var(--s)) * 100%)) scale(var(--s));
+}
+
+.galleryPhoto[data-role='prev']:hover,
+.galleryPhoto[data-role='next']:hover {
+    filter: brightness(1.08);
+}
+
+/* Waiting off to the sides, so they slide in and out rather than appear. */
+.galleryPhoto[data-role='incoming'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(100% + var(--gap) + 3rem), calc((1 - var(--s) * 0.6) * 100%)) scale(calc(var(--s) * 0.6));
+}
+
+.galleryPhoto[data-role='outgoing'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(-100% * var(--s) * 0.6 - var(--gap) - 3rem), 0) scale(calc(var(--s) * 0.6));
+}
+
+.galleryCaptions {
+    position: absolute;
+    top: 0;
+    left: calc(100% + var(--gap) * 1.75);
+    width: 16rem;
+    display: grid;
+}
+
+/* All captions share one cell; the one on show fades up once the photos
+   have mostly moved, the others leave straight away. */
+.galleryCaption {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.galleryCaption[data-on] {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease 0.35s, transform 0.6s var(--ease) 0.35s;
+}
+
+.galleryCaption h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--tm-ink);
+}
+
+.galleryCaption p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(11, 31, 51, 0.5);
+}
+
+.galleryCaption strong {
+    font-weight: 500;
+    color: var(--tm-ink);
+}
+
+.galleryChips {
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.galleryChips li {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid #CFE0F3;
+    background: var(--tm-surface);
+    color: var(--tm-brand);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Big serif counter at the bottom left; the units digit rolls. */
+.galleryCount {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: baseline;
+    margin: 0;
+    font-family: var(--font-instrument), 'Instrument Serif', Georgia, serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 1;
+    color: var(--tm-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.galleryRoll {
+    display: inline-block;
+    height: 1em;
+    overflow: hidden;
+}
+
+.galleryRoll > span {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.galleryRoll > span > span {
+    height: 1em;
+}
+
+.galleryCount small {
+    margin-left: 0.75rem;
+    font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(11, 31, 51, 0.4);
+}
+
+/* Stacked: the heading spans the width, the photo is centred under it, the
+   caption drops under the photo and the counter sits under the caption.
+   The photo shrinks on short phones so the pinned stage still fits. */
+@media (max-width: 860px) {
+    .gallery {
+        padding-bottom: 12.5rem;
+    }
+
+    .galleryCol {
+        --w: clamp(180px, min(56vw, calc((100svh - 25rem) * 0.75)), 340px);
+        --s: 0.26;
+        --gap: 10px;
+        width: auto;
+        margin: 0;
+    }
+
+    .galleryHeading {
+        width: auto;
+        max-width: none;
+        margin-bottom: 1.25rem;
+        font-size: clamp(2.2rem, 10vw, 2.75rem);
+    }
+
+    .galleryStage {
+        width: var(--w);
+        margin-inline: auto;
+    }
+
+    .galleryCaptions {
+        top: calc(100% + 1.25rem);
+        left: 50%;
+        width: min(calc(100vw - 2rem), 30rem);
+        transform: translateX(-50%);
+    }
+
+    .galleryChips {
+        display: none;
+    }
+
+    .galleryCount {
+        font-size: 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .galleryPhoto,
+    .galleryCaption,
+    .galleryCaption[data-on],
+    .galleryRoll > span {
+        transition: none;
     }
 }
 
@@ -2141,38 +2664,134 @@
     width: 24px;
 }
 
-@media (max-width: 1024px) {
-    .svcWrapper {
-        --svc-cards: 2;
+/* Pinned side-scroll (Services.tsx). On a wide, tall enough screen the section
+   pins for one viewport: the title opens centred and settles into place as
+   the cards come in, then vertical scroll moves the rail sideways, from the
+   first card starting at the centre line to the last card ending on it. The
+   section's extra height, --svc-dist, is the scroll that takes and is written
+   by Services.tsx together with `data-pinned`; until then, and on phones, short
+   screens and for reduced motion, the rail stays the swipeable carousel above. */
+/* Transforms need a box; see the lede in Services.tsx. */
+.svcLedeWord {
+    display: inline-block;
+}
+
+.svcMeter {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    margin-bottom: 0.75rem;
+}
+
+.svcCounter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--tm-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.svcProgress {
+    width: 220px;
+    height: 3px;
+    border-radius: 3px;
+    background: #DBE7F4;
+    overflow: hidden;
+}
+
+.svcOutro {
+    display: none;
+}
+
+.svcProgress i {
+    display: block;
+    height: 100%;
+    background: var(--tm-brand);
+    transform-origin: left;
+    transform: scaleX(var(--svc-progress, 0));
+}
+
+@media (min-width: 1025px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+    .svcPin {
+        height: calc(100vh + var(--svc-dist, 0px));
     }
 
-    .trustLayout {
-        grid-template-columns: 1fr;
-        min-height: auto;
+    /* 60px clears the fixed navbar. */
+    .svcStage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Cards run to the viewport edge rather than stopping at the 1200px
+       column; the page wrapper clips them there. */
+    .svcStage > .section {
+        padding-block: 0;
         overflow: visible;
     }
 
-    .trustCardsCol {
-        padding: 2.5rem 1.5rem 0;
-        width: 100%;
-        background: transparent;
+    .svcPin[data-pinned] .svcHeadText .h2,
+    .svcPin[data-pinned] .svcLedeWord {
+        will-change: transform;
     }
 
-    .trustCardsCol .positioningStack {
-        max-width: 100%;
-        border: none;
-        gap: 0.85rem;
+    /* --svc-scale / --svc-dim are written per card by Services.tsx. */
+    .svcPin[data-pinned] .svcCard {
+        transform: scale(var(--svc-scale, 1));
+        opacity: var(--svc-dim, 1);
     }
 
-    .positioningCard {
-        padding: 1.25rem 1.25rem;
+    .svcPin[data-pinned] .svcRail {
+        overflow: visible;
+        scroll-snap-type: none;
+        will-change: transform;
+    }
+
+    .svcPin[data-pinned] .svcControls {
+        display: none;
+    }
+
+    .svcPin[data-pinned] .svcMeter {
+        display: flex;
+    }
+
+    /* Follows the last card in the rail, so it can never overlap one. The
+       rail stops with that card's right edge on the centre line, which leaves
+       this block in the right half. */
+    .svcPin[data-pinned] .svcOutro {
         display: block;
-        align-items: flex-start;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 16px;
-        box-shadow: 0 4px 16px rgba(7, 26, 43, 0.04);
-        text-align: left;
+        flex: 0 0 min(28rem, 40vw);
+        align-self: center;
+        margin-left: 2.5rem;
+    }
+
+    .svcOutro h3 {
+        margin: 0;
+        font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+        line-height: 1.12;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--tm-ink);
+        text-wrap: balance;
+    }
+
+    .svcOutro p {
+        margin: 0.9rem 0 1.75rem;
+        max-width: 26rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: var(--tm-body);
+    }
+}
+
+@media (max-width: 1024px) {
+    .svcWrapper {
+        --svc-cards: 2;
     }
 
     .positioningCardInner {
@@ -2185,90 +2804,11 @@
         text-align: left;
     }
 
-    .positioningCard:last-child {
-        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
-    .positioningTitle {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin: 0 0 0.3rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
-    }
-
-    .positioningDesc {
-        font-size: 0.92rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-        min-height: 2.8em;
-    }
-
-    .positioningCardActive {
-        background: var(--tm-surface);
-        border-color: rgba(0, 86, 179, 0.35);
-        box-shadow: 0 6px 20px rgba(0, 86, 179, 0.08);
-    }
-
     .positioningBadge {
         margin-bottom: 0.25rem;
     }
 
-    .positioningCard .cardProgressBar {
-        right: 0;
-        left: 0;
-        top: auto;
-        bottom: 0;
-        width: 100%;
-        height: 3px;
-        border-radius: 0 0 16px 16px;
-        background: linear-gradient(90deg, #00C6FF 0%, #0072FF 100%);
-        transform-origin: left;
     }
-
-    .trustTextCol {
-        padding: 3.5rem 1.5rem 2rem;
-        align-items: flex-start;
-    }
-
-    .trustHeadWrap {
-        min-height: auto;
-    }
-
-    .trustHead {
-        max-width: 100%;
-        position: static;
-    }
-
-    .trustH2 {
-        font-size: clamp(1.85rem, 6.2vw, 2.4rem);
-        line-height: 1.18;
-        letter-spacing: -0.025em;
-        margin-bottom: 1rem;
-    }
-
-    .trustLede {
-        font-size: 0.96rem;
-        line-height: 1.65;
-        max-width: 520px;
-    }
-
-    .trustImageWrap {
-        position: static;
-        transform: none;
-        margin-top: 1.75rem;
-        margin-bottom: 0;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .whyImage {
-        width: 100%;
-        max-width: 380px;
-        height: auto;
-        filter: drop-shadow(0 20px 40px rgba(0, 86, 179, 0.12));
-    }
-}
 
 /* Heading text and controls stop fitting side by side around here, so stack them
    on the same leading edge rather than at a device-preset width. */
@@ -2291,32 +2831,6 @@
         padding: 1.25rem 1.1rem;
     }
 
-    .trustCardsCol {
-        padding: 1.75rem 1rem 0;
-        width: 100%;
-    }
-
-    .trustCardsCol .positioningStack {
-        max-width: 100%;
-        border: none;
-        gap: 0.75rem;
-    }
-
-    .positioningCard {
-        padding: 1.15rem 1.1rem;
-        grid-template-columns: 44px minmax(0, 1fr);
-        gap: 1rem;
-        align-items: flex-start;
-        background: #ffffff;
-        border: 1px solid rgba(0, 86, 179, 0.12);
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(7, 26, 43, 0.04);
-    }
-
-    .positioningCard:last-child {
-        border-bottom: 1px solid rgba(0, 86, 179, 0.12);
-    }
-
     .positioningIconBox {
         width: 44px;
         height: 44px;
@@ -2331,66 +2845,78 @@
         height: 22px;
     }
 
-    .positioningTitle {
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin: 0 0 0.25rem;
-        line-height: 1.35;
-        color: var(--tm-ink);
     }
-
-    .positioningDesc {
-        font-size: 0.88rem;
-        line-height: 1.55;
-        color: var(--tm-body);
-    }
-}
 
 @media (max-width: 640px) {
-    /* Phone hero: copy anchored bottom-left on one edge, over a bottom scrim. */
+    /* Phone hero: headline and description at the top under the navbar, both
+       CTAs pinned to the bottom-left in thumb reach, video showing between
+       them. The CTAs hug their labels, so they end well left of the floating
+       WhatsApp button in the bottom-right corner (it starts 72px from the
+       right edge) and can share its band of the screen. */
+    .mobileBreak {
+        display: block;
+    }
+
     .hero {
         min-height: 100dvh;
         min-height: 100svh;
-        padding: calc(72px + 1.5rem) 1rem 3rem;
-        background-image: url('/images/hero-towers-mobile-poster.webp');
+        padding: calc(72px + 1.5rem) 1rem 2.5rem;
+        background-image: url('/images/hero-day-mobile-poster.webp');
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: flex-start;
         align-items: stretch;
     }
 
+    .heroNight {
+        background-image: url('/images/hero-night-mobile-poster.webp');
+    }
+
+    /* The top gradient stays dark through the description (62% at 45%) before
+       fading out; a shorter one sits behind the CTAs. */
     .hero::after {
         background:
-            linear-gradient(180deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 30%),
-            linear-gradient(0deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 60%),
-            rgba(5, 11, 26, 0.3);
+            linear-gradient(180deg, rgba(5, 11, 26, 0.82) 0%, rgba(5, 11, 26, 0.62) 45%, rgba(5, 11, 26, 0) 70%),
+            linear-gradient(0deg, rgba(5, 11, 26, 0.8) 0%, rgba(5, 11, 26, 0) 36%),
+            rgba(5, 11, 26, 0.15);
     }
 
     .heroInner {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin: 0;
         text-align: left;
     }
 
-    /* Fluid between 30px and 36px so "With the Right Talent" stays on one
-       line down to a 320px-wide screen. */
+    /* Four stacked lines; fluid between about 42px and 52px so each fits a
+       320px screen. The description and gap follow from it as on desktop. */
+    .hero {
+        --hero-h: clamp(2.6rem, 13vw, 3.25rem);
+    }
+
     .heroTitle {
-        font-size: clamp(1.875rem, 9.2vw, 2.25rem);
+        line-height: 1.04;
     }
 
     .heroDesc {
-        max-width: none;
-        margin: 1rem 0 0;
-        font-size: 1rem;
-        line-height: 1.5;
+        max-width: 20rem;
+        margin: calc(var(--hero-h) * 0.382) 0 0;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.92);
+        text-shadow: 0 1px 12px rgba(5, 11, 26, 0.6);
         text-wrap: wrap;
     }
 
+    /* The text link is indented by the pill's own side padding, so its label
+       starts on the same line as the pill's label. */
     .heroActions {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
+        gap: 0.25rem;
+        margin-top: auto;
+        padding-top: 2rem;
     }
 
     .heroActions .btnPrimary {
@@ -2400,7 +2926,7 @@
 
     .heroActions .btnSecondary {
         min-height: 44px;
-        padding: 0.75rem 0;
+        padding: 0.75rem 1.5rem;
     }
 
     .industriesContainer {
@@ -2454,7 +2980,6 @@
         font-size: 0.86rem;
     }
 }
-
 
 /* ------------------------------------------------------------------ FAQ Section -- */
 .faqSection { position: relative; padding: clamp(4.5rem, 7vw, 6.5rem) 1.5rem; background: var(--tm-canvas); }
@@ -2516,5 +3041,15 @@
 
     .faqRightCol button {
         padding: 18px 20px !important;
+    }
+}
+
+/* Reduced motion: app/globals.css cuts every transition to near zero. The
+   day and night fades are opacity only, nothing moves, so they keep their
+   slow pace and reduced-motion visitors get the same dark-to-light turn. */
+@media (prefers-reduced-motion: reduce) {
+    .heroNight,
+    .hero::after {
+        transition-duration: var(--hero-fade, 0s) !important;
     }
 }

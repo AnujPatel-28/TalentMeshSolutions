@@ -9,14 +9,18 @@
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 1000;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  /* The transparent and solid states differ only in paint (background, blur,
+     border, shadow, text and logo colour), never in size, so nothing moves
+     when the bar switches; every one of those properties is transitioned. */
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease,
+    backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .navbar.transparentNav {
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   border-bottom: 1px solid transparent;
   box-shadow: none;
 }
@@ -49,6 +53,14 @@
   filter: brightness(0) invert(1);
 }
 
+/* Over the hero the bar stays transparent with a white logo, so the open
+   menu's trigger and the current section stay white too; brand blue on the
+   dark sky read as a broken colour. The flipped chevron marks the open one. */
+.navbar.transparentNav .linkActive,
+.navbar.transparentNav .navItem:is(:hover, :focus-within, [data-open='true']) :is(.link, .loginBtn) {
+  color: #ffffff !important;
+}
+
 .navbar.menuOpen .logoImg {
   filter: none !important;
 }
@@ -59,16 +71,11 @@
   max-width: 1280px;
   margin: 0 auto;
   padding-inline: clamp(1rem, 3vw, 2rem);
-  height: 68px;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1.618rem; /* Golden Ratio */
-  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.navbar.scrolled .container {
-  height: 60px; /* Dynamic Shrink */
 }
 
 /* ─── Logo ─────────────────────────────────────────────────────────────────── */
@@ -81,30 +88,34 @@
 }
 
 .logoImg {
-  width: 180px;
-  height: 60px;
-  object-fit: contain;
-  display: block;
-}
-
-.navbar.scrolled .logoImg {
   width: 162px;
   height: 54px;
+  object-fit: contain;
+  display: block;
+  /* Explicit identity values so the white logo over the hero fades to the
+     coloured one instead of snapping. */
+  filter: brightness(1) invert(0);
+  transition: filter 0.35s ease;
 }
 
 /* ─── Desktop Nav Links ─────────────────────────────────────────────────────── */
 .links {
   display: flex;
   align-items: center;
+  align-self: stretch;
   gap: 0;
   flex: 1;
   justify-content: center;
 }
 
+/* Items fill the bar's height, so top: 100% puts every dropdown on the bar's
+   bottom edge, level with the Talent Solutions panel, and the trigger's own
+   box is the hover bridge down to it. */
 .navItem {
   position: relative;
   display: flex;
   align-items: center;
+  align-self: stretch;
 }
 
 .link {
@@ -121,14 +132,15 @@
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.35s ease, text-shadow 0.35s ease;
   user-select: none;
   white-space: nowrap;
   position: relative;
 }
 
 .navItem:hover .link,
-.navItem:focus-within .link {
+.navItem:focus-within .link,
+.navItem[data-open='true'] .link {
   color: var(--primary-blue);
 }
 
@@ -144,7 +156,8 @@
 }
 
 .navItem:hover .chevron,
-.navItem:focus-within .chevron {
+.navItem:focus-within .chevron,
+.navItem[data-open='true'] .chevron {
   transform: rotate(180deg);
 }
 /* ─── Dropdown Panel ────────────────────────────────────────────────────────── */
@@ -152,7 +165,8 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(12px) scale(0.96);
+  transform: translateX(-50%) translateY(-6px) scale(0.97);
+  transform-origin: top center;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -163,17 +177,46 @@
   padding: 0.618rem; /* Golden Ratio */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
+  transition: var(--nav-panel-out);
   z-index: 1100;
 }
 
-.navItem:hover .dropdown,
-.navItem:focus-within .dropdown {
+/* Shared panel motion. In: drops 6px from the bar and settles with an
+   expo ease-out. Out: waits 80ms (forgives a pointer briefly leaving the
+   trigger), then fades a little faster than it came in. */
+.navbar {
+  --nav-panel-in: opacity 0.2s ease-out, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+  --nav-panel-out: opacity 0.15s ease-in 0.08s, transform 0.2s ease-in 0.08s, visibility 0s linear 0.28s;
+}
+
+.auth .navItem:hover .dropdown,
+.auth .navItem:focus-within .dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0) scale(1);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+  transition: var(--nav-panel-in);
 }
+
+/* Links follow the panel in with a short stagger; on the way out they stay
+   put and leave with the panel. */
+.dropdown .dropdownLink {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: background 0.15s ease, color 0.15s ease, opacity 0s linear 0.3s, transform 0s linear 0.3s;
+}
+
+.auth .navItem:hover .dropdown .dropdownLink,
+.auth .navItem:focus-within .dropdown .dropdownLink,
+.navItem[data-open='true'] .dropdown .dropdownLink {
+  opacity: 1;
+  transform: none;
+  transition: background 0.15s ease, color 0.15s ease,
+    opacity 0.22s ease-out var(--link-delay, 40ms), transform 0.34s cubic-bezier(0.16, 1, 0.3, 1) var(--link-delay, 40ms);
+}
+
+.dropdownLink:nth-child(2) { --link-delay: 70ms; }
+.dropdownLink:nth-child(3) { --link-delay: 100ms; }
+.dropdownLink:nth-child(n + 4) { --link-delay: 130ms; }
 
 .dropdownLink {
   display: flex;
@@ -206,28 +249,69 @@
    position:fixed skips that ancestor and centers on the viewport instead. */
 .megaPanel {
   position: fixed;
-  top: 44px;
+  top: 40px;
   left: 50%;
-  transform: translateX(-50%) translateY(8px) scale(0.98);
+  transform: translateX(-50%);
   width: min(1240px, calc(100vw - 3rem));
-  padding-top: 24px; /* invisible hover-bridge down to the visible card */
+  padding-top: 20px; /* invisible hover-bridge down to the visible card */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
   z-index: 1100;
 }
 
-.navItem:hover .megaPanel,
-.navItem:focus-within .megaPanel {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0) scale(1);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+/* ─── Shared morphing background (Talent Solutions, Talent Portal, Company) ─
+   One card sits behind whichever of the three menus is open. Navbar.tsx sets
+   (and animates) its size and position from that menu's card; moving between menus it glides
+   and resizes while the content cross-fades, so the three read as one surface.
+   The menus themselves drop their own card paint. */
+.morph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  z-index: 1050;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-in, visibility 0s linear 0.15s;
 }
 
-.navbar.scrolled .megaPanel {
-  top: 40px;
-  padding-top: 20px;
+.morph[data-state='open'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease-out, visibility 0s;
+}
+
+.links .dropdown,
+.links .megaPanelInner {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Content fades out quickly and can't catch the pointer while it goes; the
+   incoming menu fades in just behind the background's glide. Slides are
+   added in Navbar.tsx on the separate translate property. */
+.links .dropdown,
+.links .megaPanel {
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity 0.12s ease-in, visibility 0s linear 0.12s;
+}
+
+.links .navItem[data-open='true'] .dropdown,
+.links .navItem[data-open='true'] .megaPanel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.22s ease-out 0.06s, visibility 0s;
 }
 
 .megaPanelInner {
@@ -459,6 +543,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  align-self: stretch;
   flex-shrink: 0;
 }
 
@@ -468,7 +553,7 @@
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.01em;
-  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.35s ease, text-shadow 0.35s ease;
   white-space: nowrap;
 }
 
@@ -587,29 +672,33 @@
 .mobileNav[data-closing="true"] .menuIconTop { animation: iconTopClose var(--menu-exit-duration, 200ms) ease both; }
 .mobileNav[data-closing="true"] .menuIconMiddle { animation: iconMiddleClose var(--menu-exit-duration, 200ms) ease both; }
 .mobileNav[data-closing="true"] .menuIconBottom { animation: iconBottomClose var(--menu-exit-duration, 200ms) ease both; }
-.mobileScroll {
+.mobileLevels {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
+}
+.mobileScroll {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0 max(24px, env(safe-area-inset-right)) 28px max(24px, env(safe-area-inset-left));
+  padding: 0 max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
   scrollbar-width: thin;
   scrollbar-color: #9eb4c7 #f0f8ff;
 }
-.mobileIntro {
-  margin: 0 -24px 12px;
-  padding: 28px 24px;
-  background: #f0f8ff;
+/* Level 1 and each group's second screen share the same box; the inactive ones
+   wait off-canvas (and are inert + hidden) until they slide in. */
+.mobileLevel {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transition: transform 250ms ease, visibility 0s;
 }
-.mobileIntro h2 {
-  margin: 0;
-  font: inherit;
-  font-size: clamp(25px, 6.5vw, 32px);
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: -0.03em;
+.mobileLevelBehind, .mobileLevelAhead {
+  visibility: hidden;
+  transition: transform 250ms ease, visibility 0s linear 250ms;
 }
-.mobileIntro h2 span { color: #0056b3; }
+.mobileLevelBehind { transform: translateX(-100%); }
+.mobileLevelAhead { transform: translateX(100%); }
 .mobileHome {
   display: flex;
   align-items: center;
@@ -628,8 +717,8 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  min-height: 88px;
-  padding: 18px 0;
+  min-height: 64px;
+  padding: 12px 0;
   border: 0;
   background: transparent;
   color: #0b1f33;
@@ -640,27 +729,44 @@
   letter-spacing: -0.025em;
   cursor: pointer;
 }
-.mobileNavSectionHeader small {
-  display: block;
-  margin-top: 6px;
-  color: #4c6277;
-  font-size: 13px;
-  line-height: 1.5;
-  font-weight: 400;
-  letter-spacing: 0;
-}
 .mobileNavSectionHeader .chevron { opacity: 1; color: #0056b3; flex-shrink: 0; }
-.mobileNavSectionHeader[aria-expanded="true"] {
+.mobileNavSectionActive { color: #0056b3; }
+.mobileSubHeader {
   position: sticky;
   top: 0;
   z-index: 1;
-  color: #0056b3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 56px;
   background: #fff;
   border-bottom: 1px solid #dce6ef;
 }
-.mobileNavSectionHeader[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-.mobileNavSectionBody { padding: 8px 0 18px; }
-.mobileNavSectionBody[hidden] { display: none; }
+.mobileBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px 0 0;
+  border: 0;
+  background: transparent;
+  color: #0056b3;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mobileSubTitle {
+  min-width: 0;
+  margin: 0 0 0 auto;
+  color: #0b1f33;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-align: right;
+}
+.mobileNavSectionBody { padding: 8px 0 0; }
 .mobileNavLink {
   display: flex;
   align-items: center;
@@ -679,34 +785,17 @@
 .mobileNavLink[aria-current="page"] { background: #e2f0fc; text-decoration: underline; text-underline-offset: 4px; }
 .mobileNavLink span { min-width: 0; overflow-wrap: anywhere; }
 .mobileNavLinkActive { color: #0056b3; font-weight: 600; }
-.mobileService { border-bottom: 1px solid #dce6ef; }
-.mobileService:last-child { border-bottom: 0; }
-.mobileServiceTrigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  min-height: 56px;
-  padding: 14px 12px;
-  border: 0;
-  background: transparent;
-  color: #0b1f33;
-  font: inherit;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.45;
-  text-align: left;
-  cursor: pointer;
-}
-.mobileServiceTrigger svg { flex-shrink: 0; color: #0056b3; transition: transform 180ms ease; }
-.mobileServiceTrigger[aria-expanded="true"] { color: #0056b3; }
-.mobileServiceTrigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-.mobileServiceTrigger:hover, .mobileServiceTrigger:active { background: #f0f8ff; }
-.mobileServiceLinks { padding: 4px 0; margin-bottom: 10px; background: #f0f8ff; border-radius: 8px; }
-.mobileServiceLinks[hidden] { display: none; }
-.mobileScroll { overflow-anchor: none; scroll-padding-top: 100px; }
 .mobileNavSectionBody > .mobileNavLink + .mobileNavLink { border-top: 1px solid #e8eef4; }
+@media (min-width: 360px) {
+  .mobileNavGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 8px;
+  }
+  /* "Hire Talent" leads the group on its own row; the 12 solutions pair up below it. */
+  .mobileNavGrid > .mobileNavLink:first-child { grid-column: 1 / -1; }
+  .mobileNavGrid > .mobileNavLink { gap: 8px; min-height: 44px; padding: 8px 8px 8px 12px; font-size: 15px; line-height: 1.35; }
+}
 .mobileAuth {
   flex: 0 0 auto;
   padding: 16px max(24px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
@@ -767,15 +856,14 @@
 @keyframes iconBottomClose { from { transform: var(--icon-bottom-exit, translateY(-6px) rotate(-45deg)); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .mobileNav[open], .mobileNav[open] .menuIcon path { animation: none; }
-  .menuIcon path, .mobileToggle, .mobileNav .chevron, .mobileServiceTrigger svg { transition: none; }
+  .menuIcon path, .mobileToggle, .mobileNav .chevron, .mobileLevel { transition: none; }
+  .dropdown, .megaPanel { transform: translateX(-50%) !important; }
+  .dropdown .dropdownLink { transform: none !important; transition-delay: 0s !important; }
 }
 @media (max-height: 500px) {
   .mobileHeader { min-height: 64px; padding-block: 6px; }
-  .mobileIntro { padding-block: 16px; }
   .mobileAuth { padding-top: 10px; }
   .mobileNavSectionHeader { min-height: 52px; padding-block: 12px; font-size: 20px; }
-  .mobileNavSectionHeader small { display: none; }
-  .mobileScroll { scroll-padding-top: 64px; }
 }
 
 /* ─── Responsive Breakpoints ────────────────────────────────────────────────── */
@@ -852,7 +940,3 @@
   font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
 }
 
-
-@media (max-height: 650px) {
-  .mobileIntro { display: none; }
-}
