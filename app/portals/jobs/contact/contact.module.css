@@ -68,6 +68,19 @@
 .phone { display: flex; overflow: hidden; }
 .phone[data-invalid] { border-color: #b54435; }
 .phone input { flex: 1; min-width: 0; min-height: 44px; border: 0; border-radius: 0; }
+/* Focus: a 2px border in the navbar "Get Started" gradient with a bright
+   shine that travels around it. Padding drops by 1px so nothing shifts. */
+@property --contact-field-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.field :is(input, textarea):not(.phone *):focus, .phone:focus-within {
+    border: 2px solid transparent;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        conic-gradient(from var(--contact-field-angle), #0056b3, #007BFF 30%, #00C6FF 42%, #bff1ff 50%, #00C6FF 58%, #007BFF 70%, #0056b3) border-box;
+    outline: none;
+}
+.field :is(input, textarea):not(.phone *):focus { padding: 10px 13px; }
+.phone:focus-within input { min-height: 42px; }
+.phone:focus-within input:focus-visible { outline: none; }
 .countrySelect { position: relative; display: flex; align-items: center; border-right: 1px solid #dbe6ef; }
 /* globals.css styles every select with !important; this one sits inside the phone box. */
 .countrySelect select {
@@ -213,5 +226,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
     .spinner { animation: contactSpin .8s linear infinite; }
+    .field :is(input, textarea):not(.phone *):focus, .phone:focus-within { animation: contactFieldShine 2.6s linear infinite; }
 }
 @keyframes contactSpin { to { transform: rotate(360deg); } }
+@keyframes contactFieldShine { to { --contact-field-angle: 360deg; } }
