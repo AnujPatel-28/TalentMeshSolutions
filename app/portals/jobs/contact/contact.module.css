@@ -136,10 +136,15 @@
     .success { min-height: 390px; }
 }
 @media (max-width: 640px) {
-    .sky { height: 680px; background-image: url('/images/contact/contact-sky-mobile.webp'); }
+    /* The taller gap above the card is where the clouds show on a phone. */
+    .sky {
+        height: 760px; background-image: url('/images/contact/contact-sky-mobile.webp');
+        -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+    }
     .intro { text-align: left; padding-top: 120px; }
     .intro p { margin-left: 0; font-size: 1rem; }
-    .card { margin-top: 40px; }
+    .card { margin-top: 112px; }
 }
 @media (max-width: 480px) {
     .page { padding-left: 16px; padding-right: 16px; }
