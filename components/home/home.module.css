@@ -526,54 +526,98 @@
 
 /* ----------------------------------------------------------------- intro -- */
 
-/* One-off cover over the whole page, markup in HomeIntro.tsx. Four white
-   columns hold with the logo, then lift 90ms apart so their bottom edges form
-   steps. Sits above the navbar (z-index 1100). `tm-intro-seen` is set on <html>
-   once it has played in this tab. Hidden in the reduced-motion block below. */
+/* One-off cover over the whole page, markup in HomeIntro.tsx. The logo fades
+   in on white, holds, then the camera dives into the centre of the logo: the
+   white is one shape with the letters cut out, so as the logo grows and its ink
+   fades the letters become windows onto the hero, until the upright of the
+   second "t" fills the screen. Ends at 1.6s, just after `--hero-start` (1.5s),
+   so the headline rises as the last of the white leaves. Sits above the navbar
+   (z-index 1100). `tm-intro-seen` is set on <html> once it has played in this
+   tab. Hidden in the reduced-motion block below.
+
+   Timeline: ink in 0.1-0.5s, hold, zoom 0.6-1.6s, ink out 1.09-1.37s.
+   Until the zoom starts a plain white ground sits behind the logo, so the
+   cut-out letters do not show the hero before the ink has faded in. */
 .intro {
     position: fixed;
     inset: 0;
     z-index: 2000;
     pointer-events: none;
+    overflow: hidden;
+    background: #ffffff;
+    animation:
+        introGround 0s linear 0.6s forwards,
+        introDone 0s linear 1.6s forwards;
 }
 
 :global(.tm-intro-seen) .intro {
     display: none;
 }
 
-.introCol {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(var(--i) * 25%);
-    width: 25.2%;
-    background: #ffffff;
-    border-right: 1px solid rgba(7, 26, 43, 0.14);
-    animation: introLift 0.8s cubic-bezier(0.76, 0, 0.24, 1) calc(1.1s + var(--i) * 90ms) forwards;
-}
-
+/* Sized like the logo, centred; the cover shape paints far outside it. */
 .introLogo {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(260px, 50vw);
+    width: min(300px, 50vw);
     height: auto;
+    overflow: visible;
     transform: translate(-50%, -50%);
+}
+
+@media (max-width: 559px) {
+    .introLogo {
+        width: 72vw;
+    }
+}
+
+/* Origin is a solid point in the upright of the second "t" (logo units),
+   43 units left of the logo's centre, so the zoom ends inside a letter. The
+   scale grows exponentially and accelerates (x^4), stepped through keyframes. */
+.introZoom {
+    transform-origin: 1043px 362px;
+    animation: introZoom 1s linear 0.6s both;
+}
+
+.introCover {
+    fill: #ffffff;
+}
+
+.introInk {
     animation:
-        introLogoIn 0.5s ease-out 0.1s both,
-        introLogoOut 0.6s cubic-bezier(0.76, 0, 0.24, 1) 1.1s forwards;
+        introInkIn 0.4s ease-out 0.1s both,
+        introInkOut 0.28s linear 1.09s forwards;
 }
 
-@keyframes introLift {
-    to { transform: translateY(-101%); }
+@keyframes introGround {
+    to { background: transparent; }
 }
 
-@keyframes introLogoIn {
-    from { opacity: 0; transform: translate(-50%, -30%); }
+@keyframes introDone {
+    to { visibility: hidden; }
 }
 
-@keyframes introLogoOut {
-    to { opacity: 0; transform: translate(-50%, -260%); }
+@keyframes introZoom {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.059); }
+    45% { transform: scale(1.337); }
+    55% { transform: scale(1.913); }
+    65% { transform: scale(3.545); }
+    72% { transform: scale(6.722); }
+    79% { transform: scale(15.82); }
+    85% { transform: scale(40.49); }
+    90% { transform: scale(104.8); }
+    94% { transform: scale(253.6); }
+    97% { transform: scale(532.1); }
+    100% { transform: scale(1200); }
+}
+
+@keyframes introInkIn {
+    from { opacity: 0; transform: translateY(60px); }
+}
+
+@keyframes introInkOut {
+    to { opacity: 0; }
 }
 
 /* ------------------------------------------------------------ trust strip -- */
