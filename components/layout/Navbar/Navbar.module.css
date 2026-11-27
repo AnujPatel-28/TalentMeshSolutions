@@ -53,42 +53,12 @@
   filter: brightness(0) invert(1);
 }
 
-/* The current section stays white over the hero and is marked with an
-   underline; brand blue on the dark sky read as a broken colour. */
-.navbar.transparentNav .linkActive {
+/* Over the hero the bar stays transparent with a white logo, so the open
+   menu's trigger and the current section stay white too; brand blue on the
+   dark sky read as a broken colour. The flipped chevron marks the open one. */
+.navbar.transparentNav .linkActive,
+.navbar.transparentNav .navItem:is(:hover, :focus-within) :is(.link, .loginBtn) {
   color: #ffffff !important;
-}
-
-.navbar.transparentNav .linkActive .linkLabel {
-  text-decoration: underline 2px;
-  text-underline-offset: 7px;
-}
-
-/* While any menu is open the transparent bar turns solid white, so the
-   logo, the links and the panel below read as one light surface. */
-.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-}
-
-.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) :is(.link, .loginBtn) {
-  color: var(--deep-navy);
-  text-shadow: none;
-}
-
-.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .linkActive {
-  color: var(--primary-blue) !important;
-}
-
-.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .navItem:is(:hover, :focus-within) :is(.link, .loginBtn) {
-  color: var(--primary-blue);
-}
-
-.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .logoImg {
-  filter: brightness(1) invert(0);
 }
 
 .navbar.menuOpen .logoImg {
