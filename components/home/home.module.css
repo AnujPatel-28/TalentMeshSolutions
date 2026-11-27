@@ -389,7 +389,7 @@
    waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
 .hero {
-    --hero-start: 1.5s;
+    --hero-start: 2.1s;
 }
 
 :global(.tm-intro-seen) .hero {
@@ -530,12 +530,12 @@
    in on white, holds, then the camera dives into the centre of the logo: the
    white is one shape with the letters cut out, so as the logo grows and its ink
    fades the letters become windows onto the hero, until the upright of the
-   second "t" fills the screen. Ends at 1.6s, just after `--hero-start` (1.5s),
+   second "t" fills the screen. Ends at 2.2s, just after `--hero-start` (2.1s),
    so the headline rises as the last of the white leaves. Sits above the navbar
    (z-index 1100). `tm-intro-seen` is set on <html> once it has played in this
    tab. Hidden in the reduced-motion block below.
 
-   Timeline: ink in 0.1-0.5s, hold, zoom 0.6-1.6s, ink out 1.09-1.37s.
+   Timeline: ink in 0.05-0.55s, hold, zoom 0.95-2.2s, ink out 1.57-1.91s.
    Until the zoom starts a plain white ground sits behind the logo, so the
    cut-out letters do not show the hero before the ink has faded in. */
 .intro {
@@ -546,8 +546,8 @@
     overflow: hidden;
     background: #ffffff;
     animation:
-        introGround 0s linear 0.6s forwards,
-        introDone 0s linear 1.6s forwards;
+        introGround 0s linear 0.95s forwards,
+        introDone 0s linear 2.2s forwards;
 }
 
 :global(.tm-intro-seen) .intro {
@@ -576,7 +576,7 @@
    scale grows exponentially and accelerates (x^4), stepped through keyframes. */
 .introZoom {
     transform-origin: 1043px 362px;
-    animation: introZoom 1s linear 0.6s both;
+    animation: introZoom 1.25s linear 0.95s both;
 }
 
 .introCover {
@@ -585,8 +585,8 @@
 
 .introInk {
     animation:
-        introInkIn 0.4s ease-out 0.1s both,
-        introInkOut 0.28s linear 1.09s forwards;
+        introInkIn 0.5s ease-out 0.05s both,
+        introInkOut 0.34s linear 1.57s forwards;
 }
 
 @keyframes introGround {
