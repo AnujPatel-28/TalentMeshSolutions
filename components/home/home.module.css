@@ -389,7 +389,7 @@
    waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
 .hero {
-    --hero-start: 2.1s;
+    --hero-start: 1.9s;
 }
 
 :global(.tm-intro-seen) .hero {
@@ -526,43 +526,53 @@
 
 /* ----------------------------------------------------------------- intro -- */
 
-/* One-off cover over the whole page, markup in HomeIntro.tsx. The logo fades
-   in on white, holds, then the camera dives into the centre of the logo: the
-   white is one shape with the letters cut out, so as the logo grows and its ink
-   fades the letters become windows onto the hero, until the upright of the
-   second "t" fills the screen. Ends at 2.2s, just after `--hero-start` (2.1s),
-   so the headline rises as the last of the white leaves. Sits above the navbar
-   (z-index 1100). `tm-intro-seen` is set on <html> once it has played in this
-   tab. Hidden in the reduced-motion block below.
+/* One-off cover over the whole page, markup in HomeIntro.tsx. Sits above the
+   navbar (z-index 1100). `tm-intro-seen` is set on <html> once it has played
+   in this tab. Hidden in the reduced-motion block below.
 
-   Timeline: ink in 0.05-0.55s, hold, zoom 0.95-2.2s, ink out 1.57-1.91s.
-   Until the zoom starts a plain white ground sits behind the logo, so the
-   cut-out letters do not show the hero before the ink has faded in. */
+   Two layers. `.introGround` is white with the logo: on first paint the ink
+   fades in (0.05-0.5s) and holds, then at 0.8s the ground fades out. Over it,
+   `.introCanvas` carries the zoom, 0.8-2.0s, drawn by a worker
+   (public/intro-dive-worker.js) from the same timeline; it starts drawing the
+   same logo just before 0.8s, so the hand-over does not show. The ground's
+   fade is an opacity animation, so it runs on the compositor even while the
+   page is busy hydrating. Times here must match the worker's constants.
+   `--hero-start` (1.9s) starts the headline rising as the last white leaves. */
 .intro {
     position: fixed;
     inset: 0;
     z-index: 2000;
     pointer-events: none;
-    overflow: hidden;
-    background: #ffffff;
-    animation:
-        introGround 0s linear 0.95s forwards,
-        introDone 0s linear 2.2s forwards;
+    animation: introDone 0s linear 2s forwards;
 }
 
 :global(.tm-intro-seen) .intro {
     display: none;
 }
 
-/* Sized like the logo, centred; the cover shape paints far outside it. */
+.introGround {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    animation: introGroundOut 0.2s linear 0.8s forwards;
+}
+
+.introCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* The worker lays the logo out the same way (72vw under 560px). */
 .introLogo {
     position: absolute;
     left: 50%;
     top: 50%;
     width: min(300px, 50vw);
     height: auto;
-    overflow: visible;
     transform: translate(-50%, -50%);
+    animation: introInkIn 0.45s ease-out 0.05s both;
 }
 
 @media (max-width: 559px) {
@@ -571,53 +581,16 @@
     }
 }
 
-/* Origin is a solid point in the upright of the second "t" (logo units),
-   43 units left of the logo's centre, so the zoom ends inside a letter. The
-   scale grows exponentially and accelerates (x^4), stepped through keyframes. */
-.introZoom {
-    transform-origin: 1043px 362px;
-    animation: introZoom 1.25s linear 0.95s both;
-}
-
-.introCover {
-    fill: #ffffff;
-}
-
-.introInk {
-    animation:
-        introInkIn 0.5s ease-out 0.05s both,
-        introInkOut 0.34s linear 1.57s forwards;
-}
-
-@keyframes introGround {
-    to { background: transparent; }
+@keyframes introGroundOut {
+    to { opacity: 0; }
 }
 
 @keyframes introDone {
     to { visibility: hidden; }
 }
 
-@keyframes introZoom {
-    0% { transform: scale(1); }
-    30% { transform: scale(1.059); }
-    45% { transform: scale(1.337); }
-    55% { transform: scale(1.913); }
-    65% { transform: scale(3.545); }
-    72% { transform: scale(6.722); }
-    79% { transform: scale(15.82); }
-    85% { transform: scale(40.49); }
-    90% { transform: scale(104.8); }
-    94% { transform: scale(253.6); }
-    97% { transform: scale(532.1); }
-    100% { transform: scale(1200); }
-}
-
 @keyframes introInkIn {
-    from { opacity: 0; transform: translateY(60px); }
-}
-
-@keyframes introInkOut {
-    to { opacity: 0; }
+    from { opacity: 0; transform: translate(-50%, -42%); }
 }
 
 /* ------------------------------------------------------------ trust strip -- */

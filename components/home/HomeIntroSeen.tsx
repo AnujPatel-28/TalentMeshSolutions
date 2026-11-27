@@ -1,12 +1,13 @@
 'use client';
 
 import { useLayoutEffect, useRef } from 'react';
+import { bootIntro } from './introBoot';
 
 /**
- * Client half of HomeIntro. The inline script there only runs on a full page
+ * Client half of HomeIntro. The inline scripts there only run on a full page
  * load, so this handles arriving at the home page by in-app navigation: if the
  * intro has already played in this tab, hide it before paint; otherwise record
- * that it is playing now.
+ * that it is playing now and start the zoom.
  */
 export default function HomeIntroSeen({ flag }: { flag: string }) {
     // Strict Mode runs effects twice on mount; without this the second pass
@@ -21,6 +22,9 @@ export default function HomeIntroSeen({ flag }: { flag: string }) {
                 document.documentElement.classList.add(flag);
             } else {
                 sessionStorage.setItem(flag, '1');
+                // On a full load the inline script has already started the zoom
+                // (bootIntro skips a second start); this covers in-app arrival.
+                bootIntro();
             }
         } catch {
             // Storage blocked: the intro simply plays on every load.
