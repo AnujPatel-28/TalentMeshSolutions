@@ -26,12 +26,13 @@
     -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
 }
-/* Same navy scrim as the home hero (components/home/home.module.css, .hero::after):
-   a darker band at the top for the navbar over a 42% wash. It sits inside .sky, so the
-   sky's mask fades it out before the form card too. */
+/* A lighter take on the home hero's navy scrim (components/home/home.module.css,
+   .hero::after): a darker band at the top for the navbar over a 22% wash, about half the
+   hero's, so the clouds stay white. It sits inside .sky, so the sky's mask fades it out
+   before the form card too. */
 .sky::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(5, 11, 26, .55) 0%, rgba(5, 11, 26, 0) 30%), rgba(5, 11, 26, .42);
+    background: linear-gradient(180deg, rgba(5, 11, 26, .35) 0%, rgba(5, 11, 26, 0) 30%), rgba(5, 11, 26, .22);
 }
 .intro { max-width: 720px; margin: 0 auto; padding-top: 168px; text-align: center; color: #fff; text-shadow: 0 1px 14px rgba(5, 66, 140, .55); }
 .intro h1 { margin: 0; font-family: var(--font-michroma), 'Michroma', sans-serif; font-size: clamp(1.75rem, 3.6vw, 2.875rem); line-height: 1.2; letter-spacing: 0; font-weight: 400; text-wrap: balance; }
@@ -186,11 +187,12 @@
         -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
         mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
     }
-    /* The home hero's phone scrim: heavy behind the heading and intro, easing off below. */
+    /* The home hero's phone scrim at about two-thirds strength: darker behind the heading
+       and intro, easing off below. */
     .sky::after {
         background:
-            linear-gradient(180deg, rgba(5, 11, 26, .82) 0%, rgba(5, 11, 26, .62) 45%, rgba(5, 11, 26, 0) 70%),
-            rgba(5, 11, 26, .15);
+            linear-gradient(180deg, rgba(5, 11, 26, .55) 0%, rgba(5, 11, 26, .4) 45%, rgba(5, 11, 26, 0) 70%),
+            rgba(5, 11, 26, .08);
     }
     .intro { text-align: left; padding-top: 120px; }
     .intro p { margin-left: 0; font-size: 1rem; }
