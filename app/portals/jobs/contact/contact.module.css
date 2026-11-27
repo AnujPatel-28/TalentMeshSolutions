@@ -226,7 +226,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
     .spinner { animation: contactSpin .8s linear infinite; }
-    .field :is(input, textarea):not(.phone *):focus, .phone:focus-within { animation: contactFieldShine 2.6s linear infinite; }
+    .field :is(input, textarea):not(.phone *):focus, .phone:focus-within { animation: contactFieldShine 4s linear infinite; }
 }
 @keyframes contactSpin { to { transform: rotate(360deg); } }
 @keyframes contactFieldShine { to { --contact-field-angle: 360deg; } }

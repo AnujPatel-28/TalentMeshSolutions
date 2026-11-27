@@ -248,7 +248,7 @@ const Navbar = () => {
                             aria-expanded={openNav === 'solutions'}
                             aria-controls="mega-panel-solutions"
                         >
-                            Talent Solutions <span className={styles.chevron} aria-hidden="true">▼</span>
+                            <span className={styles.linkLabel}>Talent Solutions</span> <span className={styles.chevron} aria-hidden="true">▼</span>
                         </button>
                         <div id="mega-panel-solutions" className={styles.megaPanel}>
                             <div className={styles.megaPanelInner}>
@@ -332,7 +332,7 @@ const Navbar = () => {
                             aria-expanded={openNav === 'portal'}
                             aria-controls="dropdown-portal"
                         >
-                            Talent Portal <span className={styles.chevron} aria-hidden="true">▼</span>
+                            <span className={styles.linkLabel}>Talent Portal</span> <span className={styles.chevron} aria-hidden="true">▼</span>
                         </button>
                         <div id="dropdown-portal" className={styles.dropdown}>
                             <Link href="/talentmesh-portal" className={`${styles.dropdownLink} ${pathname === '/talentmesh-portal' ? styles.dropdownLinkActive : ''}`}>Talentmesh Portal</Link>
@@ -354,7 +354,7 @@ const Navbar = () => {
                             aria-expanded={openNav === 'company'}
                             aria-controls="dropdown-company"
                         >
-                            Company <span className={styles.chevron} aria-hidden="true">▼</span>
+                            <span className={styles.linkLabel}>Company</span> <span className={styles.chevron} aria-hidden="true">▼</span>
                         </button>
                         <div id="dropdown-company" className={styles.dropdown}>
                             <Link href="/about" className={`${styles.dropdownLink} ${pathname === '/about' ? styles.dropdownLinkActive : ''}`}>About</Link>

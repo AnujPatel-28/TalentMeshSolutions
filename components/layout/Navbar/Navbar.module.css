@@ -53,6 +53,44 @@
   filter: brightness(0) invert(1);
 }
 
+/* The current section stays white over the hero and is marked with an
+   underline; brand blue on the dark sky read as a broken colour. */
+.navbar.transparentNav .linkActive {
+  color: #ffffff !important;
+}
+
+.navbar.transparentNav .linkActive .linkLabel {
+  text-decoration: underline 2px;
+  text-underline-offset: 7px;
+}
+
+/* While any menu is open the transparent bar turns solid white, so the
+   logo, the links and the panel below read as one light surface. */
+.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) :is(.link, .loginBtn) {
+  color: var(--deep-navy);
+  text-shadow: none;
+}
+
+.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .linkActive {
+  color: var(--primary-blue) !important;
+}
+
+.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .navItem:is(:hover, :focus-within) :is(.link, .loginBtn) {
+  color: var(--primary-blue);
+}
+
+.navbar.transparentNav:has(.navItem:hover, .navItem:focus-within) .logoImg {
+  filter: brightness(1) invert(0);
+}
+
 .navbar.menuOpen .logoImg {
   filter: none !important;
 }
@@ -94,15 +132,20 @@
 .links {
   display: flex;
   align-items: center;
+  align-self: stretch;
   gap: 0;
   flex: 1;
   justify-content: center;
 }
 
+/* Items fill the bar's height, so top: 100% puts every dropdown on the bar's
+   bottom edge, level with the Talent Solutions panel, and the trigger's own
+   box is the hover bridge down to it. */
 .navItem {
   position: relative;
   display: flex;
   align-items: center;
+  align-self: stretch;
 }
 
 .link {
@@ -150,7 +193,8 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(12px) scale(0.96);
+  transform: translateX(-50%) translateY(-6px) scale(0.97);
+  transform-origin: top center;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -161,8 +205,16 @@
   padding: 0.618rem; /* Golden Ratio */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
+  transition: var(--nav-panel-out);
   z-index: 1100;
+}
+
+/* Shared panel motion. In: drops 6px from the bar and settles with an
+   expo ease-out. Out: waits 80ms (forgives a pointer briefly leaving the
+   trigger), then fades a little faster than it came in. */
+.navbar {
+  --nav-panel-in: opacity 0.2s ease-out, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+  --nav-panel-out: opacity 0.15s ease-in 0.08s, transform 0.2s ease-in 0.08s, visibility 0s linear 0.28s;
 }
 
 .navItem:hover .dropdown,
@@ -170,8 +222,28 @@
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0) scale(1);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+  transition: var(--nav-panel-in);
 }
+
+/* Links follow the panel in with a short stagger; on the way out they stay
+   put and leave with the panel. */
+.dropdown .dropdownLink {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: background 0.15s ease, color 0.15s ease, opacity 0s linear 0.3s, transform 0s linear 0.3s;
+}
+
+.navItem:hover .dropdown .dropdownLink,
+.navItem:focus-within .dropdown .dropdownLink {
+  opacity: 1;
+  transform: none;
+  transition: background 0.15s ease, color 0.15s ease,
+    opacity 0.22s ease-out var(--link-delay, 40ms), transform 0.34s cubic-bezier(0.16, 1, 0.3, 1) var(--link-delay, 40ms);
+}
+
+.dropdownLink:nth-child(2) { --link-delay: 70ms; }
+.dropdownLink:nth-child(3) { --link-delay: 100ms; }
+.dropdownLink:nth-child(n + 4) { --link-delay: 130ms; }
 
 .dropdownLink {
   display: flex;
@@ -206,12 +278,13 @@
   position: fixed;
   top: 40px;
   left: 50%;
-  transform: translateX(-50%) translateY(8px) scale(0.98);
+  transform: translateX(-50%) translateY(-6px) scale(0.99);
+  transform-origin: top center;
   width: min(1240px, calc(100vw - 3rem));
   padding-top: 20px; /* invisible hover-bridge down to the visible card */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.25s;
+  transition: var(--nav-panel-out);
   z-index: 1100;
 }
 
@@ -220,7 +293,7 @@
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0) scale(1);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+  transition: var(--nav-panel-in);
 }
 
 .megaPanelInner {
@@ -452,6 +525,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  align-self: stretch;
   flex-shrink: 0;
 }
 
@@ -765,6 +839,8 @@
 @media (prefers-reduced-motion: reduce) {
   .mobileNav[open], .mobileNav[open] .menuIcon path { animation: none; }
   .menuIcon path, .mobileToggle, .mobileNav .chevron, .mobileLevel { transition: none; }
+  .dropdown, .megaPanel { transform: translateX(-50%) !important; }
+  .dropdown .dropdownLink { transform: none !important; transition-delay: 0s !important; }
 }
 @media (max-height: 500px) {
   .mobileHeader { min-height: 64px; padding-block: 6px; }
