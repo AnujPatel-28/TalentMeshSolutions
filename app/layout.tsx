@@ -109,12 +109,14 @@ const organizationJsonLd = {
   areaServed: { "@type": "Country", name: "India" },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "7-B, Amrut Bag Colony, Opp. Stadium, Nr. Hindu Colony, Navrangpura",
+    streetAddress: "1203, Ganesh Glory, Gota",
     addressLocality: "Ahmedabad",
     addressRegion: "Gujarat",
-    postalCode: "380009",
+    postalCode: "382470",
     addressCountry: "IN",
   },
+  geo: { "@type": "GeoCoordinates", latitude: 23.1138905, longitude: 72.5412751 },
+  hasMap: "https://maps.app.goo.gl/6Mc8FydihB5Dt1NW8",
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Recruitment & Staffing Services",

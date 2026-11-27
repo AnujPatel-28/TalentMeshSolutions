@@ -193,5 +193,5 @@ export const ABOUT_CTA = {
   buttonHref: '/contact',
   baseTitle: 'Based in Ahmedabad, serving India',
   baseBody:
-    'Headquartered in Navrangpura, Ahmedabad, recruiting for on-site, hybrid and remote roles across India.',
+    'Headquartered in Gota, Ahmedabad, recruiting for on-site, hybrid and remote roles across India.',
 } as const;

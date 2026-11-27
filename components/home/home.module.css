@@ -389,7 +389,7 @@
    waits for the cover to lift; once `tm-intro-seen` is set it starts at once.
    Disabled wholesale in the reduced-motion block further down. */
 .hero {
-    --hero-start: 1.5s;
+    --hero-start: 1.9s;
 }
 
 :global(.tm-intro-seen) .hero {
@@ -526,54 +526,71 @@
 
 /* ----------------------------------------------------------------- intro -- */
 
-/* One-off cover over the whole page, markup in HomeIntro.tsx. Four white
-   columns hold with the logo, then lift 90ms apart so their bottom edges form
-   steps. Sits above the navbar (z-index 1100). `tm-intro-seen` is set on <html>
-   once it has played in this tab. Hidden in the reduced-motion block below. */
+/* One-off cover over the whole page, markup in HomeIntro.tsx. Sits above the
+   navbar (z-index 1100). `tm-intro-seen` is set on <html> once it has played
+   in this tab. Hidden in the reduced-motion block below.
+
+   Two layers. `.introGround` is white with the logo: on first paint the ink
+   fades in (0.05-0.5s) and holds, then at 0.8s the ground fades out. Over it,
+   `.introCanvas` carries the zoom, 0.8-2.0s, drawn by a worker
+   (public/intro-dive-worker.js) from the same timeline; it starts drawing the
+   same logo just before 0.8s, so the hand-over does not show. The ground's
+   fade is an opacity animation, so it runs on the compositor even while the
+   page is busy hydrating. Times here must match the worker's constants.
+   `--hero-start` (1.9s) starts the headline rising as the last white leaves. */
 .intro {
     position: fixed;
     inset: 0;
     z-index: 2000;
     pointer-events: none;
+    animation: introDone 0s linear 2s forwards;
 }
 
 :global(.tm-intro-seen) .intro {
     display: none;
 }
 
-.introCol {
+.introGround {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(var(--i) * 25%);
-    width: 25.2%;
+    inset: 0;
     background: #ffffff;
-    border-right: 1px solid rgba(7, 26, 43, 0.14);
-    animation: introLift 0.8s cubic-bezier(0.76, 0, 0.24, 1) calc(1.1s + var(--i) * 90ms) forwards;
+    animation: introGroundOut 0.2s linear 0.8s forwards;
 }
 
+.introCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* The worker lays the logo out the same way (72vw under 560px). */
 .introLogo {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(260px, 50vw);
+    width: min(300px, 50vw);
     height: auto;
     transform: translate(-50%, -50%);
-    animation:
-        introLogoIn 0.5s ease-out 0.1s both,
-        introLogoOut 0.6s cubic-bezier(0.76, 0, 0.24, 1) 1.1s forwards;
+    animation: introInkIn 0.45s ease-out 0.05s both;
 }
 
-@keyframes introLift {
-    to { transform: translateY(-101%); }
+@media (max-width: 559px) {
+    .introLogo {
+        width: 72vw;
+    }
 }
 
-@keyframes introLogoIn {
-    from { opacity: 0; transform: translate(-50%, -30%); }
+@keyframes introGroundOut {
+    to { opacity: 0; }
 }
 
-@keyframes introLogoOut {
-    to { opacity: 0; transform: translate(-50%, -260%); }
+@keyframes introDone {
+    to { visibility: hidden; }
+}
+
+@keyframes introInkIn {
+    from { opacity: 0; transform: translate(-50%, -42%); }
 }
 
 /* ------------------------------------------------------------ trust strip -- */
