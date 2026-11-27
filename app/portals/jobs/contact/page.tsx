@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, Check, Copy, LoaderCircle, Mail, MapPin, MessageCircle, Navigation, Phone, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Copy, LoaderCircle, Mail, MapPin, MessageCircle, Navigation, Phone } from 'lucide-react';
+import { MotionAccordion } from '@/components/ui/MotionAccordion';
 import { CONTACT, STRONG_CTA } from '@/content/home';
 import { CONTACT_FAQS } from './faqs';
 import styles from './contact.module.css';
@@ -297,18 +298,20 @@ export default function ContactPage() {
                 </div>
             </section>
 
+            {/* Same layout and accordion as the home page FAQ (components/home/HomeFAQ.tsx). */}
             <section className={`${styles.section} ${styles.faq}`} aria-labelledby="faq-title">
-                <div className={styles.faqHead}>
-                    <p className={styles.eyebrow}>FAQ</p>
-                    <h2 id="faq-title">Before you <span>get in touch.</span></h2>
+                <div className={styles.faqLeftCol}>
+                    <h2 id="faq-title" className={styles.faqHeading}>
+                        Frequently asked <br className={styles.faqBr} />questions.
+                    </h2>
+                    <p className={styles.faqSubtext}>Straight answers on who we hire for, how we work and what happens after you get in touch.</p>
                 </div>
-                <div className={styles.faqList}>
-                    {CONTACT_FAQS.map(faq => (
-                        <details key={faq.question} className={styles.faqItem}>
-                            <summary>{faq.question}<Plus size={20} aria-hidden="true" /></summary>
-                            <p>{faq.answer}</p>
-                        </details>
-                    ))}
+                <div className={styles.faqRightCol}>
+                    <MotionAccordion
+                        variant="modern"
+                        defaultOpenIndex={0}
+                        items={CONTACT_FAQS.map(faq => ({ question: faq.question, answer: faq.answer }))}
+                    />
                 </div>
             </section>
         </main>
