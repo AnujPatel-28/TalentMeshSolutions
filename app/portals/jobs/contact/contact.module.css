@@ -3,96 +3,93 @@
     --contact-ink: #0b1f33;
     --contact-muted: #465c70;
     --contact-line: #cbdce9;
+    --contact-field: #9fb3c4;
     --contact-surface: #f0f8ff;
-    /* Brand blue is 2.3:1 on the navy panel; this tint is the on-dark accent. */
-    --contact-sky: #8cc8ff;
     background: var(--contact-surface);
     color: var(--contact-ink);
     font-family: var(--font-schibsted), 'Schibsted Grotesk', sans-serif;
-    padding: 140px 32px 110px;
+    padding: 0 32px 110px;
     position: relative;
     isolation: isolate;
 }
 .page ::selection { background: var(--contact-brand); color: #fff; }
-.page :is(h1, h2, h3, input, textarea, button) { font-family: inherit; }
+.page :is(h1, h2, h3, input, textarea, select, button) { font-family: inherit; }
 .page a { text-underline-offset: 4px; }
-.page :is(a, button, input, textarea, summary):focus-visible { outline: 3px solid var(--contact-brand); outline-offset: 4px; }
-.layout { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 28px; align-items: stretch; }
+.page :is(a, button, input, textarea, select, summary):focus-visible { outline: 3px solid var(--contact-brand); outline-offset: 4px; }
 
-/* ------------------------------------------------------------ navy panel -- */
-.panel {
-    display: flex; flex-direction: column; justify-content: space-between; gap: 48px;
-    padding: 48px 44px 44px; border-radius: 28px; color: #fff; overflow: hidden;
-    background:
-        radial-gradient(60% 45% at 100% 0%, rgba(0, 123, 255, .38), transparent 70%),
-        radial-gradient(55% 40% at 0% 100%, rgba(0, 86, 179, .32), transparent 70%),
-        linear-gradient(180deg, #0b1f33 0%, #061423 100%);
+/* -------------------------------------------------------- halftone sky -- */
+/* Generated halftone-dot clouds (public/images/contact). The mask fades the
+   sky into the page colour before the form card, so the card reads on ice blue. */
+.sky {
+    position: absolute; z-index: -1; top: 0; left: 0; right: 0; height: 860px;
+    background: #0554b0 url('/images/contact/contact-sky.webp') center top / cover no-repeat;
+    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
 }
-.panel :is(a, button):focus-visible { outline-color: var(--contact-sky); }
-.intro h1 { margin: 0; font-size: clamp(2.5rem, 3.9vw, 3.75rem); line-height: 1.08; letter-spacing: -.035em; font-weight: 600; text-wrap: balance; }
-.intro h1 span { color: var(--contact-sky); }
-.intro > p { max-width: 420px; margin: 22px 0 0; color: rgba(255, 255, 255, .78); font-size: 1.0625rem; line-height: 1.7; }
-.details h2 { font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--contact-sky); margin: 0 0 16px; }
-.methods { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.method { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 12px 18px 12px 12px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 18px; background: rgba(255, 255, 255, .06); color: #fff; text-decoration: none; transition: background-color .15s, border-color .15s; }
-.method:hover { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .32); }
-.methodIcon { flex-shrink: 0; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; background: var(--contact-brand); color: #fff; }
-.methodText { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.methodText > span { font-size: .8125rem; color: rgba(255, 255, 255, .7); }
-.methodText > strong { font-size: 1.0625rem; font-weight: 500; overflow-wrap: anywhere; }
-.method > svg { flex-shrink: 0; color: var(--contact-sky); }
-.panelOffice { display: flex; gap: 14px; margin-top: 22px; padding: 0 12px; }
-.panelOffice > svg { flex-shrink: 0; width: 44px; margin-top: 2px; color: var(--contact-sky); }
-.panelOffice span { display: block; }
-.panelOffice div > span { font-size: .8125rem; color: rgba(255, 255, 255, .7); margin-bottom: 4px; }
-.panelOffice address { font-style: normal; font-size: .9375rem; line-height: 1.65; color: rgba(255, 255, 255, .9); }
+.intro { max-width: 720px; margin: 0 auto; padding-top: 168px; text-align: center; color: #fff; text-shadow: 0 1px 14px rgba(5, 66, 140, .55); }
+.intro h1 { margin: 0; font-size: clamp(2.5rem, 4.4vw, 3.5rem); line-height: 1.08; letter-spacing: -.035em; font-weight: 600; text-wrap: balance; }
+.intro p { max-width: 560px; margin: 18px auto 0; font-size: 1.125rem; line-height: 1.65; }
 
-/* ------------------------------------------------------------- form card -- */
-.formPanel { padding: 40px; background: #fff; border: 1px solid var(--contact-line); border-radius: 28px; box-shadow: 0 24px 48px -32px rgba(11, 31, 51, .28); }
-.formHeading h2, .success h2 { margin: 0 0 10px; font-weight: 600; letter-spacing: -.025em; font-size: 1.75rem; line-height: 1.2; }
-.formHeading > p { margin: 0; font-size: .9375rem; line-height: 1.6; color: var(--contact-muted); }
-.form { display: flex; flex-direction: column; gap: 23px; margin-top: 28px; }
-.purpose { border: 0; padding: 0; margin: 0; min-width: 0; }
-.purpose legend, .field > label { font-size: .875rem; font-weight: 500; margin-bottom: 9px; }
-.routes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.route { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px; min-height: 76px; border: 1px solid var(--contact-line); border-radius: 16px; cursor: pointer; transition: background-color .15s, border-color .15s; }
-.route input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.routeIcon { flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--contact-surface); color: var(--contact-brand); transition: background-color .15s, color .15s; }
-.routeText { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.routeText strong { font-size: .9375rem; font-weight: 600; line-height: 1.3; }
-.routeText span { font-size: .8125rem; line-height: 1.4; color: var(--contact-muted); }
-.routeCheck { flex-shrink: 0; padding: 3px; box-sizing: content-box; border-radius: 50%; background: var(--contact-brand); color: #fff; visibility: hidden; }
-.route:hover, .purposeOption:hover { border-color: var(--contact-brand); }
-.route:has(input:checked) { border-color: var(--contact-brand); background: var(--contact-surface); box-shadow: inset 0 0 0 1px var(--contact-brand); }
-.route:has(input:checked) .routeIcon { background: var(--contact-brand); color: #fff; }
-.route:has(input:checked) .routeCheck { visibility: visible; }
-.route:has(input:focus-visible) { outline: 3px solid var(--contact-brand); outline-offset: 4px; }
-.otherPurposes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-.purposeOption { display: flex; align-items: center; gap: 9px; padding: 9px 16px 9px 12px; min-height: 42px; border: 1px solid var(--contact-line); border-radius: 9999px; font-size: .8125rem; cursor: pointer; transition: background-color .15s, border-color .15s; }
-.purposeOption:has(input:checked) { color: var(--contact-brand); border-color: var(--contact-brand); background: var(--contact-surface); }
-.purposeOption input { accent-color: var(--contact-brand); width: 15px; height: 15px; flex-shrink: 0; }
+/* ----------------------------------------------------------- form card -- */
+.card {
+    max-width: 1096px; margin: 72px auto 0; box-sizing: border-box; padding: 48px;
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 96px; align-items: start;
+    background: #fff; border: 1px solid var(--contact-line); border-radius: 24px;
+    box-shadow: 0 30px 60px -36px rgba(5, 66, 140, .45);
+}
+.form { display: flex; flex-direction: column; gap: 22px; }
 .formRow { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .field { min-width: 0; display: flex; flex-direction: column; }
+.field > label, .services legend { font-size: .875rem; font-weight: 500; margin-bottom: 7px; padding: 0; }
 .field label span { color: var(--contact-muted); font-weight: 400; }
-.field :is(input, textarea) { width: 100%; min-height: 48px; padding: 11px 14px; border: 1px solid #71899f; border-radius: 12px; background: #fff; color: var(--contact-ink); font-size: 1rem; caret-color: var(--contact-brand); transition: border-color .15s; }
-.field :is(input, textarea):hover { border-color: var(--contact-brand); }
-.field input[aria-invalid='true'] { border-color: #b54435; }
-.field textarea { resize: vertical; min-height: 112px; line-height: 1.5; }
-.hint { margin: -1px 0 12px; color: var(--contact-muted); font-size: .8125rem; line-height: 1.6; }
-.phoneHint, .fieldError { margin: 8px 0 0; font-size: .8125rem; line-height: 1.5; }
-.phoneHint { color: var(--contact-muted); }
-.fieldError { color: #873327; }
-.formBottom { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-.submit { min-height: 52px; padding: 14px 26px; border: 0; border-radius: 9999px; background: var(--contact-brand); color: #fff; font-size: 1rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 14px; cursor: pointer; transition: background-color .15s; }
-.submit:hover:not(:disabled) { background: #0b1f33; }
+.field :is(input, textarea), .phone {
+    width: 100%; box-sizing: border-box; min-height: 46px; border: 1px solid var(--contact-field); border-radius: 10px;
+    background: #fff; color: var(--contact-ink); font-size: 1rem; transition: border-color .15s;
+}
+.field :is(input, textarea) { padding: 11px 14px; caret-color: var(--contact-brand); }
+.field :is(input, textarea)::placeholder { color: #6b7f91; }
+.field :is(input, textarea):hover, .phone:hover { border-color: var(--contact-brand); }
+.field textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+.phone { display: flex; overflow: hidden; }
+.phone[data-invalid] { border-color: #b54435; }
+.phone input { flex: 1; min-width: 0; min-height: 44px; border: 0; border-radius: 0; }
+.countrySelect { position: relative; display: flex; align-items: center; border-right: 1px solid #dbe6ef; }
+/* globals.css styles every select with !important; this one sits inside the phone box. */
+.countrySelect select {
+    height: 100%; padding: 0 2.25rem 0 14px !important; border: 0 !important; border-radius: 0 !important;
+    background-color: transparent !important; color: var(--contact-ink) !important; font-size: 1rem !important;
+}
+.countrySelect select:focus { box-shadow: none !important; }
+.countrySelect select:focus-visible { box-shadow: inset 0 0 0 3px var(--contact-brand) !important; }
+.fieldError { margin: 8px 0 0; font-size: .8125rem; line-height: 1.5; color: #873327; }
+.services { border: 0; margin: 0; padding: 0; min-width: 0; }
+.serviceGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; margin-top: 4px; }
+.service { display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: .9375rem; cursor: pointer; }
+.service input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--contact-brand); }
+.submit {
+    min-height: 50px; padding: 14px 26px; border: 0; border-radius: 10px; background: var(--contact-ink); color: #fff;
+    font-size: 1rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    cursor: pointer; transition: background-color .15s;
+}
+.form .submit { width: 100%; margin-top: 6px; }
+.submit:hover:not(:disabled) { background: var(--contact-brand); }
 .submit:disabled { opacity: .6; cursor: wait; }
-.formBottom > span { color: var(--contact-muted); font-size: .875rem; line-height: 1.6; }
-.formBottom a { color: var(--contact-brand); text-decoration: underline; }
-.success { height: 100%; min-height: 560px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.error { margin: 0; padding: 14px; border: 1px solid #b54435; border-radius: 12px; color: #873327; font-size: .875rem; line-height: 1.6; }
+.status, .visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.success { min-height: 560px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.success h2 { margin: 0 0 10px; font-weight: 600; letter-spacing: -.025em; font-size: 1.75rem; line-height: 1.2; }
 .success > svg { color: var(--contact-brand); margin-bottom: 24px; }
 .success > p { color: var(--contact-muted); line-height: 1.7; margin: 8px 0 28px; }
-.error { margin: 0; padding: 14px; border: 1px solid #b54435; border-radius: 12px; color: #873327; font-size: .875rem; line-height: 1.6; }
-.status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* ------------------------------------------------------ contact routes -- */
+.routes { display: flex; flex-direction: column; gap: 40px; padding-top: 4px; }
+.routes h2 { margin: 0 0 6px; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.01em; }
+.routes p { margin: 0 0 10px; color: var(--contact-muted); font-size: .9375rem; line-height: 1.6; }
+.route { display: flex; align-items: center; gap: 10px; min-height: 36px; color: var(--contact-ink); font-size: .9375rem; font-weight: 600; text-decoration: underline; overflow-wrap: anywhere; }
+.route svg { flex-shrink: 0; color: var(--contact-brand); }
+.route:hover { color: var(--contact-brand); }
+.routeAddress { align-items: flex-start; line-height: 1.5; }
+.routeAddress svg { margin-top: 3px; }
 
 /* ------------------------------------------------------- map and FAQ -- */
 .section { max-width: 1240px; margin: 96px auto 0; }
@@ -124,17 +121,13 @@
 .faqItem p { margin: 0; padding: 0 24px 22px; max-width: 68ch; color: var(--contact-muted); font-size: .9375rem; line-height: 1.75; }
 
 @media (max-width: 1100px) {
-    .panel { padding: 36px 28px 28px; }
-    .formPanel { padding: 28px; }
-    .routes { grid-template-columns: 1fr; }
-    .route { min-height: 64px; }
+    .card { gap: 48px; padding: 36px; }
 }
 @media (max-width: 900px) {
-    .page { padding: 116px 24px 72px; }
-    .layout { grid-template-columns: minmax(0, 1fr); max-width: 640px; gap: 20px; }
-    .panel { gap: 36px; }
-    .intro h1 { font-size: clamp(2.5rem, 7vw, 3rem); }
-    .routes { grid-template-columns: 1fr 1fr; }
+    .page { padding: 0 24px 72px; }
+    .intro { padding-top: 136px; }
+    .card { grid-template-columns: minmax(0, 1fr); max-width: 640px; }
+    .routes { padding-top: 32px; border-top: 1px solid var(--contact-line); }
     .section { max-width: 640px; margin-top: 64px; }
     .mapCard { grid-template-columns: minmax(0, 1fr); }
     .mapFrame, .mapFrame iframe { min-height: 320px; }
@@ -142,21 +135,19 @@
     .faq { grid-template-columns: minmax(0, 1fr); }
     .success { min-height: 390px; }
 }
+@media (max-width: 640px) {
+    .sky { height: 680px; background-image: url('/images/contact/contact-sky-mobile.webp'); }
+    .intro { text-align: left; padding-top: 120px; }
+    .intro p { margin-left: 0; font-size: 1rem; }
+    .card { margin-top: 40px; }
+}
 @media (max-width: 480px) {
     .page { padding-left: 16px; padding-right: 16px; }
-    .panel { padding: 30px 18px 22px; border-radius: 24px; }
-    .formPanel { padding: 24px 18px; border-radius: 24px; }
-    .method { padding-right: 14px; gap: 12px; }
-    .method > svg { display: none; }
-    .methodText > strong { font-size: 1rem; }
-    .panelOffice { padding: 0 4px; gap: 12px; }
-    .panelOffice > svg { width: 20px; }
-    .routes, .formRow { grid-template-columns: 1fr; }
-    .formRow { gap: 20px; }
-    .formBottom { align-items: flex-start; flex-direction: column; }
-    .submit { width: 100%; }
-    .formBottom > span br { display: none; }
-    .formBottom > span a { margin-left: 4px; }
+    .card { padding: 24px 18px; border-radius: 20px; }
+    .formRow, .serviceGrid { grid-template-columns: 1fr; gap: 20px; }
+    .serviceGrid { gap: 0; }
+    .service { min-height: 44px; }
+    .route { min-height: 44px; }
     .mapCard { border-radius: 24px; }
     .faqItem summary { padding: 18px; font-size: 1rem; }
     .faqItem p { padding: 0 18px 20px; }

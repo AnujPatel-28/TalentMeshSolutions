@@ -17,7 +17,7 @@ export const CONTACT_FAQS = [
   {
     question: 'I’m looking for a job. How do I get in touch?',
     answer:
-      'Choose “I’m looking for work” in the form on this page and tell us about your experience, the roles you’re looking for and your preferred location. You can also email us at info@talentmeshsolutions.com or message us on WhatsApp.',
+      'Tick “Looking for a job” in the form on this page and tell us about your experience, the roles you’re looking for and your preferred location. You can also email us at info@talentmeshsolutions.com or message us on WhatsApp.',
   },
   {
     question: 'What happens after I send the form?',
